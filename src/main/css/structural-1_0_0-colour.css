@@ -1,0 +1,474 @@
+/*
+ * Main body structure.
+ */
+
+.structural_1_0_0_body
+{
+  font-family: serif;
+  text-align:  justify;
+}
+
+.structural_1_0_0_hr
+{
+  height:           1px;
+  border:           0;
+  color:            #ccc;
+  background-color: #ccc;
+}
+
+/*
+ * Navigation bar.
+ */
+
+.structural_1_0_0_navbar
+{
+  font-family: sans-serif;
+}
+.structural_1_0_0_navbar_table
+{
+
+}
+.structural_1_0_0_navbar_table td
+{
+  border: 0;
+}
+.structural_1_0_0_navbar_prev_file_cell
+{
+
+}
+.structural_1_0_0_navbar_up_file_cell
+{
+
+}
+.structural_1_0_0_navbar_next_file_cell
+{
+
+}
+.structural_1_0_0_navbar_prev_title_cell
+{
+
+}
+.structural_1_0_0_navbar_up_title_cell
+{
+
+}
+.structural_1_0_0_navbar_next_title_cell
+{
+
+}
+
+/*
+ * Element: document-contents
+ */
+
+.structural_1_0_0_document_contents
+{
+  font-family: sans-serif;
+}
+.structural_1_0_0_document_contents_item
+{
+
+}
+.structural_1_0_0_document_contents_item1
+{
+
+}
+.structural_1_0_0_document_contents_item2
+{
+
+}
+.structural_1_0_0_document_contents_item3
+{
+
+}
+.structural_1_0_0_document_contents_item4
+{
+
+}
+.structural_1_0_0_document_contents_section
+{
+
+}
+
+/*
+ * Element: document-title
+ */
+
+.structural_1_0_0_document_title
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/*
+ * Element: footnote
+ */
+
+.structural_1_0_0_footnotes
+{
+
+}
+.structural_1_0_0_footnotes hr
+{
+  height:           1px;
+  border:           0;
+  color:            #ccc;
+  background-color: #ccc;
+}
+.structural_1_0_0_footnote_number
+{
+
+}
+.structural_1_0_0_footnote_body
+{
+
+}
+
+/*
+ * Element: formal-item
+ */
+
+.structural_1_0_0_formal_item
+{
+  border:           1px solid #ccc;
+  padding-top:      1.0em;
+  padding-left:     1.0em;
+  padding-bottom:   1.0em;
+}
+
+/*
+ * Element: formal-item-list
+ */
+
+.structural_1_0_0_formal_item_list
+{
+
+}
+.structural_1_0_0_formal_item_list_title
+{
+  font-weight: bold;
+}
+.structural_1_0_0_formal_item_list_item
+{
+
+}
+
+/*
+ * Element: formal-item-title
+ */
+
+.structural_1_0_0_formal_item_title
+{
+
+}
+
+/*
+ * Element: image
+ */
+
+.structural_1_0_0_image
+{
+
+}
+
+/*
+ * Element: link
+ */
+
+.structural_1_0_0_link
+{
+
+}
+.structural_1_0_0_link img
+{
+
+}
+
+/*
+ * Element: link-external
+ */
+
+.structural_1_0_0_link_external
+{
+
+}
+.structural_1_0_0_link_external img
+{
+  border: transparent;
+}
+
+/*
+ * Element: list-item
+ */
+
+.structural_1_0_0_list_item
+{
+
+}
+
+/*
+ * Element: list-ordered
+ */
+
+.structural_1_0_0_list_ordered
+{
+
+}
+
+/*
+ * Element: list-unordered
+ */
+
+.structural_1_0_0_list_unordered
+{
+
+}
+
+/*
+ * Element: paragraph
+ */
+
+.structural_1_0_0_paragraph_container
+{
+
+}
+.structural_1_0_0_paragraph
+{
+
+}
+.structural_1_0_0_paragraph_number
+{
+
+}
+
+/*
+ * Element: part
+ */
+
+.structural_1_0_0_part_container
+{
+
+}
+.structural_1_0_0_part
+{
+
+}
+
+/*
+ * Element: part-title
+ */
+
+.structural_1_0_0_part_title,
+.structural_1_0_0_part_title_number
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/*
+ * Element: part-contents
+ */
+
+.structural_1_0_0_part_contents
+{
+  font-family: sans-serif;
+}
+.structural_1_0_0_part_contents_item
+{
+
+}
+.structural_1_0_0_part_contents_item1
+{
+
+}
+.structural_1_0_0_part_contents_item2
+{
+
+}
+.structural_1_0_0_part_contents_item3
+{
+
+}
+.structural_1_0_0_part_contents_part
+{
+
+}
+.structural_1_0_0_part_contents_section
+{
+
+}
+.structural_1_0_0_part_contents_subsection
+{
+
+}
+
+/*
+ * Element: part-title
+ */
+
+.structural_1_0_0_part_title
+{
+
+}
+
+/*
+ * Element: section
+ */
+
+.structural_1_0_0_section_container
+{
+
+}
+.structural_1_0_0_section
+{
+
+}
+
+/*
+ * Element: section-contents
+ */
+
+.structural_1_0_0_section_contents
+{
+  font-family: sans-serif;
+}
+.structural_1_0_0_section_contents_item
+{
+
+}
+.structural_1_0_0_section_contents_item1
+{
+
+}
+.structural_1_0_0_section_contents_item2
+{
+
+}
+.structural_1_0_0_section_contents_item3
+{
+
+}
+.structural_1_0_0_section_contents_section
+{
+
+}
+.structural_1_0_0_section_contents_subsection
+{
+
+}
+
+/*
+ * Element: section-title
+ */
+
+.structural_1_0_0_section_title
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+.structural_1_0_0_section_title_number
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/*
+ * Element: subsection
+ */
+
+.structural_1_0_0_subsection_container
+{
+
+}
+.structural_1_0_0_subsection
+{
+
+}
+
+/*
+ * Element: subsection-title
+ */
+
+.structural_1_0_0_subsection_title
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+.structural_1_0_0_subsection_title_number
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/*
+ * Element: table
+ */
+
+.structural_1_0_0_table
+{
+
+}
+
+/*
+ * Element: table-cell
+ */
+
+.structural_1_0_0_table_cell
+{
+
+}
+
+/*
+ * Element: table-column-name
+ */
+
+.structural_1_0_0_table_column_name
+{
+
+}
+
+/*
+ * Element: table-head
+ */
+
+.structural_1_0_0_table_head
+{
+
+}
+
+/*
+ * Element: table-head
+ */
+
+.structural_1_0_0_table_head
+{
+
+}
+
+/*
+ * Element: table-row
+ */
+
+.structural_1_0_0_table_row
+{
+
+}
+
+/*
+ * Element: term
+ */
+
+.structural_1_0_0_term
+{
+
+}
+
+/*
+ * Element: verbatim
+ */
+
+.structural_1_0_0_verbatim
+{
+
+}
+

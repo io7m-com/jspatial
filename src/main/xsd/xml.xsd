@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.w3.org/XML/1998/namespace" xmlns:s="http://www.io7m.com/schemas/structural/1.0.0">
+  <xs:import namespace="http://www.io7m.com/schemas/structural/1.0.0" schemaLocation="structural-1_0_0.xsd"/>
+  <xs:attribute name="id" type="xs:ID"/>
+  <xs:attribute name="base"/>
+  <xs:attribute name="lang"/>
+</xs:schema>

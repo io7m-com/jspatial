@@ -1,0 +1,44 @@
+<assembly
+  xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+
+  <id>bin</id>
+  <baseDirectory>${project.name}-${project.version}</baseDirectory>
+
+  <formats>
+    <format>zip</format>
+  </formats>
+
+  <files>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0755</fileMode>
+      <source>src/main/sh/quadtree-viewer-unix.sh</source>
+      <destName>quadtree-viewer-unix.sh</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0755</fileMode>
+      <source>src/main/exe/quadtree-viewer.exe</source>
+      <destName>quadtree-viewer.exe</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0644</fileMode>
+      <source>src/main/exe/quadtree-viewer.ini</source>
+      <destName>quadtree-viewer.ini</destName>
+    </file>
+  </files>
+
+  <dependencySets>
+    <!-- Save all dependency jar files to /lib -->
+    <dependencySet>
+      <outputDirectory>/lib</outputDirectory>
+      <useProjectArtifact>true</useProjectArtifact>
+      <unpack>false</unpack>
+      <scope>runtime</scope>
+    </dependencySet>
+
+  </dependencySets>
+</assembly>

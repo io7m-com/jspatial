@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c:changelog xmlns:c="http://www.io7m.com/schemas/changelog/1.0.0">
+  <c:project>io7m-jspatial</c:project>
+
+  <c:release ticket-system="com.io7m.fossil.jspatial">
+    <c:date>2012-11-14</c:date>
+    <c:version>0.2.0</c:version>
+    <c:item>
+      <c:date>2012-11-14</c:date>
+      <c:type-code-new/>
+      <c:summary>Initial version</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:ticket-system xml:id="com.io7m.fossil.jspatial">
+    <c:ticket-url>http://fossil.io7m.com/repo.cgi/io7m-jspatial/tktview?name=</c:ticket-url>
+  </c:ticket-system>
+</c:changelog>
