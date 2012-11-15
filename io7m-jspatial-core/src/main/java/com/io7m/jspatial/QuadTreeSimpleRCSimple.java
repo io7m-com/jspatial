@@ -64,7 +64,8 @@ import com.io7m.jtensors.VectorReadable2I;
  *          The type of objects contained within the tree
  */
 
-class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
+class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
+  QuadTreeInterface<T>
 {
   class Quadrant implements BoundingArea
   {
@@ -96,8 +97,10 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
       this.x1y1 = null;
       this.leaf = true;
       this.quadrant_objects = new LinkedList<T>();
-      this.size_x = QuadTreeSimple.getSpanSizeX(this.lower, this.upper);
-      this.size_y = QuadTreeSimple.getSpanSizeY(this.lower, this.upper);
+      this.size_x =
+        QuadTreeSimpleRCSimple.getSpanSizeX(this.lower, this.upper);
+      this.size_y =
+        QuadTreeSimpleRCSimple.getSpanSizeY(this.lower, this.upper);
     }
 
     void areaContaining(
@@ -234,7 +237,7 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
     @SuppressWarnings("synthetic-access") private boolean insertObject(
       final @Nonnull T item)
     {
-      QuadTreeSimple.this.objects_all.add(item);
+      QuadTreeSimpleRCSimple.this.objects_all.add(item);
       this.quadrant_objects.add(item);
       return true;
     }
@@ -294,54 +297,52 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
       return this.insertObject(item);
     }
 
-    void raycastBase(
-      final @Nonnull VectorReadable2I origin,
-      final @Nonnull VectorReadable2F direction,
+    void raycast(
+      final @Nonnull RayI2D ray,
       final @Nonnull List<Quadrant> quadrants)
     {
-      final double origin_x = origin.getXI();
-      final double origin_y = origin.getYI();
-      final double direct_x = direction.getXF();
-      final double direct_y = direction.getYF();
-      final double lower_x = this.lower.getXI();
-      final double lower_y = this.lower.getYI();
-      final double upper_x = this.upper.getXI();
-      final double upper_y = this.upper.getYI();
+      if (this.raycastBoxIntersects(ray)) {
+        if (this.leaf) {
+          quadrants.add(this);
+          return;
+        }
 
-      final double tx0 = (lower_x - origin_x) / direct_x;
-      final double tx1 = (upper_x - origin_x) / direct_x;
-      final double ty0 = (lower_y - origin_y) / direct_y;
-      final double ty1 = (upper_y - origin_y) / direct_y;
-
-      this.raycastStep(tx0, ty0, tx1, ty1, quadrants);
+        this.x0y0.raycast(ray, quadrants);
+        this.x0y1.raycast(ray, quadrants);
+        this.x1y0.raycast(ray, quadrants);
+        this.x1y1.raycast(ray, quadrants);
+      }
     }
 
-    void raycastStep(
-      final double tx0,
-      final double ty0,
-      final double tx1,
-      final double ty1,
-      final @Nonnull List<Quadrant> quadrants)
+    /**
+     * Branchless optimization of the Kay-Kajiya slab ray/AABB intersection
+     * test by Tavian Barnes.
+     * 
+     * @see http://tavianator.com/2011/05/fast-branchless-raybounding-box-
+     *      intersections/
+     */
+
+    boolean raycastBoxIntersects(
+      final @Nonnull RayI2D ray)
     {
-      final double bound_lo = Math.max(tx0, ty0);
-      final double bound_hi = Math.min(tx1, ty1);
+      final double x0 = this.lower.getXI();
+      final double y0 = this.lower.getYI();
+      final double x1 = this.upper.getXI();
+      final double y1 = this.upper.getYI();
 
-      if ((bound_lo < bound_hi) == false) {
-        return;
-      }
+      final double tx0 = (x0 - ray.origin.x) * ray.direction_inverse.x;
+      final double tx1 = (x1 - ray.origin.x) * ray.direction_inverse.x;
 
-      if (this.leaf) {
-        quadrants.add(this);
-        return;
-      }
+      double tmin = Math.min(tx0, tx1);
+      double tmax = Math.max(tx0, tx1);
 
-      final double tx1_half = 0.5 * (tx0 + tx1);
-      final double ty1_half = 0.5 * (ty0 + ty1);
+      final double ty0 = (y0 - ray.origin.y) * ray.direction_inverse.y;
+      final double ty1 = (y1 - ray.origin.y) * ray.direction_inverse.y;
 
-      this.x0y0.raycastStep(tx0, ty0, tx1_half, ty1_half, quadrants);
-      this.x0y1.raycastStep(tx0, ty1_half, tx1_half, ty1, quadrants);
-      this.x1y0.raycastStep(tx1_half, ty0, tx1, ty1_half, quadrants);
-      this.x1y1.raycastStep(tx1_half, ty1_half, tx1, ty1, quadrants);
+      tmin = Math.max(tmin, Math.min(ty0, ty1));
+      tmax = Math.min(tmax, Math.max(ty0, ty1));
+
+      return ((tmax >= Math.max(0, tmin)) && (tmin < Double.POSITIVE_INFINITY));
     }
 
     /**
@@ -353,7 +354,7 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
       assert this.canSplit();
 
       final Quadrants q =
-        QuadTreeSimple.splitQuadrants(this.lower, this.upper);
+        QuadTreeSimpleRCSimple.splitQuadrants(this.lower, this.upper);
       this.x0y0 = new Quadrant(q.x0y0_lower, q.x0y0_upper);
       this.x0y1 = new Quadrant(q.x0y1_lower, q.x0y1_upper);
       this.x1y0 = new Quadrant(q.x1y0_lower, q.x1y0_upper);
@@ -463,8 +464,8 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
     final @Nonnull VectorReadable2I lower,
     final @Nonnull VectorReadable2I upper)
   {
-    final int size_x = QuadTreeSimple.getSpanSizeX(lower, upper);
-    final int size_y = QuadTreeSimple.getSpanSizeY(lower, upper);
+    final int size_x = QuadTreeSimpleRCSimple.getSpanSizeX(lower, upper);
+    final int size_y = QuadTreeSimpleRCSimple.getSpanSizeY(lower, upper);
 
     assert size_x >= 2;
     assert size_y >= 2;
@@ -475,7 +476,7 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
 
     final int[] spans = new int[4];
 
-    QuadTreeSimple.split1D(lower.getXI(), upper.getXI(), spans);
+    QuadTreeSimpleRCSimple.split1D(lower.getXI(), upper.getXI(), spans);
     q.x0y0_lower.x = spans[0];
     q.x0y1_lower.x = spans[0];
     q.x0y0_upper.x = spans[1];
@@ -485,7 +486,7 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
     q.x1y0_upper.x = spans[3];
     q.x1y1_upper.x = spans[3];
 
-    QuadTreeSimple.split1D(lower.getYI(), upper.getYI(), spans);
+    QuadTreeSimpleRCSimple.split1D(lower.getYI(), upper.getYI(), spans);
     q.x0y0_lower.y = spans[0];
     q.x1y0_lower.y = spans[0];
     q.x0y0_upper.y = spans[1];
@@ -501,7 +502,7 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
   private final @Nonnull Quadrant root;
   private final @Nonnull List<T>  objects_all;
 
-  public QuadTreeSimple(
+  public QuadTreeSimpleRCSimple(
     final int size_x,
     final int size_y)
     throws ConstraintError
@@ -601,36 +602,29 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
   }
 
   /**
-   * Return the set of quadrants intersected by the ray defined by the
-   * direction vector <code>direction</code> cast from the origin
-   * <code>origin</code>.
+   * Return the set of quadrants intersected by <code>ray</code>.
    * 
-   * @param origin
-   *          The origin of the ray
-   * @param direction
-   *          The direction vector of the ray
+   * @param ray
+   *          The ray
    * @param items
    *          The resulting set of quadrants
    * @throws ConstraintError
    *           Iff any of the following hold:
    *           <ul>
-   *           <li><code>origin == null</code></li>
-   *           <li><code>direction == null</code></li>
+   *           <li><code>ray == null</code></li>
    *           <li><code>items == null</code></li>
    *           </ul>
    */
 
   void quadTreeQueryRaycastQuadrants(
-    final @Nonnull VectorReadable2I origin,
-    final @Nonnull VectorReadable2F direction,
+    final @Nonnull RayI2D ray,
     final @Nonnull List<Quadrant> items)
     throws ConstraintError
   {
-    Constraints.constrainNotNull(origin, "Origin");
-    Constraints.constrainNotNull(direction, "Direction");
+    Constraints.constrainNotNull(ray, "Ray");
     Constraints.constrainNotNull(items, "Items");
 
-    this.root.raycastBase(origin, direction, items);
+    this.root.raycast(ray, items);
   }
 
   @Override public void quadTreeTraverse(
