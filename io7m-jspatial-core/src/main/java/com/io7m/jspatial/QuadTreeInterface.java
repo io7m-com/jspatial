@@ -17,6 +17,7 @@
 package com.io7m.jspatial;
 
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.annotation.Nonnull;
 
@@ -144,7 +145,7 @@ public interface QuadTreeInterface<T extends BoundingArea>
 
   void quadTreeQueryRaycast(
     final @Nonnull RayI2D ray,
-    final @Nonnull List<T> items)
+    final @Nonnull SortedSet<RaycastResult<T>> items)
     throws ConstraintError;
 
   /**

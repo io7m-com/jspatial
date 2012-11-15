@@ -27,8 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.swing.BoxLayout;
@@ -164,7 +164,8 @@ public final class QuadTreeRCSimpleRayViewer implements Runnable
           g.drawLine(x0, y0, x1, y1);
         }
 
-        for (final QuadTreeSimpleRCSimple<Rectangle>.Quadrant q : QuadTreeRCSimpleRayViewer.this.quadrants) {
+        for (final RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant> r : QuadTreeRCSimpleRayViewer.this.quadrants) {
+          final QuadTreeSimpleRCSimple<Rectangle>.Quadrant q = r.getObject();
           final VectorReadable2I lower = q.boundingAreaLower();
           final VectorReadable2I upper = q.boundingAreaUpper();
 
@@ -216,19 +217,19 @@ public final class QuadTreeRCSimpleRayViewer implements Runnable
     });
   }
 
-  private final JPanel                                           panel;
-  private QuadTreeSimpleRCSimple<Rectangle>                      quadtree;
-  private final VectorM2I                                        ray_origin;
-  private final VectorM2I                                        ray_target;
-  private final VectorM2D                                        ray_direction;
-  private final List<QuadTreeSimpleRCSimple<Rectangle>.Quadrant> quadrants;
-  private final TreeCanvas                                       canvas;
+  private final JPanel                                                               panel;
+  private QuadTreeSimpleRCSimple<Rectangle>                                          quadtree;
+  private final VectorM2I                                                            ray_origin;
+  private final VectorM2I                                                            ray_target;
+  private final VectorM2D                                                            ray_direction;
+  private final SortedSet<RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>> quadrants;
+  private final TreeCanvas                                                           canvas;
 
   public QuadTreeRCSimpleRayViewer()
     throws ConstraintError
   {
     this.quadrants =
-      new LinkedList<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>();
+      new TreeSet<RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>>();
 
     this.ray_direction = new VectorM2D();
     this.ray_origin = new VectorM2I();

@@ -18,6 +18,7 @@ package com.io7m.jspatial;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -26,6 +27,7 @@ import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.UnimplementedCodeException;
 import com.io7m.jaux.functional.Function;
+import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorM2I;
 import com.io7m.jtensors.VectorReadable2I;
@@ -298,11 +300,13 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
 
     void raycast(
       final @Nonnull RayI2D ray,
-      final @Nonnull List<Quadrant> quadrants)
+      final @Nonnull SortedSet<RaycastResult<Quadrant>> quadrants)
     {
       if (this.raycastBoxIntersects(ray)) {
         if (this.leaf) {
-          quadrants.add(this);
+          final RaycastResult<Quadrant> r =
+            new RaycastResult<Quadrant>(this, this.raycastDistance(ray));
+          quadrants.add(r);
           return;
         }
 
@@ -342,6 +346,19 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
       tmax = Math.min(tmax, Math.max(ty0, ty1));
 
       return ((tmax >= Math.max(0, tmin)) && (tmin < Double.POSITIVE_INFINITY));
+    }
+
+    /**
+     * Return the scalar distance between the lower corner of this quadrant,
+     * and the origin of the ray.
+     */
+
+    double raycastDistance(
+      final @Nonnull RayI2D ray)
+    {
+      final VectorI2D box_origin =
+        new VectorI2D(this.lower.getXI(), this.lower.getYI());
+      return VectorI2D.distance(box_origin, ray.origin);
     }
 
     /**
@@ -589,7 +606,7 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
 
   @Override public void quadTreeQueryRaycast(
     final @Nonnull RayI2D ray,
-    final @Nonnull List<T> items)
+    final @Nonnull SortedSet<RaycastResult<T>> items)
     throws ConstraintError
   {
     Constraints.constrainNotNull(ray, "Ray");
@@ -615,7 +632,7 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
 
   void quadTreeQueryRaycastQuadrants(
     final @Nonnull RayI2D ray,
-    final @Nonnull List<Quadrant> items)
+    final @Nonnull SortedSet<RaycastResult<Quadrant>> items)
     throws ConstraintError
   {
     Constraints.constrainNotNull(ray, "Ray");

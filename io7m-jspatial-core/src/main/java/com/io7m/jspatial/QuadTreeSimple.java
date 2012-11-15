@@ -18,6 +18,7 @@ package com.io7m.jspatial;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -589,7 +590,7 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
 
   @Override public void quadTreeQueryRaycast(
     final @Nonnull RayI2D ray,
-    final @Nonnull List<T> items)
+    final @Nonnull SortedSet<RaycastResult<T>> items)
     throws ConstraintError
   {
     Constraints.constrainNotNull(ray, "Ray");
