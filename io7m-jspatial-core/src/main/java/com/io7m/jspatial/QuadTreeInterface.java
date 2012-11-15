@@ -22,8 +22,6 @@ import javax.annotation.Nonnull;
 
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
-import com.io7m.jtensors.VectorReadable2F;
-import com.io7m.jtensors.VectorReadable2I;
 
 /**
  * The interface provided by quadtree implementations.
@@ -131,34 +129,21 @@ public interface QuadTreeInterface<T extends BoundingArea>
     throws ConstraintError;
 
   /**
-   * Casts a ray from the point <code>origin</code> towards the direction
-   * <code>direction</code> (which is assumed to be a unit-length vector), and
-   * returns the objects intersected by the ray in <code>items</code>.
+   * Returns the objects intersected by the ray <code>ray</code> in
+   * <code>items</code>.
    * 
-   * <p>
-   * The objects are returned in increasing order of distance. That is, the
-   * nearest object to <code>origin</code> will be the first element in the
-   * list.
-   * </p>
-   * 
-   * @param origin
-   *          The origin of the ray
-   * @param direction
-   *          The direction of the ray
    * @param items
    *          The returned objects
    * @throws ConstraintError
    *           Iff any of the following hold:
    *           <ul>
-   *           <li><code>origin == null</code></li>
-   *           <li><code>direction == null</code></li>
+   *           <li><code>ray == null</code></li>
    *           <li><code>items == null</code></li>
    *           </ul>
    */
 
   void quadTreeQueryRaycast(
-    final @Nonnull VectorReadable2I origin,
-    final @Nonnull VectorReadable2F direction,
+    final @Nonnull RayI2D ray,
     final @Nonnull List<T> items)
     throws ConstraintError;
 

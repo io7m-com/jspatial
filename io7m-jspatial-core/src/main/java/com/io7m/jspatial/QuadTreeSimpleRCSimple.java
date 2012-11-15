@@ -28,7 +28,6 @@ import com.io7m.jaux.UnimplementedCodeException;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorM2I;
-import com.io7m.jtensors.VectorReadable2F;
 import com.io7m.jtensors.VectorReadable2I;
 
 /**
@@ -589,13 +588,11 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
   }
 
   @Override public void quadTreeQueryRaycast(
-    final @Nonnull VectorReadable2I origin,
-    final @Nonnull VectorReadable2F direction,
+    final @Nonnull RayI2D ray,
     final @Nonnull List<T> items)
     throws ConstraintError
   {
-    Constraints.constrainNotNull(origin, "Origin");
-    Constraints.constrainNotNull(direction, "Direction");
+    Constraints.constrainNotNull(ray, "Ray");
     Constraints.constrainNotNull(items, "Items");
 
     throw new UnimplementedCodeException();

@@ -588,13 +588,11 @@ class QuadTreeSimple<T extends BoundingArea> implements QuadTreeInterface<T>
   }
 
   @Override public void quadTreeQueryRaycast(
-    final @Nonnull VectorReadable2I origin,
-    final @Nonnull VectorReadable2F direction,
+    final @Nonnull RayI2D ray,
     final @Nonnull List<T> items)
     throws ConstraintError
   {
-    Constraints.constrainNotNull(origin, "Origin");
-    Constraints.constrainNotNull(direction, "Direction");
+    Constraints.constrainNotNull(ray, "Ray");
     Constraints.constrainNotNull(items, "Items");
 
     throw new UnimplementedCodeException();
