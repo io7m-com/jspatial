@@ -16,8 +16,6 @@
 
 package com.io7m.jspatial;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -542,8 +540,8 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
     out[3] = high;
   }
 
-  private final @Nonnull Quadrant root;
-  private final @Nonnull List<T>  objects_all;
+  private final @Nonnull Quadrant     root;
+  private final @Nonnull SortedSet<T> objects_all;
 
   public QuadTreeBasic(
     final int size_x,
@@ -555,7 +553,7 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
     Constraints.constrainArbitrary((size_x % 2) == 0, "X size is even");
     Constraints.constrainArbitrary((size_y % 2) == 0, "Y size is even");
 
-    this.objects_all = new LinkedList<T>();
+    this.objects_all = new TreeSet<T>();
     this.root =
       new Quadrant(new VectorI2I(0, 0), new VectorI2I(size_x - 1, size_y - 1));
   }
