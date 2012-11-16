@@ -2,19 +2,21 @@ package com.io7m.jspatial;
 
 import javax.annotation.Nonnull;
 
-import com.io7m.jspatial.BoundingArea;
 import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorReadable2I;
 
-final class Rectangle implements BoundingArea
+final class Rectangle implements QuadTreeMember<Rectangle>
 {
   private final @Nonnull VectorI2I lower;
   private final @Nonnull VectorI2I upper;
+  private final long               id;
 
-  public Rectangle(
+  Rectangle(
+    final long id,
     final @Nonnull VectorI2I lower,
     final @Nonnull VectorI2I upper)
   {
+    this.id = id;
     this.lower = lower;
     this.upper = upper;
   }
@@ -27,6 +29,18 @@ final class Rectangle implements BoundingArea
   @Override public @Nonnull VectorReadable2I boundingAreaUpper()
   {
     return this.upper;
+  }
+
+  @Override public int compareTo(
+    final Rectangle other)
+  {
+    if (other.id < this.id) {
+      return -1;
+    }
+    if (other.id > this.id) {
+      return 1;
+    }
+    return 0;
   }
 
   @Override public boolean equals(
@@ -57,16 +71,6 @@ final class Rectangle implements BoundingArea
       return false;
     }
     return true;
-  }
-
-  int getHeight()
-  {
-    return (this.upper.y - this.lower.y) + 1;
-  }
-
-  int getWidth()
-  {
-    return (this.upper.x - this.lower.x) + 1;
   }
 
   @Override public int hashCode()

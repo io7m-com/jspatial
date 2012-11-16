@@ -28,8 +28,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Nonnull;
 import javax.swing.BoxLayout;
@@ -146,10 +147,15 @@ public final class QuadTreeViewer implements Runnable
           });
 
         for (final Rectangle rect : QuadTreeViewer.this.selected) {
+          final VectorReadable2I lower = rect.boundingAreaLower();
+          final VectorReadable2I upper = rect.boundingAreaUpper();
+
           g.setColor(Color.GREEN);
-          g.drawRect(rect.boundingAreaLower().getXI(), rect
-            .boundingAreaLower()
-            .getYI(), rect.getWidth(), rect.getHeight());
+          g.drawRect(
+            lower.getXI(),
+            lower.getYI(),
+            (upper.getXI() - lower.getXI()) + 1,
+            (upper.getYI() - lower.getYI()) + 1);
         }
 
         g.setColor(Color.YELLOW);
@@ -207,15 +213,17 @@ public final class QuadTreeViewer implements Runnable
     });
   }
 
-  private final JPanel             panel;
-  private QuadTreeBasic<Rectangle> quadtree;
-  private final Selection          selection;
-  private final List<Rectangle>    selected;
+  private final JPanel               panel;
+  private QuadTreeBasic<Rectangle>   quadtree;
+  private final Selection            selection;
+  private final SortedSet<Rectangle> selected;
+  private final AtomicLong           current_id;
 
   public QuadTreeViewer()
     throws ConstraintError
   {
-    this.selected = new LinkedList<Rectangle>();
+    this.current_id = new AtomicLong();
+    this.selected = new TreeSet<Rectangle>();
     this.selection = new Selection();
     this.quadtree =
       new QuadTreeBasic<Rectangle>(
@@ -313,7 +321,7 @@ public final class QuadTreeViewer implements Runnable
       });
 
       insert.addActionListener(new ActionListener() {
-        @SuppressWarnings({ "unused" }) @Override public
+        @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
           void
           actionPerformed(
             final ActionEvent _)
@@ -323,7 +331,10 @@ public final class QuadTreeViewer implements Runnable
           final int y0 = Integer.parseInt(input_y0.getText());
           final int y1 = Integer.parseInt(input_y1.getText());
           final Rectangle r =
-            new Rectangle(new VectorI2I(x0, y0), new VectorI2I(x1, y1));
+            new Rectangle(
+              QuadTreeViewer.this.current_id.getAndIncrement(),
+              new VectorI2I(x0, y0),
+              new VectorI2I(x1, y1));
           QuadTreeViewer.this.commandInsert(canvas, r);
         }
       });
@@ -487,7 +498,10 @@ public final class QuadTreeViewer implements Runnable
         final int y1 = Math.min(y0 + height, 511);
         final VectorI2I r0 = new VectorI2I(x0, y0);
         final VectorI2I r1 = new VectorI2I(x1, y1);
-        this.quadtree.quadTreeInsert(new Rectangle(r0, r1));
+        this.quadtree.quadTreeInsert(new Rectangle(
+          QuadTreeViewer.this.current_id.getAndIncrement(),
+          r0,
+          r1));
       }
     } catch (final ConstraintError e) {
       QuadTreeViewer.fatal(e);

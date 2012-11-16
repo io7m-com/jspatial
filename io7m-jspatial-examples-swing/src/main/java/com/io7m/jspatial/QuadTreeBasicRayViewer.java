@@ -29,6 +29,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Nonnull;
 import javax.swing.BoxLayout;
@@ -218,16 +219,18 @@ public final class QuadTreeBasicRayViewer implements Runnable
   }
 
   private final JPanel                              panel;
-  private QuadTreeBasic<Rectangle>         quadtree;
+  private QuadTreeBasic<Rectangle>                  quadtree;
   private final VectorM2I                           ray_origin;
   private final VectorM2I                           ray_target;
   private final VectorM2D                           ray_direction;
   private final SortedSet<RaycastResult<Rectangle>> rectangles;
   private final TreeCanvas                          canvas;
+  private final AtomicLong                          current_id;
 
   public QuadTreeBasicRayViewer()
     throws ConstraintError
   {
+    this.current_id = new AtomicLong();
     this.rectangles = new TreeSet<RaycastResult<Rectangle>>();
 
     this.ray_direction = new VectorM2D();
@@ -329,7 +332,7 @@ public final class QuadTreeBasicRayViewer implements Runnable
       });
 
       insert.addActionListener(new ActionListener() {
-        @SuppressWarnings({ "unused" }) @Override public
+        @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
           void
           actionPerformed(
             final ActionEvent _)
@@ -339,7 +342,10 @@ public final class QuadTreeBasicRayViewer implements Runnable
           final int y0 = Integer.parseInt(input_y0.getText());
           final int y1 = Integer.parseInt(input_y1.getText());
           final Rectangle r =
-            new Rectangle(new VectorI2I(x0, y0), new VectorI2I(x1, y1));
+            new Rectangle(
+              QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
+              new VectorI2I(x0, y0),
+              new VectorI2I(x1, y1));
           QuadTreeBasicRayViewer.this.commandInsert(r);
         }
       });
@@ -486,6 +492,7 @@ public final class QuadTreeBasicRayViewer implements Runnable
       final int x0 = 48;
       final int y0 = 48;
       this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
         new VectorI2I(x0, y0),
         new VectorI2I(x0 + 32, y0 + 32)));
     }
@@ -494,6 +501,7 @@ public final class QuadTreeBasicRayViewer implements Runnable
       final int x0 = 120;
       final int y0 = 120;
       this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
         new VectorI2I(x0, y0),
         new VectorI2I(x0 + 32, y0 + 32)));
     }
@@ -502,6 +510,7 @@ public final class QuadTreeBasicRayViewer implements Runnable
       final int x0 = 200;
       final int y0 = 200;
       this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
         new VectorI2I(x0, y0),
         new VectorI2I(x0 + 32, y0 + 32)));
     }
@@ -510,6 +519,7 @@ public final class QuadTreeBasicRayViewer implements Runnable
       final int x0 = 64;
       final int y0 = 260;
       this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
         new VectorI2I(x0, y0),
         new VectorI2I(x0 + 32, y0 + 32)));
     }
@@ -518,6 +528,7 @@ public final class QuadTreeBasicRayViewer implements Runnable
       final int x0 = 280;
       final int y0 = 280;
       this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
         new VectorI2I(x0, y0),
         new VectorI2I(x0 + 32, y0 + 32)));
     }
@@ -556,7 +567,10 @@ public final class QuadTreeBasicRayViewer implements Runnable
         final int y1 = Math.min(y0 + height, 511);
         final VectorI2I r0 = new VectorI2I(x0, y0);
         final VectorI2I r1 = new VectorI2I(x1, y1);
-        this.quadtree.quadTreeInsert(new Rectangle(r0, r1));
+        this.quadtree.quadTreeInsert(new Rectangle(
+          QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
+          r0,
+          r1));
       }
     } catch (final ConstraintError e) {
       QuadTreeBasicRayViewer.fatal(e);

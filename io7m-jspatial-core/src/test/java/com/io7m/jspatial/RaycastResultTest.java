@@ -115,23 +115,6 @@ public class RaycastResultTest
     Assert.assertTrue(rr0.getObject() == r);
   }
 
-  @SuppressWarnings("static-method") @Test public void testOrdering()
-  {
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(1, 1));
-    final RaycastResult<Rectangle> rr0 = new RaycastResult<Rectangle>(r, 1.0);
-    final RaycastResult<Rectangle> rr1 = new RaycastResult<Rectangle>(r, 2.0);
-    final RaycastResult<Rectangle> rr2 = new RaycastResult<Rectangle>(r, 3.0);
-
-    Assert.assertEquals(0, rr0.compareTo(rr0));
-    Assert.assertEquals(0, rr1.compareTo(rr1));
-    Assert.assertEquals(0, rr2.compareTo(rr2));
-    Assert.assertEquals(-1, rr0.compareTo(rr1));
-    Assert.assertEquals(1, rr1.compareTo(rr0));
-    Assert.assertEquals(-1, rr1.compareTo(rr2));
-    Assert.assertEquals(1, rr2.compareTo(rr1));
-  }
-
   @SuppressWarnings("static-method") @Test public void testHashcode()
   {
     final RaycastResult<Rectangle> rr0 =
@@ -158,6 +141,23 @@ public class RaycastResultTest
     Assert.assertTrue(rr0.hashCode() == rr1.hashCode());
     Assert.assertFalse(rr0.hashCode() == rr2.hashCode());
     Assert.assertFalse(rr0.hashCode() == rr3.hashCode());
+  }
+
+  @SuppressWarnings("static-method") @Test public void testOrdering()
+  {
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(1, 1));
+    final RaycastResult<Rectangle> rr0 = new RaycastResult<Rectangle>(r, 1.0);
+    final RaycastResult<Rectangle> rr1 = new RaycastResult<Rectangle>(r, 2.0);
+    final RaycastResult<Rectangle> rr2 = new RaycastResult<Rectangle>(r, 3.0);
+
+    Assert.assertEquals(0, rr0.compareTo(rr0));
+    Assert.assertEquals(0, rr1.compareTo(rr1));
+    Assert.assertEquals(0, rr2.compareTo(rr2));
+    Assert.assertEquals(-1, rr0.compareTo(rr1));
+    Assert.assertEquals(1, rr1.compareTo(rr0));
+    Assert.assertEquals(-1, rr1.compareTo(rr2));
+    Assert.assertEquals(1, rr2.compareTo(rr1));
   }
 
   @SuppressWarnings("static-method") @Test public void testToString()

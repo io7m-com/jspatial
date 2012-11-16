@@ -219,7 +219,7 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
      * Insertion base case: item may or may not fit within node.
      */
 
-    private boolean insertBase(
+    @SuppressWarnings("synthetic-access") private boolean insertBase(
       final @Nonnull T item)
     {
       if (QuadTreeBasic.this.objects_all.contains(item)) {
@@ -365,7 +365,7 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
       }
     }
 
-    boolean remove(
+    @SuppressWarnings("synthetic-access") boolean remove(
       final @Nonnull T item)
     {
       if (QuadTreeBasic.this.objects_all.contains(item) == false) {
@@ -378,7 +378,7 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
       return this.removeStep(item);
     }
 
-    private boolean removeStep(
+    @SuppressWarnings("synthetic-access") private boolean removeStep(
       final @Nonnull T item)
     {
       if (this.quadrant_objects.contains(item)) {
