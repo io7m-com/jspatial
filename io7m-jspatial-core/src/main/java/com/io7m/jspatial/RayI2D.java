@@ -32,7 +32,7 @@ public final class RayI2D
   final @Nonnull VectorI2D direction;
   final @Nonnull VectorI2D direction_inverse;
 
-  RayI2D(
+  public RayI2D(
     final @Nonnull VectorReadable2D origin,
     final @Nonnull VectorReadable2D direction)
   {

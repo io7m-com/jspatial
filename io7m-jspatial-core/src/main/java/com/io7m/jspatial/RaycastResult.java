@@ -70,7 +70,7 @@ public final class RaycastResult<T extends BoundingArea> implements
    * Retrieve the distance of this object from the origin of the ray.
    */
 
-  double getDistance()
+  public double getDistance()
   {
     return this.distance;
   }
@@ -79,7 +79,7 @@ public final class RaycastResult<T extends BoundingArea> implements
    * Retrieve the intersected object.
    */
 
-  @Nonnull T getObject()
+  public @Nonnull T getObject()
   {
     return this.object;
   }
