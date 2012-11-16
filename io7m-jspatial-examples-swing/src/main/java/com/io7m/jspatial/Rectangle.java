@@ -5,6 +5,10 @@ import javax.annotation.Nonnull;
 import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorReadable2I;
 
+/**
+ * Trivial rectangle type that can be inserted into quadtrees.
+ */
+
 final class Rectangle implements QuadTreeMember<Rectangle>
 {
   private final @Nonnull VectorI2I lower;

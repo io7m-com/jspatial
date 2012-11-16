@@ -16,15 +16,15 @@
 
 package com.io7m.jspatial;
 
-/**
- * Immutable two-dimensional ray type, defined as an origin and a direction
- * vector.
- */
-
 import javax.annotation.Nonnull;
 
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorReadable2D;
+
+/**
+ * Immutable two-dimensional ray type, defined as an origin and a direction
+ * vector.
+ */
 
 public final class RayI2D
 {

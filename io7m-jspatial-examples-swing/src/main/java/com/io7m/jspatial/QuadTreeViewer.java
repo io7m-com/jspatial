@@ -48,6 +48,10 @@ import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorM2I;
 import com.io7m.jtensors.VectorReadable2I;
 
+/**
+ * Basic Swing-based quadtree viewer demonstrating area queries.
+ */
+
 public final class QuadTreeViewer implements Runnable
 {
   static final class Selection implements BoundingArea

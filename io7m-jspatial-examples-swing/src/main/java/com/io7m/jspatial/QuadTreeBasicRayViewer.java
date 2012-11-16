@@ -49,6 +49,11 @@ import com.io7m.jtensors.VectorM2D;
 import com.io7m.jtensors.VectorM2I;
 import com.io7m.jtensors.VectorReadable2I;
 
+/**
+ * Basic Swing-based quadtree viewer demonstrating the raycast operation on
+ * objects.
+ */
+
 public final class QuadTreeBasicRayViewer implements Runnable
 {
   static final class Selection implements BoundingArea
