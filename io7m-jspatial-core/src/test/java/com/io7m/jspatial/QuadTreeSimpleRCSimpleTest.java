@@ -765,6 +765,49 @@ public class QuadTreeSimpleRCSimpleTest
     Assert.assertFalse(iter.hasNext());
   }
 
+  @SuppressWarnings("static-method") @Test public void testRaycast()
+    throws ConstraintError
+  {
+    final QuadTreeSimpleRCSimple<Rectangle> q =
+      new QuadTreeSimpleRCSimple<Rectangle>(512, 512);
+
+    q.quadTreeInsert(new Rectangle(new VectorI2I(32, 32), new VectorI2I(
+      80,
+      80)));
+    q.quadTreeInsert(new Rectangle(new VectorI2I(400, 32), new VectorI2I(
+      400 + 32,
+      80)));
+    q.quadTreeInsert(new Rectangle(new VectorI2I(400, 400), new VectorI2I(
+      480,
+      480)));
+
+    final RayI2D ray =
+      new RayI2D(VectorI2D.ZERO, VectorI2D.normalize(new VectorI2D(511, 511)));
+    final SortedSet<RaycastResult<Rectangle>> items =
+      new TreeSet<RaycastResult<Rectangle>>();
+    q.quadTreeQueryRaycast(ray, items);
+
+    Assert.assertEquals(2, items.size());
+
+    final Iterator<RaycastResult<Rectangle>> iter = items.iterator();
+
+    {
+      final RaycastResult<Rectangle> rr = iter.next();
+      final Rectangle r = rr.getObject();
+      Assert.assertEquals(32, r.boundingAreaLower().getXI());
+      Assert.assertEquals(32, r.boundingAreaLower().getYI());
+    }
+
+    {
+      final RaycastResult<Rectangle> rr = iter.next();
+      final Rectangle r = rr.getObject();
+      Assert.assertEquals(400, r.boundingAreaLower().getXI());
+      Assert.assertEquals(400, r.boundingAreaLower().getYI());
+    }
+
+    Assert.assertFalse(iter.hasNext());
+  }
+
   @SuppressWarnings("static-method") @Test public
     void
     testRaycastQuadrantsNegativeRay()
