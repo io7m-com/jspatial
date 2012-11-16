@@ -63,7 +63,7 @@ import com.io7m.jtensors.VectorReadable2I;
  *          The type of objects contained within the tree
  */
 
-class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
+class QuadTreeBasic<T extends BoundingArea> implements
   QuadTreeInterface<T>
 {
   class Quadrant implements BoundingArea
@@ -97,9 +97,9 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
       this.leaf = true;
       this.quadrant_objects = new LinkedList<T>();
       this.size_x =
-        QuadTreeSimpleRCSimple.getSpanSizeX(this.lower, this.upper);
+        QuadTreeBasic.getSpanSizeX(this.lower, this.upper);
       this.size_y =
-        QuadTreeSimpleRCSimple.getSpanSizeY(this.lower, this.upper);
+        QuadTreeBasic.getSpanSizeY(this.lower, this.upper);
     }
 
     void areaContaining(
@@ -236,7 +236,7 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
     @SuppressWarnings("synthetic-access") private boolean insertObject(
       final @Nonnull T item)
     {
-      QuadTreeSimpleRCSimple.this.objects_all.add(item);
+      QuadTreeBasic.this.objects_all.add(item);
       this.quadrant_objects.add(item);
       return true;
     }
@@ -334,7 +334,7 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
         this.upper.x,
         this.upper.y)) {
 
-        for (final T object : QuadTreeSimpleRCSimple.this.objects_all) {
+        for (final T object : QuadTreeBasic.this.objects_all) {
           final VectorReadable2I object_lower = object.boundingAreaLower();
           final VectorReadable2I object_upper = object.boundingAreaUpper();
 
@@ -430,8 +430,8 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
       final @Nonnull VectorI2I lower,
       final @Nonnull VectorI2I upper)
     {
-      final int size_x = QuadTreeSimpleRCSimple.getSpanSizeX(lower, upper);
-      final int size_y = QuadTreeSimpleRCSimple.getSpanSizeY(lower, upper);
+      final int size_x = QuadTreeBasic.getSpanSizeX(lower, upper);
+      final int size_y = QuadTreeBasic.getSpanSizeY(lower, upper);
 
       assert size_x >= 2;
       assert size_y >= 2;
@@ -442,8 +442,8 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
       final int[] x_spans = new int[4];
       final int[] y_spans = new int[4];
 
-      QuadTreeSimpleRCSimple.split1D(lower.getXI(), upper.getXI(), x_spans);
-      QuadTreeSimpleRCSimple.split1D(lower.getYI(), upper.getYI(), y_spans);
+      QuadTreeBasic.split1D(lower.getXI(), upper.getXI(), x_spans);
+      QuadTreeBasic.split1D(lower.getYI(), upper.getYI(), y_spans);
 
       this.x0y0_lower = new VectorI2I(x_spans[0], y_spans[0]);
       this.x0y1_lower = new VectorI2I(x_spans[0], y_spans[2]);
@@ -500,7 +500,7 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
   private final @Nonnull Quadrant root;
   private final @Nonnull List<T>  objects_all;
 
-  public QuadTreeSimpleRCSimple(
+  public QuadTreeBasic(
     final int size_x,
     final int size_y)
     throws ConstraintError

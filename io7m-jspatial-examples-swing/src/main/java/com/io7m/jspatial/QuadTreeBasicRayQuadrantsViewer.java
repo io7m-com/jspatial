@@ -48,7 +48,7 @@ import com.io7m.jtensors.VectorM2D;
 import com.io7m.jtensors.VectorM2I;
 import com.io7m.jtensors.VectorReadable2I;
 
-public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
+public final class QuadTreeBasicRayQuadrantsViewer implements Runnable
 {
   static final class Selection implements BoundingArea
   {
@@ -105,10 +105,10 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
         g.setColor(Color.LIGHT_GRAY);
 
         g.translate(
-          QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_OFFSET,
-          QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_OFFSET);
+          QuadTreeBasicRayQuadrantsViewer.CANVAS_OFFSET,
+          QuadTreeBasicRayQuadrantsViewer.CANVAS_OFFSET);
 
-        QuadTreeRCSimpleRayQuadrantsViewer.this.quadtree
+        QuadTreeBasicRayQuadrantsViewer.this.quadtree
           .quadTreeTraverse(new QuadTreeTraversal() {
             @SuppressWarnings("unused") @Override public void visit(
               final int depth,
@@ -124,7 +124,7 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
             }
           });
 
-        QuadTreeRCSimpleRayQuadrantsViewer.this.quadtree
+        QuadTreeBasicRayQuadrantsViewer.this.quadtree
           .quadTreeIterateObjects(new Function<Rectangle, Boolean>() {
             @Override public Boolean call(
               final Rectangle r)
@@ -144,7 +144,7 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
                 g.drawRect(x, y, w, h);
                 return Boolean.valueOf(true);
               } catch (final Exception e) {
-                QuadTreeRCSimpleRayQuadrantsViewer.fatal(e);
+                QuadTreeBasicRayQuadrantsViewer.fatal(e);
                 return Boolean.FALSE;
               }
             }
@@ -152,20 +152,20 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
 
         g.setColor(Color.YELLOW);
         g.drawString(
-          QuadTreeRCSimpleRayQuadrantsViewer.this.ray_origin.toString(),
-          QuadTreeRCSimpleRayQuadrantsViewer.this.ray_origin.x,
-          QuadTreeRCSimpleRayQuadrantsViewer.this.ray_origin.y);
+          QuadTreeBasicRayQuadrantsViewer.this.ray_origin.toString(),
+          QuadTreeBasicRayQuadrantsViewer.this.ray_origin.x,
+          QuadTreeBasicRayQuadrantsViewer.this.ray_origin.y);
 
         {
-          final int x0 = QuadTreeRCSimpleRayQuadrantsViewer.this.ray_origin.x;
-          final int x1 = QuadTreeRCSimpleRayQuadrantsViewer.this.ray_target.x;
-          final int y0 = QuadTreeRCSimpleRayQuadrantsViewer.this.ray_origin.y;
-          final int y1 = QuadTreeRCSimpleRayQuadrantsViewer.this.ray_target.y;
+          final int x0 = QuadTreeBasicRayQuadrantsViewer.this.ray_origin.x;
+          final int x1 = QuadTreeBasicRayQuadrantsViewer.this.ray_target.x;
+          final int y0 = QuadTreeBasicRayQuadrantsViewer.this.ray_origin.y;
+          final int y1 = QuadTreeBasicRayQuadrantsViewer.this.ray_target.y;
           g.drawLine(x0, y0, x1, y1);
         }
 
-        for (final RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant> r : QuadTreeRCSimpleRayQuadrantsViewer.this.quadrants) {
-          final QuadTreeSimpleRCSimple<Rectangle>.Quadrant q = r.getObject();
+        for (final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> r : QuadTreeBasicRayQuadrantsViewer.this.quadrants) {
+          final QuadTreeBasic<Rectangle>.Quadrant q = r.getObject();
           final VectorReadable2I lower = q.boundingAreaLower();
           final VectorReadable2I upper = q.boundingAreaUpper();
 
@@ -178,9 +178,9 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
         }
 
       } catch (final Exception e) {
-        QuadTreeRCSimpleRayQuadrantsViewer.fatal(e);
+        QuadTreeBasicRayQuadrantsViewer.fatal(e);
       } catch (final ConstraintError e) {
-        QuadTreeRCSimpleRayQuadrantsViewer.fatal(e);
+        QuadTreeBasicRayQuadrantsViewer.fatal(e);
       }
     }
   }
@@ -203,8 +203,8 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
       @SuppressWarnings("synthetic-access") @Override public void run()
       {
         try {
-          final QuadTreeRCSimpleRayQuadrantsViewer v =
-            new QuadTreeRCSimpleRayQuadrantsViewer();
+          final QuadTreeBasicRayQuadrantsViewer v =
+            new QuadTreeBasicRayQuadrantsViewer();
           final JFrame frame = new JFrame("QuadTreeRayQuadrantsViewer");
           frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
           frame.getContentPane().add(v.getPanel());
@@ -212,33 +212,33 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
           frame.setVisible(true);
           v.run();
         } catch (final ConstraintError e) {
-          QuadTreeRCSimpleRayQuadrantsViewer.fatal(e);
+          QuadTreeBasicRayQuadrantsViewer.fatal(e);
         }
       }
     });
   }
 
   private final JPanel                                                               panel;
-  private QuadTreeSimpleRCSimple<Rectangle>                                          quadtree;
+  private QuadTreeBasic<Rectangle>                                          quadtree;
   private final VectorM2I                                                            ray_origin;
   private final VectorM2I                                                            ray_target;
   private final VectorM2D                                                            ray_direction;
-  private final SortedSet<RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>> quadrants;
+  private final SortedSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>> quadrants;
   private final TreeCanvas                                                           canvas;
 
-  public QuadTreeRCSimpleRayQuadrantsViewer()
+  public QuadTreeBasicRayQuadrantsViewer()
     throws ConstraintError
   {
     this.quadrants =
-      new TreeSet<RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>>();
+      new TreeSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>>();
 
     this.ray_direction = new VectorM2D();
     this.ray_origin = new VectorM2I();
     this.ray_target = new VectorM2I();
     this.quadtree =
-      new QuadTreeSimpleRCSimple<Rectangle>(
-        QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_SIZE_X,
-        QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_SIZE_Y);
+      new QuadTreeBasic<Rectangle>(
+        QuadTreeBasicRayQuadrantsViewer.CANVAS_SIZE_X,
+        QuadTreeBasicRayQuadrantsViewer.CANVAS_SIZE_Y);
 
     this.panel = new JPanel();
     this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
@@ -247,10 +247,10 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
       final JPanel canvas_panel = new JPanel();
       this.canvas = new TreeCanvas();
       this.canvas.setSize(
-        QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_SIZE_X
-          + (QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_OFFSET * 2),
-        QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_SIZE_Y
-          + (QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_OFFSET * 2));
+        QuadTreeBasicRayQuadrantsViewer.CANVAS_SIZE_X
+          + (QuadTreeBasicRayQuadrantsViewer.CANVAS_OFFSET * 2),
+        QuadTreeBasicRayQuadrantsViewer.CANVAS_SIZE_Y
+          + (QuadTreeBasicRayQuadrantsViewer.CANVAS_OFFSET * 2));
       this.canvas.setMinimumSize(this.canvas.getSize());
       canvas_panel.add(this.canvas);
       this.panel.add(canvas_panel);
@@ -279,10 +279,10 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
           mousePressed(
             final MouseEvent e)
         {
-          QuadTreeRCSimpleRayQuadrantsViewer.this.ray_origin.x =
-            e.getX() - QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_OFFSET;
-          QuadTreeRCSimpleRayQuadrantsViewer.this.ray_origin.y =
-            e.getY() - QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_OFFSET;
+          QuadTreeBasicRayQuadrantsViewer.this.ray_origin.x =
+            e.getX() - QuadTreeBasicRayQuadrantsViewer.CANVAS_OFFSET;
+          QuadTreeBasicRayQuadrantsViewer.this.ray_origin.y =
+            e.getY() - QuadTreeBasicRayQuadrantsViewer.CANVAS_OFFSET;
         }
 
         @SuppressWarnings("synthetic-access") @Override public
@@ -290,12 +290,12 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
           mouseReleased(
             final MouseEvent e)
         {
-          QuadTreeRCSimpleRayQuadrantsViewer.this.ray_target.x =
-            e.getX() - QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_OFFSET;
-          QuadTreeRCSimpleRayQuadrantsViewer.this.ray_target.y =
-            e.getY() - QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_OFFSET;
+          QuadTreeBasicRayQuadrantsViewer.this.ray_target.x =
+            e.getX() - QuadTreeBasicRayQuadrantsViewer.CANVAS_OFFSET;
+          QuadTreeBasicRayQuadrantsViewer.this.ray_target.y =
+            e.getY() - QuadTreeBasicRayQuadrantsViewer.CANVAS_OFFSET;
 
-          QuadTreeRCSimpleRayQuadrantsViewer.this.commandRayCast();
+          QuadTreeBasicRayQuadrantsViewer.this.commandRayCast();
         }
       });
 
@@ -318,7 +318,7 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
           actionPerformed(
             final ActionEvent e)
         {
-          QuadTreeRCSimpleRayQuadrantsViewer.this.commandReset();
+          QuadTreeBasicRayQuadrantsViewer.this.commandReset();
         }
       });
 
@@ -342,7 +342,7 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
           final int y1 = Integer.parseInt(input_y1.getText());
           final Rectangle r =
             new Rectangle(new VectorI2I(x0, y0), new VectorI2I(x1, y1));
-          QuadTreeRCSimpleRayQuadrantsViewer.this.commandInsert(r);
+          QuadTreeBasicRayQuadrantsViewer.this.commandInsert(r);
         }
       });
 
@@ -350,8 +350,8 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
         @SuppressWarnings("unused") @Override public void actionPerformed(
           final ActionEvent _)
         {
-          QuadTreeRCSimpleRayQuadrantsViewer.this.commandReset();
-          QuadTreeRCSimpleRayQuadrantsViewer.this.commandRandomize();
+          QuadTreeBasicRayQuadrantsViewer.this.commandReset();
+          QuadTreeBasicRayQuadrantsViewer.this.commandRandomize();
         }
       });
 
@@ -537,7 +537,7 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
     final Rectangle rect)
   {
     try {
-      QuadTreeRCSimpleRayQuadrantsViewer.this.quadtree.quadTreeInsert(rect);
+      QuadTreeBasicRayQuadrantsViewer.this.quadtree.quadTreeInsert(rect);
       this.canvas.repaint();
     } catch (final IllegalArgumentException __) {
       // Ignored!
@@ -561,7 +561,7 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
         this.quadtree.quadTreeInsert(new Rectangle(r0, r1));
       }
     } catch (final ConstraintError e) {
-      QuadTreeRCSimpleRayQuadrantsViewer.fatal(e);
+      QuadTreeBasicRayQuadrantsViewer.fatal(e);
     }
   }
 
@@ -593,13 +593,13 @@ public final class QuadTreeRCSimpleRayQuadrantsViewer implements Runnable
   {
     try {
       this.quadrants.clear();
-      QuadTreeRCSimpleRayQuadrantsViewer.this.quadtree =
-        new QuadTreeSimpleRCSimple<Rectangle>(
-          QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_SIZE_X,
-          QuadTreeRCSimpleRayQuadrantsViewer.CANVAS_SIZE_Y);
+      QuadTreeBasicRayQuadrantsViewer.this.quadtree =
+        new QuadTreeBasic<Rectangle>(
+          QuadTreeBasicRayQuadrantsViewer.CANVAS_SIZE_X,
+          QuadTreeBasicRayQuadrantsViewer.CANVAS_SIZE_Y);
       this.canvas.repaint();
     } catch (final ConstraintError x) {
-      QuadTreeRCSimpleRayQuadrantsViewer.fatal(x);
+      QuadTreeBasicRayQuadrantsViewer.fatal(x);
     }
   }
 

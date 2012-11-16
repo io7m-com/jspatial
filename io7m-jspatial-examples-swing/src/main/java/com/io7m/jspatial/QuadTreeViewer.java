@@ -43,9 +43,6 @@ import javax.swing.WindowConstants;
 
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
-import com.io7m.jspatial.BoundingArea;
-import com.io7m.jspatial.QuadTreeSimple;
-import com.io7m.jspatial.QuadTreeTraversal;
 import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorM2I;
 import com.io7m.jtensors.VectorReadable2I;
@@ -210,10 +207,10 @@ public final class QuadTreeViewer implements Runnable
     });
   }
 
-  private final JPanel              panel;
-  private QuadTreeSimple<Rectangle> quadtree;
-  private final Selection           selection;
-  private final List<Rectangle>     selected;
+  private final JPanel             panel;
+  private QuadTreeBasic<Rectangle> quadtree;
+  private final Selection          selection;
+  private final List<Rectangle>    selected;
 
   public QuadTreeViewer()
     throws ConstraintError
@@ -221,7 +218,7 @@ public final class QuadTreeViewer implements Runnable
     this.selected = new LinkedList<Rectangle>();
     this.selection = new Selection();
     this.quadtree =
-      new QuadTreeSimple<Rectangle>(
+      new QuadTreeBasic<Rectangle>(
         QuadTreeViewer.CANVAS_SIZE_X,
         QuadTreeViewer.CANVAS_SIZE_Y);
 
@@ -502,7 +499,7 @@ public final class QuadTreeViewer implements Runnable
   {
     try {
       QuadTreeViewer.this.quadtree =
-        new QuadTreeSimple<Rectangle>(
+        new QuadTreeBasic<Rectangle>(
           QuadTreeViewer.CANVAS_SIZE_X,
           QuadTreeViewer.CANVAS_SIZE_Y);
       canvas.repaint();
