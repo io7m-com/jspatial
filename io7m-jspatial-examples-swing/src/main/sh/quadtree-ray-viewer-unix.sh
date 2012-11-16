@@ -12,4 +12,4 @@ do
   fi
 done
 
-exec java -cp "${JAR_PATH}" "com.io7m.jspatial.examples.QuadTreeViewer" $@
+exec java -cp "${JAR_PATH}" "com.io7m.jspatial.QuadTreeBasicRayViewer" $@

@@ -14,20 +14,56 @@
     <file>
       <outputDirectory>/</outputDirectory>
       <fileMode>0755</fileMode>
-      <source>src/main/sh/quadtree-viewer-unix.sh</source>
-      <destName>quadtree-viewer-unix.sh</destName>
+      <source>src/main/sh/quadtree-area-viewer-unix.sh</source>
+      <destName>quadtree-area-viewer-unix.sh</destName>
     </file>
     <file>
       <outputDirectory>/</outputDirectory>
       <fileMode>0755</fileMode>
-      <source>src/main/exe/quadtree-viewer.exe</source>
-      <destName>quadtree-viewer.exe</destName>
+      <source>src/main/sh/quadtree-ray-viewer-unix.sh</source>
+      <destName>quadtree-ray-viewer-unix.sh</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0755</fileMode>
+      <source>src/main/sh/quadtree-quad-ray-viewer-unix.sh</source>
+      <destName>quadtree-quad-ray-viewer-unix.sh</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0755</fileMode>
+      <source>src/main/exe/wrapper.exe</source>
+      <destName>quadtree-area-viewer.exe</destName>
     </file>
     <file>
       <outputDirectory>/</outputDirectory>
       <fileMode>0644</fileMode>
-      <source>src/main/exe/quadtree-viewer.ini</source>
-      <destName>quadtree-viewer.ini</destName>
+      <source>src/main/exe/quadtree-area-viewer.ini</source>
+      <destName>quadtree-area-viewer.ini</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0755</fileMode>
+      <source>src/main/exe/wrapper.exe</source>
+      <destName>quadtree-ray-viewer.exe</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0644</fileMode>
+      <source>src/main/exe/quadtree-ray-viewer.ini</source>
+      <destName>quadtree-ray-viewer.ini</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0755</fileMode>
+      <source>src/main/exe/wrapper.exe</source>
+      <destName>quadtree-quad-ray-viewer.exe</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0644</fileMode>
+      <source>src/main/exe/quadtree-quad-ray-viewer.ini</source>
+      <destName>quadtree-quad-ray-viewer.ini</destName>
     </file>
   </files>
 

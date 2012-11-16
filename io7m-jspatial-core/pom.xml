@@ -5,7 +5,7 @@
   <artifactId>io7m-jspatial-core</artifactId>
   <name>io7m-jspatial-core</name>
   <description>Common API code</description>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
   <url>http://mvn.io7m.com/jspatial-core</url>
   <packaging>jar</packaging>
 
