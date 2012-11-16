@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document
+  xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>io7m-jspatial</title>
+  </properties>
+
+  <body>
+    <subsection name="jspatial">
+      <p>
+        The <var>jspatial</var> package implements a set of spatial data structures.
+      </p>
+    </subsection>
+    <subsection name="features">
+      <ul>
+        <li>Quadtree, including efficient area and raycast queries.</li>
+        <li>Octree, including efficient volume and raycast queries.</li>
+        <li>Fully documented (Javadoc).</li>
+        <li>100% automated unit test coverage.</li>
+        <li>ISC license.</li>
+        <li>Platform independent (tested on FreeBSD, Linux, Mac OS X, Solaris, Windows XP).</li>
+      </ul>
+    </subsection>
+  </body>
+
+</document>
