@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
  * by their scalar distance from the origin of the ray.
  */
 
-final class RaycastResult<T extends BoundingArea> implements
+public final class RaycastResult<T extends BoundingArea> implements
   Comparable<RaycastResult<T>>
 {
   private final double     distance;
@@ -35,6 +35,35 @@ final class RaycastResult<T extends BoundingArea> implements
   {
     this.object = object;
     this.distance = distance;
+  }
+
+  @Override public int compareTo(
+    final @Nonnull RaycastResult<T> other)
+  {
+    return Double.compare(this.distance, other.distance);
+  }
+
+  @Override public boolean equals(
+    final Object obj)
+  {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    final RaycastResult<?> other = (RaycastResult<?>) obj;
+    if (Double.doubleToLongBits(this.distance) != Double
+      .doubleToLongBits(other.distance)) {
+      return false;
+    }
+    if (!this.object.equals(other.object)) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -55,10 +84,15 @@ final class RaycastResult<T extends BoundingArea> implements
     return this.object;
   }
 
-  @Override public int compareTo(
-    final @Nonnull RaycastResult<T> other)
+  @Override public int hashCode()
   {
-    return Double.compare(this.distance, other.distance);
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(this.distance);
+    result = (prime * result) + (int) (temp ^ (temp >>> 32));
+    result = (prime * result) + this.object.hashCode();
+    return result;
   }
 
   @Override public String toString()
@@ -70,44 +104,5 @@ final class RaycastResult<T extends BoundingArea> implements
     builder.append(this.object);
     builder.append("]");
     return builder.toString();
-  }
-
-  @Override public int hashCode()
-  {
-    final int prime = 31;
-    int result = 1;
-    long temp;
-    temp = Double.doubleToLongBits(this.distance);
-    result = (prime * result) + (int) (temp ^ (temp >>> 32));
-    result =
-      (prime * result) + ((this.object == null) ? 0 : this.object.hashCode());
-    return result;
-  }
-
-  @Override public boolean equals(
-    final Object obj)
-  {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (this.getClass() != obj.getClass()) {
-      return false;
-    }
-    final RaycastResult<?> other = (RaycastResult<?>) obj;
-    if (Double.doubleToLongBits(this.distance) != Double
-      .doubleToLongBits(other.distance)) {
-      return false;
-    }
-    if (this.object == null) {
-      if (other.object != null) {
-        return false;
-      }
-    } else if (!this.object.equals(other.object)) {
-      return false;
-    }
-    return true;
   }
 }

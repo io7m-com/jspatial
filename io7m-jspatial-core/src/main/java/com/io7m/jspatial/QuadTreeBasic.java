@@ -19,12 +19,14 @@ package com.io7m.jspatial;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
@@ -63,21 +65,21 @@ import com.io7m.jtensors.VectorReadable2I;
  *          The type of objects contained within the tree
  */
 
-class QuadTreeBasic<T extends BoundingArea> implements
+public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
   QuadTreeInterface<T>
 {
   class Quadrant implements BoundingArea
   {
-    private final @Nonnull VectorI2I lower;
-    private final @Nonnull VectorI2I upper;
-    private @CheckForNull Quadrant   x0y0;
-    private @CheckForNull Quadrant   x1y0;
-    private @CheckForNull Quadrant   x0y1;
-    private @CheckForNull Quadrant   x1y1;
-    private boolean                  leaf;
-    private final @Nonnull List<T>   quadrant_objects;
-    final int                        size_x;
-    final int                        size_y;
+    private final @Nonnull VectorI2I    lower;
+    private final @Nonnull VectorI2I    upper;
+    private @CheckForNull Quadrant      x0y0;
+    private @CheckForNull Quadrant      x1y0;
+    private @CheckForNull Quadrant      x0y1;
+    private @CheckForNull Quadrant      x1y1;
+    private boolean                     leaf;
+    private final @Nonnull SortedSet<T> quadrant_objects;
+    final int                           size_x;
+    final int                           size_y;
 
     /**
      * Construct a quadrant defined by the inclusive ranges given by
@@ -95,16 +97,14 @@ class QuadTreeBasic<T extends BoundingArea> implements
       this.x0y1 = null;
       this.x1y1 = null;
       this.leaf = true;
-      this.quadrant_objects = new LinkedList<T>();
-      this.size_x =
-        QuadTreeBasic.getSpanSizeX(this.lower, this.upper);
-      this.size_y =
-        QuadTreeBasic.getSpanSizeY(this.lower, this.upper);
+      this.quadrant_objects = new TreeSet<T>();
+      this.size_x = QuadTreeBasic.getSpanSizeX(this.lower, this.upper);
+      this.size_y = QuadTreeBasic.getSpanSizeY(this.lower, this.upper);
     }
 
     void areaContaining(
       final @Nonnull BoundingArea area,
-      final @Nonnull List<T> items)
+      final @Nonnull SortedSet<T> items)
     {
       /**
        * If <code>area</code> completely contains this quadrant, collect
@@ -137,7 +137,7 @@ class QuadTreeBasic<T extends BoundingArea> implements
 
     void areaOverlapping(
       final @Nonnull BoundingArea area,
-      final @Nonnull List<T> items)
+      final @Nonnull SortedSet<T> items)
     {
       /**
        * If <code>area</code> overlaps this quadrant, test each object against
@@ -190,7 +190,7 @@ class QuadTreeBasic<T extends BoundingArea> implements
     }
 
     private void collectRecursive(
-      final @Nonnull List<T> items)
+      final @Nonnull SortedSet<T> items)
     {
       items.addAll(this.quadrant_objects);
       if (this.leaf == false) {
@@ -222,6 +222,9 @@ class QuadTreeBasic<T extends BoundingArea> implements
     private boolean insertBase(
       final @Nonnull T item)
     {
+      if (QuadTreeBasic.this.objects_all.contains(item)) {
+        return false;
+      }
       if (BoundingAreaCheck.containedWithin(this, item)) {
         return this.insertStep(item);
       }
@@ -296,6 +299,45 @@ class QuadTreeBasic<T extends BoundingArea> implements
       return this.insertObject(item);
     }
 
+    void raycast(
+      final @Nonnull RayI2D ray,
+      final @Nonnull SortedSet<RaycastResult<T>> items)
+    {
+      if (BoundingAreaCheck.rayBoxIntersects(
+        ray,
+        this.lower.x,
+        this.lower.y,
+        this.upper.x,
+        this.upper.y)) {
+
+        for (final T object : this.quadrant_objects) {
+          final VectorReadable2I object_lower = object.boundingAreaLower();
+          final VectorReadable2I object_upper = object.boundingAreaUpper();
+
+          if (BoundingAreaCheck.rayBoxIntersects(
+            ray,
+            object_lower.getXI(),
+            object_lower.getYI(),
+            object_upper.getXI(),
+            object_upper.getYI())) {
+
+            final RaycastResult<T> r =
+              new RaycastResult<T>(object, VectorI2D.distance(new VectorI2D(
+                object_lower.getXI(),
+                object_lower.getYI()), ray.origin));
+            items.add(r);
+          }
+        }
+
+        if (this.leaf == false) {
+          this.x0y0.raycast(ray, items);
+          this.x0y1.raycast(ray, items);
+          this.x1y0.raycast(ray, items);
+          this.x1y1.raycast(ray, items);
+        }
+      }
+    }
+
     void raycastQuadrants(
       final @Nonnull RayI2D ray,
       final @Nonnull SortedSet<RaycastResult<Quadrant>> quadrants)
@@ -323,43 +365,46 @@ class QuadTreeBasic<T extends BoundingArea> implements
       }
     }
 
-    void raycast(
-      final @Nonnull RayI2D ray,
-      final @Nonnull SortedSet<RaycastResult<T>> items)
+    boolean remove(
+      final @Nonnull T item)
     {
-      if (BoundingAreaCheck.rayBoxIntersects(
-        ray,
-        this.lower.x,
-        this.lower.y,
-        this.upper.x,
-        this.upper.y)) {
+      if (QuadTreeBasic.this.objects_all.contains(item) == false) {
+        return false;
+      }
 
-        for (final T object : QuadTreeBasic.this.objects_all) {
-          final VectorReadable2I object_lower = object.boundingAreaLower();
-          final VectorReadable2I object_upper = object.boundingAreaUpper();
+      // If an object is in objects_all, then it must be within the
+      // bounds of the tree, according to insert().
+      assert BoundingAreaCheck.containedWithin(this, item);
+      return this.removeStep(item);
+    }
 
-          if (BoundingAreaCheck.rayBoxIntersects(
-            ray,
-            object_lower.getXI(),
-            object_lower.getYI(),
-            object_upper.getXI(),
-            object_upper.getYI())) {
+    private boolean removeStep(
+      final @Nonnull T item)
+    {
+      if (this.quadrant_objects.contains(item)) {
+        this.quadrant_objects.remove(item);
+        QuadTreeBasic.this.objects_all.remove(item);
+        return true;
+      }
 
-            final RaycastResult<T> r =
-              new RaycastResult<T>(object, VectorI2D.distance(new VectorI2D(
-                object_lower.getXI(),
-                object_lower.getYI()), ray.origin));
-            items.add(r);
-          }
+      if (this.leaf == false) {
+        if (BoundingAreaCheck.containedWithin(this.x0y0, item)) {
+          return this.x0y0.removeStep(item);
         }
-
-        if (this.leaf == false) {
-          this.x0y0.raycast(ray, items);
-          this.x0y1.raycast(ray, items);
-          this.x1y0.raycast(ray, items);
-          this.x1y1.raycast(ray, items);
+        if (BoundingAreaCheck.containedWithin(this.x1y0, item)) {
+          return this.x1y0.removeStep(item);
+        }
+        if (BoundingAreaCheck.containedWithin(this.x0y1, item)) {
+          return this.x0y1.removeStep(item);
+        }
+        if (BoundingAreaCheck.containedWithin(this.x1y1, item)) {
+          return this.x1y1.removeStep(item);
         }
       }
+
+      // The object must be in the tree, according to remove().
+      // Therefore it must be in this node, or one of the child quadrants.
+      throw new UnreachableCodeException();
     }
 
     /**
@@ -560,7 +605,7 @@ class QuadTreeBasic<T extends BoundingArea> implements
 
   @Override public void quadTreeQueryAreaContaining(
     final @Nonnull BoundingArea area,
-    final @Nonnull List<T> items)
+    final @Nonnull SortedSet<T> items)
     throws ConstraintError
   {
     Constraints.constrainNotNull(area, "Area");
@@ -574,7 +619,7 @@ class QuadTreeBasic<T extends BoundingArea> implements
 
   @Override public void quadTreeQueryAreaOverlapping(
     final @Nonnull BoundingArea area,
-    final @Nonnull List<T> items)
+    final @Nonnull SortedSet<T> items)
     throws ConstraintError
   {
     Constraints.constrainNotNull(area, "Area");
@@ -621,6 +666,18 @@ class QuadTreeBasic<T extends BoundingArea> implements
     Constraints.constrainNotNull(items, "Items");
 
     this.root.raycastQuadrants(ray, items);
+  }
+
+  @Override public boolean quadTreeRemove(
+    final @Nonnull T item)
+    throws ConstraintError
+  {
+    Constraints.constrainNotNull(item, "Item");
+    Constraints.constrainArbitrary(
+      BoundingAreaCheck.wellFormed(item),
+      "Bounding area is well-formed");
+
+    return this.root.remove(item);
   }
 
   @Override public void quadTreeTraverse(

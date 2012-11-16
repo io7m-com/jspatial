@@ -16,14 +16,18 @@
 
 package com.io7m.jspatial;
 
-import javax.annotation.Nonnull;
-
 /**
- * The interface provided by octree implementations.
+ * The type of objects that can be placed into a quadtree. Objects are
+ * required to have:
+ * 
+ * <ul>
+ * <li>Unique and totally ordered identifiers, in order to allow for "set"
+ * semantics within the tree.</li>
+ * <li>Axis-aligned bounding boxes, for spatial queries.</li>
+ * </ul>
  */
 
-public interface OctreeInterface<T extends BoundingArea>
+public interface QuadTreeMember<T> extends BoundingArea, Comparable<T>
 {
-  void octreeInsert(
-    final @Nonnull T item);
+  // See superinterfaces
 }

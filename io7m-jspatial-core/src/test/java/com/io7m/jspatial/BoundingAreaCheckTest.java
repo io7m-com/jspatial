@@ -14,9 +14,9 @@ public class BoundingAreaCheckTest
     testContainedAsymmetric()
   {
     final Rectangle rect0 =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(7, 7));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
     final Rectangle rect1 =
-      new Rectangle(new VectorI2I(2, 2), new VectorI2I(5, 5));
+      new Rectangle(1, new VectorI2I(2, 2), new VectorI2I(5, 5));
 
     {
       final Result r = BoundingAreaCheck.checkAgainst(rect0, rect1);
@@ -32,11 +32,11 @@ public class BoundingAreaCheckTest
   @SuppressWarnings("static-method") @Test public void testContainedNot0()
   {
     final Rectangle rect0 =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(2, 2));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(2, 2));
 
     {
       final Rectangle rect1 =
-        new Rectangle(new VectorI2I(3, 3), new VectorI2I(5, 5));
+        new Rectangle(1, new VectorI2I(3, 3), new VectorI2I(5, 5));
       final Result r0 = BoundingAreaCheck.checkAgainst(rect0, rect1);
       Assert.assertEquals(Result.RESULT_NO_OVERLAP, r0);
       final Result r1 = BoundingAreaCheck.checkAgainst(rect1, rect0);
@@ -45,7 +45,7 @@ public class BoundingAreaCheckTest
 
     {
       final Rectangle rect1 =
-        new Rectangle(new VectorI2I(0, 3), new VectorI2I(5, 5));
+        new Rectangle(1, new VectorI2I(0, 3), new VectorI2I(5, 5));
       final Result r0 = BoundingAreaCheck.checkAgainst(rect0, rect1);
       Assert.assertEquals(Result.RESULT_NO_OVERLAP, r0);
       final Result r1 = BoundingAreaCheck.checkAgainst(rect1, rect0);
@@ -54,7 +54,7 @@ public class BoundingAreaCheckTest
 
     {
       final Rectangle rect1 =
-        new Rectangle(new VectorI2I(3, 0), new VectorI2I(5, 5));
+        new Rectangle(1, new VectorI2I(3, 0), new VectorI2I(5, 5));
       final Result r0 = BoundingAreaCheck.checkAgainst(rect0, rect1);
       Assert.assertEquals(Result.RESULT_NO_OVERLAP, r0);
       final Result r1 = BoundingAreaCheck.checkAgainst(rect1, rect0);
@@ -67,7 +67,7 @@ public class BoundingAreaCheckTest
     testContainedReflexive()
   {
     final Rectangle rect =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(7, 7));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
 
     final Result r = BoundingAreaCheck.checkAgainst(rect, rect);
     Assert.assertEquals(Result.RESULT_CONTAINED_WITHIN, r);
@@ -76,9 +76,9 @@ public class BoundingAreaCheckTest
   @SuppressWarnings("static-method") @Test public void testContainedSimple()
   {
     final Rectangle container =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(15, 15));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(15, 15));
     final Rectangle item =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(7, 7));
+      new Rectangle(1, new VectorI2I(0, 0), new VectorI2I(7, 7));
 
     final boolean in = BoundingAreaCheck.containedWithin(container, item);
     Assert.assertTrue(in);
@@ -317,7 +317,7 @@ public class BoundingAreaCheckTest
   @SuppressWarnings("static-method") @Test public void testWellFormed()
   {
     final Rectangle rect =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(7, 7));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
 
     Assert.assertTrue(BoundingAreaCheck.wellFormed(rect));
   }
@@ -325,7 +325,7 @@ public class BoundingAreaCheckTest
   @SuppressWarnings("static-method") @Test public void testWellFormedNotX()
   {
     final Rectangle rect =
-      new Rectangle(new VectorI2I(8, 0), new VectorI2I(7, 7));
+      new Rectangle(0, new VectorI2I(8, 0), new VectorI2I(7, 7));
 
     Assert.assertFalse(BoundingAreaCheck.wellFormed(rect));
   }
@@ -333,7 +333,7 @@ public class BoundingAreaCheckTest
   @SuppressWarnings("static-method") @Test public void testWellFormedNotY()
   {
     final Rectangle rect =
-      new Rectangle(new VectorI2I(0, 8), new VectorI2I(7, 7));
+      new Rectangle(0, new VectorI2I(0, 8), new VectorI2I(7, 7));
 
     Assert.assertFalse(BoundingAreaCheck.wellFormed(rect));
   }

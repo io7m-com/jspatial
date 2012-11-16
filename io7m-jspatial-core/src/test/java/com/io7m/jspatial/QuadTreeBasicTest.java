@@ -1,8 +1,6 @@
 package com.io7m.jspatial;
 
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -16,7 +14,7 @@ import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorReadable2I;
 
-public class QuadTreeSimpleRCSimpleTest
+public class QuadTreeBasicTest
 {
   private static class Counter implements QuadTreeTraversal
   {
@@ -84,16 +82,15 @@ public class QuadTreeSimpleRCSimpleTest
     throws ConstraintError,
       Exception
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(128, 128);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(128, 128);
     final Rectangle r0 =
-      new Rectangle(new VectorI2I(8, 8), new VectorI2I(48, 48));
+      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
     final Rectangle r1 =
-      new Rectangle(new VectorI2I(8, 80), new VectorI2I(48, 120));
+      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
     final Rectangle r2 =
-      new Rectangle(new VectorI2I(80, 8), new VectorI2I(120, 48));
+      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
     final Rectangle r3 =
-      new Rectangle(new VectorI2I(80, 80), new VectorI2I(120, 120));
+      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
 
     boolean in = false;
     in = q.quadTreeInsert(r0);
@@ -123,8 +120,7 @@ public class QuadTreeSimpleRCSimpleTest
     throws Exception,
       ConstraintError
   {
-    final QuadTreeBasic<Rectangle> qt =
-      new QuadTreeBasic<Rectangle>(8, 8);
+    final QuadTreeBasic<Rectangle> qt = new QuadTreeBasic<Rectangle>(8, 8);
     final Counter c = new Counter();
 
     qt.quadTreeTraverse(c);
@@ -134,8 +130,7 @@ public class QuadTreeSimpleRCSimpleTest
   @SuppressWarnings({ "static-method" }) @Test public void testCreate()
     throws ConstraintError
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(2, 2);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(2, 2);
     Assert.assertEquals(2, q.quadTreeGetSizeX());
     Assert.assertEquals(2, q.quadTreeGetSizeY());
   }
@@ -174,17 +169,16 @@ public class QuadTreeSimpleRCSimpleTest
       throws ConstraintError,
         Exception
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(16, 16);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(16, 16);
     final Counter c = new Counter();
     final Rectangle r0 =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(7, 7));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
     final Rectangle r1 =
-      new Rectangle(new VectorI2I(8, 0), new VectorI2I(15, 7));
+      new Rectangle(1, new VectorI2I(8, 0), new VectorI2I(15, 7));
     final Rectangle r2 =
-      new Rectangle(new VectorI2I(0, 8), new VectorI2I(7, 15));
+      new Rectangle(2, new VectorI2I(0, 8), new VectorI2I(7, 15));
     final Rectangle r3 =
-      new Rectangle(new VectorI2I(8, 8), new VectorI2I(15, 15));
+      new Rectangle(3, new VectorI2I(8, 8), new VectorI2I(15, 15));
 
     {
       final VectorReadable2I bal = r0.boundingAreaLower();
@@ -232,17 +226,31 @@ public class QuadTreeSimpleRCSimpleTest
     throws ConstraintError,
       Exception
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(16, 16);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(16, 16);
     final Counter c = new Counter();
     final Rectangle r =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(12, 12));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
 
     final boolean in = q.quadTreeInsert(r);
     Assert.assertTrue(in);
 
     q.quadTreeTraverse(c);
     Assert.assertEquals(5, c.count);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testInsertDuplicate()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(16, 16);
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
+
+    boolean in = false;
+    in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+    in = q.quadTreeInsert(r);
+    Assert.assertFalse(in);
   }
 
   @SuppressWarnings("static-method") @Test(expected = ConstraintError.class) public
@@ -256,7 +264,7 @@ public class QuadTreeSimpleRCSimpleTest
 
     try {
       q = new QuadTreeBasic<Rectangle>(16, 16);
-      r = new Rectangle(new VectorI2I(12, 12), new VectorI2I(0, 0));
+      r = new Rectangle(0, new VectorI2I(12, 12), new VectorI2I(0, 0));
     } catch (final ConstraintError e) {
       Assert.fail(e.toString());
     }
@@ -269,10 +277,9 @@ public class QuadTreeSimpleRCSimpleTest
     throws ConstraintError,
       Exception
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(16, 16);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(16, 16);
     final Rectangle r =
-      new Rectangle(new VectorI2I(18, 18), new VectorI2I(28, 28));
+      new Rectangle(0, new VectorI2I(18, 18), new VectorI2I(28, 28));
 
     final boolean in = q.quadTreeInsert(r);
     Assert.assertFalse(in);
@@ -282,17 +289,17 @@ public class QuadTreeSimpleRCSimpleTest
     throws ConstraintError,
       Exception
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(16, 16);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(16, 16);
     final Rectangle r =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(0, 0));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
 
     final boolean in = q.quadTreeInsert(r);
     Assert.assertTrue(in);
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
       q.quadTreeQueryAreaContaining(new Rectangle(
+        0,
         new VectorI2I(0, 0),
         new VectorI2I(15, 15)), items);
       Assert.assertEquals(1, items.size());
@@ -303,16 +310,15 @@ public class QuadTreeSimpleRCSimpleTest
     throws ConstraintError,
       Exception
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(16, 16);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(16, 16);
     final Rectangle r0 =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(7, 7));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
     final Rectangle r1 =
-      new Rectangle(new VectorI2I(8, 0), new VectorI2I(15, 7));
+      new Rectangle(1, new VectorI2I(8, 0), new VectorI2I(15, 7));
     final Rectangle r2 =
-      new Rectangle(new VectorI2I(0, 8), new VectorI2I(7, 15));
+      new Rectangle(2, new VectorI2I(0, 8), new VectorI2I(7, 15));
     final Rectangle r3 =
-      new Rectangle(new VectorI2I(8, 8), new VectorI2I(15, 15));
+      new Rectangle(3, new VectorI2I(8, 8), new VectorI2I(15, 15));
 
     boolean in = false;
     in = q.quadTreeInsert(r0);
@@ -375,16 +381,15 @@ public class QuadTreeSimpleRCSimpleTest
     throws ConstraintError,
       Exception
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(16, 16);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(16, 16);
     final Rectangle r0 =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(7, 7));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
     final Rectangle r1 =
-      new Rectangle(new VectorI2I(8, 0), new VectorI2I(15, 7));
+      new Rectangle(1, new VectorI2I(8, 0), new VectorI2I(15, 7));
     final Rectangle r2 =
-      new Rectangle(new VectorI2I(0, 8), new VectorI2I(7, 15));
+      new Rectangle(2, new VectorI2I(0, 8), new VectorI2I(7, 15));
     final Rectangle r3 =
-      new Rectangle(new VectorI2I(8, 8), new VectorI2I(15, 15));
+      new Rectangle(3, new VectorI2I(8, 8), new VectorI2I(15, 15));
 
     boolean in = false;
     in = q.quadTreeInsert(r0);
@@ -440,19 +445,35 @@ public class QuadTreeSimpleRCSimpleTest
     Assert.assertEquals(15, q.x1y1_upper.y);
   }
 
+  @SuppressWarnings("static-method") @Test public void testQuadrantString()
+    throws ConstraintError
+  {
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(128, 128);
+    final SortedSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>> items =
+      new TreeSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>>();
+
+    q.quadTreeQueryRaycastQuadrants(new RayI2D(VectorI2D.ZERO, new VectorI2D(
+      1.0,
+      1.0)), items);
+
+    final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rr = items.first();
+    final QuadTreeBasic<Rectangle>.Quadrant qr = rr.getObject();
+
+    System.err.println(qr.toString());
+  }
+
   @SuppressWarnings("static-method") @Test public void testQueryContaining()
     throws ConstraintError
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(128, 128);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(128, 128);
     final Rectangle r0 =
-      new Rectangle(new VectorI2I(8, 8), new VectorI2I(48, 48));
+      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
     final Rectangle r1 =
-      new Rectangle(new VectorI2I(8, 80), new VectorI2I(48, 120));
+      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
     final Rectangle r2 =
-      new Rectangle(new VectorI2I(80, 8), new VectorI2I(120, 48));
+      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
     final Rectangle r3 =
-      new Rectangle(new VectorI2I(80, 80), new VectorI2I(120, 120));
+      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
 
     boolean in = false;
     in = q.quadTreeInsert(r0);
@@ -465,35 +486,35 @@ public class QuadTreeSimpleRCSimpleTest
     Assert.assertTrue(in);
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(
-        new VectorI2I(8 - 4, 8 - 4),
-        new VectorI2I(48 + 4, 48 + 4)), items);
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaContaining(new Rectangle(0, new VectorI2I(
+        8 - 4,
+        8 - 4), new VectorI2I(48 + 4, 48 + 4)), items);
       Assert.assertEquals(1, items.size());
       Assert.assertTrue(items.contains(r0));
     }
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(
-        new VectorI2I(8 - 4, 80 - 4),
-        new VectorI2I(48 + 2, 120 + 4)), items);
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaContaining(new Rectangle(0, new VectorI2I(
+        8 - 4,
+        80 - 4), new VectorI2I(48 + 2, 120 + 4)), items);
       Assert.assertEquals(1, items.size());
       Assert.assertTrue(items.contains(r1));
     }
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(
-        new VectorI2I(80 - 4, 8 - 4),
-        new VectorI2I(120 + 4, 48 + 4)), items);
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaContaining(new Rectangle(0, new VectorI2I(
+        80 - 4,
+        8 - 4), new VectorI2I(120 + 4, 48 + 4)), items);
       Assert.assertEquals(1, items.size());
       Assert.assertTrue(items.contains(r2));
     }
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(new VectorI2I(
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaContaining(new Rectangle(0, new VectorI2I(
         80 - 4,
         80 - 4), new VectorI2I(120 + 4, 120 + 4)), items);
       Assert.assertEquals(1, items.size());
@@ -506,16 +527,15 @@ public class QuadTreeSimpleRCSimpleTest
     testQueryContainingExact()
       throws ConstraintError
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(128, 128);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(128, 128);
     final Rectangle r0 =
-      new Rectangle(new VectorI2I(8, 8), new VectorI2I(48, 48));
+      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
     final Rectangle r1 =
-      new Rectangle(new VectorI2I(8, 80), new VectorI2I(48, 120));
+      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
     final Rectangle r2 =
-      new Rectangle(new VectorI2I(80, 8), new VectorI2I(120, 48));
+      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
     final Rectangle r3 =
-      new Rectangle(new VectorI2I(80, 80), new VectorI2I(120, 120));
+      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
 
     boolean in = false;
     in = q.quadTreeInsert(r0);
@@ -528,8 +548,9 @@ public class QuadTreeSimpleRCSimpleTest
     Assert.assertTrue(in);
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
       q.quadTreeQueryAreaContaining(new Rectangle(
+        0,
         new VectorI2I(0, 0),
         new VectorI2I(127, 127)), items);
       Assert.assertEquals(4, items.size());
@@ -543,16 +564,15 @@ public class QuadTreeSimpleRCSimpleTest
   @SuppressWarnings("static-method") @Test public void testQueryOverlapping()
     throws ConstraintError
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(128, 128);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(128, 128);
     final Rectangle r0 =
-      new Rectangle(new VectorI2I(8, 8), new VectorI2I(48, 48));
+      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
     final Rectangle r1 =
-      new Rectangle(new VectorI2I(8, 80), new VectorI2I(48, 120));
+      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
     final Rectangle r2 =
-      new Rectangle(new VectorI2I(80, 8), new VectorI2I(120, 48));
+      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
     final Rectangle r3 =
-      new Rectangle(new VectorI2I(80, 80), new VectorI2I(120, 120));
+      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
 
     boolean in = false;
     in = q.quadTreeInsert(r0);
@@ -565,17 +585,17 @@ public class QuadTreeSimpleRCSimpleTest
     Assert.assertTrue(in);
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(
-        new VectorI2I(8 - 2, 8 - 2),
-        new VectorI2I(8 + 2, 8 + 2)), items);
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
+        8 - 2,
+        8 - 2), new VectorI2I(8 + 2, 8 + 2)), items);
       Assert.assertEquals(1, items.size());
       Assert.assertTrue(items.contains(r0));
     }
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(new VectorI2I(
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
         8 - 2,
         80 - 2), new VectorI2I(8 + 2, 80 + 2)), items);
       Assert.assertEquals(1, items.size());
@@ -583,8 +603,8 @@ public class QuadTreeSimpleRCSimpleTest
     }
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(new VectorI2I(
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
         80 - 2,
         8 - 2), new VectorI2I(80 + 2, 8 + 2)), items);
       Assert.assertEquals(1, items.size());
@@ -592,8 +612,8 @@ public class QuadTreeSimpleRCSimpleTest
     }
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(new VectorI2I(
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
         80 - 2,
         80 - 2), new VectorI2I(80 + 2, 80 + 2)), items);
       Assert.assertEquals(1, items.size());
@@ -606,16 +626,15 @@ public class QuadTreeSimpleRCSimpleTest
     testQueryOverlappingExact()
       throws ConstraintError
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(128, 128);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(128, 128);
     final Rectangle r0 =
-      new Rectangle(new VectorI2I(8, 8), new VectorI2I(48, 48));
+      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
     final Rectangle r1 =
-      new Rectangle(new VectorI2I(8, 80), new VectorI2I(48, 120));
+      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
     final Rectangle r2 =
-      new Rectangle(new VectorI2I(80, 8), new VectorI2I(120, 48));
+      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
     final Rectangle r3 =
-      new Rectangle(new VectorI2I(80, 80), new VectorI2I(120, 120));
+      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
 
     boolean in = false;
     in = q.quadTreeInsert(r0);
@@ -628,10 +647,10 @@ public class QuadTreeSimpleRCSimpleTest
     Assert.assertTrue(in);
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(
-        new VectorI2I(8 + 2, 8 + 2),
-        new VectorI2I(120 - 2, 120 - 2)), items);
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
+        8 + 2,
+        8 + 2), new VectorI2I(120 - 2, 120 - 2)), items);
       Assert.assertEquals(4, items.size());
       Assert.assertTrue(items.contains(r0));
       Assert.assertTrue(items.contains(r1));
@@ -645,12 +664,11 @@ public class QuadTreeSimpleRCSimpleTest
     testQueryOverlappingNotAll()
       throws ConstraintError
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(128, 128);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(128, 128);
     final Rectangle r0 =
-      new Rectangle(new VectorI2I(0, 0), new VectorI2I(127, 127));
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(127, 127));
     final Rectangle r1 =
-      new Rectangle(new VectorI2I(4, 4), new VectorI2I(127, 127));
+      new Rectangle(1, new VectorI2I(4, 4), new VectorI2I(127, 127));
 
     boolean in = false;
     in = q.quadTreeInsert(r0);
@@ -659,8 +677,9 @@ public class QuadTreeSimpleRCSimpleTest
     Assert.assertTrue(in);
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
       q.quadTreeQueryAreaOverlapping(new Rectangle(
+        0,
         new VectorI2I(0, 0),
         new VectorI2I(2, 2)), items);
       Assert.assertEquals(1, items.size());
@@ -668,8 +687,8 @@ public class QuadTreeSimpleRCSimpleTest
     }
 
     {
-      final List<Rectangle> items = new LinkedList<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(new VectorI2I(
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
         127 - 4,
         127 - 4), new VectorI2I(127, 127)), items);
       Assert.assertEquals(2, items.size());
@@ -678,106 +697,18 @@ public class QuadTreeSimpleRCSimpleTest
     }
   }
 
-  @SuppressWarnings("static-method") @Test public void testRaycastQuadrants()
-    throws ConstraintError
-  {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(512, 512);
-
-    q.quadTreeInsert(new Rectangle(new VectorI2I(32, 32), new VectorI2I(
-      80,
-      80)));
-    q.quadTreeInsert(new Rectangle(new VectorI2I(400, 400), new VectorI2I(
-      480,
-      480)));
-
-    final RayI2D ray =
-      new RayI2D(VectorI2D.ZERO, VectorI2D.normalize(new VectorI2D(511, 511)));
-    final SortedSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>> items =
-      new TreeSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>>();
-    q.quadTreeQueryRaycastQuadrants(ray, items);
-
-    Assert.assertEquals(6, items.size());
-
-    final Iterator<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>> iter =
-      items.iterator();
-
-    {
-      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq =
-        iter.next();
-      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
-      Assert.assertEquals(0, quad.boundingAreaLower().getXI());
-      Assert.assertEquals(0, quad.boundingAreaLower().getYI());
-      Assert.assertEquals(63, quad.boundingAreaUpper().getXI());
-      Assert.assertEquals(63, quad.boundingAreaUpper().getYI());
-    }
-
-    {
-      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq =
-        iter.next();
-      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
-      Assert.assertEquals(64, quad.boundingAreaLower().getXI());
-      Assert.assertEquals(64, quad.boundingAreaLower().getYI());
-      Assert.assertEquals(127, quad.boundingAreaUpper().getXI());
-      Assert.assertEquals(127, quad.boundingAreaUpper().getYI());
-    }
-
-    {
-      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq =
-        iter.next();
-      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
-      Assert.assertEquals(128, quad.boundingAreaLower().getXI());
-      Assert.assertEquals(128, quad.boundingAreaLower().getYI());
-      Assert.assertEquals(255, quad.boundingAreaUpper().getXI());
-      Assert.assertEquals(255, quad.boundingAreaUpper().getYI());
-    }
-
-    {
-      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq =
-        iter.next();
-      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
-      Assert.assertEquals(256, quad.boundingAreaLower().getXI());
-      Assert.assertEquals(256, quad.boundingAreaLower().getYI());
-      Assert.assertEquals(383, quad.boundingAreaUpper().getXI());
-      Assert.assertEquals(383, quad.boundingAreaUpper().getYI());
-    }
-
-    {
-      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq =
-        iter.next();
-      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
-      Assert.assertEquals(384, quad.boundingAreaLower().getXI());
-      Assert.assertEquals(384, quad.boundingAreaLower().getYI());
-      Assert.assertEquals(447, quad.boundingAreaUpper().getXI());
-      Assert.assertEquals(447, quad.boundingAreaUpper().getYI());
-    }
-
-    {
-      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq =
-        iter.next();
-      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
-      Assert.assertEquals(448, quad.boundingAreaLower().getXI());
-      Assert.assertEquals(448, quad.boundingAreaLower().getYI());
-      Assert.assertEquals(511, quad.boundingAreaUpper().getXI());
-      Assert.assertEquals(511, quad.boundingAreaUpper().getYI());
-    }
-
-    Assert.assertFalse(iter.hasNext());
-  }
-
   @SuppressWarnings("static-method") @Test public void testRaycast()
     throws ConstraintError
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(512, 512);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(512, 512);
 
-    q.quadTreeInsert(new Rectangle(new VectorI2I(32, 32), new VectorI2I(
+    q.quadTreeInsert(new Rectangle(0, new VectorI2I(32, 32), new VectorI2I(
       80,
       80)));
-    q.quadTreeInsert(new Rectangle(new VectorI2I(400, 32), new VectorI2I(
+    q.quadTreeInsert(new Rectangle(1, new VectorI2I(400, 32), new VectorI2I(
       400 + 32,
       80)));
-    q.quadTreeInsert(new Rectangle(new VectorI2I(400, 400), new VectorI2I(
+    q.quadTreeInsert(new Rectangle(2, new VectorI2I(400, 400), new VectorI2I(
       480,
       480)));
 
@@ -808,13 +739,92 @@ public class QuadTreeSimpleRCSimpleTest
     Assert.assertFalse(iter.hasNext());
   }
 
+  @SuppressWarnings("static-method") @Test public void testRaycastQuadrants()
+    throws ConstraintError
+  {
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(512, 512);
+
+    q.quadTreeInsert(new Rectangle(0, new VectorI2I(32, 32), new VectorI2I(
+      80,
+      80)));
+    q.quadTreeInsert(new Rectangle(1, new VectorI2I(400, 400), new VectorI2I(
+      480,
+      480)));
+
+    final RayI2D ray =
+      new RayI2D(VectorI2D.ZERO, VectorI2D.normalize(new VectorI2D(511, 511)));
+    final SortedSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>> items =
+      new TreeSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>>();
+    q.quadTreeQueryRaycastQuadrants(ray, items);
+
+    Assert.assertEquals(6, items.size());
+
+    final Iterator<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>> iter =
+      items.iterator();
+
+    {
+      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq = iter.next();
+      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(0, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(0, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(63, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(63, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq = iter.next();
+      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(64, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(64, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(127, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(127, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq = iter.next();
+      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(128, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(128, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(255, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(255, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq = iter.next();
+      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(256, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(256, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(383, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(383, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq = iter.next();
+      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(384, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(384, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(447, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(447, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> rq = iter.next();
+      final QuadTreeBasic<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(448, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(448, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(511, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(511, quad.boundingAreaUpper().getYI());
+    }
+
+    Assert.assertFalse(iter.hasNext());
+  }
+
   @SuppressWarnings("static-method") @Test public
     void
     testRaycastQuadrantsNegativeRay()
       throws ConstraintError
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(512, 512);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(512, 512);
 
     final RayI2D ray =
       new RayI2D(new VectorI2D(512, 512), VectorI2D.normalize(new VectorI2D(
@@ -825,6 +835,62 @@ public class QuadTreeSimpleRCSimpleTest
     q.quadTreeQueryRaycastQuadrants(ray, items);
 
     Assert.assertEquals(1, items.size());
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRemove()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(16, 16);
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
+
+    boolean in = false;
+    in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+    in = q.quadTreeInsert(r);
+    Assert.assertFalse(in);
+
+    boolean removed = false;
+    removed = q.quadTreeRemove(r);
+    Assert.assertTrue(removed);
+    removed = q.quadTreeRemove(r);
+    Assert.assertFalse(removed);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRemoveSub()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(32, 32);
+    final Rectangle r0 =
+      new Rectangle(0, new VectorI2I(2, 2), new VectorI2I(4, 4));
+    final Rectangle r1 =
+      new Rectangle(1, new VectorI2I(18, 2), new VectorI2I(20, 4));
+    final Rectangle r2 =
+      new Rectangle(2, new VectorI2I(2, 18), new VectorI2I(4, 20));
+    final Rectangle r3 =
+      new Rectangle(3, new VectorI2I(18, 18), new VectorI2I(20, 20));
+
+    boolean in = false;
+    in = q.quadTreeInsert(r0);
+    Assert.assertTrue(in);
+    in = q.quadTreeInsert(r1);
+    Assert.assertTrue(in);
+    in = q.quadTreeInsert(r2);
+    Assert.assertTrue(in);
+    in = q.quadTreeInsert(r3);
+    Assert.assertTrue(in);
+
+    boolean removed = false;
+    removed = q.quadTreeRemove(r0);
+    Assert.assertTrue(removed);
+    removed = q.quadTreeRemove(r1);
+    Assert.assertTrue(removed);
+    removed = q.quadTreeRemove(r2);
+    Assert.assertTrue(removed);
+    removed = q.quadTreeRemove(r3);
+    Assert.assertTrue(removed);
   }
 
   @SuppressWarnings("static-method") @Test public void testSpan1D()
@@ -867,8 +933,7 @@ public class QuadTreeSimpleRCSimpleTest
   @SuppressWarnings("static-method") @Test public void testToString()
     throws ConstraintError
   {
-    final QuadTreeBasic<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(128, 128);
+    final QuadTreeBasic<Rectangle> q = new QuadTreeBasic<Rectangle>(128, 128);
     System.err.println(q.toString());
   }
 }

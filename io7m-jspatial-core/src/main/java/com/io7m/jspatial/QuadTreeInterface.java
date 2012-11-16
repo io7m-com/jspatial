@@ -16,19 +16,19 @@
 
 package com.io7m.jspatial;
 
-import java.util.List;
 import java.util.SortedSet;
 
 import javax.annotation.Nonnull;
 
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
+import com.io7m.jtensors.VectorI2D;
 
 /**
  * The interface provided by quadtree implementations.
  */
 
-public interface QuadTreeInterface<T extends BoundingArea>
+public interface QuadTreeInterface<T extends QuadTreeMember<T>>
 {
   /**
    * Delete all objects, if any, contained within the quadtree.
@@ -106,7 +106,7 @@ public interface QuadTreeInterface<T extends BoundingArea>
 
   void quadTreeQueryAreaContaining(
     final @Nonnull BoundingArea area,
-    final @Nonnull List<T> items)
+    final @Nonnull SortedSet<T> items)
     throws ConstraintError;
 
   /**
@@ -126,13 +126,18 @@ public interface QuadTreeInterface<T extends BoundingArea>
 
   void quadTreeQueryAreaOverlapping(
     final @Nonnull BoundingArea area,
-    final @Nonnull List<T> items)
+    final @Nonnull SortedSet<T> items)
     throws ConstraintError;
 
   /**
    * Returns the objects intersected by the ray <code>ray</code> in
    * <code>items</code>.
    * 
+   * The objects are returned in order of increasing scalar distance from the
+   * origin of <code>ray</code>. That is, the nearest object to the origin of
+   * <code>ray</code> will be the first item in <code>items</code>.
+   * 
+   * @see VectorI2D#distance(VectorI2D, VectorI2D)
    * @param items
    *          The returned objects
    * @throws ConstraintError
@@ -146,6 +151,27 @@ public interface QuadTreeInterface<T extends BoundingArea>
   void quadTreeQueryRaycast(
     final @Nonnull RayI2D ray,
     final @Nonnull SortedSet<RaycastResult<T>> items)
+    throws ConstraintError;
+
+  /**
+   * Remove the object <code>item</code> from the quadtree.
+   * <p>
+   * The function returns <code>false</code> if the object could not be
+   * removed for any reason (perhaps due to not being in the tree in the first
+   * place).
+   * </p>
+   * 
+   * @param item
+   *          The object to remove
+   * 
+   * @return <code>true</code> if the object was removed
+   * 
+   * @throws ConstraintError
+   *           Iff <code>item == null</code>
+   */
+
+  boolean quadTreeRemove(
+    final @Nonnull T item)
     throws ConstraintError;
 
   /**
