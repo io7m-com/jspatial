@@ -1,7 +1,10 @@
 package com.io7m.jspatial;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,8 +12,8 @@ import org.junit.Test;
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jspatial.QuadTreeSimpleRCSimple.Quadrants;
+import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
-import com.io7m.jtensors.VectorM2I;
 import com.io7m.jtensors.VectorReadable2I;
 
 public class QuadTreeSimpleRCSimpleTest
@@ -412,9 +415,9 @@ public class QuadTreeSimpleRCSimpleTest
 
   @SuppressWarnings("static-method") @Test public void testQuadrantsSimple()
   {
-    final VectorM2I lower = new VectorM2I(8, 8);
-    final VectorM2I upper = new VectorM2I(15, 15);
-    final Quadrants q = QuadTreeSimpleRCSimple.splitQuadrants(lower, upper);
+    final VectorI2I lower = new VectorI2I(8, 8);
+    final VectorI2I upper = new VectorI2I(15, 15);
+    final Quadrants q = new Quadrants(lower, upper);
 
     Assert.assertEquals(8, q.x0y0_lower.x);
     Assert.assertEquals(8, q.x0y0_lower.y);
@@ -673,6 +676,112 @@ public class QuadTreeSimpleRCSimpleTest
       Assert.assertTrue(items.contains(r0));
       Assert.assertTrue(items.contains(r1));
     }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRaycastQuadrants()
+    throws ConstraintError
+  {
+    final QuadTreeSimpleRCSimple<Rectangle> q =
+      new QuadTreeSimpleRCSimple<Rectangle>(512, 512);
+
+    q.quadTreeInsert(new Rectangle(new VectorI2I(32, 32), new VectorI2I(
+      80,
+      80)));
+    q.quadTreeInsert(new Rectangle(new VectorI2I(400, 400), new VectorI2I(
+      480,
+      480)));
+
+    final RayI2D ray =
+      new RayI2D(VectorI2D.ZERO, VectorI2D.normalize(new VectorI2D(511, 511)));
+    final SortedSet<RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>> items =
+      new TreeSet<RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>>();
+    q.quadTreeQueryRaycastQuadrants(ray, items);
+
+    Assert.assertEquals(6, items.size());
+
+    final Iterator<RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>> iter =
+      items.iterator();
+
+    {
+      final RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant> rq =
+        iter.next();
+      final QuadTreeSimpleRCSimple<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(0, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(0, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(63, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(63, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant> rq =
+        iter.next();
+      final QuadTreeSimpleRCSimple<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(64, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(64, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(127, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(127, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant> rq =
+        iter.next();
+      final QuadTreeSimpleRCSimple<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(128, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(128, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(255, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(255, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant> rq =
+        iter.next();
+      final QuadTreeSimpleRCSimple<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(256, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(256, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(383, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(383, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant> rq =
+        iter.next();
+      final QuadTreeSimpleRCSimple<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(384, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(384, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(447, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(447, quad.boundingAreaUpper().getYI());
+    }
+
+    {
+      final RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant> rq =
+        iter.next();
+      final QuadTreeSimpleRCSimple<Rectangle>.Quadrant quad = rq.getObject();
+      Assert.assertEquals(448, quad.boundingAreaLower().getXI());
+      Assert.assertEquals(448, quad.boundingAreaLower().getYI());
+      Assert.assertEquals(511, quad.boundingAreaUpper().getXI());
+      Assert.assertEquals(511, quad.boundingAreaUpper().getYI());
+    }
+
+    Assert.assertFalse(iter.hasNext());
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testRaycastQuadrantsNegativeRay()
+      throws ConstraintError
+  {
+    final QuadTreeSimpleRCSimple<Rectangle> q =
+      new QuadTreeSimpleRCSimple<Rectangle>(512, 512);
+
+    final RayI2D ray =
+      new RayI2D(new VectorI2D(512, 512), VectorI2D.normalize(new VectorI2D(
+        -0.5,
+        -0.5)));
+    final SortedSet<RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>> items =
+      new TreeSet<RaycastResult<QuadTreeSimpleRCSimple<Rectangle>.Quadrant>>();
+    q.quadTreeQueryRaycastQuadrants(ray, items);
+
+    Assert.assertEquals(1, items.size());
   }
 
   @SuppressWarnings("static-method") @Test public void testSpan1D()

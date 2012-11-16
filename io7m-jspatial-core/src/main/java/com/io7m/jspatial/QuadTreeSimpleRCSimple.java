@@ -25,11 +25,9 @@ import javax.annotation.Nonnull;
 
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnimplementedCodeException;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
-import com.io7m.jtensors.VectorM2I;
 import com.io7m.jtensors.VectorReadable2I;
 
 /**
@@ -70,16 +68,16 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
 {
   class Quadrant implements BoundingArea
   {
-    private final @Nonnull VectorReadable2I lower;
-    private final @Nonnull VectorReadable2I upper;
-    private @CheckForNull Quadrant          x0y0;
-    private @CheckForNull Quadrant          x1y0;
-    private @CheckForNull Quadrant          x0y1;
-    private @CheckForNull Quadrant          x1y1;
-    private boolean                         leaf;
-    private final @Nonnull List<T>          quadrant_objects;
-    final int                               size_x;
-    final int                               size_y;
+    private final @Nonnull VectorI2I lower;
+    private final @Nonnull VectorI2I upper;
+    private @CheckForNull Quadrant   x0y0;
+    private @CheckForNull Quadrant   x1y0;
+    private @CheckForNull Quadrant   x0y1;
+    private @CheckForNull Quadrant   x1y1;
+    private boolean                  leaf;
+    private final @Nonnull List<T>   quadrant_objects;
+    final int                        size_x;
+    final int                        size_y;
 
     /**
      * Construct a quadrant defined by the inclusive ranges given by
@@ -87,8 +85,8 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
      */
 
     Quadrant(
-      final @Nonnull VectorReadable2I lower,
-      final @Nonnull VectorReadable2I upper)
+      final @Nonnull VectorI2I lower,
+      final @Nonnull VectorI2I upper)
     {
       this.upper = upper;
       this.lower = lower;
@@ -298,67 +296,70 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
       return this.insertObject(item);
     }
 
-    void raycast(
+    void raycastQuadrants(
       final @Nonnull RayI2D ray,
       final @Nonnull SortedSet<RaycastResult<Quadrant>> quadrants)
     {
-      if (this.raycastBoxIntersects(ray)) {
+      if (BoundingAreaCheck.rayBoxIntersects(
+        ray,
+        this.lower.x,
+        this.lower.y,
+        this.upper.x,
+        this.upper.y)) {
+
         if (this.leaf) {
           final RaycastResult<Quadrant> r =
-            new RaycastResult<Quadrant>(this, this.raycastDistance(ray));
+            new RaycastResult<Quadrant>(this, VectorI2D.distance(
+              new VectorI2D(this.lower.x, this.lower.y),
+              ray.origin));
           quadrants.add(r);
           return;
         }
 
-        this.x0y0.raycast(ray, quadrants);
-        this.x0y1.raycast(ray, quadrants);
-        this.x1y0.raycast(ray, quadrants);
-        this.x1y1.raycast(ray, quadrants);
+        this.x0y0.raycastQuadrants(ray, quadrants);
+        this.x0y1.raycastQuadrants(ray, quadrants);
+        this.x1y0.raycastQuadrants(ray, quadrants);
+        this.x1y1.raycastQuadrants(ray, quadrants);
       }
     }
 
-    /**
-     * Branchless optimization of the Kay-Kajiya slab ray/AABB intersection
-     * test by Tavian Barnes.
-     * 
-     * @see http://tavianator.com/2011/05/fast-branchless-raybounding-box-
-     *      intersections/
-     */
-
-    boolean raycastBoxIntersects(
-      final @Nonnull RayI2D ray)
+    void raycast(
+      final @Nonnull RayI2D ray,
+      final @Nonnull SortedSet<RaycastResult<T>> items)
     {
-      final double x0 = this.lower.getXI();
-      final double y0 = this.lower.getYI();
-      final double x1 = this.upper.getXI();
-      final double y1 = this.upper.getYI();
+      if (BoundingAreaCheck.rayBoxIntersects(
+        ray,
+        this.lower.x,
+        this.lower.y,
+        this.upper.x,
+        this.upper.y)) {
 
-      final double tx0 = (x0 - ray.origin.x) * ray.direction_inverse.x;
-      final double tx1 = (x1 - ray.origin.x) * ray.direction_inverse.x;
+        for (final T object : QuadTreeSimpleRCSimple.this.objects_all) {
+          final VectorReadable2I object_lower = object.boundingAreaLower();
+          final VectorReadable2I object_upper = object.boundingAreaUpper();
 
-      double tmin = Math.min(tx0, tx1);
-      double tmax = Math.max(tx0, tx1);
+          if (BoundingAreaCheck.rayBoxIntersects(
+            ray,
+            object_lower.getXI(),
+            object_lower.getYI(),
+            object_upper.getXI(),
+            object_upper.getYI())) {
 
-      final double ty0 = (y0 - ray.origin.y) * ray.direction_inverse.y;
-      final double ty1 = (y1 - ray.origin.y) * ray.direction_inverse.y;
+            final RaycastResult<T> r =
+              new RaycastResult<T>(object, VectorI2D.distance(new VectorI2D(
+                object_lower.getXI(),
+                object_lower.getYI()), ray.origin));
+            items.add(r);
+          }
+        }
 
-      tmin = Math.max(tmin, Math.min(ty0, ty1));
-      tmax = Math.min(tmax, Math.max(ty0, ty1));
-
-      return ((tmax >= Math.max(0, tmin)) && (tmin < Double.POSITIVE_INFINITY));
-    }
-
-    /**
-     * Return the scalar distance between the lower corner of this quadrant,
-     * and the origin of the ray.
-     */
-
-    double raycastDistance(
-      final @Nonnull RayI2D ray)
-    {
-      final VectorI2D box_origin =
-        new VectorI2D(this.lower.getXI(), this.lower.getYI());
-      return VectorI2D.distance(box_origin, ray.origin);
+        if (this.leaf == false) {
+          this.x0y0.raycast(ray, items);
+          this.x0y1.raycast(ray, items);
+          this.x1y0.raycast(ray, items);
+          this.x1y1.raycast(ray, items);
+        }
+      }
     }
 
     /**
@@ -369,8 +370,7 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
     {
       assert this.canSplit();
 
-      final Quadrants q =
-        QuadTreeSimpleRCSimple.splitQuadrants(this.lower, this.upper);
+      final Quadrants q = new Quadrants(this.lower, this.upper);
       this.x0y0 = new Quadrant(q.x0y0_lower, q.x0y0_upper);
       this.x0y1 = new Quadrant(q.x0y1_lower, q.x0y1_upper);
       this.x1y0 = new Quadrant(q.x1y0_lower, q.x1y0_upper);
@@ -410,20 +410,50 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
 
   static final class Quadrants
   {
-    final @Nonnull VectorM2I x0y0_lower = new VectorM2I();
-    final @Nonnull VectorM2I x0y0_upper = new VectorM2I();
-    final @Nonnull VectorM2I x1y0_lower = new VectorM2I();
-    final @Nonnull VectorM2I x1y0_upper = new VectorM2I();
-    final @Nonnull VectorM2I x0y1_lower = new VectorM2I();
-    final @Nonnull VectorM2I x0y1_upper = new VectorM2I();
-    final @Nonnull VectorM2I x1y1_lower = new VectorM2I();
-    final @Nonnull VectorM2I x1y1_upper = new VectorM2I();
-    int                      size_x     = 0;
-    int                      size_y     = 0;
+    final @Nonnull VectorI2I x0y0_lower;
+    final @Nonnull VectorI2I x0y0_upper;
+    final @Nonnull VectorI2I x1y0_lower;
+    final @Nonnull VectorI2I x1y0_upper;
+    final @Nonnull VectorI2I x0y1_lower;
+    final @Nonnull VectorI2I x0y1_upper;
+    final @Nonnull VectorI2I x1y1_lower;
+    final @Nonnull VectorI2I x1y1_upper;
+    int                      new_size_x;
+    int                      new_size_y;
 
-    Quadrants()
+    /**
+     * Split a quadrant defined by the two points <code>lower</code> and
+     * <code>upper</code> into four quadrants.
+     */
+
+    Quadrants(
+      final @Nonnull VectorI2I lower,
+      final @Nonnull VectorI2I upper)
     {
+      final int size_x = QuadTreeSimpleRCSimple.getSpanSizeX(lower, upper);
+      final int size_y = QuadTreeSimpleRCSimple.getSpanSizeY(lower, upper);
 
+      assert size_x >= 2;
+      assert size_y >= 2;
+
+      this.new_size_x = size_x >> 1;
+      this.new_size_y = size_y >> 1;
+
+      final int[] x_spans = new int[4];
+      final int[] y_spans = new int[4];
+
+      QuadTreeSimpleRCSimple.split1D(lower.getXI(), upper.getXI(), x_spans);
+      QuadTreeSimpleRCSimple.split1D(lower.getYI(), upper.getYI(), y_spans);
+
+      this.x0y0_lower = new VectorI2I(x_spans[0], y_spans[0]);
+      this.x0y1_lower = new VectorI2I(x_spans[0], y_spans[2]);
+      this.x1y0_lower = new VectorI2I(x_spans[2], y_spans[0]);
+      this.x1y1_lower = new VectorI2I(x_spans[2], y_spans[2]);
+
+      this.x0y0_upper = new VectorI2I(x_spans[1], y_spans[1]);
+      this.x0y1_upper = new VectorI2I(x_spans[1], y_spans[3]);
+      this.x1y0_upper = new VectorI2I(x_spans[3], y_spans[1]);
+      this.x1y1_upper = new VectorI2I(x_spans[3], y_spans[3]);
     }
   }
 
@@ -465,54 +495,6 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
     out[1] = low + ((size >> 1) - 1);
     out[2] = low + (size >> 1);
     out[3] = high;
-  }
-
-  /**
-   * Split a quadrant defined by the two points <code>lower</code> and
-   * <code>upper</code> into four quadrants.
-   * 
-   * @throws ConstraintError
-   *           Iff the quadrant is too small to split (the size of either
-   *           dimension is less than 2)
-   */
-
-  static @Nonnull Quadrants splitQuadrants(
-    final @Nonnull VectorReadable2I lower,
-    final @Nonnull VectorReadable2I upper)
-  {
-    final int size_x = QuadTreeSimpleRCSimple.getSpanSizeX(lower, upper);
-    final int size_y = QuadTreeSimpleRCSimple.getSpanSizeY(lower, upper);
-
-    assert size_x >= 2;
-    assert size_y >= 2;
-
-    final Quadrants q = new Quadrants();
-    q.size_x = size_x >> 1;
-    q.size_y = size_y >> 1;
-
-    final int[] spans = new int[4];
-
-    QuadTreeSimpleRCSimple.split1D(lower.getXI(), upper.getXI(), spans);
-    q.x0y0_lower.x = spans[0];
-    q.x0y1_lower.x = spans[0];
-    q.x0y0_upper.x = spans[1];
-    q.x0y1_upper.x = spans[1];
-    q.x1y0_lower.x = spans[2];
-    q.x1y1_lower.x = spans[2];
-    q.x1y0_upper.x = spans[3];
-    q.x1y1_upper.x = spans[3];
-
-    QuadTreeSimpleRCSimple.split1D(lower.getYI(), upper.getYI(), spans);
-    q.x0y0_lower.y = spans[0];
-    q.x1y0_lower.y = spans[0];
-    q.x0y0_upper.y = spans[1];
-    q.x1y0_upper.y = spans[1];
-    q.x0y1_lower.y = spans[2];
-    q.x1y1_lower.y = spans[2];
-    q.x0y1_upper.y = spans[3];
-    q.x1y1_upper.y = spans[3];
-
-    return q;
   }
 
   private final @Nonnull Quadrant root;
@@ -612,7 +594,7 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
     Constraints.constrainNotNull(ray, "Ray");
     Constraints.constrainNotNull(items, "Items");
 
-    throw new UnimplementedCodeException();
+    this.root.raycast(ray, items);
   }
 
   /**
@@ -638,7 +620,7 @@ class QuadTreeSimpleRCSimple<T extends BoundingArea> implements
     Constraints.constrainNotNull(ray, "Ray");
     Constraints.constrainNotNull(items, "Items");
 
-    this.root.raycast(ray, items);
+    this.root.raycastQuadrants(ray, items);
   }
 
   @Override public void quadTreeTraverse(

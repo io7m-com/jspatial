@@ -178,6 +178,36 @@ public final class BoundingAreaCheck
   }
 
   /**
+   * Branchless optimization of the Kay-Kajiya slab ray/AABB intersection test
+   * by Tavian Barnes.
+   * 
+   * @see http://tavianator.com/2011/05/fast-branchless-raybounding-box-
+   *      intersections/
+   */
+
+  static boolean rayBoxIntersects(
+    final @Nonnull RayI2D ray,
+    final double x0,
+    final double y0,
+    final double x1,
+    final double y1)
+  {
+    final double tx0 = (x0 - ray.origin.x) * ray.direction_inverse.x;
+    final double tx1 = (x1 - ray.origin.x) * ray.direction_inverse.x;
+
+    double tmin = Math.min(tx0, tx1);
+    double tmax = Math.max(tx0, tx1);
+
+    final double ty0 = (y0 - ray.origin.y) * ray.direction_inverse.y;
+    final double ty1 = (y1 - ray.origin.y) * ray.direction_inverse.y;
+
+    tmin = Math.max(tmin, Math.min(ty0, ty1));
+    tmax = Math.min(tmax, Math.max(ty0, ty1));
+
+    return ((tmax >= Math.max(0, tmin)) && (tmin < Double.POSITIVE_INFINITY));
+  }
+
+  /**
    * Return <code>true</code> iff the given bounding area is well formed. That
    * is, iff
    * <code>container.boundingAreaLower().getXI() <= container.boundingAreaUpper().getXI()</code>
