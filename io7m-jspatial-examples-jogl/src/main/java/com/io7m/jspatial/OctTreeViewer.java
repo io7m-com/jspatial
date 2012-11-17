@@ -596,9 +596,9 @@ public final class OctTreeViewer implements Runnable
   private static final double        CAMERA_SPEED_LINEAR     = 0.3;
   private static final double        CAMERA_SPEED_ANGULAR    = 0.3;
   private static final double        CAMERA_FRICTION         = 0.85;
-  private static final int           TREE_SIZE_X             = 32;
-  private static final int           TREE_SIZE_Y             = 32;
-  private static final int           TREE_SIZE_Z             = 32;
+  private static final int           TREE_SIZE_X             = 128;
+  private static final int           TREE_SIZE_Y             = 128;
+  private static final int           TREE_SIZE_Z             = 128;
   protected final VectorM3F          camera_focus;
   protected final VectorM3F          camera_position;
   protected double                   camera_orientation      = 0.0;
@@ -616,10 +616,10 @@ public final class OctTreeViewer implements Runnable
   {
     this.executor = Executors.newScheduledThreadPool(1);
 
-    this.camera_focus = new VectorM3F(27, 2, 7.64f);
-    this.camera_position = new VectorM3F(-46, 60, 58);
-    this.camera_orientation = 5.67;
-    this.camera_orbit_offset = 90;
+    this.camera_position = new VectorM3F(286.9f, 177.14f, 273.5f);
+    this.camera_focus = new VectorM3F(-10f, 2f, -5.8f);
+    this.camera_orientation = 3.89f;
+    this.camera_orbit_offset = 408f;
 
     this.current_id = new AtomicLong();
     this.octtree =
@@ -627,7 +627,7 @@ public final class OctTreeViewer implements Runnable
         OctTreeViewer.TREE_SIZE_X,
         OctTreeViewer.TREE_SIZE_Y,
         OctTreeViewer.TREE_SIZE_Z);
-    this.populateInitial();
+    // this.populateInitial();
 
     this.panel = new JPanel();
     this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
@@ -721,7 +721,7 @@ public final class OctTreeViewer implements Runnable
         @SuppressWarnings("unused") @Override public void actionPerformed(
           final ActionEvent _)
         {
-          // Unused
+          OctTreeViewer.this.commandRandomize();
         }
       });
 
@@ -887,7 +887,29 @@ public final class OctTreeViewer implements Runnable
 
   void commandRandomize()
   {
-    // Unused
+    try {
+      for (int i = 0; i < 100; ++i) {
+        final int width = (int) (2 + (Math.random() * 16));
+        final int height = (int) (2 + (Math.random() * 16));
+        final int depth = (int) (2 + (Math.random() * 16));
+
+        final int x0 = (int) (Math.random() * OctTreeViewer.TREE_SIZE_X);
+        final int y0 = (int) (Math.random() * OctTreeViewer.TREE_SIZE_Y);
+        final int z0 = (int) (Math.random() * OctTreeViewer.TREE_SIZE_Z);
+
+        final int x1 = Math.min(x0 + width, OctTreeViewer.TREE_SIZE_X - 1);
+        final int y1 = Math.min(y0 + height, OctTreeViewer.TREE_SIZE_Y - 1);
+        final int z1 = Math.min(z0 + depth, OctTreeViewer.TREE_SIZE_Z - 1);
+
+        final VectorI3I r0 = new VectorI3I(x0, y0, z0);
+        final VectorI3I r1 = new VectorI3I(x1, y1, z1);
+
+        this.octtree.octTreeInsert(new Cuboid(this.current_id
+          .incrementAndGet(), r0, r1));
+      }
+    } catch (final ConstraintError e) {
+      OctTreeViewer.fatal(e);
+    }
   }
 
   void commandReset()
