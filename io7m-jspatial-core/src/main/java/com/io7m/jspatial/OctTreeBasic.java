@@ -202,6 +202,19 @@ public class OctTreeBasic<T extends OctTreeMember<T>> implements
         return this.x1y1z0.insertStep(item);
       }
 
+      if (BoundingVolumeCheck.containedWithin(this.x0y0z1, item)) {
+        return this.x0y0z1.insertStep(item);
+      }
+      if (BoundingVolumeCheck.containedWithin(this.x1y0z1, item)) {
+        return this.x1y0z1.insertStep(item);
+      }
+      if (BoundingVolumeCheck.containedWithin(this.x0y1z1, item)) {
+        return this.x0y1z1.insertStep(item);
+      }
+      if (BoundingVolumeCheck.containedWithin(this.x1y1z1, item)) {
+        return this.x1y1z1.insertStep(item);
+      }
+
       /**
        * Otherwise, insert the object into this node.
        */
