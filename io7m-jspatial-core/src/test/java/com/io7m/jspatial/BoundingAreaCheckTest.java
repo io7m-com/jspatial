@@ -5,6 +5,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.io7m.jspatial.BoundingAreaCheck.Result;
+import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
 
 public class BoundingAreaCheckTest
@@ -312,6 +313,76 @@ public class BoundingAreaCheckTest
       b_x1,
       b_y0,
       b_y1));
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRayIntersection()
+  {
+    final VectorI2I lower = new VectorI2I(2, 2);
+    final VectorI2I upper = new VectorI2I(4, 4);
+
+    {
+      // Intersect -X edge in +X direction
+      final VectorI2D origin = new VectorI2D(1, 3);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(1, 0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        BoundingAreaCheck.rayBoxIntersects(
+          ray,
+          lower.x,
+          lower.y,
+          upper.x,
+          upper.y);
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect +X edge in -X direction
+      final VectorI2D origin = new VectorI2D(6, 3);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(-1, 0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        BoundingAreaCheck.rayBoxIntersects(
+          ray,
+          lower.x,
+          lower.y,
+          upper.x,
+          upper.y);
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect +Y edge in -Y direction
+      final VectorI2D origin = new VectorI2D(3, 6);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(0, -1));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        BoundingAreaCheck.rayBoxIntersects(
+          ray,
+          lower.x,
+          lower.y,
+          upper.x,
+          upper.y);
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect -Y edge in +Y direction
+      final VectorI2D origin = new VectorI2D(3, 1);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(0, 1));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        BoundingAreaCheck.rayBoxIntersects(
+          ray,
+          lower.x,
+          lower.y,
+          upper.x,
+          upper.y);
+      Assert.assertTrue(i);
+    }
   }
 
   @SuppressWarnings("static-method") @Test public void testWellFormed()
