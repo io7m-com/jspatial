@@ -10,6 +10,27 @@
     <format>zip</format>
   </formats>
 
+  <files>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0755</fileMode>
+      <source>src/main/sh/octtree-viewer-unix.sh</source>
+      <destName>octtree-viewer-unix.sh</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0755</fileMode>
+      <source>src/main/exe/wrapper.exe</source>
+      <destName>octtree-viewer.exe</destName>
+    </file>
+    <file>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>0644</fileMode>
+      <source>src/main/exe/octtree-viewer.ini</source>
+      <destName>octtree-viewer.ini</destName>
+    </file>
+  </files>
+
   <dependencySets>
     <!-- Save all dependency jar files to /lib -->
     <dependencySet>
