@@ -860,19 +860,6 @@ public final class OctTreeViewer implements Runnable
     }
   }
 
-  private void populateInitial()
-    throws ConstraintError
-  {
-    {
-      final Cuboid c =
-        new Cuboid(
-          this.current_id.getAndIncrement(),
-          new VectorI3I(2, 2, 2),
-          new VectorI3I(4, 4, 4));
-      this.octtree.octTreeInsert(c);
-    }
-  }
-
   void commandInsert(
     final Cuboid cube)
   {

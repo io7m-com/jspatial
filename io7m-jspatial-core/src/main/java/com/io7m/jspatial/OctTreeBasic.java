@@ -23,7 +23,7 @@ import javax.annotation.Nonnull;
 
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.UnimplementedCodeException;
+import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jtensors.VectorI3I;
 import com.io7m.jtensors.VectorReadable3I;
@@ -259,6 +259,61 @@ public class OctTreeBasic<T extends OctTreeMember<T>> implements
         this.x1y1z1.traverse(depth + 1, traversal);
       }
     }
+
+    @SuppressWarnings("synthetic-access") boolean remove(
+      final @Nonnull T item)
+    {
+      if (OctTreeBasic.this.objects_all.contains(item) == false) {
+        return false;
+      }
+
+      // If an object is in objects_all, then it must be within the
+      // bounds of the tree, according to insert().
+      assert BoundingVolumeCheck.containedWithin(this, item);
+      return this.removeStep(item);
+    }
+
+    @SuppressWarnings("synthetic-access") private boolean removeStep(
+      final @Nonnull T item)
+    {
+      if (this.octant_objects.contains(item)) {
+        this.octant_objects.remove(item);
+        OctTreeBasic.this.objects_all.remove(item);
+        return true;
+      }
+
+      if (this.leaf == false) {
+        if (BoundingVolumeCheck.containedWithin(this.x0y0z0, item)) {
+          return this.x0y0z0.removeStep(item);
+        }
+        if (BoundingVolumeCheck.containedWithin(this.x1y0z0, item)) {
+          return this.x1y0z0.removeStep(item);
+        }
+        if (BoundingVolumeCheck.containedWithin(this.x0y1z0, item)) {
+          return this.x0y1z0.removeStep(item);
+        }
+        if (BoundingVolumeCheck.containedWithin(this.x1y1z0, item)) {
+          return this.x1y1z0.removeStep(item);
+        }
+
+        if (BoundingVolumeCheck.containedWithin(this.x0y0z1, item)) {
+          return this.x0y0z1.removeStep(item);
+        }
+        if (BoundingVolumeCheck.containedWithin(this.x1y0z1, item)) {
+          return this.x1y0z1.removeStep(item);
+        }
+        if (BoundingVolumeCheck.containedWithin(this.x0y1z1, item)) {
+          return this.x0y1z1.removeStep(item);
+        }
+        if (BoundingVolumeCheck.containedWithin(this.x1y1z1, item)) {
+          return this.x1y1z1.removeStep(item);
+        }
+      }
+
+      // The object must be in the tree, according to objects_all.
+      // Therefore it must be in this node, or one of the child quadrants.
+      throw new UnreachableCodeException();
+    }
   }
 
   static final class Octants
@@ -372,7 +427,8 @@ public class OctTreeBasic<T extends OctTreeMember<T>> implements
 
   @Override public void octTreeClear()
   {
-    throw new UnimplementedCodeException();
+    this.objects_all.clear();
+    this.root.clear();
   }
 
   @Override public int octTreeGetSizeX()
@@ -424,5 +480,17 @@ public class OctTreeBasic<T extends OctTreeMember<T>> implements
   {
     Constraints.constrainNotNull(traversal, "Traversal");
     this.root.traverse(0, traversal);
+  }
+
+  @Override public boolean octTreeRemove(
+    final @Nonnull T item)
+    throws ConstraintError
+  {
+    Constraints.constrainNotNull(item, "Item");
+    Constraints.constrainArbitrary(
+      BoundingVolumeCheck.wellFormed(item),
+      "Bounding volume is well-formed");
+
+    return this.root.remove(item);
   }
 }

@@ -2,6 +2,7 @@ package com.io7m.jspatial;
 
 import javax.annotation.Nonnull;
 
+import com.io7m.jtensors.VectorReadable2I;
 import com.io7m.jtensors.VectorReadable3I;
 
 final class Dimensions
@@ -14,8 +15,8 @@ final class Dimensions
    */
 
   static int getSpanSizeX(
-    final @Nonnull VectorReadable3I lower,
-    final @Nonnull VectorReadable3I upper)
+    final @Nonnull VectorReadable2I lower,
+    final @Nonnull VectorReadable2I upper)
   {
     return (upper.getXI() - lower.getXI()) + 1;
   }
@@ -28,8 +29,8 @@ final class Dimensions
    */
 
   static int getSpanSizeY(
-    final @Nonnull VectorReadable3I lower,
-    final @Nonnull VectorReadable3I upper)
+    final @Nonnull VectorReadable2I lower,
+    final @Nonnull VectorReadable2I upper)
   {
     return (upper.getYI() - lower.getYI()) + 1;
   }

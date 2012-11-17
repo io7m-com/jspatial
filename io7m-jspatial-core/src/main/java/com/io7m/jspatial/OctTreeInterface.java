@@ -72,6 +72,43 @@ public interface OctTreeInterface<T extends OctTreeMember<T>>
     throws ConstraintError;
 
   /**
+   * Pass each object in the octtree to <code>f.call()</code>, in no
+   * particular order. Iteration stops if <code>f.call()</code> returns
+   * <code>false</code>, or raises an exception.
+   * 
+   * @throws Exception
+   *           Propagated from <code>f.call()</code>
+   * @throws ConstraintError
+   *           Iff <code>f == null</code>
+   */
+
+  void octTreeIterateObjects(
+    final @Nonnull Function<T, Boolean> f)
+    throws Exception,
+      ConstraintError;
+
+  /**
+   * Remove the object <code>item</code> from the octtree.
+   * <p>
+   * The function returns <code>false</code> if the object could not be
+   * removed for any reason (perhaps due to not being in the tree in the first
+   * place).
+   * </p>
+   * 
+   * @param item
+   *          The object to remove
+   * 
+   * @return <code>true</code> if the object was removed
+   * 
+   * @throws ConstraintError
+   *           Iff <code>item == null</code>
+   */
+
+  boolean octTreeRemove(
+    final @Nonnull T item)
+    throws ConstraintError;
+
+  /**
    * Pass each node of the given octtree to <code>traversal.visit()</code>, in
    * depth-first order.
    * 
@@ -85,22 +122,6 @@ public interface OctTreeInterface<T extends OctTreeMember<T>>
 
   void octTreeTraverse(
     final @Nonnull OctTreeTraversal traversal)
-    throws Exception,
-      ConstraintError;
-
-  /**
-   * Pass each object in the octtree to <code>f.call()</code>, in no
-   * particular order. Iteration stops if <code>f.call()</code> returns
-   * <code>false</code>, or raises an exception.
-   * 
-   * @throws Exception
-   *           Propagated from <code>f.call()</code>
-   * @throws ConstraintError
-   *           Iff <code>f == null</code>
-   */
-
-  void octTreeIterateObjects(
-    final @Nonnull Function<T, Boolean> f)
     throws Exception,
       ConstraintError;
 }
