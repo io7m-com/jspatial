@@ -1,5 +1,8 @@
 package com.io7m.jspatial;
 
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import javax.annotation.Nonnull;
 
 import org.junit.Assert;
@@ -8,6 +11,7 @@ import org.junit.Test;
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
 import com.io7m.jspatial.OctTreeBasic.Octants;
+import com.io7m.jtensors.VectorI3D;
 import com.io7m.jtensors.VectorI3I;
 import com.io7m.jtensors.VectorReadable3I;
 
@@ -35,25 +39,11 @@ public class OctTreeBasicTest
   private static abstract class IterationChecker0 implements
     Function<Cuboid, Boolean>
   {
-    boolean found_r0 = false;
-    boolean found_r1 = false;
-    boolean found_r2 = false;
-    boolean found_r3 = false;
+    final TreeSet<Cuboid> got;
 
     IterationChecker0()
     {
-
-    }
-  }
-
-  private static abstract class IterationChecker1 implements
-    Function<Cuboid, Boolean>
-  {
-    int count = 0;
-
-    IterationChecker1()
-    {
-
+      this.got = new TreeSet<Cuboid>();
     }
   }
 
@@ -72,6 +62,101 @@ public class OctTreeBasicTest
       ++this.count;
       return Boolean.TRUE;
     }
+  }
+
+  static Cuboid[] makeCuboids(
+    final long id_first,
+    final int container_size)
+  {
+    final Cuboid[] cubes = new Cuboid[8];
+    final int half_size = container_size >> 1;
+    final int cube_size = half_size - 3;
+
+    int x_root = 2;
+    int y_root = 2;
+    int z_root = 2;
+    cubes[0] =
+      new Cuboid(
+        id_first,
+        new VectorI3I(x_root, y_root, z_root),
+        new VectorI3I(x_root + cube_size, y_root + cube_size, z_root
+          + cube_size));
+
+    x_root = half_size + 2;
+    y_root = 2;
+    z_root = 2;
+    cubes[1] =
+      new Cuboid(
+        id_first + 1,
+        new VectorI3I(x_root, y_root, z_root),
+        new VectorI3I(x_root + cube_size, y_root + cube_size, z_root
+          + cube_size));
+
+    x_root = 2;
+    y_root = half_size + 2;
+    z_root = 2;
+    cubes[2] =
+      new Cuboid(
+        id_first + 2,
+        new VectorI3I(x_root, y_root, z_root),
+        new VectorI3I(x_root + cube_size, y_root + cube_size, z_root
+          + cube_size));
+
+    x_root = half_size + 2;
+    y_root = half_size + 2;
+    z_root = 2;
+    cubes[3] =
+      new Cuboid(
+        id_first + 3,
+        new VectorI3I(x_root, y_root, z_root),
+        new VectorI3I(x_root + cube_size, y_root + cube_size, z_root
+          + cube_size));
+
+    //
+    // Upper Z
+    //
+
+    x_root = 2;
+    y_root = 2;
+    z_root = half_size + 2;
+    cubes[4] =
+      new Cuboid(
+        id_first + 4,
+        new VectorI3I(x_root, y_root, z_root),
+        new VectorI3I(x_root + cube_size, y_root + cube_size, z_root
+          + cube_size));
+
+    x_root = half_size + 2;
+    y_root = 2;
+    z_root = half_size + 2;
+    cubes[5] =
+      new Cuboid(
+        id_first + 5,
+        new VectorI3I(x_root, y_root, z_root),
+        new VectorI3I(x_root + cube_size, y_root + cube_size, z_root
+          + cube_size));
+
+    x_root = 2;
+    y_root = half_size + 2;
+    z_root = half_size + 2;
+    cubes[6] =
+      new Cuboid(
+        id_first + 6,
+        new VectorI3I(x_root, y_root, z_root),
+        new VectorI3I(x_root + cube_size, y_root + cube_size, z_root
+          + cube_size));
+
+    x_root = half_size + 2;
+    y_root = half_size + 2;
+    z_root = half_size + 2;
+    cubes[7] =
+      new Cuboid(
+        id_first + 7,
+        new VectorI3I(x_root, y_root, z_root),
+        new VectorI3I(x_root + cube_size, y_root + cube_size, z_root
+          + cube_size));
+
+    return cubes;
   }
 
   @SuppressWarnings("static-method") @Test public void testClear()
@@ -190,120 +275,6 @@ public class OctTreeBasicTest
     Assert.assertEquals(9, c.count);
   }
 
-  @SuppressWarnings("static-method") @Test public
-    void
-    testInsertLeafNoSplit()
-      throws ConstraintError,
-        Exception
-  {
-    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(2, 2, 2);
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(9, c.count);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertImmediate()
-    throws ConstraintError,
-      Exception
-  {
-    final int size = 10;
-
-    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(32, 32, 32);
-    final Counter counter = new Counter();
-
-    final Cuboid cubes[] = new Cuboid[8];
-
-    int x_root = 2;
-    int y_root = 2;
-    int z_root = 2;
-    cubes[0] =
-      new Cuboid(0, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 18;
-    y_root = 2;
-    z_root = 2;
-    cubes[1] =
-      new Cuboid(1, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 2;
-    y_root = 18;
-    z_root = 2;
-    cubes[2] =
-      new Cuboid(2, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 18;
-    y_root = 18;
-    z_root = 2;
-    cubes[3] =
-      new Cuboid(3, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    //
-    // Upper Z
-    //
-
-    x_root = 2;
-    y_root = 2;
-    z_root = 18;
-    cubes[4] =
-      new Cuboid(4, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 18;
-    y_root = 2;
-    z_root = 18;
-    cubes[5] =
-      new Cuboid(5, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 2;
-    y_root = 18;
-    z_root = 18;
-    cubes[6] =
-      new Cuboid(6, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 18;
-    y_root = 18;
-    z_root = 18;
-    cubes[7] =
-      new Cuboid(7, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    for (final Cuboid c : cubes) {
-      final boolean in = q.octTreeInsert(c);
-      Assert.assertTrue(in);
-    }
-
-    q.octTreeTraverse(counter);
-    Assert.assertEquals(73, counter.count);
-  }
-
   @SuppressWarnings("static-method") @Test public void testInsertDuplicate()
     throws ConstraintError,
       Exception
@@ -339,6 +310,41 @@ public class OctTreeBasicTest
     q.octTreeInsert(r);
   }
 
+  @SuppressWarnings("static-method") @Test public void testInsertImmediate()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(32, 32, 32);
+    final Counter counter = new Counter();
+    final Cuboid cubes[] = OctTreeBasicTest.makeCuboids(0, 32);
+
+    for (final Cuboid c : cubes) {
+      final boolean in = q.octTreeInsert(c);
+      Assert.assertTrue(in);
+    }
+
+    q.octTreeTraverse(counter);
+    Assert.assertEquals(73, counter.count);
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testInsertLeafNoSplit()
+      throws ConstraintError,
+        Exception
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(2, 2, 2);
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(9, c.count);
+  }
+
   @SuppressWarnings("static-method") @Test public void testInsertOutside()
     throws ConstraintError,
       Exception
@@ -349,6 +355,76 @@ public class OctTreeBasicTest
 
     final boolean in = q.octTreeInsert(r);
     Assert.assertFalse(in);
+  }
+
+  @Test public void testIterate()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(32, 32, 32);
+    final Cuboid cubes[] = OctTreeBasicTest.makeCuboids(0, 32);
+
+    for (final Cuboid c : cubes) {
+      q.octTreeInsert(c);
+    }
+
+    final IterationChecker0 checker = new IterationChecker0() {
+      @Override public Boolean call(
+        final Cuboid x)
+      {
+        this.got.add(x);
+        return Boolean.TRUE;
+      }
+    };
+
+    q.octTreeIterateObjects(checker);
+
+    Assert.assertEquals(8, checker.got.size());
+    for (final Cuboid c : cubes) {
+      Assert.assertTrue(checker.got.contains(c));
+    }
+  }
+
+  @Test public void testIterateEarlyEnd()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(32, 32, 32);
+    final Cuboid cubes[] = OctTreeBasicTest.makeCuboids(0, 32);
+
+    for (final Cuboid c : cubes) {
+      q.octTreeInsert(c);
+    }
+
+    final IterationChecker0 checker = new IterationChecker0() {
+      Integer count = Integer.valueOf(0);
+
+      @Override public Boolean call(
+        final Cuboid x)
+      {
+        this.count = Integer.valueOf(this.count.intValue() + 1);
+        this.got.add(x);
+
+        if (this.count.intValue() == 4) {
+          return Boolean.FALSE;
+        }
+
+        return Boolean.TRUE;
+      }
+    };
+
+    q.octTreeIterateObjects(checker);
+
+    Assert.assertEquals(4, checker.got.size());
+
+    int count = 0;
+    for (final Cuboid c : cubes) {
+      if (checker.got.contains(c)) {
+        ++count;
+      }
+    }
+
+    Assert.assertEquals(4, count);
   }
 
   @SuppressWarnings("static-method") @Test(expected = ConstraintError.class) public
@@ -377,23 +453,167 @@ public class OctTreeBasicTest
 
     Assert.assertEquals(8, q.x0y0z0_lower.x);
     Assert.assertEquals(8, q.x0y0z0_lower.y);
+    Assert.assertEquals(8, q.x0y0z0_lower.z);
     Assert.assertEquals(11, q.x0y0z0_upper.x);
     Assert.assertEquals(11, q.x0y0z0_upper.y);
+    Assert.assertEquals(11, q.x0y0z0_upper.z);
 
     Assert.assertEquals(12, q.x1y0z0_lower.x);
     Assert.assertEquals(8, q.x1y0z0_lower.y);
+    Assert.assertEquals(8, q.x1y0z0_lower.z);
     Assert.assertEquals(15, q.x1y0z0_upper.x);
     Assert.assertEquals(11, q.x1y0z0_upper.y);
+    Assert.assertEquals(11, q.x1y0z0_upper.z);
 
     Assert.assertEquals(8, q.x0y1z0_lower.x);
     Assert.assertEquals(12, q.x0y1z0_lower.y);
+    Assert.assertEquals(8, q.x0y1z0_lower.z);
     Assert.assertEquals(11, q.x0y1z0_upper.x);
     Assert.assertEquals(15, q.x0y1z0_upper.y);
+    Assert.assertEquals(11, q.x0y1z0_upper.z);
 
     Assert.assertEquals(12, q.x1y1z0_lower.x);
     Assert.assertEquals(12, q.x1y1z0_lower.y);
+    Assert.assertEquals(8, q.x1y1z0_lower.z);
     Assert.assertEquals(15, q.x1y1z0_upper.x);
     Assert.assertEquals(15, q.x1y1z0_upper.y);
+    Assert.assertEquals(11, q.x1y1z0_upper.z);
+
+    Assert.assertEquals(8, q.x0y0z1_lower.x);
+    Assert.assertEquals(8, q.x0y0z1_lower.y);
+    Assert.assertEquals(12, q.x0y0z1_lower.z);
+    Assert.assertEquals(11, q.x0y0z1_upper.x);
+    Assert.assertEquals(11, q.x0y0z1_upper.y);
+    Assert.assertEquals(15, q.x0y0z1_upper.z);
+
+    Assert.assertEquals(12, q.x1y0z1_lower.x);
+    Assert.assertEquals(8, q.x1y0z1_lower.y);
+    Assert.assertEquals(12, q.x1y0z1_lower.z);
+    Assert.assertEquals(15, q.x1y0z1_upper.x);
+    Assert.assertEquals(11, q.x1y0z1_upper.y);
+    Assert.assertEquals(15, q.x1y0z1_upper.z);
+
+    Assert.assertEquals(8, q.x0y1z1_lower.x);
+    Assert.assertEquals(12, q.x0y1z1_lower.y);
+    Assert.assertEquals(12, q.x0y1z1_lower.z);
+    Assert.assertEquals(11, q.x0y1z1_upper.x);
+    Assert.assertEquals(15, q.x0y1z1_upper.y);
+    Assert.assertEquals(15, q.x0y1z1_upper.z);
+
+    Assert.assertEquals(12, q.x1y1z1_lower.x);
+    Assert.assertEquals(12, q.x1y1z1_lower.y);
+    Assert.assertEquals(12, q.x1y1z1_lower.z);
+    Assert.assertEquals(15, q.x1y1z1_upper.x);
+    Assert.assertEquals(15, q.x1y1z1_upper.y);
+    Assert.assertEquals(15, q.x1y1z1_upper.z);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testQueryContaining()
+    throws ConstraintError
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
+    final Cuboid[] cubes = OctTreeBasicTest.makeCuboids(0, 128);
+
+    for (final Cuboid c : cubes) {
+      final boolean in = q.octTreeInsert(c);
+      Assert.assertTrue(in);
+    }
+
+    for (final Cuboid c : cubes) {
+      final SortedSet<Cuboid> items = new TreeSet<Cuboid>();
+      q.octTreeQueryVolumeContaining(c, items);
+      Assert.assertEquals(1, items.size());
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testQueryContainingExact()
+      throws ConstraintError
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
+    final Cuboid[] cubes = OctTreeBasicTest.makeCuboids(0, 128);
+
+    for (final Cuboid c : cubes) {
+      final boolean in = q.octTreeInsert(c);
+      Assert.assertTrue(in);
+    }
+
+    final SortedSet<Cuboid> items = new TreeSet<Cuboid>();
+    q.octTreeQueryVolumeContaining(new Cuboid(
+      0,
+      new VectorI3I(0, 0, 0),
+      new VectorI3I(127, 127, 127)), items);
+
+    Assert.assertEquals(8, items.size());
+  }
+
+  @SuppressWarnings("static-method") @Test public void testQueryOverlapping()
+    throws ConstraintError
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
+    final Cuboid[] cubes = OctTreeBasicTest.makeCuboids(0, 128);
+
+    for (final Cuboid c : cubes) {
+      final boolean in = q.octTreeInsert(c);
+      Assert.assertTrue(in);
+    }
+
+    for (final Cuboid c : cubes) {
+      final VectorReadable3I lower = c.boundingVolumeLower();
+      final VectorReadable3I upper = c.boundingVolumeUpper();
+
+      final VectorI3I new_lower =
+        new VectorI3I(lower.getXI() - 2, lower.getYI() - 2, lower.getZI() - 2);
+      final VectorI3I new_upper =
+        new VectorI3I(upper.getXI() - 8, upper.getYI() - 8, upper.getZI() - 8);
+
+      final Cuboid d = new Cuboid(c.getId(), new_lower, new_upper);
+      final SortedSet<Cuboid> items = new TreeSet<Cuboid>();
+      q.octTreeQueryVolumeOverlapping(d, items);
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testQueryOverlappingExact()
+      throws ConstraintError
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
+    final Cuboid[] cubes = OctTreeBasicTest.makeCuboids(0, 128);
+
+    for (final Cuboid c : cubes) {
+      final boolean in = q.octTreeInsert(c);
+      Assert.assertTrue(in);
+    }
+
+    final SortedSet<Cuboid> items = new TreeSet<Cuboid>();
+    q.octTreeQueryVolumeOverlapping(new Cuboid(
+      0,
+      new VectorI3I(0, 0, 0),
+      new VectorI3I(127, 127, 127)), items);
+
+    Assert.assertEquals(8, items.size());
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testQueryOverlappingNot()
+      throws ConstraintError
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
+    final Cuboid c =
+      new Cuboid(0, new VectorI3I(4, 4, 4), new VectorI3I(8, 8, 8));
+    final Cuboid d =
+      new Cuboid(0, new VectorI3I(10, 10, 10), new VectorI3I(12, 12, 12));
+
+    final boolean in = q.octTreeInsert(c);
+    Assert.assertTrue(in);
+
+    final SortedSet<Cuboid> items = new TreeSet<Cuboid>();
+    q.octTreeQueryVolumeOverlapping(d, items);
+
+    Assert.assertEquals(0, items.size());
   }
 
   @SuppressWarnings("static-method") @Test public void testRemove()
@@ -424,84 +644,7 @@ public class OctTreeBasicTest
         Exception
   {
     final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(32, 32, 32);
-    final int size = 10;
-    final Cuboid cubes[] = new Cuboid[8];
-
-    int x_root = 2;
-    int y_root = 2;
-    int z_root = 2;
-    cubes[0] =
-      new Cuboid(0, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 18;
-    y_root = 2;
-    z_root = 2;
-    cubes[1] =
-      new Cuboid(1, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 2;
-    y_root = 18;
-    z_root = 2;
-    cubes[2] =
-      new Cuboid(2, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 18;
-    y_root = 18;
-    z_root = 2;
-    cubes[3] =
-      new Cuboid(3, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    //
-    // Upper Z
-    //
-
-    x_root = 2;
-    y_root = 2;
-    z_root = 18;
-    cubes[4] =
-      new Cuboid(4, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 18;
-    y_root = 2;
-    z_root = 18;
-    cubes[5] =
-      new Cuboid(5, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 2;
-    y_root = 18;
-    z_root = 18;
-    cubes[6] =
-      new Cuboid(6, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
-
-    x_root = 18;
-    y_root = 18;
-    z_root = 18;
-    cubes[7] =
-      new Cuboid(7, new VectorI3I(x_root, y_root, z_root), new VectorI3I(
-        x_root + size,
-        y_root + size,
-        z_root + size));
+    final Cuboid cubes[] = OctTreeBasicTest.makeCuboids(0, 32);
 
     for (final Cuboid c : cubes) {
       boolean added = q.octTreeInsert(c);
@@ -524,5 +667,66 @@ public class OctTreeBasicTest
   {
     final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
     System.err.println(q.toString());
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRaycast()
+    throws ConstraintError
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
+    final Cuboid[] cubes = OctTreeBasicTest.makeCuboids(0, 128);
+
+    for (final Cuboid c : cubes) {
+      boolean added = q.octTreeInsert(c);
+      Assert.assertTrue(added);
+      added = q.octTreeInsert(c);
+      Assert.assertFalse(added);
+    }
+
+    {
+      final VectorI3D direction =
+        VectorI3D.normalize(new VectorI3D(127, 127, 127));
+      final RayI3D ray = new RayI3D(VectorI3D.ZERO, direction);
+
+      final SortedSet<OctTreeRaycastResult<Cuboid>> items =
+        new TreeSet<OctTreeRaycastResult<Cuboid>>();
+      q.octTreeQueryRaycast(ray, items);
+
+      Assert.assertEquals(2, items.size());
+
+      {
+        final OctTreeRaycastResult<Cuboid> r = items.first();
+        Assert.assertTrue(r.getObject() == cubes[0]);
+      }
+
+      {
+        final OctTreeRaycastResult<Cuboid> r = items.last();
+        Assert.assertTrue(r.getObject() == cubes[7]);
+      }
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRaycastNot()
+    throws ConstraintError
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
+    final Cuboid[] cubes = OctTreeBasicTest.makeCuboids(0, 128);
+
+    for (final Cuboid c : cubes) {
+      boolean added = q.octTreeInsert(c);
+      Assert.assertTrue(added);
+      added = q.octTreeInsert(c);
+      Assert.assertFalse(added);
+    }
+
+    {
+      final VectorI3D direction = VectorI3D.normalize(new VectorI3D(0, 1, 0));
+      final RayI3D ray = new RayI3D(VectorI3D.ZERO, direction);
+
+      final SortedSet<OctTreeRaycastResult<Cuboid>> items =
+        new TreeSet<OctTreeRaycastResult<Cuboid>>();
+      q.octTreeQueryRaycast(ray, items);
+
+      Assert.assertEquals(0, items.size());
+    }
   }
 }

@@ -5,17 +5,17 @@ import org.junit.Test;
 
 import com.io7m.jtensors.VectorI2I;
 
-public class RaycastResultTest
+public class QuadTreeRaycastResultTest
 {
   @SuppressWarnings("static-method") @Test public void testEquals()
   {
-    final RaycastResult<Rectangle> rr0 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr0 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
-    final RaycastResult<Rectangle> rr1 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr1 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
@@ -25,8 +25,8 @@ public class RaycastResultTest
 
   @SuppressWarnings("static-method") @Test public void testEqualsNotCase0()
   {
-    final RaycastResult<Rectangle> rr0 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr0 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
@@ -36,8 +36,8 @@ public class RaycastResultTest
 
   @SuppressWarnings("static-method") @Test public void testEqualsNotCase1()
   {
-    final RaycastResult<Rectangle> rr0 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr0 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
@@ -47,13 +47,13 @@ public class RaycastResultTest
 
   @SuppressWarnings("static-method") @Test public void testEqualsNotCase2()
   {
-    final RaycastResult<Rectangle> rr0 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr0 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
-    final RaycastResult<Rectangle> rr1 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr1 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 2.0);
@@ -63,13 +63,13 @@ public class RaycastResultTest
 
   @SuppressWarnings("static-method") @Test public void testEqualsNotCase3()
   {
-    final RaycastResult<Rectangle> rr0 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr0 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
-    final RaycastResult<Rectangle> rr1 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr1 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(2, 2)), 1.0);
@@ -79,8 +79,8 @@ public class RaycastResultTest
 
   @SuppressWarnings("static-method") @Test public void testEqualsReflexive()
   {
-    final RaycastResult<Rectangle> rr0 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr0 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
@@ -90,13 +90,13 @@ public class RaycastResultTest
 
   @SuppressWarnings("static-method") @Test public void testEqualsSymmetric()
   {
-    final RaycastResult<Rectangle> rr0 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr0 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
-    final RaycastResult<Rectangle> rr1 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr1 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
@@ -109,7 +109,7 @@ public class RaycastResultTest
   {
     final Rectangle r =
       new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(1, 1));
-    final RaycastResult<Rectangle> rr0 = new RaycastResult<Rectangle>(r, 1.0);
+    final QuadTreeRaycastResult<Rectangle> rr0 = new QuadTreeRaycastResult<Rectangle>(r, 1.0);
 
     Assert.assertTrue(rr0.getDistance() == 1.0);
     Assert.assertTrue(rr0.getObject() == r);
@@ -117,23 +117,23 @@ public class RaycastResultTest
 
   @SuppressWarnings("static-method") @Test public void testHashcode()
   {
-    final RaycastResult<Rectangle> rr0 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr0 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
-    final RaycastResult<Rectangle> rr1 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr1 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
-    final RaycastResult<Rectangle> rr2 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr2 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(2, 2)), 1.0);
-    final RaycastResult<Rectangle> rr3 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr3 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(2, 2)), 2.0);
@@ -147,9 +147,9 @@ public class RaycastResultTest
   {
     final Rectangle r =
       new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(1, 1));
-    final RaycastResult<Rectangle> rr0 = new RaycastResult<Rectangle>(r, 1.0);
-    final RaycastResult<Rectangle> rr1 = new RaycastResult<Rectangle>(r, 2.0);
-    final RaycastResult<Rectangle> rr2 = new RaycastResult<Rectangle>(r, 3.0);
+    final QuadTreeRaycastResult<Rectangle> rr0 = new QuadTreeRaycastResult<Rectangle>(r, 1.0);
+    final QuadTreeRaycastResult<Rectangle> rr1 = new QuadTreeRaycastResult<Rectangle>(r, 2.0);
+    final QuadTreeRaycastResult<Rectangle> rr2 = new QuadTreeRaycastResult<Rectangle>(r, 3.0);
 
     Assert.assertEquals(0, rr0.compareTo(rr0));
     Assert.assertEquals(0, rr1.compareTo(rr1));
@@ -162,23 +162,23 @@ public class RaycastResultTest
 
   @SuppressWarnings("static-method") @Test public void testToString()
   {
-    final RaycastResult<Rectangle> rr0 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr0 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
-    final RaycastResult<Rectangle> rr1 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr1 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(1, 1)), 1.0);
-    final RaycastResult<Rectangle> rr2 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr2 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(2, 2)), 1.0);
-    final RaycastResult<Rectangle> rr3 =
-      new RaycastResult<Rectangle>(new Rectangle(
+    final QuadTreeRaycastResult<Rectangle> rr3 =
+      new QuadTreeRaycastResult<Rectangle>(new Rectangle(
         0,
         new VectorI2I(0, 0),
         new VectorI2I(2, 2)), 2.0);

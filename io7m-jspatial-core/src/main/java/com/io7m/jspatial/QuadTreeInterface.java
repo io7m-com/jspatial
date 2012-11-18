@@ -150,7 +150,7 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
 
   void quadTreeQueryRaycast(
     final @Nonnull RayI2D ray,
-    final @Nonnull SortedSet<RaycastResult<T>> items)
+    final @Nonnull SortedSet<QuadTreeRaycastResult<T>> items)
     throws ConstraintError;
 
   /**

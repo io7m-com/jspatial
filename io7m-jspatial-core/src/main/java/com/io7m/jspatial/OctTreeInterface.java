@@ -16,10 +16,13 @@
 
 package com.io7m.jspatial;
 
+import java.util.SortedSet;
+
 import javax.annotation.Nonnull;
 
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
+import com.io7m.jtensors.VectorI3D;
 
 /**
  * The interface provided by octtree implementations.
@@ -88,6 +91,80 @@ public interface OctTreeInterface<T extends OctTreeMember<T>>
       ConstraintError;
 
   /**
+   * Returns the objects intersected by the ray <code>ray</code> in
+   * <code>items</code>.
+   * 
+   * The objects are returned in order of increasing scalar distance from the
+   * origin of <code>ray</code>. That is, the nearest object to the origin of
+   * <code>ray</code> will be the first item in <code>items</code>.
+   * 
+   * @see VectorI3D#distance(VectorI3D, VectorI3D)
+   * @param items
+   *          The returned objects
+   * @throws ConstraintError
+   *           Iff any of the following hold:
+   *           <ul>
+   *           <li><code>ray == null</code></li>
+   *           <li><code>items == null</code></li>
+   *           </ul>
+   */
+
+  void octTreeQueryRaycast(
+    final @Nonnull RayI3D ray,
+    final @Nonnull SortedSet<OctTreeRaycastResult<T>> items)
+    throws ConstraintError;
+
+  /**
+   * Returns all objects in the tree that are completely contained within
+   * <code>volume</code>, saving the results to <code>items</code>.
+   * 
+   * @param volume
+   *          The volume to examine
+   * @param items
+   *          The returned items
+   * @throws ConstraintError
+   *           Iff any of the following hold:
+   *           <ul>
+   *           <li><code>items == null</code>
+   *           <li><code>volume == null</code>
+   *           <li><code>volume</code> is not well formed</li>
+   *           </ul>
+   * 
+   * 
+   * @see BoundingVolumeCheck#wellFormed(BoundingVolume)
+   */
+
+  void octTreeQueryVolumeContaining(
+    final @Nonnull BoundingVolume volume,
+    final @Nonnull SortedSet<T> items)
+    throws ConstraintError;
+
+  /**
+   * Returns all objects in the tree that are overlapped by
+   * <code>volume</code>, saving the results to <code>items</code>.
+   * 
+   * @param volume
+   *          The volume to examine
+   * @param items
+   *          The returned items
+   * @throws ConstraintError
+   *           Iff any of the following hold:
+   *           <ul>
+   *           <li><code>items == null</code>
+   *           <li><code>volume == null</code>
+   *           <li><code>volume</code> is not well formed</li>
+   *           </ul>
+   * 
+   * 
+   * @see BoundingVolumeCheck#wellFormed(BoundingVolume)
+   */
+
+  void octTreeQueryVolumeOverlapping(
+    final @Nonnull BoundingVolume volume,
+    final @Nonnull SortedSet<T> items)
+    throws ConstraintError;
+
+  /**
    * Remove the object <code>item</code> from the octtree.
    * <p>
    * The function returns <code>false</code> if the object could not be
@@ -124,4 +201,5 @@ public interface OctTreeInterface<T extends OctTreeMember<T>>
     final @Nonnull OctTreeTraversal traversal)
     throws Exception,
       ConstraintError;
+
 }

@@ -23,13 +23,13 @@ import javax.annotation.Nonnull;
  * by their scalar distance from the origin of the ray.
  */
 
-public final class RaycastResult<T extends BoundingArea> implements
-  Comparable<RaycastResult<T>>
+public final class QuadTreeRaycastResult<T extends BoundingArea> implements
+  Comparable<QuadTreeRaycastResult<T>>
 {
   private final double     distance;
   private final @Nonnull T object;
 
-  RaycastResult(
+  QuadTreeRaycastResult(
     final @Nonnull T object,
     final double distance)
   {
@@ -38,7 +38,7 @@ public final class RaycastResult<T extends BoundingArea> implements
   }
 
   @Override public int compareTo(
-    final @Nonnull RaycastResult<T> other)
+    final @Nonnull QuadTreeRaycastResult<T> other)
   {
     return Double.compare(this.distance, other.distance);
   }
@@ -55,7 +55,7 @@ public final class RaycastResult<T extends BoundingArea> implements
     if (this.getClass() != obj.getClass()) {
       return false;
     }
-    final RaycastResult<?> other = (RaycastResult<?>) obj;
+    final QuadTreeRaycastResult<?> other = (QuadTreeRaycastResult<?>) obj;
     if (Double.doubleToLongBits(this.distance) != Double
       .doubleToLongBits(other.distance)) {
       return false;
@@ -98,7 +98,7 @@ public final class RaycastResult<T extends BoundingArea> implements
   @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
-    builder.append("[RaycastResult ");
+    builder.append("[QuadTreeRaycastResult ");
     builder.append(this.distance);
     builder.append(" ");
     builder.append(this.object);

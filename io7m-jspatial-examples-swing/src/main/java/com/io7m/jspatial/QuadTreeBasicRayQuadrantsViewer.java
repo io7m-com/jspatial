@@ -170,7 +170,7 @@ public final class QuadTreeBasicRayQuadrantsViewer implements Runnable
           g.drawLine(x0, y0, x1, y1);
         }
 
-        for (final RaycastResult<QuadTreeBasic<Rectangle>.Quadrant> r : QuadTreeBasicRayQuadrantsViewer.this.quadrants) {
+        for (final QuadTreeRaycastResult<QuadTreeBasic<Rectangle>.Quadrant> r : QuadTreeBasicRayQuadrantsViewer.this.quadrants) {
           final QuadTreeBasic<Rectangle>.Quadrant q = r.getObject();
           final VectorReadable2I lower = q.boundingAreaLower();
           final VectorReadable2I upper = q.boundingAreaUpper();
@@ -229,7 +229,7 @@ public final class QuadTreeBasicRayQuadrantsViewer implements Runnable
   private final VectorM2I                                                   ray_origin;
   private final VectorM2I                                                   ray_target;
   private final VectorM2D                                                   ray_direction;
-  private final SortedSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>> quadrants;
+  private final SortedSet<QuadTreeRaycastResult<QuadTreeBasic<Rectangle>.Quadrant>> quadrants;
   private final TreeCanvas                                                  canvas;
   private final AtomicLong                                                  current_id;
 
@@ -238,7 +238,7 @@ public final class QuadTreeBasicRayQuadrantsViewer implements Runnable
   {
     this.current_id = new AtomicLong();
     this.quadrants =
-      new TreeSet<RaycastResult<QuadTreeBasic<Rectangle>.Quadrant>>();
+      new TreeSet<QuadTreeRaycastResult<QuadTreeBasic<Rectangle>.Quadrant>>();
 
     this.ray_direction = new VectorM2D();
     this.ray_origin = new VectorM2I();

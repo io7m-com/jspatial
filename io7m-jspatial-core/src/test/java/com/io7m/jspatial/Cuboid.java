@@ -73,6 +73,11 @@ final class Cuboid implements OctTreeMember<Cuboid>
     return true;
   }
 
+  long getId()
+  {
+    return this.id;
+  }
+
   @Override public int hashCode()
   {
     final int prime = 31;

@@ -106,7 +106,7 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
     {
       /**
        * If <code>area</code> completely contains this quadrant, collect
-       * everything in this quadrant and all chidren of this quadrant.
+       * everything in this quadrant and all children of this quadrant.
        */
 
       if (BoundingAreaCheck.containedWithin(area, this)) {
@@ -299,7 +299,7 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
 
     void raycast(
       final @Nonnull RayI2D ray,
-      final @Nonnull SortedSet<RaycastResult<T>> items)
+      final @Nonnull SortedSet<QuadTreeRaycastResult<T>> items)
     {
       if (BoundingAreaCheck.rayBoxIntersects(
         ray,
@@ -319,8 +319,8 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
             object_upper.getXI(),
             object_upper.getYI())) {
 
-            final RaycastResult<T> r =
-              new RaycastResult<T>(object, VectorI2D.distance(new VectorI2D(
+            final QuadTreeRaycastResult<T> r =
+              new QuadTreeRaycastResult<T>(object, VectorI2D.distance(new VectorI2D(
                 object_lower.getXI(),
                 object_lower.getYI()), ray.origin));
             items.add(r);
@@ -338,7 +338,7 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
 
     void raycastQuadrants(
       final @Nonnull RayI2D ray,
-      final @Nonnull SortedSet<RaycastResult<Quadrant>> quadrants)
+      final @Nonnull SortedSet<QuadTreeRaycastResult<Quadrant>> quadrants)
     {
       if (BoundingAreaCheck.rayBoxIntersects(
         ray,
@@ -348,8 +348,8 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
         this.upper.y)) {
 
         if (this.leaf) {
-          final RaycastResult<Quadrant> r =
-            new RaycastResult<Quadrant>(this, VectorI2D.distance(
+          final QuadTreeRaycastResult<Quadrant> r =
+            new QuadTreeRaycastResult<Quadrant>(this, VectorI2D.distance(
               new VectorI2D(this.lower.x, this.lower.y),
               ray.origin));
           quadrants.add(r);
@@ -631,7 +631,7 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
 
   @Override public void quadTreeQueryRaycast(
     final @Nonnull RayI2D ray,
-    final @Nonnull SortedSet<RaycastResult<T>> items)
+    final @Nonnull SortedSet<QuadTreeRaycastResult<T>> items)
     throws ConstraintError
   {
     Constraints.constrainNotNull(ray, "Ray");
@@ -657,7 +657,7 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
 
   void quadTreeQueryRaycastQuadrants(
     final @Nonnull RayI2D ray,
-    final @Nonnull SortedSet<RaycastResult<Quadrant>> items)
+    final @Nonnull SortedSet<QuadTreeRaycastResult<Quadrant>> items)
     throws ConstraintError
   {
     Constraints.constrainNotNull(ray, "Ray");

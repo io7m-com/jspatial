@@ -16,6 +16,7 @@
 
 package com.io7m.jspatial;
 
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.annotation.CheckForNull;
@@ -25,12 +26,13 @@ import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jaux.functional.Function;
+import com.io7m.jtensors.VectorI3D;
 import com.io7m.jtensors.VectorI3I;
 import com.io7m.jtensors.VectorReadable3I;
 
 /**
  * Basic implementation of Octrees, based on a 3D generalization of
- * {@link OctTreeBasic}.
+ * {@link QuadTreeBasic}.
  */
 
 public class OctTreeBasic<T extends OctTreeMember<T>> implements
@@ -107,6 +109,23 @@ public class OctTreeBasic<T extends OctTreeMember<T>> implements
         this.x1y0z1.clear();
         this.x0y1z1.clear();
         this.x1y1z1.clear();
+      }
+    }
+
+    private void collectRecursive(
+      final @Nonnull SortedSet<T> items)
+    {
+      items.addAll(this.octant_objects);
+      if (this.leaf == false) {
+        this.x0y0z0.collectRecursive(items);
+        this.x0y1z0.collectRecursive(items);
+        this.x1y0z0.collectRecursive(items);
+        this.x1y1z0.collectRecursive(items);
+
+        this.x0y0z1.collectRecursive(items);
+        this.x0y1z1.collectRecursive(items);
+        this.x1y0z1.collectRecursive(items);
+        this.x1y1z1.collectRecursive(items);
       }
     }
 
@@ -221,42 +240,54 @@ public class OctTreeBasic<T extends OctTreeMember<T>> implements
       return this.insertObject(item);
     }
 
-    /**
-     * Split this node into four octants.
-     */
-
-    private void split()
+    void raycast(
+      final @Nonnull RayI3D ray,
+      final @Nonnull SortedSet<OctTreeRaycastResult<T>> items)
     {
-      assert this.canSplit();
+      if (BoundingVolumeCheck.rayBoxIntersects(
+        ray,
+        this.lower.x,
+        this.lower.y,
+        this.lower.z,
+        this.upper.x,
+        this.upper.y,
+        this.upper.z)) {
 
-      final Octants q = new Octants(this.lower, this.upper);
-      this.x0y0z0 = new Octant(q.x0y0z0_lower, q.x0y0z0_upper);
-      this.x0y1z0 = new Octant(q.x0y1z0_lower, q.x0y1z0_upper);
-      this.x1y0z0 = new Octant(q.x1y0z0_lower, q.x1y0z0_upper);
-      this.x1y1z0 = new Octant(q.x1y1z0_lower, q.x1y1z0_upper);
-      this.x0y0z1 = new Octant(q.x0y0z1_lower, q.x0y0z1_upper);
-      this.x0y1z1 = new Octant(q.x0y1z1_lower, q.x0y1z1_upper);
-      this.x1y0z1 = new Octant(q.x1y0z1_lower, q.x1y0z1_upper);
-      this.x1y1z1 = new Octant(q.x1y1z1_lower, q.x1y1z1_upper);
-      this.leaf = false;
-    }
+        for (final T object : this.octant_objects) {
+          final VectorReadable3I object_lower = object.boundingVolumeLower();
+          final VectorReadable3I object_upper = object.boundingVolumeUpper();
 
-    void traverse(
-      final int depth,
-      final @Nonnull OctTreeTraversal traversal)
-      throws Exception
-    {
-      traversal.visit(depth, this.lower, this.upper);
+          if (BoundingVolumeCheck.rayBoxIntersects(
+            ray,
+            object_lower.getXI(),
+            object_lower.getYI(),
+            object_lower.getZI(),
+            object_upper.getXI(),
+            object_upper.getYI(),
+            object_upper.getZI())) {
 
-      if (this.leaf == false) {
-        this.x0y0z0.traverse(depth + 1, traversal);
-        this.x1y0z0.traverse(depth + 1, traversal);
-        this.x0y1z0.traverse(depth + 1, traversal);
-        this.x1y1z0.traverse(depth + 1, traversal);
-        this.x0y0z1.traverse(depth + 1, traversal);
-        this.x1y0z1.traverse(depth + 1, traversal);
-        this.x0y1z1.traverse(depth + 1, traversal);
-        this.x1y1z1.traverse(depth + 1, traversal);
+            final OctTreeRaycastResult<T> r =
+              new OctTreeRaycastResult<T>(object, VectorI3D.distance(
+                new VectorI3D(
+                  object_lower.getXI(),
+                  object_lower.getYI(),
+                  object_lower.getZI()),
+                ray.origin));
+            items.add(r);
+          }
+        }
+
+        if (this.leaf == false) {
+          this.x0y0z0.raycast(ray, items);
+          this.x0y1z0.raycast(ray, items);
+          this.x1y0z0.raycast(ray, items);
+          this.x1y1z0.raycast(ray, items);
+
+          this.x0y0z1.raycast(ray, items);
+          this.x0y1z1.raycast(ray, items);
+          this.x1y0z1.raycast(ray, items);
+          this.x1y1z1.raycast(ray, items);
+        }
       }
     }
 
@@ -311,8 +342,117 @@ public class OctTreeBasic<T extends OctTreeMember<T>> implements
       }
 
       // The object must be in the tree, according to objects_all.
-      // Therefore it must be in this node, or one of the child quadrants.
+      // Therefore it must be in this node, or one of the child octants.
       throw new UnreachableCodeException();
+    }
+
+    /**
+     * Split this node into four octants.
+     */
+
+    private void split()
+    {
+      assert this.canSplit();
+
+      final Octants q = new Octants(this.lower, this.upper);
+      this.x0y0z0 = new Octant(q.x0y0z0_lower, q.x0y0z0_upper);
+      this.x0y1z0 = new Octant(q.x0y1z0_lower, q.x0y1z0_upper);
+      this.x1y0z0 = new Octant(q.x1y0z0_lower, q.x1y0z0_upper);
+      this.x1y1z0 = new Octant(q.x1y1z0_lower, q.x1y1z0_upper);
+      this.x0y0z1 = new Octant(q.x0y0z1_lower, q.x0y0z1_upper);
+      this.x0y1z1 = new Octant(q.x0y1z1_lower, q.x0y1z1_upper);
+      this.x1y0z1 = new Octant(q.x1y0z1_lower, q.x1y0z1_upper);
+      this.x1y1z1 = new Octant(q.x1y1z1_lower, q.x1y1z1_upper);
+      this.leaf = false;
+    }
+
+    void traverse(
+      final int depth,
+      final @Nonnull OctTreeTraversal traversal)
+      throws Exception
+    {
+      traversal.visit(depth, this.lower, this.upper);
+
+      if (this.leaf == false) {
+        this.x0y0z0.traverse(depth + 1, traversal);
+        this.x1y0z0.traverse(depth + 1, traversal);
+        this.x0y1z0.traverse(depth + 1, traversal);
+        this.x1y1z0.traverse(depth + 1, traversal);
+
+        this.x0y0z1.traverse(depth + 1, traversal);
+        this.x1y0z1.traverse(depth + 1, traversal);
+        this.x0y1z1.traverse(depth + 1, traversal);
+        this.x1y1z1.traverse(depth + 1, traversal);
+      }
+    }
+
+    void volumeContaining(
+      final @Nonnull BoundingVolume volume,
+      final @Nonnull SortedSet<T> items)
+    {
+      /**
+       * If <code>volume</code> completely contains this octant, collect
+       * everything in this octant and all children of this octant.
+       */
+
+      if (BoundingVolumeCheck.containedWithin(volume, this)) {
+        this.collectRecursive(items);
+        return;
+      }
+
+      /**
+       * Otherwise, <code>volume</code> may be overlapping this octant and
+       * therefore some items may still be contained within
+       * <code>volume</code>.
+       */
+
+      for (final T object : this.octant_objects) {
+        if (BoundingVolumeCheck.containedWithin(volume, object)) {
+          items.add(object);
+        }
+      }
+
+      if (this.leaf == false) {
+        this.x0y0z0.volumeContaining(volume, items);
+        this.x0y1z0.volumeContaining(volume, items);
+        this.x1y0z0.volumeContaining(volume, items);
+        this.x1y1z0.volumeContaining(volume, items);
+
+        this.x0y0z1.volumeContaining(volume, items);
+        this.x0y1z1.volumeContaining(volume, items);
+        this.x1y0z1.volumeContaining(volume, items);
+        this.x1y1z1.volumeContaining(volume, items);
+      }
+    }
+
+    void volumeOverlapping(
+      final @Nonnull BoundingVolume volume,
+      final @Nonnull SortedSet<T> items)
+    {
+      /**
+       * If <code>volume</code> overlaps this octant, test each object against
+       * <code>volume</code>.
+       */
+
+      if (BoundingVolumeCheck.overlapsVolume(volume, this)) {
+        for (final T object : this.octant_objects) {
+          if (BoundingVolumeCheck.overlapsVolume(volume, object)) {
+            items.add(object);
+          }
+        }
+
+        if (this.leaf == false) {
+          this.x0y0z0.volumeOverlapping(volume, items);
+          this.x1y0z0.volumeOverlapping(volume, items);
+          this.x0y1z0.volumeOverlapping(volume, items);
+          this.x1y1z0.volumeOverlapping(volume, items);
+
+          this.x0y0z1.volumeOverlapping(volume, items);
+          this.x1y0z1.volumeOverlapping(volume, items);
+          this.x0y1z1.volumeOverlapping(volume, items);
+          this.x1y1z1.volumeOverlapping(volume, items);
+        }
+      }
     }
   }
 
@@ -473,13 +613,43 @@ public class OctTreeBasic<T extends OctTreeMember<T>> implements
     }
   }
 
-  @Override public void octTreeTraverse(
-    final @Nonnull OctTreeTraversal traversal)
-    throws Exception,
-      ConstraintError
+  @Override public void octTreeQueryRaycast(
+    final @Nonnull RayI3D ray,
+    final @Nonnull SortedSet<OctTreeRaycastResult<T>> items)
+    throws ConstraintError
   {
-    Constraints.constrainNotNull(traversal, "Traversal");
-    this.root.traverse(0, traversal);
+    Constraints.constrainNotNull(ray, "Ray");
+    Constraints.constrainNotNull(items, "Items");
+
+    this.root.raycast(ray, items);
+  }
+
+  @Override public void octTreeQueryVolumeContaining(
+    final @Nonnull BoundingVolume volume,
+    final @Nonnull SortedSet<T> items)
+    throws ConstraintError
+  {
+    Constraints.constrainNotNull(volume, "Volume");
+    Constraints.constrainArbitrary(
+      BoundingVolumeCheck.wellFormed(volume),
+      "Bounding volume is well-formed");
+    Constraints.constrainNotNull(items, "Items");
+
+    this.root.volumeContaining(volume, items);
+  }
+
+  @Override public void octTreeQueryVolumeOverlapping(
+    final @Nonnull BoundingVolume volume,
+    final @Nonnull SortedSet<T> items)
+    throws ConstraintError
+  {
+    Constraints.constrainNotNull(volume, "Volume");
+    Constraints.constrainArbitrary(
+      BoundingVolumeCheck.wellFormed(volume),
+      "Bounding volume is well-formed");
+    Constraints.constrainNotNull(items, "Items");
+
+    this.root.volumeOverlapping(volume, items);
   }
 
   @Override public boolean octTreeRemove(
@@ -492,5 +662,27 @@ public class OctTreeBasic<T extends OctTreeMember<T>> implements
       "Bounding volume is well-formed");
 
     return this.root.remove(item);
+  }
+
+  @Override public void octTreeTraverse(
+    final @Nonnull OctTreeTraversal traversal)
+    throws Exception,
+      ConstraintError
+  {
+    Constraints.constrainNotNull(traversal, "Traversal");
+    this.root.traverse(0, traversal);
+  }
+
+  @SuppressWarnings("synthetic-access") @Override public String toString()
+  {
+    final StringBuilder builder = new StringBuilder();
+    builder.append("[OctTree ");
+    builder.append(this.root.lower);
+    builder.append(" ");
+    builder.append(this.root.upper);
+    builder.append(" ");
+    builder.append(this.objects_all);
+    builder.append("]");
+    return builder.toString();
   }
 }
