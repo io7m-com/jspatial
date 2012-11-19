@@ -17,8 +17,8 @@
 package com.io7m.jspatial;
 
 /**
- * The type of objects that can be placed into a octtree. Objects are required
- * to have:
+ * The type of objects that can be placed into an octtree. Objects are
+ * required to have:
  * 
  * <ul>
  * <li>Unique and totally ordered identifiers, in order to allow for "set"
