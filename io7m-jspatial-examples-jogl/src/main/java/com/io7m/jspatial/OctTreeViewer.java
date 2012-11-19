@@ -25,6 +25,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -39,17 +41,20 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
+import com.io7m.jtensors.VectorI3D;
 import com.io7m.jtensors.VectorI3I;
 import com.io7m.jtensors.VectorM3F;
 import com.io7m.jtensors.VectorReadable3I;
@@ -259,92 +264,6 @@ public final class OctTreeViewer implements Runnable
       }
     }
 
-    @SuppressWarnings("synthetic-access") private void renderTree(
-      final GL2 gl)
-      throws Exception,
-        ConstraintError
-    {
-      gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-
-      gl.glEnable(GL.GL_BLEND);
-      gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-
-      OctTreeViewer.this.octtree.octTreeTraverse(new OctTreeTraversal() {
-        @SuppressWarnings("unused") @Override public void visit(
-          final int depth,
-          final @Nonnull VectorReadable3I lower,
-          final @Nonnull VectorReadable3I upper)
-          throws Exception
-        {
-          gl.glBegin(GL2.GL_QUADS);
-          {
-            gl.glColor4d(1.0, 1.0, 1.0, 0.2);
-
-            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
-            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
-            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
-            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
-
-            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
-            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
-            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
-            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
-
-            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
-            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
-            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
-            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
-
-            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
-            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
-            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
-            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
-          }
-          gl.glEnd();
-        }
-      });
-
-      gl.glDisable(GL.GL_BLEND);
-
-      OctTreeViewer.this.octtree
-        .octTreeIterateObjects(new Function<Cuboid, Boolean>() {
-          @Override public Boolean call(
-            final Cuboid x)
-          {
-            final VectorReadable3I lower = x.boundingVolumeLower();
-            final VectorReadable3I upper = x.boundingVolumeUpper();
-
-            gl.glBegin(GL2.GL_QUADS);
-            {
-              gl.glColor4d(0.0, 1.0, 0.0, 0.8);
-
-              gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
-              gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
-              gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
-              gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
-
-              gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
-              gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
-              gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
-              gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
-
-              gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
-              gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
-              gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
-              gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
-
-              gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
-              gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
-              gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
-              gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
-            }
-            gl.glEnd();
-
-            return Boolean.TRUE;
-          }
-        });
-    }
-
     @SuppressWarnings("unused") @Override public void dispose(
       final GLAutoDrawable drawable)
     {
@@ -547,6 +466,214 @@ public final class OctTreeViewer implements Runnable
       gl.glDisable(GL.GL_BLEND);
     }
 
+    @SuppressWarnings("synthetic-access") private void renderTree(
+      final GL2 gl)
+      throws Exception,
+        ConstraintError
+    {
+      gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+
+      gl.glEnable(GL.GL_BLEND);
+      gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
+      OctTreeViewer.this.octtree.octTreeTraverse(new OctTreeTraversal() {
+        @SuppressWarnings("unused") @Override public void visit(
+          final int depth,
+          final @Nonnull VectorReadable3I lower,
+          final @Nonnull VectorReadable3I upper)
+          throws Exception
+        {
+          gl.glBegin(GL2.GL_QUADS);
+          {
+            gl.glColor4d(1.0, 1.0, 1.0, 0.05);
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+
+            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+          }
+          gl.glEnd();
+        }
+      });
+
+      OctTreeViewer.this.octtree
+        .octTreeIterateObjects(new Function<Cuboid, Boolean>() {
+          @Override public Boolean call(
+            final Cuboid x)
+          {
+            final VectorReadable3I lower = x.boundingVolumeLower();
+            final VectorReadable3I upper = x.boundingVolumeUpper();
+
+            gl.glBegin(GL2.GL_QUADS);
+            {
+              gl.glColor4d(0.8, 0.8, 0.8, 0.8);
+
+              gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+              gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+              gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+              gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+
+              gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+              gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+              gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+              gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+
+              gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+              gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+              gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+              gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+
+              gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+              gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+              gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+              gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+            }
+            gl.glEnd();
+
+            return Boolean.TRUE;
+          }
+        });
+
+      if (OctTreeViewer.this.volume_selected) {
+        {
+          final VectorReadable3I lower =
+            OctTreeViewer.this.volume_select.boundingVolumeLower();
+          final VectorReadable3I upper =
+            OctTreeViewer.this.volume_select.boundingVolumeUpper();
+
+          gl.glBegin(GL2.GL_QUADS);
+          {
+            gl.glColor4d(1.0, 1.0, 0.0, 0.2);
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+
+            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+          }
+          gl.glEnd();
+        }
+
+        for (final Cuboid c : OctTreeViewer.this.volume_select_results) {
+          final VectorReadable3I lower = c.boundingVolumeLower();
+          final VectorReadable3I upper = c.boundingVolumeUpper();
+
+          gl.glBegin(GL2.GL_QUADS);
+          {
+            gl.glColor4d(1.0, 0.0, 0.0, 0.2);
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+
+            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+          }
+          gl.glEnd();
+        }
+      }
+
+      if (OctTreeViewer.this.raycast_active) {
+        final double target_x =
+          OctTreeViewer.this.raycast_ray.direction.x
+            * (OctTreeViewer.TREE_SIZE_X * 1000);
+        final double target_y =
+          OctTreeViewer.this.raycast_ray.direction.y
+            * (OctTreeViewer.TREE_SIZE_Y * 1000);
+        final double target_z =
+          OctTreeViewer.this.raycast_ray.direction.y
+            * (OctTreeViewer.TREE_SIZE_Z * 1000);
+
+        gl.glBegin(GL.GL_LINES);
+        {
+          gl.glColor4d(0.0, 1.0, 1.0, 0.3);
+
+          gl.glVertex3d(
+            OctTreeViewer.this.raycast_ray.origin.x,
+            OctTreeViewer.this.raycast_ray.origin.y,
+            OctTreeViewer.this.raycast_ray.origin.z);
+          gl.glVertex3d(target_x, target_y, target_z);
+        }
+        gl.glEnd();
+
+        for (final OctTreeRaycastResult<Cuboid> r : OctTreeViewer.this.raycast_selection) {
+          final Cuboid c = r.getObject();
+          final VectorReadable3I lower = c.boundingVolumeLower();
+          final VectorReadable3I upper = c.boundingVolumeUpper();
+
+          gl.glBegin(GL2.GL_QUADS);
+          {
+            gl.glColor4d(0.0, 1.0, 1.0, 0.3);
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+
+            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), lower.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), lower.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), lower.getZI());
+
+            gl.glVertex3d(lower.getXI(), upper.getYI(), upper.getZI());
+            gl.glVertex3d(lower.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), lower.getYI(), upper.getZI());
+            gl.glVertex3d(upper.getXI(), upper.getYI(), upper.getZI());
+          }
+          gl.glEnd();
+        }
+      }
+
+      gl.glDisable(GL.GL_BLEND);
+    }
+
     @SuppressWarnings("unused") @Override public void reshape(
       final GLAutoDrawable drawable,
       final int x,
@@ -558,8 +685,22 @@ public final class OctTreeViewer implements Runnable
     }
   }
 
-  private static final int CANVAS_SIZE_X = 512;
-  private static final int CANVAS_SIZE_Y = 512;
+  private static final int    CANVAS_SIZE_X        = 512;
+  private static final int    CANVAS_SIZE_Y        = 512;
+
+  private static final double CAMERA_SPEED_LINEAR  = 0.3;
+  private static final double CAMERA_SPEED_ANGULAR = 0.3;
+  private static final double CAMERA_FRICTION      = 0.85;
+
+  private static final int    TREE_SIZE_X          = 128;
+  private static final int    TREE_SIZE_Y          = 128;
+  private static final int    TREE_SIZE_Z          = 128;
+
+  static <T extends Throwable> void error(
+    final T e)
+  {
+    e.printStackTrace();
+  }
 
   static <T extends Throwable> void fatal(
     final T e)
@@ -589,27 +730,40 @@ public final class OctTreeViewer implements Runnable
     });
   }
 
-  private final GLCanvas             canvas;
-  private final JPanel               panel;
-  private OctTreeBasic<Cuboid>       octtree;
-  private final AtomicLong           current_id;
-  private static final double        CAMERA_SPEED_LINEAR     = 0.3;
-  private static final double        CAMERA_SPEED_ANGULAR    = 0.3;
-  private static final double        CAMERA_FRICTION         = 0.85;
-  private static final int           TREE_SIZE_X             = 128;
-  private static final int           TREE_SIZE_Y             = 128;
-  private static final int           TREE_SIZE_Z             = 128;
-  protected final VectorM3F          camera_focus;
-  protected final VectorM3F          camera_position;
-  protected double                   camera_orientation      = 0.0;
-  protected double                   camera_velocity_forward = 0.0;
-  protected double                   camera_velocity_side    = 0.0;
-  protected double                   camera_velocity_up      = 0.0;
-  protected double                   camera_rotate_velocity  = 0.0;
-  protected double                   camera_orbit_velocity   = 0.0;
-  protected double                   camera_orbit_offset     = 32.0;
-  protected Input                    input_state             = new Input();
-  protected ScheduledExecutorService executor;
+  private final GLCanvas                                canvas;
+  private final JPanel                                  panel;
+  private OctTreeBasic<Cuboid>                          octtree;
+  private final AtomicLong                              current_id;
+  protected final VectorM3F                             camera_focus;
+  protected final VectorM3F                             camera_position;
+  protected double                                      camera_orientation      =
+                                                                                  0.0;
+  protected double                                      camera_velocity_forward =
+                                                                                  0.0;
+  protected double                                      camera_velocity_side    =
+                                                                                  0.0;
+  protected double                                      camera_velocity_up      =
+                                                                                  0.0;
+  protected double                                      camera_rotate_velocity  =
+                                                                                  0.0;
+  protected double                                      camera_orbit_velocity   =
+                                                                                  0.0;
+  protected double                                      camera_orbit_offset     =
+                                                                                  32.0;
+  protected Input                                       input_state             =
+                                                                                  new Input();
+  protected ScheduledExecutorService                    executor;
+
+  private final JPanel                                  canvas_container;
+  private final JPanel                                  control_container;
+
+  private final SortedSet<OctTreeRaycastResult<Cuboid>> raycast_selection;
+  private RayI3D                                        raycast_ray;
+  private boolean                                       raycast_active;
+
+  private Cuboid                                        volume_select;
+  private final SortedSet<Cuboid>                       volume_select_results;
+  private boolean                                       volume_selected;
 
   public OctTreeViewer()
     throws ConstraintError
@@ -627,236 +781,51 @@ public final class OctTreeViewer implements Runnable
         OctTreeViewer.TREE_SIZE_X,
         OctTreeViewer.TREE_SIZE_Y,
         OctTreeViewer.TREE_SIZE_Z);
-    // this.populateInitial();
+
+    this.volume_select = new Cuboid(0, VectorI3I.ZERO, VectorI3I.ZERO);
+    this.volume_select_results = new TreeSet<Cuboid>();
+    this.volume_selected = false;
+
+    this.raycast_selection = new TreeSet<OctTreeRaycastResult<Cuboid>>();
+    this.raycast_ray = null;
+    this.raycast_active = false;
+
+    this.canvas_container = new JPanel();
+    this.canvas_container.setLayout(new BoxLayout(
+      this.canvas_container,
+      BoxLayout.Y_AXIS));
+
+    this.canvas = this.makeGLCanvas(this.executor);
+    this.canvas_container.add(this.canvas);
+
+    this.control_container = new JPanel();
+    this.control_container.setLayout(new BoxLayout(
+      this.control_container,
+      BoxLayout.Y_AXIS));
+
+    this.control_container.add(this.makeInsertControls());
+    this.control_container.add(this.makeRaycastControls());
+    this.control_container.add(this.makeSelectControls());
+    this.control_container.add(this.makeViewerControls());
 
     this.panel = new JPanel();
-    this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
+    this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.X_AXIS));
+    this.panel.add(this.canvas_container);
+    this.panel.add(this.control_container);
+  }
 
-    {
-      this.canvas = new GLCanvas();
-      this.canvas.setSize(
-        OctTreeViewer.CANVAS_SIZE_X,
-        OctTreeViewer.CANVAS_SIZE_Y);
-      this.canvas.setMinimumSize(new Dimension(
-        OctTreeViewer.CANVAS_SIZE_X,
-        OctTreeViewer.CANVAS_SIZE_Y));
-      this.canvas.setPreferredSize(new Dimension(
-        OctTreeViewer.CANVAS_SIZE_X,
-        OctTreeViewer.CANVAS_SIZE_Y));
-
-      this.canvas.addKeyListener(new ViewKeyListener());
-      this.canvas.addGLEventListener(new ViewRenderer());
-      this.canvas.setFocusable(true);
-      this.panel.add(this.canvas);
-
-      this.executor.scheduleAtFixedRate(new Runnable() {
-        @Override public void run()
-        {
-          SwingUtilities.invokeLater(new Runnable() {
-            @SuppressWarnings("synthetic-access") @Override public void run()
-            {
-              OctTreeViewer.this.canvas.repaint();
-            }
-          });
-        }
-      }, 0, 15, TimeUnit.MILLISECONDS);
-
-      final JLabel label_lower = new JLabel("x0, y0, z0");
-      final JLabel label_upper = new JLabel("x1, y1, z1");
-
-      final JTextField input_x0 = new JTextField("0");
-      final JTextField input_y0 = new JTextField("0");
-      final JTextField input_z0 = new JTextField("0");
-      final JTextField input_x1 = new JTextField("7");
-      final JTextField input_y1 = new JTextField("7");
-      final JTextField input_z1 = new JTextField("7");
-
-      final JButton insert = new JButton("Insert");
-      final JButton reset = new JButton("Reset");
-      final JButton random = new JButton("Randomize");
-      final JButton quit = new JButton("Quit");
-
-      reset.addActionListener(new ActionListener() {
-        @SuppressWarnings({ "unused" }) @Override public
-          void
-          actionPerformed(
-            final ActionEvent e)
-        {
-          OctTreeViewer.this.commandReset();
-        }
-      });
-
-      quit.addActionListener(new ActionListener() {
-        @SuppressWarnings("unused") @Override public void actionPerformed(
-          final ActionEvent event)
-        {
-          System.exit(0);
-        }
-      });
-
-      insert.addActionListener(new ActionListener() {
-        @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
-          void
-          actionPerformed(
-            final ActionEvent _)
-        {
-          final int x0 = Integer.parseInt(input_x0.getText());
-          final int x1 = Integer.parseInt(input_x1.getText());
-          final int y0 = Integer.parseInt(input_y0.getText());
-          final int y1 = Integer.parseInt(input_y1.getText());
-          final int z0 = Integer.parseInt(input_z0.getText());
-          final int z1 = Integer.parseInt(input_z1.getText());
-
-          final Cuboid c =
-            new Cuboid(
-              OctTreeViewer.this.current_id.getAndIncrement(),
-              new VectorI3I(x0, y0, z0),
-              new VectorI3I(x1, y1, z1));
-
-          OctTreeViewer.this.commandInsert(c);
-        }
-      });
-
-      random.addActionListener(new ActionListener() {
-        @SuppressWarnings("unused") @Override public void actionPerformed(
-          final ActionEvent _)
-        {
-          OctTreeViewer.this.commandRandomize();
-        }
-      });
-
-      final JPanel controls_panel = new JPanel();
-      controls_panel.setLayout(new GridBagLayout());
-
-      final Insets padding = new Insets(4, 8, 4, 8);
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(label_lower, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 1;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_x0, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 2;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_y0, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 3;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_z0, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 4;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(insert, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 4;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(random, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 5;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(reset, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 5;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(quit, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(label_upper, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 1;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_x1, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 2;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_y1, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 3;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_z1, c);
-      }
-
-      this.panel.add(controls_panel);
+  void commandClear()
+  {
+    try {
+      this.octtree =
+        new OctTreeBasic<Cuboid>(
+          OctTreeViewer.TREE_SIZE_X,
+          OctTreeViewer.TREE_SIZE_Y,
+          OctTreeViewer.TREE_SIZE_Z);
+      this.raycast_active = false;
+      this.volume_selected = false;
+    } catch (final ConstraintError e) {
+      OctTreeViewer.fatal(e);
     }
   }
 
@@ -864,12 +833,19 @@ public final class OctTreeViewer implements Runnable
     final Cuboid cube)
   {
     try {
+      System.err.println("Insert: " + cube);
       OctTreeViewer.this.octtree.octTreeInsert(cube);
-    } catch (final IllegalArgumentException __) {
-      // Ignored!
+    } catch (final IllegalArgumentException x) {
+      OctTreeViewer.error(x);
     } catch (final ConstraintError x) {
-      // Ignored!
+      OctTreeViewer.error(x);
     }
+  }
+
+  void commandQuit()
+  {
+    this.canvas.destroy();
+    System.exit(0);
   }
 
   void commandRandomize()
@@ -899,22 +875,537 @@ public final class OctTreeViewer implements Runnable
     }
   }
 
-  void commandReset()
+  void commandRaycast(
+    final RayI3D ray)
   {
+    System.err.println("Cast: " + ray);
+
     try {
-      this.octtree =
-        new OctTreeBasic<Cuboid>(
-          OctTreeViewer.TREE_SIZE_X,
-          OctTreeViewer.TREE_SIZE_Y,
-          OctTreeViewer.TREE_SIZE_Z);
+      this.octtree.octTreeQueryRaycast(ray, this.raycast_selection);
+      this.raycast_active = true;
+      this.raycast_ray = ray;
     } catch (final ConstraintError e) {
-      OctTreeViewer.fatal(e);
+      OctTreeViewer.error(e);
+    }
+  }
+
+  void commandSelect(
+    final Cuboid c,
+    final boolean containing)
+  {
+    System.err.println("Select: "
+      + c
+      + " "
+      + (containing ? "(containing)" : "(overlapping)"));
+
+    try {
+      this.volume_select = c;
+      this.volume_select_results.clear();
+
+      if (containing) {
+        this.octtree.octTreeQueryVolumeContaining(
+          c,
+          this.volume_select_results);
+      } else {
+        this.octtree.octTreeQueryVolumeOverlapping(
+          c,
+          this.volume_select_results);
+      }
+      this.volume_selected = true;
+    } catch (final ConstraintError e) {
+      OctTreeViewer.error(e);
     }
   }
 
   private Component getPanel()
   {
     return this.panel;
+  }
+
+  private GLCanvas makeGLCanvas(
+    final ScheduledExecutorService exec)
+  {
+    final GLCanvas c = new GLCanvas();
+    c.setSize(OctTreeViewer.CANVAS_SIZE_X, OctTreeViewer.CANVAS_SIZE_Y);
+    c.setMinimumSize(new Dimension(
+      OctTreeViewer.CANVAS_SIZE_X,
+      OctTreeViewer.CANVAS_SIZE_Y));
+    c.setPreferredSize(new Dimension(
+      OctTreeViewer.CANVAS_SIZE_X,
+      OctTreeViewer.CANVAS_SIZE_Y));
+
+    c.addKeyListener(new ViewKeyListener());
+    c.addGLEventListener(new ViewRenderer());
+    c.setFocusable(true);
+
+    exec.scheduleAtFixedRate(new Runnable() {
+      @Override public void run()
+      {
+        SwingUtilities.invokeLater(new Runnable() {
+          @SuppressWarnings("synthetic-access") @Override public void run()
+          {
+            OctTreeViewer.this.canvas.repaint();
+          }
+        });
+      }
+    }, 0, 15, TimeUnit.MILLISECONDS);
+
+    return c;
+  }
+
+  private JPanel makeInsertControls()
+  {
+    final JButton insert = new JButton("Insert");
+
+    final JTextField input_x0 = new JTextField("0");
+    final JTextField input_y0 = new JTextField("0");
+    final JTextField input_z0 = new JTextField("0");
+    final JTextField input_x1 =
+      new JTextField("" + (OctTreeViewer.TREE_SIZE_X - 1));
+    final JTextField input_y1 =
+      new JTextField("" + (OctTreeViewer.TREE_SIZE_Y - 1));
+    final JTextField input_z1 =
+      new JTextField("" + (OctTreeViewer.TREE_SIZE_Z - 1));
+
+    input_x0.setColumns(3);
+    input_y0.setColumns(3);
+    input_z0.setColumns(3);
+    input_x1.setColumns(3);
+    input_y1.setColumns(3);
+    input_z1.setColumns(3);
+
+    insert.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
+        void
+        actionPerformed(
+          final ActionEvent _)
+      {
+        final int x0 = Integer.parseInt(input_x0.getText());
+        final int x1 = Integer.parseInt(input_x1.getText());
+        final int y0 = Integer.parseInt(input_y0.getText());
+        final int y1 = Integer.parseInt(input_y1.getText());
+        final int z0 = Integer.parseInt(input_z0.getText());
+        final int z1 = Integer.parseInt(input_z1.getText());
+
+        final Cuboid c =
+          new Cuboid(
+            OctTreeViewer.this.current_id.getAndIncrement(),
+            new VectorI3I(x0, y0, z0),
+            new VectorI3I(x1, y1, z1));
+
+        OctTreeViewer.this.commandInsert(c);
+      }
+    });
+
+    final JPanel controls_insert = new JPanel();
+    controls_insert.setBorder(BorderFactory.createTitledBorder("Insert"));
+    controls_insert.setLayout(new GridBagLayout());
+
+    final Insets padding = new Insets(4, 8, 4, 8);
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("x0"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_x0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("y0"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_y0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 2;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("z0"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_z0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("x1"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_x1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("y1"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_y1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 2;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("z1"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_z1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 4;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(insert, c);
+    }
+
+    return controls_insert;
+  }
+
+  private JPanel makeRaycastControls()
+  {
+    final JButton cast = new JButton("Cast");
+
+    final JPanel controls_raycast = new JPanel();
+    controls_raycast.setBorder(BorderFactory.createTitledBorder("Raycast"));
+    controls_raycast.setLayout(new GridBagLayout());
+
+    final JTextField input_x0 = new JTextField("0");
+    final JTextField input_y0 = new JTextField("0");
+    final JTextField input_z0 = new JTextField("0");
+    final JTextField input_x1 =
+      new JTextField("" + (OctTreeViewer.TREE_SIZE_X - 1));
+    final JTextField input_y1 =
+      new JTextField("" + (OctTreeViewer.TREE_SIZE_Y - 1));
+    final JTextField input_z1 =
+      new JTextField("" + (OctTreeViewer.TREE_SIZE_Z - 1));
+
+    input_x0.setColumns(3);
+    input_y0.setColumns(3);
+    input_z0.setColumns(3);
+    input_x1.setColumns(3);
+    input_y1.setColumns(3);
+    input_z1.setColumns(3);
+
+    cast.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+        final ActionEvent _)
+      {
+        final int x0 = Integer.parseInt(input_x0.getText());
+        final int x1 = Integer.parseInt(input_x1.getText());
+        final int y0 = Integer.parseInt(input_y0.getText());
+        final int y1 = Integer.parseInt(input_y1.getText());
+        final int z0 = Integer.parseInt(input_z0.getText());
+        final int z1 = Integer.parseInt(input_z1.getText());
+
+        final VectorI3D origin = new VectorI3D(x0, y0, z0);
+        final VectorI3D direction =
+          VectorI3D.normalize(new VectorI3D(x0 + x1, y0 + y1, z0 + z1));
+        final RayI3D ray = new RayI3D(origin, direction);
+
+        OctTreeViewer.this.commandRaycast(ray);
+      }
+    });
+
+    final Insets padding = new Insets(4, 8, 4, 8);
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("x0"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_x0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("y0"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_y0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 2;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("z0"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_z0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("x1"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_x1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("y1"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_y1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 2;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("z1"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_z1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 4;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(cast, c);
+    }
+
+    return controls_raycast;
+  }
+
+  private JPanel makeSelectControls()
+  {
+    final JButton select = new JButton("Select");
+
+    final JPanel controls_select = new JPanel();
+    controls_select.setBorder(BorderFactory.createTitledBorder("Select"));
+    controls_select.setLayout(new GridBagLayout());
+
+    final JTextField input_x0 = new JTextField("0");
+    final JTextField input_y0 = new JTextField("0");
+    final JTextField input_z0 = new JTextField("0");
+    final JTextField input_x1 =
+      new JTextField("" + (OctTreeViewer.TREE_SIZE_X - 1));
+    final JTextField input_y1 =
+      new JTextField("" + (OctTreeViewer.TREE_SIZE_Y - 1));
+    final JTextField input_z1 =
+      new JTextField("" + (OctTreeViewer.TREE_SIZE_Z - 1));
+
+    input_x0.setColumns(3);
+    input_y0.setColumns(3);
+    input_z0.setColumns(3);
+    input_x1.setColumns(3);
+    input_y1.setColumns(3);
+    input_z1.setColumns(3);
+
+    final JRadioButton input_cont = new JRadioButton("Containing");
+    input_cont
+      .setToolTipText("Only select objects strictly contained by this volume");
+
+    select.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
+        void
+        actionPerformed(
+          final ActionEvent _)
+      {
+        final int x0 = Integer.parseInt(input_x0.getText());
+        final int x1 = Integer.parseInt(input_x1.getText());
+        final int y0 = Integer.parseInt(input_y0.getText());
+        final int y1 = Integer.parseInt(input_y1.getText());
+        final int z0 = Integer.parseInt(input_z0.getText());
+        final int z1 = Integer.parseInt(input_z1.getText());
+        final boolean containing = input_cont.isSelected();
+
+        final Cuboid c =
+          new Cuboid(
+            OctTreeViewer.this.current_id.getAndIncrement(),
+            new VectorI3I(x0, y0, z0),
+            new VectorI3I(x1, y1, z1));
+
+        OctTreeViewer.this.commandSelect(c, containing);
+      }
+    });
+
+    final Insets padding = new Insets(4, 8, 4, 8);
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("x0"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_x0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("y0"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_y0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 2;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("z0"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_z0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("x1"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_x1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("y1"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_y1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 2;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("z1"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_z1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 4;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(input_cont, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 4;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(select, c);
+    }
+
+    return controls_select;
+  }
+
+  private JPanel makeViewerControls()
+  {
+    final JButton clear = new JButton("Clear");
+    final JButton random = new JButton("Randomize");
+    final JButton quit = new JButton("Quit");
+
+    clear.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+        final ActionEvent e)
+      {
+        OctTreeViewer.this.commandClear();
+      }
+    });
+
+    quit.addActionListener(new ActionListener() {
+      @SuppressWarnings("unused") @Override public void actionPerformed(
+        final ActionEvent event)
+      {
+        OctTreeViewer.this.commandQuit();
+      }
+    });
+
+    random.addActionListener(new ActionListener() {
+      @SuppressWarnings("unused") @Override public void actionPerformed(
+        final ActionEvent _)
+      {
+        OctTreeViewer.this.commandRandomize();
+      }
+    });
+
+    final JPanel controls_viewer = new JPanel();
+    controls_viewer.setBorder(BorderFactory.createTitledBorder("Viewer"));
+    controls_viewer.add(random);
+    controls_viewer.add(clear);
+    controls_viewer.add(quit);
+    return controls_viewer;
   }
 
   @Override public void run()
