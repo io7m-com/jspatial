@@ -545,6 +545,28 @@ import com.io7m.jtensors.VectorReadable3I;
   private final @Nonnull Octant     root;
   private final @Nonnull TreeSet<T> objects_all;
 
+  /**
+   * Construct an octtree of width <code>size_x</code>, depth
+   * <code>size_z</code>, and height <code>size_y</code>.
+   * 
+   * @throws ConstraintError
+   *           Iff any of the following conditions hold:
+   *           <ul>
+   *           <li>
+   *           <code>(size_x >= 2 && size_x <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(size_y >= 2 && size_y <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(size_z >= 2 && size_z <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li><code>size_x</code> is not divisible by <code>2</code></li>
+   *           <li><code>size_y</code> is not divisible by <code>2</code></li>
+   *           <li><code>size_z</code> is not divisible by <code>2</code></li>
+   *           </ul>
+   */
+
   public OctTreeBasic(
     final int size_x,
     final int size_y,
