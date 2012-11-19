@@ -17,6 +17,7 @@
 package com.io7m.jspatial;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import com.io7m.jtensors.VectorI3D;
 import com.io7m.jtensors.VectorReadable3D;
@@ -26,7 +27,7 @@ import com.io7m.jtensors.VectorReadable3D;
  * vector.
  */
 
-public final class RayI3D
+@Immutable public final class RayI3D
 {
   final @Nonnull VectorI3D origin;
   final @Nonnull VectorI3D direction;

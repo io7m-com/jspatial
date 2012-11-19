@@ -123,6 +123,557 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
   </s:part>
 
   <s:part>
+    <s:part-title>Tutorial</s:part-title>
+    <s:part-contents/>
+    <s:section>
+      <s:section-title>QuadTrees</s:section-title>
+      <s:subsection>
+        <s:subsection-title>Overview</s:subsection-title>
+        <s:paragraph>
+          A <s:term type="type">quadtree</s:term> is a spatial data structure that
+          recursively subdivides space into quadrants. It allows for efficient
+          <s:footnote>
+            Where "efficient" typically means <s:term type="variable">O(log₂n)</s:term>
+            time in the average case.
+          </s:footnote>
+          queries over a given 2D area such as:
+        </s:paragraph>
+        <s:formal-item kind="example">
+          <s:formal-item-title>QuadTree queries</s:formal-item-title>
+          <s:list-unordered>
+            <s:list-item>Which objects are completely contained within a given area?</s:list-item>
+            <s:list-item>Which objects are overlapped by a given area?</s:list-item>
+            <s:list-item>Which objects are intersected by a given ray?</s:list-item>
+          </s:list-unordered>
+        </s:formal-item>
+      </s:subsection>
+      <s:subsection>
+        <s:subsection-title>Usage</s:subsection-title>
+        <s:paragraph>
+          In order to use a <s:term type="type">quadtree</s:term>, it's first necessary to
+          pick one of the available <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeInterface.html">implementations</s:link-external>.
+        </s:paragraph>
+        <s:paragraph>
+          All objects that are to be inserted into the tree must implement the
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeMember.html">QuadTreeMember</s:link-external>
+          interface. The <s:term type="type">QuadTreeMember</s:term> interface allows the library to
+          query the axis-aligned bounding boxes of objects within the tree, and also ensures that
+          objects have some form of total order to allow <s:term type="type">quadtree</s:term>
+          implementations to use efficient <s:term type="type">Set</s:term> data structures internally.
+        </s:paragraph>
+      </s:subsection>
+      <s:subsection>
+        <s:subsection-title>Example</s:subsection-title>
+        <s:formal-item kind="example">
+          <s:formal-item-title>TrivialQuad</s:formal-item-title>
+          <s:verbatim><![CDATA[
+package com.io7m.jspatial.example;
+
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicLong;
+
+import javax.annotation.Nonnull;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jspatial.MutableArea;
+import com.io7m.jspatial.QuadTreeBasic;
+import com.io7m.jspatial.QuadTreeMember;
+import com.io7m.jspatial.QuadTreeRaycastResult;
+import com.io7m.jspatial.RayI2D;
+import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.VectorM2I;
+import com.io7m.jtensors.VectorReadable2I;
+
+public final class TrivialQuad
+{
+  /**
+   * An extremely simple class that implements {@link QuadTreeMember}.
+   */
+
+  static class Something implements QuadTreeMember<Something>
+  {
+    /**
+     * The lower and upper corners of this object's axis-aligned bounding box.
+     */
+
+    private final VectorM2I         lower;
+    private final VectorM2I         upper;
+
+    /**
+     * The unique identifier of this object.
+     */
+
+    private final long              id;
+
+    /**
+     * A "pool" of unique identifiers, shared between all objects of type
+     * <code>Something</code>.
+     */
+
+    private static final AtomicLong pool = new AtomicLong(0);
+
+    Something(
+      final VectorM2I lower,
+      final VectorM2I upper)
+    {
+      this.id = Something.pool.incrementAndGet();
+      this.lower = lower;
+      this.upper = upper;
+    }
+
+    @Override public @Nonnull VectorReadable2I boundingAreaLower()
+    {
+      return this.lower;
+    }
+
+    @Override public @Nonnull VectorReadable2I boundingAreaUpper()
+    {
+      return this.upper;
+    }
+
+    @Override public int compareTo(
+      final Something other)
+    {
+      if (this.id > other.id) {
+        return 1;
+      }
+      if (this.id < other.id) {
+        return -1;
+      }
+      return 0;
+    }
+
+  }
+
+  @SuppressWarnings("static-method") @Test public void example()
+    throws ConstraintError
+  {
+    /**
+     * Create a quadtree of width and height 128, using the simplest
+     * implementation the package provides.
+     */
+
+    final QuadTreeBasic<Something> tree =
+      new QuadTreeBasic<Something>(128, 128);
+
+    /**
+     * Insert four objects into the tree. The sizes and positions of the
+     * object will place one in each corner of the area described by the tree.
+     */
+
+    Something s0;
+    Something s1;
+    Something s2;
+    Something s3;
+
+    {
+      final VectorM2I lower = new VectorM2I(0, 0);
+      final VectorM2I upper = new VectorM2I(31, 31);
+      s0 = new Something(lower, upper);
+    }
+
+    {
+      final VectorM2I lower = new VectorM2I(64, 0);
+      final VectorM2I upper = new VectorM2I(64 + 31, 31);
+      s1 = new Something(lower, upper);
+    }
+
+    {
+      final VectorM2I lower = new VectorM2I(0, 64);
+      final VectorM2I upper = new VectorM2I(0 + 31, 64 + 31);
+      s2 = new Something(lower, upper);
+    }
+
+    {
+      final VectorM2I lower = new VectorM2I(64, 64);
+      final VectorM2I upper = new VectorM2I(64 + 31, 64 + 31);
+      s3 = new Something(lower, upper);
+    }
+
+    boolean inserted = true;
+    inserted &= tree.quadTreeInsert(s0);
+    inserted &= tree.quadTreeInsert(s1);
+    inserted &= tree.quadTreeInsert(s2);
+    inserted &= tree.quadTreeInsert(s3);
+
+    Assert.assertTrue(inserted);
+
+    /**
+     * Now, select an area of the tree and check that the expected objects
+     * were contained within the area.
+     */
+
+    {
+      final MutableArea area = new MutableArea();
+      area.setLowerX(0);
+      area.setLowerY(0);
+      area.setUpperX(40);
+      area.setUpperY(128);
+
+      final TreeSet<Something> objects = new TreeSet<Something>();
+      tree.quadTreeQueryAreaContaining(area, objects);
+
+      Assert.assertEquals(2, objects.size());
+      Assert.assertTrue(objects.contains(s0));
+      Assert.assertFalse(objects.contains(s1));
+      Assert.assertTrue(objects.contains(s2));
+      Assert.assertFalse(objects.contains(s3));
+    }
+
+    /**
+     * Now, select another area of the tree and check that the expected
+     * objects were overlapped by the area.
+     */
+
+    {
+      final MutableArea area = new MutableArea();
+      area.setLowerX(0);
+      area.setLowerY(0);
+      area.setUpperX(80);
+      area.setUpperY(80);
+
+      final TreeSet<Something> objects = new TreeSet<Something>();
+      tree.quadTreeQueryAreaOverlapping(area, objects);
+
+      Assert.assertEquals(4, objects.size());
+      Assert.assertTrue(objects.contains(s0));
+      Assert.assertTrue(objects.contains(s1));
+      Assert.assertTrue(objects.contains(s2));
+      Assert.assertTrue(objects.contains(s3));
+    }
+
+    /**
+     * Now, cast a ray from (16,16) towards (128,128), and check that the
+     * expected objects were intersected by the ray.
+     *
+     * Note that objects are returned in order of increasing distance: The
+     * nearest object intersected by the ray will be the first in the returned
+     * set.
+     */
+
+    {
+
+      final VectorI2D origin = new VectorI2D(16, 16);
+      final VectorI2D direction =
+        VectorI2D.normalize(new VectorI2D(128, 128));
+      final RayI2D ray = new RayI2D(origin, direction);
+
+      final TreeSet<QuadTreeRaycastResult<Something>> objects =
+        new TreeSet<QuadTreeRaycastResult<Something>>();
+      tree.quadTreeQueryRaycast(ray, objects);
+
+      Assert.assertEquals(2, objects.size());
+      Assert.assertSame(objects.first().getObject(), s0);
+      Assert.assertSame(objects.last().getObject(), s3);
+    }
+  }
+}
+]]>
+          </s:verbatim>
+        </s:formal-item>
+      </s:subsection>
+    </s:section>
+
+    <s:section>
+      <s:section-title>OctTrees</s:section-title>
+      <s:subsection>
+        <s:subsection-title>Overview</s:subsection-title>
+        <s:paragraph>
+          A <s:term type="type">octtree</s:term> is a spatial data structure that
+          recursively subdivides space into octants. It allows for efficient
+          <s:footnote>
+            Where "efficient" typically means <s:term type="variable">O(log₂n)</s:term>
+            time in the average case.
+          </s:footnote>
+          queries over a given 3D volume such as:
+        </s:paragraph>
+        <s:formal-item kind="example">
+          <s:formal-item-title>OctTree queries</s:formal-item-title>
+          <s:list-unordered>
+            <s:list-item>Which objects are completely contained within a given volume?</s:list-item>
+            <s:list-item>Which objects are overlapped by a given volume?</s:list-item>
+            <s:list-item>Which objects are intersected by a given ray?</s:list-item>
+          </s:list-unordered>
+        </s:formal-item>
+      </s:subsection>
+      <s:subsection>
+        <s:subsection-title>Usage</s:subsection-title>
+        <s:paragraph>
+          In order to use an <s:term type="type">octtree</s:term>, it's first necessary to
+          pick one of the available <s:link-external target="javadoc/com/io7m/jspatial/OctTreeInterface.html">implementations</s:link-external>.
+        </s:paragraph>
+        <s:paragraph>
+          All objects that are to be inserted into the tree must implement the
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeMember.html">OctTreeMember</s:link-external>
+          interface. The <s:term type="type">OctTreeMember</s:term> interface allows the library to
+          query the axis-aligned bounding boxes of objects within the tree, and also ensures that
+          objects have some form of total order to allow <s:term type="type">octtree</s:term>
+          implementations to use efficient <s:term type="type">Set</s:term> data structures internally.
+        </s:paragraph>
+      </s:subsection>
+      <s:subsection>
+        <s:subsection-title>Example</s:subsection-title>
+        <s:formal-item kind="example">
+          <s:formal-item-title>TrivialOct</s:formal-item-title>
+          <s:verbatim><![CDATA[
+package com.io7m.jspatial.example;
+
+import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicLong;
+
+import javax.annotation.Nonnull;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+
+import com.io7m.jaux.Constraints.ConstraintError;
+import com.io7m.jspatial.MutableVolume;
+import com.io7m.jspatial.OctTreeBasic;
+import com.io7m.jspatial.OctTreeMember;
+import com.io7m.jspatial.OctTreeRaycastResult;
+import com.io7m.jspatial.RayI3D;
+import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.VectorM3I;
+import com.io7m.jtensors.VectorReadable3I;
+
+public final class TrivialOct
+{
+  /**
+   * An extremely simple class that implements {@link OctTreeMember}.
+   */
+
+  static class Something implements OctTreeMember<Something>
+  {
+    /**
+     * The lower and upper corners of this object's axis-aligned bounding box.
+     */
+
+    private final VectorM3I         lower;
+    private final VectorM3I         upper;
+
+    /**
+     * The unique identifier of this object.
+     */
+
+    private final long              id;
+
+    /**
+     * A "pool" of unique identifiers, shared between all objects of type
+     * <code>Something</code>.
+     */
+
+    private static final AtomicLong pool = new AtomicLong(0);
+
+    Something(
+      final VectorM3I lower,
+      final VectorM3I upper)
+    {
+      this.id = Something.pool.incrementAndGet();
+      this.lower = lower;
+      this.upper = upper;
+    }
+
+    @Override public @Nonnull VectorReadable3I boundingVolumeLower()
+    {
+      return this.lower;
+    }
+
+    @Override public @Nonnull VectorReadable3I boundingVolumeUpper()
+    {
+      return this.upper;
+    }
+
+    @Override public int compareTo(
+      final Something other)
+    {
+      if (this.id > other.id) {
+        return 1;
+      }
+      if (this.id < other.id) {
+        return -1;
+      }
+      return 0;
+    }
+
+  }
+
+  @SuppressWarnings("static-method") @Test public void example()
+    throws ConstraintError
+  {
+    /**
+     * Create a octtree of width, height, and depth 128, using the simplest
+     * implementation the package provides.
+     */
+
+    final OctTreeBasic<Something> tree =
+      new OctTreeBasic<Something>(128, 128, 128);
+
+    /**
+     * Insert eight objects into the tree. The sizes and positions of the
+     * object will place one in each corner of the volume described by the
+     * tree.
+     */
+
+    Something s0;
+    Something s1;
+    Something s2;
+    Something s3;
+    Something s4;
+    Something s5;
+    Something s6;
+    Something s7;
+
+    {
+      final VectorM3I lower = new VectorM3I(0, 0, 0);
+      final VectorM3I upper = new VectorM3I(31, 31, 31);
+      s0 = new Something(lower, upper);
+    }
+
+    {
+      final VectorM3I lower = new VectorM3I(64, 0, 0);
+      final VectorM3I upper = new VectorM3I(64 + 31, 31, 31);
+      s1 = new Something(lower, upper);
+    }
+
+    {
+      final VectorM3I lower = new VectorM3I(0, 64, 0);
+      final VectorM3I upper = new VectorM3I(31, 64 + 31, 31);
+      s2 = new Something(lower, upper);
+    }
+
+    {
+      final VectorM3I lower = new VectorM3I(64, 64, 0);
+      final VectorM3I upper = new VectorM3I(64 + 31, 64 + 31, 31);
+      s3 = new Something(lower, upper);
+    }
+
+    /**
+     * Upper Z...
+     */
+
+    {
+      final VectorM3I lower = new VectorM3I(0, 0, 64);
+      final VectorM3I upper = new VectorM3I(31, 31, 64 + 31);
+      s4 = new Something(lower, upper);
+    }
+
+    {
+      final VectorM3I lower = new VectorM3I(64, 0, 64);
+      final VectorM3I upper = new VectorM3I(64 + 31, 31, 64 + 31);
+      s5 = new Something(lower, upper);
+    }
+
+    {
+      final VectorM3I lower = new VectorM3I(0, 64, 64);
+      final VectorM3I upper = new VectorM3I(31, 64 + 31, 64 + 31);
+      s6 = new Something(lower, upper);
+    }
+
+    {
+      final VectorM3I lower = new VectorM3I(64, 64, 64);
+      final VectorM3I upper = new VectorM3I(64 + 31, 64 + 31, 64 + 31);
+      s7 = new Something(lower, upper);
+    }
+
+    boolean inserted = true;
+    inserted &= tree.octTreeInsert(s0);
+    inserted &= tree.octTreeInsert(s1);
+    inserted &= tree.octTreeInsert(s2);
+    inserted &= tree.octTreeInsert(s3);
+    inserted &= tree.octTreeInsert(s4);
+    inserted &= tree.octTreeInsert(s5);
+    inserted &= tree.octTreeInsert(s6);
+    inserted &= tree.octTreeInsert(s7);
+
+    Assert.assertTrue(inserted);
+
+    /**
+     * Now, select a volume of the tree and check that the expected objects
+     * were contained within the volume.
+     */
+
+    {
+      final MutableVolume volume = new MutableVolume();
+      volume.setLowerX(0);
+      volume.setLowerY(0);
+      volume.setLowerZ(0);
+      volume.setUpperX(40);
+      volume.setUpperY(128);
+      volume.setUpperZ(40);
+
+      final TreeSet<Something> objects = new TreeSet<Something>();
+      tree.octTreeQueryVolumeContaining(volume, objects);
+
+      Assert.assertEquals(2, objects.size());
+      Assert.assertTrue(objects.contains(s0));
+      Assert.assertFalse(objects.contains(s1));
+      Assert.assertTrue(objects.contains(s2));
+      Assert.assertFalse(objects.contains(s3));
+    }
+
+    /**
+     * Now, select another volume of the tree and check that the expected
+     * objects were overlapped by the volume.
+     */
+
+    {
+      final MutableVolume volume = new MutableVolume();
+      volume.setLowerX(0);
+      volume.setLowerY(0);
+      volume.setLowerZ(80);
+      volume.setUpperX(80);
+      volume.setUpperY(80);
+      volume.setUpperZ(128);
+
+      final TreeSet<Something> objects = new TreeSet<Something>();
+      tree.octTreeQueryVolumeOverlapping(volume, objects);
+
+      Assert.assertEquals(4, objects.size());
+      Assert.assertTrue(objects.contains(s4));
+      Assert.assertTrue(objects.contains(s5));
+      Assert.assertTrue(objects.contains(s6));
+      Assert.assertTrue(objects.contains(s7));
+    }
+
+    /**
+     * Now, cast a ray from (16,16,16) towards (128,128,16), and check that
+     * the expected objects were intersected by the ray.
+     * 
+     * Note that objects are returned in order of increasing distance: The
+     * nearest object intersected by the ray will be the first in the returned
+     * set.
+     */
+
+    {
+
+      final VectorI3D origin = new VectorI3D(16, 16, 16);
+      final VectorI3D direction =
+        VectorI3D.normalize(new VectorI3D(128, 128, 16));
+      final RayI3D ray = new RayI3D(origin, direction);
+
+      final TreeSet<OctTreeRaycastResult<Something>> objects =
+        new TreeSet<OctTreeRaycastResult<Something>>();
+      tree.octTreeQueryRaycast(ray, objects);
+
+      Assert.assertEquals(2, objects.size());
+      Assert.assertSame(objects.first().getObject(), s0);
+      Assert.assertSame(objects.last().getObject(), s3);
+    }
+  }
+}
+]]>
+          </s:verbatim>
+        </s:formal-item>
+      </s:subsection>
+    </s:section>
+  </s:part>
+
+  <s:part>
     <s:part-title>API Reference</s:part-title>
     <s:part-contents/>
     <s:section>

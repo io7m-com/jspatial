@@ -21,6 +21,7 @@ import java.util.TreeSet;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
@@ -57,13 +58,16 @@ import com.io7m.jtensors.VectorReadable2I;
  * <li>
  * Each child quadrant of a given quadrant is exactly half the width and
  * height of the parent.</li>
+ * <li>
+ * Values of type <code>QuadTreeBasic</code> cannot be safely accessed from
+ * multiple threads without explicit synchronization.</li>
  * </ul>
  * 
  * @param <T>
  *          The type of objects contained within the tree
  */
 
-public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
+@NotThreadSafe public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
   QuadTreeInterface<T>
 {
   final class Quadrant implements BoundingArea
@@ -320,9 +324,9 @@ public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
             object_upper.getYI())) {
 
             final QuadTreeRaycastResult<T> r =
-              new QuadTreeRaycastResult<T>(object, VectorI2D.distance(new VectorI2D(
-                object_lower.getXI(),
-                object_lower.getYI()), ray.origin));
+              new QuadTreeRaycastResult<T>(object, VectorI2D.distance(
+                new VectorI2D(object_lower.getXI(), object_lower.getYI()),
+                ray.origin));
             items.add(r);
           }
         }

@@ -17,6 +17,7 @@
 package com.io7m.jspatial;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * Overlap and containment checks between bounding volumes.
@@ -24,7 +25,7 @@ import javax.annotation.Nonnull;
  * @see BoundingVolume
  */
 
-public final class BoundingVolumeCheck
+@ThreadSafe public final class BoundingVolumeCheck
 {
   static enum Result
   {

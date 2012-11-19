@@ -1,11 +1,13 @@
 package com.io7m.jspatial;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
+import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jtensors.VectorReadable2I;
 import com.io7m.jtensors.VectorReadable3I;
 
-final class Dimensions
+@ThreadSafe final class Dimensions
 {
   /**
    * Return the span on the X axis of the inclusive range defined by the given
@@ -73,5 +75,10 @@ final class Dimensions
     out[1] = low + ((size >> 1) - 1);
     out[2] = low + (size >> 1);
     out[3] = high;
+  }
+
+  private Dimensions()
+  {
+    throw new UnreachableCodeException();
   }
 }

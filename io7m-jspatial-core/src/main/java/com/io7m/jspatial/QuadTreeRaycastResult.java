@@ -17,13 +17,19 @@
 package com.io7m.jspatial;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 /**
  * An object returned by a successful raycast operation. Objects are ordered
  * by their scalar distance from the origin of the ray.
+ * 
+ * Note that although the <code>QuadTreeRaycastResult</code> class is
+ * immutable, whether or not the object of type <code>T</code> returned by
+ * {@link #getObject()} is mutable depends entirely on the user and therefore
+ * thread-safety is also the responsibility of the user.
  */
 
-public final class QuadTreeRaycastResult<T extends BoundingArea> implements
+@Immutable public final class QuadTreeRaycastResult<T extends BoundingArea> implements
   Comparable<QuadTreeRaycastResult<T>>
 {
   private final double     distance;

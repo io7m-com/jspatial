@@ -21,6 +21,7 @@ import java.util.TreeSet;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.io7m.jaux.Constraints;
 import com.io7m.jaux.Constraints.ConstraintError;
@@ -35,7 +36,7 @@ import com.io7m.jtensors.VectorReadable3I;
  * {@link QuadTreeBasic}.
  */
 
-public class OctTreeBasic<T extends OctTreeMember<T>> implements
+@NotThreadSafe public class OctTreeBasic<T extends OctTreeMember<T>> implements
   OctTreeInterface<T>
 {
   final class Octant implements BoundingVolume

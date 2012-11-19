@@ -616,59 +616,6 @@ public class OctTreeBasicTest
     Assert.assertEquals(0, items.size());
   }
 
-  @SuppressWarnings("static-method") @Test public void testRemove()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(16, 16, 16);
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(12, 12, 12));
-
-    boolean in = false;
-    in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-    in = q.octTreeInsert(r);
-    Assert.assertFalse(in);
-
-    boolean removed = false;
-    removed = q.octTreeRemove(r);
-    Assert.assertTrue(removed);
-    removed = q.octTreeRemove(r);
-    Assert.assertFalse(removed);
-  }
-
-  @SuppressWarnings("static-method") @Test public
-    void
-    testRemoveInsertInvariants()
-      throws ConstraintError,
-        Exception
-  {
-    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(32, 32, 32);
-    final Cuboid cubes[] = OctTreeBasicTest.makeCuboids(0, 32);
-
-    for (final Cuboid c : cubes) {
-      boolean added = q.octTreeInsert(c);
-      Assert.assertTrue(added);
-      added = q.octTreeInsert(c);
-      Assert.assertFalse(added);
-    }
-
-    for (final Cuboid c : cubes) {
-      boolean removed = false;
-      removed = q.octTreeRemove(c);
-      Assert.assertTrue(removed);
-      removed = q.octTreeRemove(c);
-      Assert.assertFalse(removed);
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public void testToString()
-    throws ConstraintError
-  {
-    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
-    System.err.println(q.toString());
-  }
-
   @SuppressWarnings("static-method") @Test public void testRaycast()
     throws ConstraintError
   {
@@ -728,5 +675,58 @@ public class OctTreeBasicTest
 
       Assert.assertEquals(0, items.size());
     }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testRemove()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(16, 16, 16);
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(12, 12, 12));
+
+    boolean in = false;
+    in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+    in = q.octTreeInsert(r);
+    Assert.assertFalse(in);
+
+    boolean removed = false;
+    removed = q.octTreeRemove(r);
+    Assert.assertTrue(removed);
+    removed = q.octTreeRemove(r);
+    Assert.assertFalse(removed);
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testRemoveInsertInvariants()
+      throws ConstraintError,
+        Exception
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(32, 32, 32);
+    final Cuboid cubes[] = OctTreeBasicTest.makeCuboids(0, 32);
+
+    for (final Cuboid c : cubes) {
+      boolean added = q.octTreeInsert(c);
+      Assert.assertTrue(added);
+      added = q.octTreeInsert(c);
+      Assert.assertFalse(added);
+    }
+
+    for (final Cuboid c : cubes) {
+      boolean removed = false;
+      removed = q.octTreeRemove(c);
+      Assert.assertTrue(removed);
+      removed = q.octTreeRemove(c);
+      Assert.assertFalse(removed);
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public void testToString()
+    throws ConstraintError
+  {
+    final OctTreeBasic<Cuboid> q = new OctTreeBasic<Cuboid>(128, 128, 128);
+    System.err.println(q.toString());
   }
 }

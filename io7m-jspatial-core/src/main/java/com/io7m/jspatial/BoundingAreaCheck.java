@@ -17,6 +17,7 @@
 package com.io7m.jspatial;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * Overlap and containment checks between bounding areas.
@@ -24,7 +25,7 @@ import javax.annotation.Nonnull;
  * @see BoundingArea
  */
 
-public final class BoundingAreaCheck
+@ThreadSafe public final class BoundingAreaCheck
 {
   static enum Result
   {

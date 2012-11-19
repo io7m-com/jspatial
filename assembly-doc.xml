@@ -9,7 +9,7 @@
   </formats>
   <fileSets>
     <fileSet>
-      <directory>${project.build.directory}/apidocs</directory>
+      <directory>${project.basedir}/io7m-jspatial-core/target/apidocs</directory>
       <outputDirectory>/javadoc</outputDirectory>
     </fileSet>
     <fileSet>

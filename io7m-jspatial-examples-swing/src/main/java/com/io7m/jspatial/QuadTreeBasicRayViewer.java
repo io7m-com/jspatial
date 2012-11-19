@@ -490,63 +490,6 @@ public final class QuadTreeBasicRayViewer implements Runnable
     }
   }
 
-  private void initialSetup()
-    throws ConstraintError
-  {
-    {
-      final int x0 = 48;
-      final int y0 = 48;
-      this.quadtree.quadTreeInsert(new Rectangle(
-        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
-        new VectorI2I(x0, y0),
-        new VectorI2I(x0 + 32, y0 + 32)));
-    }
-
-    {
-      final int x0 = 120;
-      final int y0 = 120;
-      this.quadtree.quadTreeInsert(new Rectangle(
-        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
-        new VectorI2I(x0, y0),
-        new VectorI2I(x0 + 32, y0 + 32)));
-    }
-
-    {
-      final int x0 = 200;
-      final int y0 = 200;
-      this.quadtree.quadTreeInsert(new Rectangle(
-        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
-        new VectorI2I(x0, y0),
-        new VectorI2I(x0 + 32, y0 + 32)));
-    }
-
-    {
-      final int x0 = 64;
-      final int y0 = 260;
-      this.quadtree.quadTreeInsert(new Rectangle(
-        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
-        new VectorI2I(x0, y0),
-        new VectorI2I(x0 + 32, y0 + 32)));
-    }
-
-    {
-      final int x0 = 280;
-      final int y0 = 280;
-      this.quadtree.quadTreeInsert(new Rectangle(
-        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
-        new VectorI2I(x0, y0),
-        new VectorI2I(x0 + 32, y0 + 32)));
-    }
-
-    {
-      this.ray_origin.x = 15;
-      this.ray_origin.y = 0;
-      this.ray_target.x = 200;
-      this.ray_target.y = 512;
-      this.commandRayCast();
-    }
-  }
-
   void commandInsert(
     final Rectangle rect)
   {
@@ -623,6 +566,63 @@ public final class QuadTreeBasicRayViewer implements Runnable
   private Component getPanel()
   {
     return this.panel;
+  }
+
+  private void initialSetup()
+    throws ConstraintError
+  {
+    {
+      final int x0 = 48;
+      final int y0 = 48;
+      this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
+        new VectorI2I(x0, y0),
+        new VectorI2I(x0 + 32, y0 + 32)));
+    }
+
+    {
+      final int x0 = 120;
+      final int y0 = 120;
+      this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
+        new VectorI2I(x0, y0),
+        new VectorI2I(x0 + 32, y0 + 32)));
+    }
+
+    {
+      final int x0 = 200;
+      final int y0 = 200;
+      this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
+        new VectorI2I(x0, y0),
+        new VectorI2I(x0 + 32, y0 + 32)));
+    }
+
+    {
+      final int x0 = 64;
+      final int y0 = 260;
+      this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
+        new VectorI2I(x0, y0),
+        new VectorI2I(x0 + 32, y0 + 32)));
+    }
+
+    {
+      final int x0 = 280;
+      final int y0 = 280;
+      this.quadtree.quadTreeInsert(new Rectangle(
+        QuadTreeBasicRayViewer.this.current_id.getAndIncrement(),
+        new VectorI2I(x0, y0),
+        new VectorI2I(x0 + 32, y0 + 32)));
+    }
+
+    {
+      this.ray_origin.x = 15;
+      this.ray_origin.y = 0;
+      this.ray_target.x = 200;
+      this.ray_target.y = 512;
+      this.commandRayCast();
+    }
   }
 
   @Override public void run()
