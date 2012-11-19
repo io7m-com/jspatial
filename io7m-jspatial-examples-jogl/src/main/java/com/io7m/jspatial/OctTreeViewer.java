@@ -876,6 +876,7 @@ public final class OctTreeViewer implements Runnable
     System.err.println("Cast: " + ray);
 
     try {
+      this.raycast_selection.clear();
       this.octtree.octTreeQueryRaycast(ray, this.raycast_selection);
       this.raycast_active = true;
       this.raycast_ray = ray;

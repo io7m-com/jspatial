@@ -8,7 +8,7 @@
   <artifactId>io7m-jspatial-examples-jogl</artifactId>
   <name>io7m-jspatial-examples-jogl</name>
   <description>API examples using Swing/JOGL</description>
-  <version>0.5.0</version>
+  <version>0.6.0</version>
   <url>http://mvn.io7m.com/jspatial-examples-jogl</url>
   <packaging>jar</packaging>
 
@@ -55,12 +55,12 @@
     <dependency>
       <groupId>com.io7m.jspatial.core</groupId>
       <artifactId>io7m-jspatial-core</artifactId>
-      <version>0.5.0</version>
+      <version>0.6.0</version>
     </dependency>
     <dependency>
       <groupId>com.io7m.jspatial.core</groupId>
       <artifactId>io7m-jspatial-core</artifactId>
-      <version>0.5.0</version>
+      <version>0.6.0</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>

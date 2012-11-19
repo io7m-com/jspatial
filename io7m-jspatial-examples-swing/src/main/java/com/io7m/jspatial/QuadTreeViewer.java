@@ -26,26 +26,26 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Nonnull;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
+import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
-import com.io7m.jtensors.VectorM2I;
 import com.io7m.jtensors.VectorReadable2I;
 
 /**
@@ -54,43 +54,6 @@ import com.io7m.jtensors.VectorReadable2I;
 
 public final class QuadTreeViewer implements Runnable
 {
-  static final class Selection implements BoundingArea
-  {
-    VectorM2I lower = new VectorM2I();
-    VectorM2I upper = new VectorM2I();
-
-    @Override public @Nonnull VectorReadable2I boundingAreaLower()
-    {
-      return this.lower;
-    }
-
-    @Override public @Nonnull VectorReadable2I boundingAreaUpper()
-    {
-      return this.upper;
-    }
-
-    int getHeight()
-    {
-      return (this.upper.y - this.lower.y) + 1;
-    }
-
-    int getWidth()
-    {
-      return (this.upper.x - this.lower.x) + 1;
-    }
-
-    @Override public String toString()
-    {
-      final StringBuilder builder = new StringBuilder();
-      builder.append("[Selection lower=");
-      builder.append(this.lower);
-      builder.append(", upper=");
-      builder.append(this.upper);
-      builder.append("]");
-      return builder.toString();
-    }
-  }
-
   private class TreeCanvas extends Canvas
   {
     private static final long serialVersionUID = 474729240519661207L;
@@ -110,73 +73,93 @@ public final class QuadTreeViewer implements Runnable
 
         QuadTreeViewer.this.quadtree
           .quadTreeTraverse(new QuadTreeTraversal() {
-            @SuppressWarnings("unused") @Override public void visit(
-              final int depth,
+            @Override public void visit(
+              @SuppressWarnings("unused") final int depth,
               final @Nonnull VectorReadable2I lower,
               final @Nonnull VectorReadable2I upper)
               throws Exception
             {
-              final int x = lower.getXI();
-              final int y = lower.getYI();
-              final int w = (upper.getXI() - lower.getXI()) + 1;
-              final int h = (upper.getYI() - lower.getYI()) + 1;
-              g.drawRect(x, y, w, h);
+              g.setColor(Color.GRAY);
+              g.drawRect(
+                lower.getXI(),
+                lower.getYI(),
+                (upper.getXI() - lower.getXI()) + 1,
+                (upper.getYI() - lower.getYI()) + 1);
             }
           });
 
         QuadTreeViewer.this.quadtree
           .quadTreeIterateObjects(new Function<Rectangle, Boolean>() {
             @Override public Boolean call(
-              final Rectangle r)
+              final Rectangle x)
             {
-              try {
-                g.setColor(Color.RED);
-                final int x = r.boundingAreaLower().getXI();
-                final int y = r.boundingAreaLower().getYI();
-                final int w =
-                  (r.boundingAreaUpper().getXI() - r
-                    .boundingAreaLower()
-                    .getXI()) + 1;
-                final int h =
-                  (r.boundingAreaUpper().getYI() - r
-                    .boundingAreaLower()
-                    .getYI()) + 1;
-                g.drawRect(x, y, w, h);
-                return Boolean.valueOf(true);
-              } catch (final Exception e) {
-                QuadTreeViewer.fatal(e);
-                return Boolean.FALSE;
-              }
+              final VectorReadable2I lower = x.boundingAreaLower();
+              final VectorReadable2I upper = x.boundingAreaUpper();
+
+              g.setColor(Color.GREEN);
+              g.drawRect(
+                lower.getXI(),
+                lower.getYI(),
+                (upper.getXI() - lower.getXI()) + 1,
+                (upper.getYI() - lower.getYI()) + 1);
+
+              return Boolean.TRUE;
             }
           });
 
-        for (final Rectangle rect : QuadTreeViewer.this.selected) {
-          final VectorReadable2I lower = rect.boundingAreaLower();
-          final VectorReadable2I upper = rect.boundingAreaUpper();
+        if (QuadTreeViewer.this.area_selected) {
+          g.setColor(Color.RED);
 
-          g.setColor(Color.GREEN);
-          g.drawRect(
-            lower.getXI(),
-            lower.getYI(),
-            (upper.getXI() - lower.getXI()) + 1,
-            (upper.getYI() - lower.getYI()) + 1);
+          {
+            final VectorReadable2I lower =
+              QuadTreeViewer.this.area_select.boundingAreaLower();
+            final VectorReadable2I upper =
+              QuadTreeViewer.this.area_select.boundingAreaUpper();
+
+            g.drawRect(
+              lower.getXI(),
+              lower.getYI(),
+              (upper.getXI() - lower.getXI()) + 1,
+              (upper.getYI() - lower.getYI()) + 1);
+          }
+
+          for (final Rectangle r : QuadTreeViewer.this.area_select_results) {
+            final VectorReadable2I lower = r.boundingAreaLower();
+            final VectorReadable2I upper = r.boundingAreaUpper();
+
+            g.drawRect(
+              lower.getXI(),
+              lower.getYI(),
+              (upper.getXI() - lower.getXI()) + 1,
+              (upper.getYI() - lower.getYI()) + 1);
+          }
         }
 
-        g.setColor(Color.YELLOW);
-        g.drawRect(
-          QuadTreeViewer.this.selection.lower.x,
-          QuadTreeViewer.this.selection.lower.y,
-          QuadTreeViewer.this.selection.getWidth(),
-          QuadTreeViewer.this.selection.getHeight());
+        if (QuadTreeViewer.this.raycast_active) {
+          g.setColor(Color.BLUE);
 
-        g.drawString(
-          QuadTreeViewer.this.selection.lower.toString(),
-          QuadTreeViewer.this.selection.lower.x,
-          QuadTreeViewer.this.selection.lower.y);
-        g.drawString(
-          QuadTreeViewer.this.selection.upper.toString(),
-          QuadTreeViewer.this.selection.upper.x,
-          QuadTreeViewer.this.selection.upper.y);
+          final int origin_x = (int) QuadTreeViewer.this.raycast_ray.origin.x;
+          final int origin_y = (int) QuadTreeViewer.this.raycast_ray.origin.y;
+
+          int target_x = origin_x;
+          target_x += (QuadTreeViewer.this.raycast_ray.direction.x) * 1000;
+          int target_y = origin_y;
+          target_y += (QuadTreeViewer.this.raycast_ray.direction.y) * 1000;
+
+          g.drawLine(origin_x, origin_y, target_x, target_y);
+
+          for (final QuadTreeRaycastResult<Rectangle> rr : QuadTreeViewer.this.raycast_selection) {
+            final Rectangle r = rr.getObject();
+            final VectorReadable2I lower = r.boundingAreaLower();
+            final VectorReadable2I upper = r.boundingAreaUpper();
+
+            g.drawRect(
+              lower.getXI(),
+              lower.getYI(),
+              (upper.getXI() - lower.getXI()) + 1,
+              (upper.getYI() - lower.getYI()) + 1);
+          }
+        }
 
       } catch (final Exception e) {
         QuadTreeViewer.fatal(e);
@@ -186,8 +169,17 @@ public final class QuadTreeViewer implements Runnable
     }
   }
 
-  private static final int CANVAS_SIZE_Y = 512;
   private static final int CANVAS_SIZE_X = 512;
+  private static final int CANVAS_SIZE_Y = 512;
+
+  private static final int TREE_SIZE_X   = 512;
+  private static final int TREE_SIZE_Y   = 512;
+
+  static <T extends Throwable> void error(
+    final T e)
+  {
+    e.printStackTrace();
+  }
 
   static <T extends Throwable> void fatal(
     final T e)
@@ -217,346 +209,542 @@ public final class QuadTreeViewer implements Runnable
     });
   }
 
-  private final JPanel               panel;
-  private QuadTreeBasic<Rectangle>   quadtree;
-  private final Selection            selection;
-  private final SortedSet<Rectangle> selected;
-  private final AtomicLong           current_id;
+  private final TreeCanvas                                  canvas;
+  private final JPanel                                      panel;
+  private QuadTreeBasic<Rectangle>                          quadtree;
+  private final AtomicLong                                  current_id;
+
+  private final JPanel                                      canvas_container;
+  private final JPanel                                      control_container;
+
+  private final SortedSet<QuadTreeRaycastResult<Rectangle>> raycast_selection;
+  private RayI2D                                            raycast_ray;
+  private boolean                                           raycast_active;
+
+  private Rectangle                                         area_select;
+  private final SortedSet<Rectangle>                        area_select_results;
+  private boolean                                           area_selected;
 
   public QuadTreeViewer()
     throws ConstraintError
   {
     this.current_id = new AtomicLong();
-    this.selected = new TreeSet<Rectangle>();
-    this.selection = new Selection();
     this.quadtree =
       new QuadTreeBasic<Rectangle>(
-        QuadTreeViewer.CANVAS_SIZE_X,
-        QuadTreeViewer.CANVAS_SIZE_Y);
+        QuadTreeViewer.TREE_SIZE_X,
+        QuadTreeViewer.TREE_SIZE_Y);
+
+    this.area_select = new Rectangle(0, VectorI2I.ZERO, VectorI2I.ZERO);
+    this.area_select_results = new TreeSet<Rectangle>();
+    this.area_selected = false;
+
+    this.raycast_selection = new TreeSet<QuadTreeRaycastResult<Rectangle>>();
+    this.raycast_ray = null;
+    this.raycast_active = false;
+
+    this.canvas_container = new JPanel();
+    this.canvas_container.setLayout(new BoxLayout(
+      this.canvas_container,
+      BoxLayout.Y_AXIS));
+
+    this.canvas = new TreeCanvas();
+    this.canvas.setPreferredSize(new Dimension(
+      QuadTreeViewer.CANVAS_SIZE_X,
+      QuadTreeViewer.CANVAS_SIZE_Y));
+    this.canvas.setMinimumSize(new Dimension(
+      QuadTreeViewer.CANVAS_SIZE_X,
+      QuadTreeViewer.CANVAS_SIZE_Y));
+    this.canvas.setMaximumSize(new Dimension(
+      QuadTreeViewer.CANVAS_SIZE_X,
+      QuadTreeViewer.CANVAS_SIZE_Y));
+    this.canvas_container.add(this.canvas);
+
+    this.control_container = new JPanel();
+    this.control_container.setLayout(new BoxLayout(
+      this.control_container,
+      BoxLayout.Y_AXIS));
+
+    this.control_container.add(this.makeInsertControls());
+    this.control_container.add(this.makeRaycastControls());
+    this.control_container.add(this.makeSelectControls());
+    this.control_container.add(this.makeViewerControls());
 
     this.panel = new JPanel();
-    this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.Y_AXIS));
-
-    {
-      final JPanel canvas_panel = new JPanel();
-      final TreeCanvas canvas = new TreeCanvas();
-      canvas.setSize(
-        QuadTreeViewer.CANVAS_SIZE_X,
-        QuadTreeViewer.CANVAS_SIZE_Y);
-      canvas.setMinimumSize(new Dimension(
-        QuadTreeViewer.CANVAS_SIZE_X,
-        QuadTreeViewer.CANVAS_SIZE_Y));
-      canvas_panel.add(canvas);
-      this.panel.add(canvas_panel);
-
-      canvas.addMouseListener(new MouseListener() {
-        @SuppressWarnings("unused") @Override public void mouseClicked(
-          final MouseEvent _)
-        {
-          // Unused
-        }
-
-        @SuppressWarnings("unused") @Override public void mouseEntered(
-          final MouseEvent _)
-        {
-          // Unused
-        }
-
-        @SuppressWarnings("unused") @Override public void mouseExited(
-          final MouseEvent _)
-        {
-          // Unused
-        }
-
-        @SuppressWarnings("synthetic-access") @Override public
-          void
-          mousePressed(
-            final MouseEvent e)
-        {
-          QuadTreeViewer.this.selection.lower.x = e.getX();
-          QuadTreeViewer.this.selection.lower.y = e.getY();
-        }
-
-        @SuppressWarnings("synthetic-access") @Override public
-          void
-          mouseReleased(
-            final MouseEvent e)
-        {
-          QuadTreeViewer.this.selection.upper.x = e.getX();
-          QuadTreeViewer.this.selection.upper.y = e.getY();
-
-          if (e.getButton() == MouseEvent.BUTTON1) {
-            QuadTreeViewer.this.commandSelectContaining(canvas);
-          } else if (e.getButton() == MouseEvent.BUTTON3) {
-            QuadTreeViewer.this.commandSelectOverlapping(canvas);
-          }
-        }
-      });
-
-      final JLabel label_lower = new JLabel("x0, y0");
-      final JLabel label_upper = new JLabel("x1, y1");
-
-      final JTextField input_x0 = new JTextField("0");
-      final JTextField input_y0 = new JTextField("0");
-      final JTextField input_x1 = new JTextField("7");
-      final JTextField input_y1 = new JTextField("7");
-
-      final JButton insert = new JButton("Insert");
-      final JButton reset = new JButton("Reset");
-      final JButton random = new JButton("Randomize");
-      final JButton quit = new JButton("Quit");
-
-      reset.addActionListener(new ActionListener() {
-        @SuppressWarnings({ "unused" }) @Override public
-          void
-          actionPerformed(
-            final ActionEvent e)
-        {
-          QuadTreeViewer.this.commandReset(canvas);
-        }
-      });
-
-      quit.addActionListener(new ActionListener() {
-        @SuppressWarnings("unused") @Override public void actionPerformed(
-          final ActionEvent event)
-        {
-          System.exit(0);
-        }
-      });
-
-      insert.addActionListener(new ActionListener() {
-        @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
-          void
-          actionPerformed(
-            final ActionEvent _)
-        {
-          final int x0 = Integer.parseInt(input_x0.getText());
-          final int x1 = Integer.parseInt(input_x1.getText());
-          final int y0 = Integer.parseInt(input_y0.getText());
-          final int y1 = Integer.parseInt(input_y1.getText());
-          final Rectangle r =
-            new Rectangle(
-              QuadTreeViewer.this.current_id.getAndIncrement(),
-              new VectorI2I(x0, y0),
-              new VectorI2I(x1, y1));
-          QuadTreeViewer.this.commandInsert(canvas, r);
-        }
-      });
-
-      random.addActionListener(new ActionListener() {
-        @SuppressWarnings("unused") @Override public void actionPerformed(
-          final ActionEvent _)
-        {
-          QuadTreeViewer.this.commandReset(canvas);
-          QuadTreeViewer.this.commandRandomize();
-        }
-      });
-
-      final JPanel controls_panel = new JPanel();
-      controls_panel.setLayout(new GridBagLayout());
-
-      final Insets padding = new Insets(4, 8, 4, 8);
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(label_lower, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 1;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_x0, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 2;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_y0, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 3;
-        c.gridy = 0;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(insert, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(label_upper, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 1;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_x1, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 2;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.ipadx = 16;
-        controls_panel.add(input_y1, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 3;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        c.weightx = 1.0;
-        controls_panel.add(new JPanel(), c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 4;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(reset, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 3;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(random, c);
-      }
-
-      {
-        final GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 5;
-        c.gridy = 1;
-        c.insets = padding;
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        controls_panel.add(quit, c);
-      }
-
-      this.panel.add(controls_panel);
-    }
+    this.panel.setLayout(new BoxLayout(this.panel, BoxLayout.X_AXIS));
+    this.panel.add(this.canvas_container);
+    this.panel.add(this.control_container);
   }
 
-  void commandInsert(
-    final Canvas canvas,
-    final Rectangle rect)
+  void commandClear()
   {
     try {
-      QuadTreeViewer.this.quadtree.quadTreeInsert(rect);
-      canvas.repaint();
-    } catch (final IllegalArgumentException __) {
-      // Ignored!
-    } catch (final ConstraintError x) {
-      // Ignored!
-    }
-  }
-
-  void commandRandomize()
-  {
-    try {
-      for (int index = 0; index < 100; ++index) {
-        final int width = (int) (2 + (Math.random() * 64));
-        final int height = (int) (2 + (Math.random() * 64));
-        final int x0 = (int) (Math.random() * 512);
-        final int y0 = (int) (Math.random() * 512);
-        final int x1 = Math.min(x0 + width, 511);
-        final int y1 = Math.min(y0 + height, 511);
-        final VectorI2I r0 = new VectorI2I(x0, y0);
-        final VectorI2I r1 = new VectorI2I(x1, y1);
-        this.quadtree.quadTreeInsert(new Rectangle(
-          QuadTreeViewer.this.current_id.getAndIncrement(),
-          r0,
-          r1));
-      }
+      this.quadtree =
+        new QuadTreeBasic<Rectangle>(
+          QuadTreeViewer.TREE_SIZE_X,
+          QuadTreeViewer.TREE_SIZE_Y);
+      this.raycast_active = false;
+      this.area_selected = false;
+      this.canvas.repaint();
     } catch (final ConstraintError e) {
       QuadTreeViewer.fatal(e);
     }
   }
 
-  void commandReset(
-    final Canvas canvas)
+  void commandInsert(
+    final Rectangle cube)
   {
     try {
-      QuadTreeViewer.this.quadtree =
-        new QuadTreeBasic<Rectangle>(
-          QuadTreeViewer.CANVAS_SIZE_X,
-          QuadTreeViewer.CANVAS_SIZE_Y);
-      canvas.repaint();
+      System.err.println("Insert: " + cube);
+      QuadTreeViewer.this.quadtree.quadTreeInsert(cube);
+      this.canvas.repaint();
+    } catch (final IllegalArgumentException x) {
+      QuadTreeViewer.error(x);
     } catch (final ConstraintError x) {
-      QuadTreeViewer.fatal(x);
+      QuadTreeViewer.error(x);
     }
   }
 
-  void commandSelectContaining(
-    final Canvas canvas)
+  @SuppressWarnings("static-method") void commandQuit()
+  {
+    System.exit(0);
+  }
+
+  void commandRandomize()
   {
     try {
-      QuadTreeViewer.this.selected.clear();
-      QuadTreeViewer.this.quadtree.quadTreeQueryAreaContaining(
-        QuadTreeViewer.this.selection,
-        QuadTreeViewer.this.selected);
-      canvas.repaint();
+      for (int i = 0; i < 100; ++i) {
+        final int width = (int) (2 + (Math.random() * 16));
+        final int height = (int) (2 + (Math.random() * 16));
+
+        final int x0 = (int) (Math.random() * QuadTreeViewer.TREE_SIZE_X);
+        final int y0 = (int) (Math.random() * QuadTreeViewer.TREE_SIZE_Y);
+
+        final int x1 = Math.min(x0 + width, QuadTreeViewer.TREE_SIZE_X - 1);
+        final int y1 = Math.min(y0 + height, QuadTreeViewer.TREE_SIZE_Y - 1);
+
+        final VectorI2I r0 = new VectorI2I(x0, y0);
+        final VectorI2I r1 = new VectorI2I(x1, y1);
+
+        this.quadtree.quadTreeInsert(new Rectangle(this.current_id
+          .incrementAndGet(), r0, r1));
+      }
+      this.canvas.repaint();
     } catch (final ConstraintError e) {
-      // Ignored!
+      QuadTreeViewer.fatal(e);
     }
   }
 
-  void commandSelectOverlapping(
-    final Canvas canvas)
+  void commandRaycast(
+    final RayI2D ray)
   {
+    System.err.println("Cast: " + ray);
+
     try {
-      QuadTreeViewer.this.selected.clear();
-      QuadTreeViewer.this.quadtree.quadTreeQueryAreaOverlapping(
-        QuadTreeViewer.this.selection,
-        QuadTreeViewer.this.selected);
-      canvas.repaint();
+      this.raycast_selection.clear();
+      this.quadtree.quadTreeQueryRaycast(ray, this.raycast_selection);
+      this.raycast_active = true;
+      this.raycast_ray = ray;
+      this.canvas.repaint();
     } catch (final ConstraintError e) {
-      // Ignored!
+      QuadTreeViewer.error(e);
+    }
+  }
+
+  void commandSelect(
+    final Rectangle c,
+    final boolean containing)
+  {
+    System.err.println("Select: "
+      + c
+      + " "
+      + (containing ? "(containing)" : "(overlapping)"));
+
+    try {
+      this.area_select = c;
+      this.area_select_results.clear();
+
+      if (containing) {
+        this.quadtree
+          .quadTreeQueryAreaContaining(c, this.area_select_results);
+      } else {
+        this.quadtree.quadTreeQueryAreaOverlapping(
+          c,
+          this.area_select_results);
+      }
+      this.area_selected = true;
+      this.canvas.repaint();
+    } catch (final ConstraintError e) {
+      QuadTreeViewer.error(e);
     }
   }
 
   private Component getPanel()
   {
     return this.panel;
+  }
+
+  private JPanel makeInsertControls()
+  {
+    final JButton insert = new JButton("Insert");
+
+    final JTextField input_x0 = new JTextField("0");
+    final JTextField input_y0 = new JTextField("0");
+    final JTextField input_x1 =
+      new JTextField("" + (QuadTreeViewer.TREE_SIZE_X - 1));
+    final JTextField input_y1 =
+      new JTextField("" + (QuadTreeViewer.TREE_SIZE_Y - 1));
+
+    input_x0.setColumns(3);
+    input_y0.setColumns(3);
+    input_x1.setColumns(3);
+    input_y1.setColumns(3);
+
+    insert.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
+        void
+        actionPerformed(
+          final ActionEvent _)
+      {
+        final int x0 = Integer.parseInt(input_x0.getText());
+        final int x1 = Integer.parseInt(input_x1.getText());
+        final int y0 = Integer.parseInt(input_y0.getText());
+        final int y1 = Integer.parseInt(input_y1.getText());
+
+        final Rectangle c =
+          new Rectangle(
+            QuadTreeViewer.this.current_id.getAndIncrement(),
+            new VectorI2I(x0, y0),
+            new VectorI2I(x1, y1));
+
+        QuadTreeViewer.this.commandInsert(c);
+      }
+    });
+
+    final JPanel controls_insert = new JPanel();
+    controls_insert.setBorder(BorderFactory.createTitledBorder("Insert"));
+    controls_insert.setLayout(new GridBagLayout());
+
+    final Insets padding = new Insets(4, 8, 4, 8);
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("x0"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_x0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("y0"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_y0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("x1"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_x1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(new JLabel("y1"), c);
+      c.gridx = c.gridx + 1;
+      controls_insert.add(input_y1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 4;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_insert.add(insert, c);
+    }
+
+    return controls_insert;
+  }
+
+  private JPanel makeRaycastControls()
+  {
+    final JButton cast = new JButton("Cast");
+
+    final JPanel controls_raycast = new JPanel();
+    controls_raycast.setBorder(BorderFactory.createTitledBorder("Raycast"));
+    controls_raycast.setLayout(new GridBagLayout());
+
+    final JTextField input_x0 = new JTextField("0");
+    final JTextField input_y0 = new JTextField("0");
+    final JTextField input_x1 =
+      new JTextField("" + (QuadTreeViewer.TREE_SIZE_X - 1));
+    final JTextField input_y1 =
+      new JTextField("" + (QuadTreeViewer.TREE_SIZE_Y - 1));
+
+    input_x0.setColumns(3);
+    input_y0.setColumns(3);
+    input_x1.setColumns(3);
+    input_y1.setColumns(3);
+
+    cast.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+        final ActionEvent _)
+      {
+        final int x0 = Integer.parseInt(input_x0.getText());
+        final int x1 = Integer.parseInt(input_x1.getText());
+        final int y0 = Integer.parseInt(input_y0.getText());
+        final int y1 = Integer.parseInt(input_y1.getText());
+
+        final VectorI2D origin = new VectorI2D(x0, y0);
+        final VectorI2D target = new VectorI2D(x1, y1);
+        final VectorI2D direction =
+          VectorI2D.normalize(VectorI2D.subtract(target, origin));
+
+        final RayI2D ray = new RayI2D(origin, direction);
+
+        QuadTreeViewer.this.commandRaycast(ray);
+      }
+    });
+
+    final Insets padding = new Insets(4, 8, 4, 8);
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("x0"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_x0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("y0"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_y0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("x1"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_x1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(new JLabel("y1"), c);
+      c.gridx = c.gridx + 1;
+      controls_raycast.add(input_y1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 4;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_raycast.add(cast, c);
+    }
+
+    return controls_raycast;
+  }
+
+  private JPanel makeSelectControls()
+  {
+    final JButton select = new JButton("Select");
+
+    final JPanel controls_select = new JPanel();
+    controls_select.setBorder(BorderFactory.createTitledBorder("Select"));
+    controls_select.setLayout(new GridBagLayout());
+
+    final JTextField input_x0 = new JTextField("0");
+    final JTextField input_y0 = new JTextField("0");
+    final JTextField input_x1 =
+      new JTextField("" + (QuadTreeViewer.TREE_SIZE_X - 1));
+    final JTextField input_y1 =
+      new JTextField("" + (QuadTreeViewer.TREE_SIZE_Y - 1));
+
+    input_x0.setColumns(3);
+    input_y0.setColumns(3);
+    input_x1.setColumns(3);
+    input_y1.setColumns(3);
+
+    final JRadioButton input_cont = new JRadioButton("Containing");
+    input_cont
+      .setToolTipText("Only select objects strictly contained by this area");
+
+    select.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
+        void
+        actionPerformed(
+          final ActionEvent _)
+      {
+        final int x0 = Integer.parseInt(input_x0.getText());
+        final int x1 = Integer.parseInt(input_x1.getText());
+        final int y0 = Integer.parseInt(input_y0.getText());
+        final int y1 = Integer.parseInt(input_y1.getText());
+        final boolean containing = input_cont.isSelected();
+
+        final Rectangle c =
+          new Rectangle(
+            QuadTreeViewer.this.current_id.getAndIncrement(),
+            new VectorI2I(x0, y0),
+            new VectorI2I(x1, y1));
+
+        QuadTreeViewer.this.commandSelect(c, containing);
+      }
+    });
+
+    final Insets padding = new Insets(4, 8, 4, 8);
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("x0"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_x0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 0;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("y0"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_y0, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("x1"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_x1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 2;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(new JLabel("y1"), c);
+      c.gridx = c.gridx + 1;
+      controls_select.add(input_y1, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 4;
+      c.gridy = 0;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(input_cont, c);
+    }
+
+    {
+      final GridBagConstraints c = new GridBagConstraints();
+      c.gridx = 4;
+      c.gridy = 1;
+      c.insets = padding;
+      c.gridheight = 1;
+      c.gridwidth = 1;
+      controls_select.add(select, c);
+    }
+
+    return controls_select;
+  }
+
+  private JPanel makeViewerControls()
+  {
+    final JButton clear = new JButton("Clear");
+    final JButton random = new JButton("Randomize");
+    final JButton quit = new JButton("Quit");
+
+    clear.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+        final ActionEvent e)
+      {
+        QuadTreeViewer.this.commandClear();
+      }
+    });
+
+    quit.addActionListener(new ActionListener() {
+      @SuppressWarnings("unused") @Override public void actionPerformed(
+        final ActionEvent event)
+      {
+        QuadTreeViewer.this.commandQuit();
+      }
+    });
+
+    random.addActionListener(new ActionListener() {
+      @SuppressWarnings("unused") @Override public void actionPerformed(
+        final ActionEvent _)
+      {
+        QuadTreeViewer.this.commandRandomize();
+      }
+    });
+
+    final JPanel controls_viewer = new JPanel();
+    controls_viewer.setBorder(BorderFactory.createTitledBorder("Viewer"));
+    controls_viewer.add(random);
+    controls_viewer.add(clear);
+    controls_viewer.add(quit);
+    return controls_viewer;
   }
 
   @Override public void run()
