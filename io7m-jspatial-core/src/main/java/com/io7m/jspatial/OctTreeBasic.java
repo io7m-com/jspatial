@@ -32,7 +32,7 @@ import com.io7m.jtensors.VectorI3I;
 import com.io7m.jtensors.VectorReadable3I;
 
 /**
- * Basic implementation of Octrees, based on a 3D generalization of
+ * Basic implementation of an octtree, based on a 3D generalization of
  * {@link QuadTreeBasic}.
  */
 

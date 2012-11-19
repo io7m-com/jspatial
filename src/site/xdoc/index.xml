@@ -17,7 +17,7 @@
     <subsection name="features">
       <ul>
         <li>Quadtree, including efficient area and raycast queries.</li>
-        <li>Octree, including efficient volume and raycast queries.</li>
+        <li>Octtree, including efficient volume and raycast queries.</li>
         <li>Fully documented (Javadoc).</li>
         <li>100% automated unit test coverage.</li>
         <li>ISC license.</li>
