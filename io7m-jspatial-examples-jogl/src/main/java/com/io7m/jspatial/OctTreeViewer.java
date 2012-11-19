@@ -27,9 +27,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Nonnull;
@@ -58,6 +55,7 @@ import com.io7m.jtensors.VectorI3D;
 import com.io7m.jtensors.VectorI3I;
 import com.io7m.jtensors.VectorM3F;
 import com.io7m.jtensors.VectorReadable3I;
+import com.jogamp.opengl.util.Animator;
 
 /**
  * Basic Swing-based octtree viewer demonstrating area queries.
@@ -752,7 +750,6 @@ public final class OctTreeViewer implements Runnable
                                                                                   32.0;
   protected Input                                       input_state             =
                                                                                   new Input();
-  protected ScheduledExecutorService                    executor;
 
   private final JPanel                                  canvas_container;
   private final JPanel                                  control_container;
@@ -768,8 +765,6 @@ public final class OctTreeViewer implements Runnable
   public OctTreeViewer()
     throws ConstraintError
   {
-    this.executor = Executors.newScheduledThreadPool(1);
-
     this.camera_position = new VectorM3F(286.9f, 177.14f, 273.5f);
     this.camera_focus = new VectorM3F(-10f, 2f, -5.8f);
     this.camera_orientation = 3.89f;
@@ -795,7 +790,7 @@ public final class OctTreeViewer implements Runnable
       this.canvas_container,
       BoxLayout.Y_AXIS));
 
-    this.canvas = this.makeGLCanvas(this.executor);
+    this.canvas = this.makeGLCanvas();
     this.canvas_container.add(this.canvas);
 
     this.control_container = new JPanel();
@@ -922,8 +917,7 @@ public final class OctTreeViewer implements Runnable
     return this.panel;
   }
 
-  private GLCanvas makeGLCanvas(
-    final ScheduledExecutorService exec)
+  private GLCanvas makeGLCanvas()
   {
     final GLCanvas c = new GLCanvas();
     c.setSize(OctTreeViewer.CANVAS_SIZE_X, OctTreeViewer.CANVAS_SIZE_Y);
@@ -934,21 +928,12 @@ public final class OctTreeViewer implements Runnable
       OctTreeViewer.CANVAS_SIZE_X,
       OctTreeViewer.CANVAS_SIZE_Y));
 
+    final Animator animator = new Animator(c);
+    animator.start();
+
     c.addKeyListener(new ViewKeyListener());
     c.addGLEventListener(new ViewRenderer());
     c.setFocusable(true);
-
-    exec.scheduleAtFixedRate(new Runnable() {
-      @Override public void run()
-      {
-        SwingUtilities.invokeLater(new Runnable() {
-          @SuppressWarnings("synthetic-access") @Override public void run()
-          {
-            OctTreeViewer.this.canvas.repaint();
-          }
-        });
-      }
-    }, 0, 15, TimeUnit.MILLISECONDS);
 
     return c;
   }
