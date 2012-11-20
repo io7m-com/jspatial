@@ -34,7 +34,7 @@ import com.io7m.jtensors.VectorReadable2I;
 /**
  * <p>
  * A quadtree implementation based on {@link QuadTreeBasic}, but extended with
- * concept of static/dynamic categorization for inserted objects.
+ * the concept of static/dynamic categorization for inserted objects.
  * </p>
  * <p>
  * As mentioned in {@link QuadTreeBasic}, many games/simulations populate a

@@ -35,7 +35,7 @@ import com.io7m.jtensors.VectorReadable3I;
 /**
  * <p>
  * An octtree implementation based on {@link OctTreeBasic}, but extended with
- * concept of static/dynamic categorization for inserted objects.
+ * the concept of static/dynamic categorization for inserted objects.
  * </p>
  * <p>
  * As mentioned in {@link QuadTreeBasic}, many games/simulations populate a
