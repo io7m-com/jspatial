@@ -380,34 +380,6 @@ import com.io7m.jtensors.VectorReadable2I;
       throw new UnreachableCodeException();
     }
 
-    private boolean unsplitCanPrune()
-    {
-      return (this.leaf == true) && this.quadrant_objects.isEmpty();
-    }
-
-    /**
-     * Attempt to turn this node back into a leaf.
-     */
-
-    private void unsplitAttempt()
-    {
-      if (this.leaf == false) {
-        boolean prunable = true;
-        prunable &= this.x0y0.unsplitCanPrune();
-        prunable &= this.x1y0.unsplitCanPrune();
-        prunable &= this.x0y1.unsplitCanPrune();
-        prunable &= this.x1y1.unsplitCanPrune();
-
-        if (prunable) {
-          this.leaf = true;
-          this.x0y0 = null;
-          this.x0y1 = null;
-          this.x1y0 = null;
-          this.x1y1 = null;
-        }
-      }
-    }
-
     /**
      * Split this node into four quadrants.
      */
@@ -451,6 +423,34 @@ import com.io7m.jtensors.VectorReadable2I;
         this.x0y1.traverse(depth + 1, traversal);
         this.x1y1.traverse(depth + 1, traversal);
       }
+    }
+
+    /**
+     * Attempt to turn this node back into a leaf.
+     */
+
+    private void unsplitAttempt()
+    {
+      if (this.leaf == false) {
+        boolean prunable = true;
+        prunable &= this.x0y0.unsplitCanPrune();
+        prunable &= this.x1y0.unsplitCanPrune();
+        prunable &= this.x0y1.unsplitCanPrune();
+        prunable &= this.x1y1.unsplitCanPrune();
+
+        if (prunable) {
+          this.leaf = true;
+          this.x0y0 = null;
+          this.x0y1 = null;
+          this.x1y0 = null;
+          this.x1y1 = null;
+        }
+      }
+    }
+
+    private boolean unsplitCanPrune()
+    {
+      return (this.leaf == true) && this.quadrant_objects.isEmpty();
     }
   }
 

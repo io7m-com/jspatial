@@ -324,7 +324,7 @@ public final class QuadTreeViewer implements Runnable
    * Quit the program.
    */
 
-  @SuppressWarnings("static-method") void commandQuit()
+  @SuppressWarnings("static-method") protected void commandQuit()
   {
     System.exit(0);
   }
@@ -885,7 +885,7 @@ public final class QuadTreeViewer implements Runnable
    * Reset the current selection state.
    */
 
-  private void commandSelectReset()
+  protected void commandSelectReset()
   {
     this.area_selected = false;
     this.area_select_results.clear();
