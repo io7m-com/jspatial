@@ -272,40 +272,6 @@ public class QuadTreeSDTest
     Assert.assertFalse(in);
   }
 
-  @SuppressWarnings("static-method") @Test public
-    void
-    testInsertTypeStaticCollision()
-      throws ConstraintError,
-        Exception
-  {
-    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(16, 16);
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
-
-    boolean in = false;
-    in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
-    Assert.assertFalse(in);
-  }
-
-  @SuppressWarnings("static-method") @Test public
-    void
-    testInsertTypeDynamicCollision()
-      throws ConstraintError,
-        Exception
-  {
-    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(16, 16);
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
-
-    boolean in = false;
-    in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
-    Assert.assertFalse(in);
-  }
-
   @SuppressWarnings("static-method") @Test(expected = ConstraintError.class) public
     void
     testInsertIllFormed()
@@ -357,6 +323,40 @@ public class QuadTreeSDTest
         new VectorI2I(15, 15)), items);
       Assert.assertEquals(1, items.size());
     }
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testInsertTypeDynamicCollision()
+      throws ConstraintError,
+        Exception
+  {
+    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(16, 16);
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
+
+    boolean in = false;
+    in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+    Assert.assertTrue(in);
+    in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+    Assert.assertFalse(in);
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testInsertTypeStaticCollision()
+      throws ConstraintError,
+        Exception
+  {
+    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(16, 16);
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
+
+    boolean in = false;
+    in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+    Assert.assertTrue(in);
+    in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+    Assert.assertFalse(in);
   }
 
   @Test public void testIterate()
@@ -634,36 +634,7 @@ public class QuadTreeSDTest
 
   @SuppressWarnings("static-method") @Test public
     void
-    testQueryOverlappingStatic()
-      throws ConstraintError
-  {
-    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(128, 128);
-    final Rectangle[] dynamics = TestUtilities.makeRectangles(0, 128);
-    final Rectangle[] statics = TestUtilities.makeRectangles(10, 128);
-
-    for (final Rectangle r : dynamics) {
-      final boolean in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
-      Assert.assertTrue(in);
-    }
-    for (final Rectangle r : statics) {
-      final boolean in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
-      Assert.assertTrue(in);
-    }
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(
-        0,
-        new VectorI2I(16, 16),
-        new VectorI2I(80, 80)), items);
-
-      Assert.assertEquals(8, items.size());
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public
-    void
-    testQueryOverlappingStaticNot()
+    testQueryContainingStatic()
       throws ConstraintError
   {
     final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(128, 128);
@@ -677,12 +648,12 @@ public class QuadTreeSDTest
 
     {
       final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(
+      q.quadTreeQueryAreaContaining(new Rectangle(
         0,
-        new VectorI2I(0, 0),
-        new VectorI2I(65, 65)), items);
+        new VectorI2I(66, 66),
+        new VectorI2I(127, 127)), items);
 
-      Assert.assertEquals(0, items.size());
+      Assert.assertEquals(1, items.size());
     }
   }
 
@@ -708,31 +679,6 @@ public class QuadTreeSDTest
         new VectorI2I(65, 65)), items);
 
       Assert.assertEquals(0, items.size());
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public
-    void
-    testQueryContainingStatic()
-      throws ConstraintError
-  {
-    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(128, 128);
-
-    final boolean in =
-      q.quadTreeInsertSD(new Rectangle(
-        0,
-        new VectorI2I(66, 66),
-        new VectorI2I(127, 127)), SDType.SD_STATIC);
-    Assert.assertTrue(in);
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(
-        0,
-        new VectorI2I(66, 66),
-        new VectorI2I(127, 127)), items);
-
-      Assert.assertEquals(1, items.size());
     }
   }
 
@@ -869,6 +815,60 @@ public class QuadTreeSDTest
       Assert.assertEquals(2, items.size());
       Assert.assertTrue(items.contains(r0));
       Assert.assertTrue(items.contains(r1));
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testQueryOverlappingStatic()
+      throws ConstraintError
+  {
+    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(128, 128);
+    final Rectangle[] dynamics = TestUtilities.makeRectangles(0, 128);
+    final Rectangle[] statics = TestUtilities.makeRectangles(10, 128);
+
+    for (final Rectangle r : dynamics) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+      Assert.assertTrue(in);
+    }
+    for (final Rectangle r : statics) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+      Assert.assertTrue(in);
+    }
+
+    {
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(
+        0,
+        new VectorI2I(16, 16),
+        new VectorI2I(80, 80)), items);
+
+      Assert.assertEquals(8, items.size());
+    }
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testQueryOverlappingStaticNot()
+      throws ConstraintError
+  {
+    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(128, 128);
+
+    final boolean in =
+      q.quadTreeInsertSD(new Rectangle(
+        0,
+        new VectorI2I(66, 66),
+        new VectorI2I(127, 127)), SDType.SD_STATIC);
+    Assert.assertTrue(in);
+
+    {
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(
+        0,
+        new VectorI2I(0, 0),
+        new VectorI2I(65, 65)), items);
+
+      Assert.assertEquals(0, items.size());
     }
   }
 
