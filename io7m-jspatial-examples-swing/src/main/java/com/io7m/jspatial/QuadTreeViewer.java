@@ -26,14 +26,17 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Nonnull;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -44,6 +47,8 @@ import javax.swing.WindowConstants;
 
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
+import com.io7m.jaux.functional.PartialFunction;
+import com.io7m.jaux.functional.Unit;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorReadable2I;
@@ -54,6 +59,10 @@ import com.io7m.jtensors.VectorReadable2I;
 
 public final class QuadTreeViewer implements Runnable
 {
+  /**
+   * A trivial 2D canvas that draws the current quadtree.
+   */
+
   private class TreeCanvas extends Canvas
   {
     private static final long serialVersionUID = 474729240519661207L;
@@ -171,7 +180,6 @@ public final class QuadTreeViewer implements Runnable
 
   private static final int CANVAS_SIZE_X = 512;
   private static final int CANVAS_SIZE_Y = 512;
-
   private static final int TREE_SIZE_X   = 512;
   private static final int TREE_SIZE_Y   = 512;
 
@@ -209,30 +217,36 @@ public final class QuadTreeViewer implements Runnable
     });
   }
 
-  private final TreeCanvas                                  canvas;
-  private final JPanel                                      panel;
-  private QuadTreeBasic<Rectangle>                          quadtree;
-  private final AtomicLong                                  current_id;
+  private final TreeCanvas                                                                        canvas;
+  private final JPanel                                                                            panel;
+  private final JPanel                                                                            canvas_container;
+  private final JPanel                                                                            control_container;
 
-  private final JPanel                                      canvas_container;
-  private final JPanel                                      control_container;
+  private final SortedSet<QuadTreeRaycastResult<Rectangle>>                                       raycast_selection;
+  private RayI2D                                                                                  raycast_ray;
+  private boolean                                                                                 raycast_active;
 
-  private final SortedSet<QuadTreeRaycastResult<Rectangle>> raycast_selection;
-  private RayI2D                                            raycast_ray;
-  private boolean                                           raycast_active;
+  private Rectangle                                                                               area_select;
+  private final SortedSet<Rectangle>                                                              area_select_results;
+  private boolean                                                                                 area_selected;
 
-  private Rectangle                                         area_select;
-  private final SortedSet<Rectangle>                        area_select_results;
-  private boolean                                           area_selected;
+  protected QuadTreeInterface<Rectangle>                                                          quadtree;
+  protected final HashMap<String, PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>> quadtree_constructors;
+
+  private final AtomicLong                                                                        current_id;
 
   public QuadTreeViewer()
     throws ConstraintError
   {
     this.current_id = new AtomicLong();
+
     this.quadtree =
       new QuadTreeBasic<Rectangle>(
         QuadTreeViewer.TREE_SIZE_X,
         QuadTreeViewer.TREE_SIZE_Y);
+    this.quadtree_constructors =
+      new HashMap<String, PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>>();
+    this.initializeConstructors();
 
     this.area_select = new Rectangle(0, VectorI2I.ZERO, VectorI2I.ZERO);
     this.area_select_results = new TreeSet<Rectangle>();
@@ -264,6 +278,7 @@ public final class QuadTreeViewer implements Runnable
       this.control_container,
       BoxLayout.Y_AXIS));
 
+    this.control_container.add(this.makeImplementationControls());
     this.control_container.add(this.makeInsertControls());
     this.control_container.add(this.makeRaycastControls());
     this.control_container.add(this.makeSelectControls());
@@ -275,27 +290,28 @@ public final class QuadTreeViewer implements Runnable
     this.panel.add(this.control_container);
   }
 
-  void commandClear()
+  /**
+   * Delete all objects in the current quadtree.
+   */
+
+  protected void commandClear()
   {
-    try {
-      this.quadtree =
-        new QuadTreeBasic<Rectangle>(
-          QuadTreeViewer.TREE_SIZE_X,
-          QuadTreeViewer.TREE_SIZE_Y);
-      this.raycast_active = false;
-      this.area_selected = false;
-      this.canvas.repaint();
-    } catch (final ConstraintError e) {
-      QuadTreeViewer.fatal(e);
-    }
+    this.quadtree.quadTreeClear();
+    this.commandSelectReset();
+    this.raycast_active = false;
+    this.canvas.repaint();
   }
 
-  void commandInsert(
-    final Rectangle cube)
+  /**
+   * Insert the given rectangle into the current quadtree.
+   */
+
+  protected void commandInsert(
+    final Rectangle r)
   {
     try {
-      System.err.println("Insert: " + cube);
-      QuadTreeViewer.this.quadtree.quadTreeInsert(cube);
+      System.err.println("Insert: " + r);
+      QuadTreeViewer.this.quadtree.quadTreeInsert(r);
       this.canvas.repaint();
     } catch (final IllegalArgumentException x) {
       QuadTreeViewer.error(x);
@@ -304,12 +320,20 @@ public final class QuadTreeViewer implements Runnable
     }
   }
 
+  /**
+   * Quit the program.
+   */
+
   @SuppressWarnings("static-method") void commandQuit()
   {
     System.exit(0);
   }
 
-  void commandRandomize()
+  /**
+   * Fill the current quadtree with 100 randomly sized rectangles.
+   */
+
+  protected void commandRandomize()
   {
     try {
       for (int i = 0; i < 100; ++i) {
@@ -334,7 +358,11 @@ public final class QuadTreeViewer implements Runnable
     }
   }
 
-  void commandRaycast(
+  /**
+   * Cast the given ray through the current quadtree.
+   */
+
+  protected void commandRaycast(
     final RayI2D ray)
   {
     System.err.println("Cast: " + ray);
@@ -350,7 +378,11 @@ public final class QuadTreeViewer implements Runnable
     }
   }
 
-  void commandSelect(
+  /**
+   * Select objects within the current quadtree.
+   */
+
+  protected void commandSelect(
     final Rectangle c,
     final boolean containing)
   {
@@ -360,8 +392,9 @@ public final class QuadTreeViewer implements Runnable
       + (containing ? "(containing)" : "(overlapping)"));
 
     try {
+      this.commandSelectReset();
+
       this.area_select = c;
-      this.area_select_results.clear();
 
       if (containing) {
         this.quadtree
@@ -378,10 +411,114 @@ public final class QuadTreeViewer implements Runnable
     }
   }
 
+  protected void commandSelectImplementation(
+    final PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable> f)
+    throws Throwable
+  {
+    this.quadtree = f.call(new Unit());
+    this.commandClear();
+  }
+
   private Component getPanel()
   {
     return this.panel;
   }
+
+  /**
+   * Initialize the map of names to quadtree constructors.
+   */
+
+  private void initializeConstructors()
+  {
+    this.quadtree_constructors.put(
+      "QuadTreeBasic",
+      new PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>() {
+        @SuppressWarnings("unused") @Override public
+          QuadTreeInterface<Rectangle>
+          call(
+            final Unit _)
+            throws ConstraintError
+        {
+          return new QuadTreeBasic<Rectangle>(
+            QuadTreeViewer.TREE_SIZE_X,
+            QuadTreeViewer.TREE_SIZE_Y);
+        }
+      });
+
+    this.quadtree_constructors.put(
+      "QuadTreeSD",
+      new PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>() {
+        @SuppressWarnings("unused") @Override public
+          QuadTreeInterface<Rectangle>
+          call(
+            final Unit _)
+            throws ConstraintError
+        {
+          return new QuadTreeSD<Rectangle>(
+            QuadTreeViewer.TREE_SIZE_X,
+            QuadTreeViewer.TREE_SIZE_Y);
+        }
+      });
+
+    this.quadtree_constructors.put(
+      "QuadTreePrune",
+      new PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>() {
+        @SuppressWarnings("unused") @Override public
+          QuadTreeInterface<Rectangle>
+          call(
+            final Unit _)
+            throws ConstraintError
+        {
+          return new QuadTreePrune<Rectangle>(
+            QuadTreeViewer.TREE_SIZE_X,
+            QuadTreeViewer.TREE_SIZE_Y);
+        }
+      });
+  }
+
+  /**
+   * Construct the panel of controls that select the desired quadtree
+   * implementation.
+   */
+
+  private JPanel makeImplementationControls()
+  {
+    final JPanel p = new JPanel();
+    p.setBorder(BorderFactory.createTitledBorder("Implementation"));
+
+    final Vector<String> names = new Vector<String>();
+    for (final String key : this.quadtree_constructors.keySet()) {
+      names.add(key);
+    }
+
+    final JComboBox cb = new JComboBox(names);
+
+    cb.addActionListener(new ActionListener() {
+      @Override public void actionPerformed(
+        final ActionEvent e)
+      {
+        try {
+          final JComboBox box = (JComboBox) e.getSource();
+          final String name = (String) box.getSelectedItem();
+          if (QuadTreeViewer.this.quadtree_constructors.containsKey(name)) {
+            final PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable> f =
+              QuadTreeViewer.this.quadtree_constructors.get(name);
+            QuadTreeViewer.this.commandSelectImplementation(f);
+          }
+        } catch (final Throwable x) {
+          QuadTreeViewer.fatal(x);
+        }
+      }
+
+    });
+
+    p.add(cb);
+    return p;
+  }
+
+  /**
+   * Construct the panel of controls that deal with object insertion.
+   */
 
   private JPanel makeInsertControls()
   {
@@ -487,6 +624,10 @@ public final class QuadTreeViewer implements Runnable
     return controls_insert;
   }
 
+  /**
+   * Construct the panel of controls that deal with raycasting.
+   */
+
   private JPanel makeRaycastControls()
   {
     final JButton cast = new JButton("Cast");
@@ -590,9 +731,14 @@ public final class QuadTreeViewer implements Runnable
     return controls_raycast;
   }
 
+  /**
+   * Construct the panel of controls that deal with object selection.
+   */
+
   private JPanel makeSelectControls()
   {
     final JButton select = new JButton("Select");
+    final JButton delete = new JButton("Delete");
 
     final JPanel controls_select = new JPanel();
     controls_select.setBorder(BorderFactory.createTitledBorder("Select"));
@@ -633,6 +779,14 @@ public final class QuadTreeViewer implements Runnable
             new VectorI2I(x1, y1));
 
         QuadTreeViewer.this.commandSelect(c, containing);
+      }
+    });
+
+    delete.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+        final ActionEvent _)
+      {
+        QuadTreeViewer.this.commandDeleteSelected();
       }
     });
 
@@ -694,20 +848,52 @@ public final class QuadTreeViewer implements Runnable
       c.gridheight = 1;
       c.gridwidth = 1;
       controls_select.add(input_cont, c);
-    }
-
-    {
-      final GridBagConstraints c = new GridBagConstraints();
-      c.gridx = 4;
       c.gridy = 1;
-      c.insets = padding;
-      c.gridheight = 1;
-      c.gridwidth = 1;
       controls_select.add(select, c);
+      c.gridy = 2;
+      controls_select.add(delete, c);
     }
 
     return controls_select;
   }
+
+  /**
+   * Delete the currently selected objects (if any).
+   */
+
+  protected void commandDeleteSelected()
+  {
+    try {
+      if (this.area_selected) {
+        for (final Rectangle r : this.area_select_results) {
+          final boolean deleted = this.quadtree.quadTreeRemove(r);
+          if (deleted) {
+            System.err.println("Deleted: " + r);
+          } else {
+            System.err.println("Failed to delete: " + r);
+          }
+        }
+        this.commandSelectReset();
+      }
+      this.canvas.repaint();
+    } catch (final ConstraintError x) {
+      QuadTreeViewer.fatal(x);
+    }
+  }
+
+  /**
+   * Reset the current selection state.
+   */
+
+  private void commandSelectReset()
+  {
+    this.area_selected = false;
+    this.area_select_results.clear();
+  }
+
+  /**
+   * Construct the panel of controls that deal with global viewer controls.
+   */
 
   private JPanel makeViewerControls()
   {
