@@ -51,6 +51,8 @@ import javax.swing.WindowConstants;
 
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jaux.functional.Function;
+import com.io7m.jaux.functional.PartialFunction;
+import com.io7m.jaux.functional.Unit;
 import com.io7m.jtensors.VectorI3D;
 import com.io7m.jtensors.VectorI3I;
 import com.io7m.jtensors.VectorM3F;
@@ -358,6 +360,7 @@ public final class OctTreeViewer implements Runnable
 
       assert OctTreeViewer.this.camera_orientation >= 0.0;
       assert OctTreeViewer.this.camera_orientation <= (2 * Math.PI);
+
       /*
        * Apply velocities given the current orientation.
        */
@@ -730,8 +733,8 @@ public final class OctTreeViewer implements Runnable
 
   private final GLCanvas                                canvas;
   private final JPanel                                  panel;
-  private OctTreeBasic<Cuboid>                          octtree;
-  private final AtomicLong                              current_id;
+  private OctTreeInterface<Cuboid>                      octtree;
+
   protected final VectorM3F                             camera_focus;
   protected final VectorM3F                             camera_position;
   protected double                                      camera_orientation      =
@@ -761,6 +764,8 @@ public final class OctTreeViewer implements Runnable
   private Cuboid                                        volume_select;
   private final SortedSet<Cuboid>                       volume_select_results;
   private boolean                                       volume_selected;
+
+  private final AtomicLong                              current_id;
 
   public OctTreeViewer()
     throws ConstraintError
@@ -809,7 +814,11 @@ public final class OctTreeViewer implements Runnable
     this.panel.add(this.control_container);
   }
 
-  void commandClear()
+  /**
+   * Delete all objects in the current octtree.
+   */
+
+  protected void commandClear()
   {
     try {
       this.octtree =
@@ -824,7 +833,35 @@ public final class OctTreeViewer implements Runnable
     }
   }
 
-  void commandInsert(
+  /**
+   * Delete the currently selected objects (if any).
+   */
+
+  protected void commandDeleteSelected()
+  {
+    try {
+      if (this.volume_selected) {
+        for (final Cuboid c : this.volume_select_results) {
+          final boolean deleted = this.octtree.octTreeRemove(c);
+          if (deleted) {
+            System.err.println("Deleted: " + c);
+          } else {
+            System.err.println("Failed to delete: " + c);
+          }
+        }
+        this.commandSelectReset();
+      }
+      this.canvas.repaint();
+    } catch (final ConstraintError x) {
+      OctTreeViewer.fatal(x);
+    }
+  }
+
+  /**
+   * Insert the given cuboid into the current octtree.
+   */
+
+  protected void commandInsert(
     final Cuboid cube)
   {
     try {
@@ -837,13 +874,21 @@ public final class OctTreeViewer implements Runnable
     }
   }
 
-  void commandQuit()
+  /**
+   * Quit the program.
+   */
+
+  protected void commandQuit()
   {
     this.canvas.destroy();
     System.exit(0);
   }
 
-  void commandRandomize()
+  /**
+   * Fill the current octtree with 100 randomly sized cuboids.
+   */
+
+  protected void commandRandomize()
   {
     try {
       for (int i = 0; i < 100; ++i) {
@@ -870,7 +915,11 @@ public final class OctTreeViewer implements Runnable
     }
   }
 
-  void commandRaycast(
+  /**
+   * Cast the given ray through the current octtree.
+   */
+
+  protected void commandRaycast(
     final RayI3D ray)
   {
     System.err.println("Cast: " + ray);
@@ -885,7 +934,11 @@ public final class OctTreeViewer implements Runnable
     }
   }
 
-  void commandSelect(
+  /**
+   * Select objects within the current octtree.
+   */
+
+  protected void commandSelect(
     final Cuboid c,
     final boolean containing)
   {
@@ -895,9 +948,9 @@ public final class OctTreeViewer implements Runnable
       + (containing ? "(containing)" : "(overlapping)"));
 
     try {
-      this.volume_select = c;
-      this.volume_select_results.clear();
+      this.commandDeleteSelected();
 
+      this.volume_select = c;
       if (containing) {
         this.octtree.octTreeQueryVolumeContaining(
           c,
@@ -911,6 +964,24 @@ public final class OctTreeViewer implements Runnable
     } catch (final ConstraintError e) {
       OctTreeViewer.error(e);
     }
+  }
+
+  protected void commandSelectImplementation(
+    final PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable> f)
+    throws Throwable
+  {
+    this.octtree = f.call(new Unit());
+    this.commandClear();
+  }
+
+  /**
+   * Reset the current selection state.
+   */
+
+  protected void commandSelectReset()
+  {
+    this.volume_selected = false;
+    this.volume_select_results.clear();
   }
 
   private Component getPanel()
@@ -1209,6 +1280,7 @@ public final class OctTreeViewer implements Runnable
   private JPanel makeSelectControls()
   {
     final JButton select = new JButton("Select");
+    final JButton delete = new JButton("Delete");
 
     final JPanel controls_select = new JPanel();
     controls_select.setBorder(BorderFactory.createTitledBorder("Select"));
@@ -1256,6 +1328,14 @@ public final class OctTreeViewer implements Runnable
             new VectorI3I(x1, y1, z1));
 
         OctTreeViewer.this.commandSelect(c, containing);
+      }
+    });
+
+    delete.addActionListener(new ActionListener() {
+      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+        final ActionEvent _)
+      {
+        OctTreeViewer.this.commandDeleteSelected();
       }
     });
 
@@ -1351,6 +1431,8 @@ public final class OctTreeViewer implements Runnable
       c.gridheight = 1;
       c.gridwidth = 1;
       controls_select.add(select, c);
+      c.gridy = 2;
+      controls_select.add(delete, c);
     }
 
     return controls_select;
