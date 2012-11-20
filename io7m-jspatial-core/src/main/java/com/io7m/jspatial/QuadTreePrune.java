@@ -353,9 +353,11 @@ import com.io7m.jtensors.VectorReadable2I;
       if (this.quadrant_objects.contains(item)) {
         this.quadrant_objects.remove(item);
         QuadTreePrune.this.objects_all.remove(item);
-        this.unsplitAttempt();
+        this.unsplitAttemptRecursive();
         return true;
       }
+
+      this.unsplitAttemptRecursive();
 
       if (this.leaf == false) {
         if (BoundingAreaCheck.containedWithin(this.x0y0, item)) {
@@ -422,6 +424,19 @@ import com.io7m.jtensors.VectorReadable2I;
         this.x1y0.traverse(depth + 1, traversal);
         this.x0y1.traverse(depth + 1, traversal);
         this.x1y1.traverse(depth + 1, traversal);
+      }
+    }
+
+    /**
+     * Attempt to turn this node and as many ancestors if this node back into
+     * leaves as possible.
+     */
+
+    private void unsplitAttemptRecursive()
+    {
+      this.unsplitAttempt();
+      if (this.parent != null) {
+        this.parent.unsplitAttemptRecursive();
       }
     }
 

@@ -923,7 +923,7 @@ public class QuadTreePruneTest
 
       final Counter counter = new Counter();
       q.quadTreeTraverse(counter);
-      Assert.assertEquals(5, counter.count);
+      Assert.assertEquals(1, counter.count);
     }
 
     {
