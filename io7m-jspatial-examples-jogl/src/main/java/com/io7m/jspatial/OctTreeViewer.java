@@ -25,8 +25,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.Vector;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Nonnull;
@@ -41,6 +43,7 @@ import javax.media.opengl.glu.GLU;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -731,41 +734,42 @@ public final class OctTreeViewer implements Runnable
     });
   }
 
-  private final GLCanvas                                canvas;
-  private final JPanel                                  panel;
-  private OctTreeInterface<Cuboid>                      octtree;
+  private final GLCanvas                                                                      canvas;
+  private final JPanel                                                                        panel;
+  private OctTreeInterface<Cuboid>                                                            octtree;
+  protected final HashMap<String, PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>> octtree_constructors;
 
-  protected final VectorM3F                             camera_focus;
-  protected final VectorM3F                             camera_position;
-  protected double                                      camera_orientation      =
-                                                                                  0.0;
-  protected double                                      camera_velocity_forward =
-                                                                                  0.0;
-  protected double                                      camera_velocity_side    =
-                                                                                  0.0;
-  protected double                                      camera_velocity_up      =
-                                                                                  0.0;
-  protected double                                      camera_rotate_velocity  =
-                                                                                  0.0;
-  protected double                                      camera_orbit_velocity   =
-                                                                                  0.0;
-  protected double                                      camera_orbit_offset     =
-                                                                                  32.0;
-  protected Input                                       input_state             =
-                                                                                  new Input();
+  protected final VectorM3F                                                                   camera_focus;
+  protected final VectorM3F                                                                   camera_position;
+  protected double                                                                            camera_orientation      =
+                                                                                                                        0.0;
+  protected double                                                                            camera_velocity_forward =
+                                                                                                                        0.0;
+  protected double                                                                            camera_velocity_side    =
+                                                                                                                        0.0;
+  protected double                                                                            camera_velocity_up      =
+                                                                                                                        0.0;
+  protected double                                                                            camera_rotate_velocity  =
+                                                                                                                        0.0;
+  protected double                                                                            camera_orbit_velocity   =
+                                                                                                                        0.0;
+  protected double                                                                            camera_orbit_offset     =
+                                                                                                                        32.0;
+  protected Input                                                                             input_state             =
+                                                                                                                        new Input();
 
-  private final JPanel                                  canvas_container;
-  private final JPanel                                  control_container;
+  private final JPanel                                                                        canvas_container;
+  private final JPanel                                                                        control_container;
 
-  private final SortedSet<OctTreeRaycastResult<Cuboid>> raycast_selection;
-  private RayI3D                                        raycast_ray;
-  private boolean                                       raycast_active;
+  private final SortedSet<OctTreeRaycastResult<Cuboid>>                                       raycast_selection;
+  private RayI3D                                                                              raycast_ray;
+  private boolean                                                                             raycast_active;
 
-  private Cuboid                                        volume_select;
-  private final SortedSet<Cuboid>                       volume_select_results;
-  private boolean                                       volume_selected;
+  private Cuboid                                                                              volume_select;
+  private final SortedSet<Cuboid>                                                             volume_select_results;
+  private boolean                                                                             volume_selected;
 
-  private final AtomicLong                              current_id;
+  private final AtomicLong                                                                    current_id;
 
   public OctTreeViewer()
     throws ConstraintError
@@ -781,6 +785,9 @@ public final class OctTreeViewer implements Runnable
         OctTreeViewer.TREE_SIZE_X,
         OctTreeViewer.TREE_SIZE_Y,
         OctTreeViewer.TREE_SIZE_Z);
+    this.octtree_constructors =
+      new HashMap<String, PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>>();
+    this.initializeConstructors();
 
     this.volume_select = new Cuboid(0, VectorI3I.ZERO, VectorI3I.ZERO);
     this.volume_select_results = new TreeSet<Cuboid>();
@@ -803,6 +810,7 @@ public final class OctTreeViewer implements Runnable
       this.control_container,
       BoxLayout.Y_AXIS));
 
+    this.control_container.add(this.makeImplementationControls());
     this.control_container.add(this.makeInsertControls());
     this.control_container.add(this.makeRaycastControls());
     this.control_container.add(this.makeSelectControls());
@@ -989,6 +997,45 @@ public final class OctTreeViewer implements Runnable
     return this.panel;
   }
 
+  /**
+   * Initialize the map of names to octtree constructors.
+   */
+
+  private void initializeConstructors()
+  {
+    this.octtree_constructors.put(
+      "OctTreeBasic",
+      new PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>() {
+        @SuppressWarnings("unused") @Override public
+          OctTreeInterface<Cuboid>
+          call(
+            final Unit _)
+            throws ConstraintError
+        {
+          return new OctTreeBasic<Cuboid>(
+            OctTreeViewer.TREE_SIZE_X,
+            OctTreeViewer.TREE_SIZE_Y,
+            OctTreeViewer.TREE_SIZE_Z);
+        }
+      });
+
+    this.octtree_constructors.put(
+      "OctTreeSD",
+      new PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>() {
+        @SuppressWarnings("unused") @Override public
+          OctTreeInterface<Cuboid>
+          call(
+            final Unit _)
+            throws ConstraintError
+        {
+          return new OctTreeSD<Cuboid>(
+            OctTreeViewer.TREE_SIZE_X,
+            OctTreeViewer.TREE_SIZE_Y,
+            OctTreeViewer.TREE_SIZE_Z);
+        }
+      });
+  }
+
   private GLCanvas makeGLCanvas()
   {
     final GLCanvas c = new GLCanvas();
@@ -1008,6 +1055,46 @@ public final class OctTreeViewer implements Runnable
     c.setFocusable(true);
 
     return c;
+  }
+
+  /**
+   * Construct the panel of controls that select the desired quadtree
+   * implementation.
+   */
+
+  private JPanel makeImplementationControls()
+  {
+    final JPanel p = new JPanel();
+    p.setBorder(BorderFactory.createTitledBorder("Implementation"));
+
+    final Vector<String> names = new Vector<String>();
+    for (final String key : this.octtree_constructors.keySet()) {
+      names.add(key);
+    }
+
+    final JComboBox cb = new JComboBox(names);
+
+    cb.addActionListener(new ActionListener() {
+      @Override public void actionPerformed(
+        final ActionEvent e)
+      {
+        try {
+          final JComboBox box = (JComboBox) e.getSource();
+          final String name = (String) box.getSelectedItem();
+          if (OctTreeViewer.this.octtree_constructors.containsKey(name)) {
+            final PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable> f =
+              OctTreeViewer.this.octtree_constructors.get(name);
+            OctTreeViewer.this.commandSelectImplementation(f);
+          }
+        } catch (final Throwable x) {
+          OctTreeViewer.fatal(x);
+        }
+      }
+
+    });
+
+    p.add(cb);
+    return p;
   }
 
   private JPanel makeInsertControls()
