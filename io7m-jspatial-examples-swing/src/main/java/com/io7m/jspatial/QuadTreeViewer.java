@@ -49,7 +49,7 @@ import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorReadable2I;
 
 /**
- * Basic Swing-based quadtree viewer demonstrating area queries.
+ * Quadtree viewer demonstrating tree operations.
  */
 
 public final class QuadTreeViewer implements Runnable

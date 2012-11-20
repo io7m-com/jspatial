@@ -58,7 +58,7 @@ import com.io7m.jtensors.VectorReadable3I;
 import com.jogamp.opengl.util.Animator;
 
 /**
- * Basic Swing-based octtree viewer demonstrating area queries.
+ * Octtree viewer demonstrating tree operations.
  */
 
 public final class OctTreeViewer implements Runnable
