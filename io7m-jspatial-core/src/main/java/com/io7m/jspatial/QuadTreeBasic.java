@@ -100,8 +100,8 @@ import com.io7m.jtensors.VectorReadable2I;
       this.x1y1 = null;
       this.leaf = true;
       this.quadrant_objects = new TreeSet<T>();
-      this.size_x = QuadTreeBasic.getSpanSizeX(this.lower, this.upper);
-      this.size_y = QuadTreeBasic.getSpanSizeY(this.lower, this.upper);
+      this.size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
+      this.size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
     }
 
     void areaContaining(
@@ -477,8 +477,8 @@ import com.io7m.jtensors.VectorReadable2I;
       final @Nonnull VectorI2I lower,
       final @Nonnull VectorI2I upper)
     {
-      final int size_x = QuadTreeBasic.getSpanSizeX(lower, upper);
-      final int size_y = QuadTreeBasic.getSpanSizeY(lower, upper);
+      final int size_x = Dimensions.getSpanSizeX(lower, upper);
+      final int size_y = Dimensions.getSpanSizeY(lower, upper);
 
       assert size_x >= 2;
       assert size_y >= 2;
@@ -489,8 +489,8 @@ import com.io7m.jtensors.VectorReadable2I;
       final int[] x_spans = new int[4];
       final int[] y_spans = new int[4];
 
-      QuadTreeBasic.split1D(lower.getXI(), upper.getXI(), x_spans);
-      QuadTreeBasic.split1D(lower.getYI(), upper.getYI(), y_spans);
+      Dimensions.split1D(lower.getXI(), upper.getXI(), x_spans);
+      Dimensions.split1D(lower.getYI(), upper.getYI(), y_spans);
 
       this.x0y0_lower = new VectorI2I(x_spans[0], y_spans[0]);
       this.x0y1_lower = new VectorI2I(x_spans[0], y_spans[2]);
@@ -502,46 +502,6 @@ import com.io7m.jtensors.VectorReadable2I;
       this.x1y0_upper = new VectorI2I(x_spans[3], y_spans[1]);
       this.x1y1_upper = new VectorI2I(x_spans[3], y_spans[3]);
     }
-  }
-
-  static int getSpanSizeX(
-    final @Nonnull VectorReadable2I lower,
-    final @Nonnull VectorReadable2I upper)
-  {
-    return (upper.getXI() - lower.getXI()) + 1;
-  }
-
-  static int getSpanSizeY(
-    final @Nonnull VectorReadable2I lower,
-    final @Nonnull VectorReadable2I upper)
-  {
-    return (upper.getYI() - lower.getYI()) + 1;
-  }
-
-  /**
-   * Given an inclusive range defined by <code>[low .. high]</code>, split the
-   * range in the middle and produce two new inclusive ranges.
-   * 
-   * <p>
-   * The lower and upper bounds of the lower range are stored in
-   * <code>out[0]</code> and <code>out[1]</code>, respectively. The lower and
-   * upper bounds of the upper range are stored in <code>out[2]</code> and
-   * <code>out[3]</code>, respectively.
-   * </p>
-   */
-
-  static void split1D(
-    final int low,
-    final int high,
-    final int[] out)
-  {
-    assert out.length == 4;
-
-    final int size = (high - low) + 1;
-    out[0] = low;
-    out[1] = low + ((size >> 1) - 1);
-    out[2] = low + (size >> 1);
-    out[3] = high;
   }
 
   private final @Nonnull Quadrant     root;

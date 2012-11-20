@@ -183,29 +183,29 @@ public class QuadTreeBasicTest
     {
       final VectorReadable2I bal = r0.boundingAreaLower();
       final VectorReadable2I bau = r0.boundingAreaUpper();
-      Assert.assertEquals(8, QuadTreeBasic.getSpanSizeX(bal, bau));
-      Assert.assertEquals(8, QuadTreeBasic.getSpanSizeY(bal, bau));
+      Assert.assertEquals(8, Dimensions.getSpanSizeX(bal, bau));
+      Assert.assertEquals(8, Dimensions.getSpanSizeY(bal, bau));
     }
 
     {
       final VectorReadable2I bal = r1.boundingAreaLower();
       final VectorReadable2I bau = r1.boundingAreaUpper();
-      Assert.assertEquals(8, QuadTreeBasic.getSpanSizeX(bal, bau));
-      Assert.assertEquals(8, QuadTreeBasic.getSpanSizeY(bal, bau));
+      Assert.assertEquals(8, Dimensions.getSpanSizeX(bal, bau));
+      Assert.assertEquals(8, Dimensions.getSpanSizeY(bal, bau));
     }
 
     {
       final VectorReadable2I bal = r2.boundingAreaLower();
       final VectorReadable2I bau = r2.boundingAreaUpper();
-      Assert.assertEquals(8, QuadTreeBasic.getSpanSizeX(bal, bau));
-      Assert.assertEquals(8, QuadTreeBasic.getSpanSizeY(bal, bau));
+      Assert.assertEquals(8, Dimensions.getSpanSizeX(bal, bau));
+      Assert.assertEquals(8, Dimensions.getSpanSizeY(bal, bau));
     }
 
     {
       final VectorReadable2I bal = r3.boundingAreaLower();
       final VectorReadable2I bau = r3.boundingAreaUpper();
-      Assert.assertEquals(8, QuadTreeBasic.getSpanSizeX(bal, bau));
-      Assert.assertEquals(8, QuadTreeBasic.getSpanSizeY(bal, bau));
+      Assert.assertEquals(8, Dimensions.getSpanSizeX(bal, bau));
+      Assert.assertEquals(8, Dimensions.getSpanSizeY(bal, bau));
     }
 
     boolean in = false;
