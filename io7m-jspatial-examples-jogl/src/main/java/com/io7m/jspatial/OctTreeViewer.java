@@ -1037,11 +1037,29 @@ public final class OctTreeViewer implements Runnable
             final Unit _)
             throws ConstraintError
         {
-          System.err.println("Selected OctTreePrune");
           return new OctTreePrune<Cuboid>(
             OctTreeViewer.TREE_SIZE_X,
             OctTreeViewer.TREE_SIZE_Y,
             OctTreeViewer.TREE_SIZE_Z);
+        }
+      });
+
+    this.octtree_constructors.put(
+      "OctTreeLimit",
+      new PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>() {
+        @SuppressWarnings("unused") @Override public
+          OctTreeInterface<Cuboid>
+          call(
+            final Unit _)
+            throws ConstraintError
+        {
+          return new OctTreeLimit<Cuboid>(
+            OctTreeViewer.TREE_SIZE_X,
+            OctTreeViewer.TREE_SIZE_Y,
+            OctTreeViewer.TREE_SIZE_Z,
+            32,
+            32,
+            32);
         }
       });
   }
