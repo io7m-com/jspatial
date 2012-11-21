@@ -766,6 +766,7 @@ public final class OctTreeViewer implements Runnable
   private boolean                                                                             volume_selected;
 
   private final AtomicLong                                                                    current_id;
+  private PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>                          octtree_constructor;
 
   public OctTreeViewer()
     throws Throwable
@@ -889,6 +890,18 @@ public final class OctTreeViewer implements Runnable
     System.exit(0);
   }
 
+  protected void commandReload()
+  {
+    try {
+      System.err.println("Reload: " + this.octtree_constructor);
+      if (this.octtree_constructor != null) {
+        this.commandSelectImplementation(this.octtree_constructor);
+      }
+    } catch (final Throwable e) {
+      OctTreeViewer.fatal(e);
+    }
+  }
+
   /**
    * Fill the current octtree with 100 randomly sized cuboids.
    */
@@ -975,6 +988,9 @@ public final class OctTreeViewer implements Runnable
     final PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable> f)
     throws Throwable
   {
+    System.err.println("Select implementation: " + f);
+
+    this.octtree_constructor = f;
     this.octtree = f.call(new Unit());
     this.commandClear();
   }
@@ -1090,7 +1106,6 @@ public final class OctTreeViewer implements Runnable
     }
 
     final JComboBox cb = new JComboBox(names);
-
     cb.addActionListener(new ActionListener() {
       @Override public void actionPerformed(
         final ActionEvent e)
@@ -1107,10 +1122,127 @@ public final class OctTreeViewer implements Runnable
           OctTreeViewer.fatal(x);
         }
       }
-
     });
 
-    p.add(cb);
+    final JTextField input_min_x = new JTextField("2");
+    final JTextField input_min_y = new JTextField("2");
+    final JTextField input_min_z = new JTextField("2");
+    input_min_x.setColumns(3);
+    input_min_y.setColumns(3);
+    input_min_z.setColumns(3);
+
+    input_min_x.addKeyListener(new KeyListener() {
+      @Override public void keyTyped(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+
+      @Override public void keyReleased(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        final int x = Integer.parseInt(input_min_x.getText());
+        System.err.println("minimum-x: " + x);
+        OctTreeViewer.this.octtree_config.setMinimumSizeX(x);
+      }
+
+      @Override public void keyPressed(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+    });
+
+    input_min_y.addKeyListener(new KeyListener() {
+      @Override public void keyTyped(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+
+      @Override public void keyReleased(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        final int y = Integer.parseInt(input_min_y.getText());
+        System.err.println("minimum-y: " + y);
+        OctTreeViewer.this.octtree_config.setMinimumSizeY(y);
+      }
+
+      @Override public void keyPressed(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+    });
+
+    input_min_z.addKeyListener(new KeyListener() {
+      @Override public void keyTyped(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+
+      @Override public void keyReleased(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        final int z = Integer.parseInt(input_min_z.getText());
+        System.err.println("minimum-z: " + z);
+        OctTreeViewer.this.octtree_config.setMinimumSizeZ(z);
+      }
+
+      @Override public void keyPressed(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+    });
+
+    final JPanel con = new JPanel();
+    con.setLayout(new GridBagLayout());
+
+    final Insets padding = new Insets(4, 8, 4, 8);
+    final GridBagConstraints c = new GridBagConstraints();
+    c.gridx = 0;
+    c.gridy = 0;
+    c.insets = padding;
+    c.gridheight = 1;
+    c.gridwidth = 1;
+
+    c.gridx = 0;
+    c.gridy = 0;
+    con.add(new JLabel("minimum-x"), c);
+    c.gridx = c.gridx + 1;
+    con.add(input_min_x, c);
+
+    c.gridx = 0;
+    c.gridy = 1;
+    con.add(new JLabel("minimum-y"), c);
+    c.gridx = c.gridx + 1;
+    con.add(input_min_y, c);
+
+    c.gridx = 0;
+    c.gridy = 2;
+    con.add(new JLabel("minimum-z"), c);
+    c.gridx = c.gridx + 1;
+    con.add(input_min_z, c);
+
+    final JButton reload = new JButton("Reload");
+    reload.addActionListener(new ActionListener() {
+      @Override public void actionPerformed(
+        @SuppressWarnings("unused") final ActionEvent _)
+      {
+        OctTreeViewer.this.commandReload();
+      }
+    });
+
+    c.gridx = 2;
+    c.gridy = 0;
+    con.add(cb);
+    c.gridx = 3;
+    c.gridy = 3;
+    con.add(reload);
+
+    p.add(con);
     return p;
   }
 

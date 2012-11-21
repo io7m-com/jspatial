@@ -26,6 +26,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -235,6 +237,7 @@ public final class QuadTreeViewer implements Runnable
   protected final QuadTreeConfig                                                                  quadtree_config;
 
   private final AtomicLong                                                                        current_id;
+  private PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>                          quadtree_constructor;
 
   public QuadTreeViewer()
     throws ConstraintError
@@ -413,10 +416,23 @@ public final class QuadTreeViewer implements Runnable
     }
   }
 
+  protected void commandReload()
+  {
+    try {
+      System.err.println("Reload: " + this.quadtree_constructor);
+      if (this.quadtree_constructor != null) {
+        this.commandSelectImplementation(this.quadtree_constructor);
+      }
+    } catch (final Throwable e) {
+      QuadTreeViewer.fatal(e);
+    }
+  }
+
   protected void commandSelectImplementation(
     final PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable> f)
     throws Throwable
   {
+    this.quadtree_constructor = f;
     this.quadtree = f.call(new Unit());
     this.commandClear();
   }
@@ -505,7 +521,6 @@ public final class QuadTreeViewer implements Runnable
     }
 
     final JComboBox cb = new JComboBox(names);
-
     cb.addActionListener(new ActionListener() {
       @Override public void actionPerformed(
         final ActionEvent e)
@@ -522,10 +537,99 @@ public final class QuadTreeViewer implements Runnable
           QuadTreeViewer.fatal(x);
         }
       }
-
     });
 
-    p.add(cb);
+    final JTextField input_min_x = new JTextField("2");
+    final JTextField input_min_y = new JTextField("2");
+    final JTextField input_min_z = new JTextField("2");
+    input_min_x.setColumns(3);
+    input_min_y.setColumns(3);
+    input_min_z.setColumns(3);
+
+    input_min_x.addKeyListener(new KeyListener() {
+      @Override public void keyTyped(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+
+      @Override public void keyReleased(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        final int x = Integer.parseInt(input_min_x.getText());
+        System.err.println("minimum-x: " + x);
+        QuadTreeViewer.this.quadtree_config.setMinimumSizeX(x);
+      }
+
+      @Override public void keyPressed(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+    });
+
+    input_min_y.addKeyListener(new KeyListener() {
+      @Override public void keyTyped(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+
+      @Override public void keyReleased(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        final int y = Integer.parseInt(input_min_y.getText());
+        System.err.println("minimum-y: " + y);
+        QuadTreeViewer.this.quadtree_config.setMinimumSizeY(y);
+      }
+
+      @Override public void keyPressed(
+        @SuppressWarnings("unused") final KeyEvent _)
+      {
+        // Nothing.
+      }
+    });
+
+    final JPanel con = new JPanel();
+    con.setLayout(new GridBagLayout());
+
+    final Insets padding = new Insets(4, 8, 4, 8);
+    final GridBagConstraints c = new GridBagConstraints();
+    c.gridx = 0;
+    c.gridy = 0;
+    c.insets = padding;
+    c.gridheight = 1;
+    c.gridwidth = 1;
+
+    c.gridx = 0;
+    c.gridy = 0;
+    con.add(new JLabel("minimum-x"), c);
+    c.gridx = c.gridx + 1;
+    con.add(input_min_x, c);
+
+    c.gridx = 0;
+    c.gridy = 1;
+    con.add(new JLabel("minimum-y"), c);
+    c.gridx = c.gridx + 1;
+    con.add(input_min_y, c);
+
+    final JButton reload = new JButton("Reload");
+    reload.addActionListener(new ActionListener() {
+      @Override public void actionPerformed(
+        @SuppressWarnings("unused") final ActionEvent _)
+      {
+        QuadTreeViewer.this.commandReload();
+      }
+    });
+
+    c.gridx = 2;
+    c.gridy = 0;
+    con.add(cb);
+    c.gridx = 3;
+    c.gridy = 3;
+    con.add(reload);
+
+    p.add(con);
     return p;
   }
 
