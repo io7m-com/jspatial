@@ -36,7 +36,7 @@ import com.io7m.jtensors.VectorReadable3I;
  * {@link QuadTreeBasic}.
  */
 
-@NotThreadSafe public class OctTreeBasic<T extends OctTreeMember<T>> implements
+@NotThreadSafe public final class OctTreeBasic<T extends OctTreeMember<T>> implements
   OctTreeInterface<T>
 {
   final class Octant implements BoundingVolume
@@ -92,10 +92,10 @@ import com.io7m.jtensors.VectorReadable3I;
 
     private boolean canSplit()
     {
-      if (this.leaf) {
-        return (this.size_x >= 2) && (this.size_y >= 2) && (this.size_z >= 2);
-      }
-      return false;
+      return this.leaf
+        && (this.size_x >= 2)
+        && (this.size_y >= 2)
+        && (this.size_z >= 2);
     }
 
     void clear()

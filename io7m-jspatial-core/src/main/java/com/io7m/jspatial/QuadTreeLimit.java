@@ -45,14 +45,16 @@ import com.io7m.jtensors.VectorReadable2I;
   {
     private final @Nonnull VectorI2I    lower;
     private final @Nonnull VectorI2I    upper;
+
     private @CheckForNull Quadrant      x0y0;
     private @CheckForNull Quadrant      x1y0;
     private @CheckForNull Quadrant      x0y1;
     private @CheckForNull Quadrant      x1y1;
     private boolean                     leaf;
+
     private final @Nonnull SortedSet<T> quadrant_objects;
-    final int                           size_x;
-    final int                           size_y;
+    protected final int                 quadrant_size_x;
+    protected final int                 quadrant_size_y;
 
     /**
      * Construct a quadrant defined by the inclusive ranges given by
@@ -71,8 +73,8 @@ import com.io7m.jtensors.VectorReadable2I;
       this.x1y1 = null;
       this.leaf = true;
       this.quadrant_objects = new TreeSet<T>();
-      this.size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
-      this.size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
+      this.quadrant_size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
+      this.quadrant_size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
     }
 
     void areaContaining(
@@ -146,8 +148,8 @@ import com.io7m.jtensors.VectorReadable2I;
     private boolean canSplit()
     {
       return this.leaf
-        && (this.size_x >= (QuadTreeLimit.this.minimum_size_x << 1))
-        && (this.size_y >= (QuadTreeLimit.this.minimum_size_y << 1));
+        && (this.quadrant_size_x >= (QuadTreeLimit.this.minimum_size_x << 1))
+        && (this.quadrant_size_y >= (QuadTreeLimit.this.minimum_size_y << 1));
     }
 
     void clear()
@@ -551,12 +553,12 @@ import com.io7m.jtensors.VectorReadable2I;
 
   @Override public int quadTreeGetSizeX()
   {
-    return this.root.size_x;
+    return this.root.quadrant_size_x;
   }
 
   @Override public int quadTreeGetSizeY()
   {
-    return this.root.size_y;
+    return this.root.quadrant_size_y;
   }
 
   @Override public boolean quadTreeInsert(

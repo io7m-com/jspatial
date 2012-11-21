@@ -19,6 +19,8 @@ package com.io7m.jspatial;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.io7m.jaux.UnreachableCodeException;
+
 /**
  * Overlap and containment checks between bounding areas.
  * 
@@ -231,5 +233,10 @@ import javax.annotation.concurrent.ThreadSafe;
       return false;
     }
     return true;
+  }
+
+  private BoundingAreaCheck()
+  {
+    throw new UnreachableCodeException();
   }
 }

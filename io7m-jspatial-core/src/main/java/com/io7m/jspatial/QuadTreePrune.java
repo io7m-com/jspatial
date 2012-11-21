@@ -41,7 +41,7 @@ import com.io7m.jtensors.VectorReadable2I;
 @NotThreadSafe public final class QuadTreePrune<T extends QuadTreeMember<T>> implements
   QuadTreeInterface<T>
 {
-  protected final class Quadrant implements BoundingArea
+  final class Quadrant implements BoundingArea
   {
     private final @Nonnull VectorI2I     lower;
     private final @Nonnull VectorI2I     upper;

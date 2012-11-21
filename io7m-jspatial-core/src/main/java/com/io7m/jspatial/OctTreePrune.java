@@ -38,7 +38,7 @@ import com.io7m.jtensors.VectorReadable3I;
  * </p>
  */
 
-@NotThreadSafe public class OctTreePrune<T extends OctTreeMember<T>> implements
+@NotThreadSafe public final class OctTreePrune<T extends OctTreeMember<T>> implements
   OctTreeInterface<T>
 {
   final class Octant implements BoundingVolume
@@ -142,7 +142,7 @@ import com.io7m.jtensors.VectorReadable3I;
      * Insertion base case: item may or may not fit within node.
      */
 
-    @SuppressWarnings("synthetic-access") private boolean insertBase(
+    private boolean insertBase(
       final @Nonnull T item)
     {
       if (OctTreePrune.this.objects_all.contains(item)) {
@@ -159,7 +159,7 @@ import com.io7m.jtensors.VectorReadable3I;
      * inserted into the "global" object list.
      */
 
-    @SuppressWarnings("synthetic-access") private boolean insertObject(
+    private boolean insertObject(
       final @Nonnull T item)
     {
       OctTreePrune.this.objects_all.add(item);
@@ -286,7 +286,7 @@ import com.io7m.jtensors.VectorReadable3I;
       }
     }
 
-    @SuppressWarnings("synthetic-access") boolean remove(
+    boolean remove(
       final @Nonnull T item)
     {
       if (OctTreePrune.this.objects_all.contains(item) == false) {
@@ -301,7 +301,7 @@ import com.io7m.jtensors.VectorReadable3I;
       return this.removeStep(item);
     }
 
-    @SuppressWarnings("synthetic-access") private boolean removeStep(
+    private boolean removeStep(
       final @Nonnull T item)
     {
       if (this.octant_objects.contains(item)) {
@@ -594,11 +594,11 @@ import com.io7m.jtensors.VectorReadable3I;
     }
   }
 
-  private @Nonnull Octant           root;
-  private final @Nonnull TreeSet<T> objects_all;
-  private final int                 size_x;
-  private final int                 size_y;
-  private final int                 size_z;
+  private @Nonnull Octant             root;
+  protected final @Nonnull TreeSet<T> objects_all;
+  private final int                   size_x;
+  private final int                   size_y;
+  private final int                   size_z;
 
   /**
    * Construct an octtree of width <code>size_x</code>, depth

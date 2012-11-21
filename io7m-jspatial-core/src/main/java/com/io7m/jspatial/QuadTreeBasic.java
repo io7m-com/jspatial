@@ -67,21 +67,23 @@ import com.io7m.jtensors.VectorReadable2I;
  *          The type of objects contained within the tree
  */
 
-@NotThreadSafe public class QuadTreeBasic<T extends QuadTreeMember<T>> implements
+@NotThreadSafe public final class QuadTreeBasic<T extends QuadTreeMember<T>> implements
   QuadTreeInterface<T>
 {
   final class Quadrant implements BoundingArea
   {
     private final @Nonnull VectorI2I    lower;
     private final @Nonnull VectorI2I    upper;
+
     private @CheckForNull Quadrant      x0y0;
     private @CheckForNull Quadrant      x1y0;
     private @CheckForNull Quadrant      x0y1;
     private @CheckForNull Quadrant      x1y1;
     private boolean                     leaf;
+
     private final @Nonnull SortedSet<T> quadrant_objects;
-    final int                           size_x;
-    final int                           size_y;
+    protected final int                 quadrant_size_x;
+    protected final int                 quadrant_size_y;
 
     /**
      * Construct a quadrant defined by the inclusive ranges given by
@@ -100,8 +102,8 @@ import com.io7m.jtensors.VectorReadable2I;
       this.x1y1 = null;
       this.leaf = true;
       this.quadrant_objects = new TreeSet<T>();
-      this.size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
-      this.size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
+      this.quadrant_size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
+      this.quadrant_size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
     }
 
     void areaContaining(
@@ -174,10 +176,9 @@ import com.io7m.jtensors.VectorReadable2I;
 
     private boolean canSplit()
     {
-      if (this.leaf) {
-        return (this.size_x >= 2) && (this.size_y >= 2);
-      }
-      return false;
+      return this.leaf
+        && (this.quadrant_size_x >= 2)
+        && (this.quadrant_size_y >= 2);
     }
 
     void clear()
@@ -221,7 +222,7 @@ import com.io7m.jtensors.VectorReadable2I;
      * Insertion base case: item may or may not fit within node.
      */
 
-    @SuppressWarnings("synthetic-access") private boolean insertBase(
+    private boolean insertBase(
       final @Nonnull T item)
     {
       if (QuadTreeBasic.this.objects_all.contains(item)) {
@@ -238,7 +239,7 @@ import com.io7m.jtensors.VectorReadable2I;
      * also inserted into the "global" object list.
      */
 
-    @SuppressWarnings("synthetic-access") private boolean insertObject(
+    private boolean insertObject(
       final @Nonnull T item)
     {
       QuadTreeBasic.this.objects_all.add(item);
@@ -367,20 +368,22 @@ import com.io7m.jtensors.VectorReadable2I;
       }
     }
 
-    @SuppressWarnings("synthetic-access") boolean remove(
+    boolean remove(
       final @Nonnull T item)
     {
       if (QuadTreeBasic.this.objects_all.contains(item) == false) {
         return false;
       }
 
-      // If an object is in objects_all, then it must be within the
-      // bounds of the tree, according to insert().
+      /**
+       * If an object is in objects_all, then it must be within the bounds of
+       * the tree, according to insert().
+       */
       assert BoundingAreaCheck.containedWithin(this, item);
       return this.removeStep(item);
     }
 
-    @SuppressWarnings("synthetic-access") private boolean removeStep(
+    private boolean removeStep(
       final @Nonnull T item)
     {
       if (this.quadrant_objects.contains(item)) {
@@ -404,8 +407,10 @@ import com.io7m.jtensors.VectorReadable2I;
         }
       }
 
-      // The object must be in the tree, according to remove().
-      // Therefore it must be in this node, or one of the child quadrants.
+      /**
+       * The object must be in the tree, according to remove(). Therefore it
+       * must be in this node, or one of the child quadrants.
+       */
       throw new UnreachableCodeException();
     }
 
@@ -504,8 +509,8 @@ import com.io7m.jtensors.VectorReadable2I;
     }
   }
 
-  private final @Nonnull Quadrant     root;
-  private final @Nonnull SortedSet<T> objects_all;
+  private final @Nonnull Quadrant       root;
+  protected final @Nonnull SortedSet<T> objects_all;
 
   /**
    * Construct an octtree of width <code>size_x</code>, and height
@@ -548,12 +553,12 @@ import com.io7m.jtensors.VectorReadable2I;
 
   @Override public int quadTreeGetSizeX()
   {
-    return this.root.size_x;
+    return this.root.quadrant_size_x;
   }
 
   @Override public int quadTreeGetSizeY()
   {
-    return this.root.size_y;
+    return this.root.quadrant_size_y;
   }
 
   @Override public boolean quadTreeInsert(

@@ -125,6 +125,69 @@ public class OctTreeLimitTest
   }
 
   @SuppressWarnings({ "unused", "static-method" }) @Test(
+    expected = ConstraintError.class) public void testCreateLimitOddX()
+    throws ConstraintError
+  {
+    new OctTreeLimit<Cuboid>(4, 4, 4, 3, 4, 4);
+  }
+
+  @SuppressWarnings({ "unused", "static-method" }) @Test(
+    expected = ConstraintError.class) public void testCreateLimitOddY()
+    throws ConstraintError
+  {
+    new OctTreeLimit<Cuboid>(4, 4, 4, 4, 3, 4);
+  }
+
+  @SuppressWarnings({ "unused", "static-method" }) @Test(
+    expected = ConstraintError.class) public void testCreateLimitOddZ()
+    throws ConstraintError
+  {
+    new OctTreeLimit<Cuboid>(4, 4, 4, 4, 4, 3);
+  }
+
+  @SuppressWarnings({ "unused", "static-method" }) @Test(
+    expected = ConstraintError.class) public void testCreateLimitTooLargeX()
+    throws ConstraintError
+  {
+    new OctTreeLimit<Cuboid>(4, 4, 4, 5, 4, 4);
+  }
+
+  @SuppressWarnings({ "unused", "static-method" }) @Test(
+    expected = ConstraintError.class) public void testCreateLimitTooLargeY()
+    throws ConstraintError
+  {
+    new OctTreeLimit<Cuboid>(4, 4, 4, 4, 5, 4);
+  }
+
+  @SuppressWarnings({ "unused", "static-method" }) @Test(
+    expected = ConstraintError.class) public void testCreateLimitTooLargeZ()
+    throws ConstraintError
+  {
+    new OctTreeLimit<Cuboid>(4, 4, 4, 4, 4, 5);
+  }
+
+  @SuppressWarnings({ "unused", "static-method" }) @Test(
+    expected = ConstraintError.class) public void testCreateLimitTooSmallX()
+    throws ConstraintError
+  {
+    new OctTreeLimit<Cuboid>(4, 4, 4, 1, 2, 2);
+  }
+
+  @SuppressWarnings({ "unused", "static-method" }) @Test(
+    expected = ConstraintError.class) public void testCreateLimitTooSmallY()
+    throws ConstraintError
+  {
+    new OctTreeLimit<Cuboid>(4, 4, 4, 2, 1, 2);
+  }
+
+  @SuppressWarnings({ "unused", "static-method" }) @Test(
+    expected = ConstraintError.class) public void testCreateLimitTooSmallZ()
+    throws ConstraintError
+  {
+    new OctTreeLimit<Cuboid>(4, 4, 4, 2, 2, 1);
+  }
+
+  @SuppressWarnings({ "unused", "static-method" }) @Test(
     expected = ConstraintError.class) public void testCreateOddX()
     throws ConstraintError
   {
@@ -166,69 +229,6 @@ public class OctTreeLimitTest
     new OctTreeLimit<Cuboid>(2, 2, 1, 2, 2, 2);
   }
 
-  @SuppressWarnings({ "unused", "static-method" }) @Test(
-    expected = ConstraintError.class) public void testCreateLimitTooSmallX()
-    throws ConstraintError
-  {
-    new OctTreeLimit<Cuboid>(4, 4, 4, 1, 2, 2);
-  }
-
-  @SuppressWarnings({ "unused", "static-method" }) @Test(
-    expected = ConstraintError.class) public void testCreateLimitTooSmallY()
-    throws ConstraintError
-  {
-    new OctTreeLimit<Cuboid>(4, 4, 4, 2, 1, 2);
-  }
-
-  @SuppressWarnings({ "unused", "static-method" }) @Test(
-    expected = ConstraintError.class) public void testCreateLimitTooSmallZ()
-    throws ConstraintError
-  {
-    new OctTreeLimit<Cuboid>(4, 4, 4, 2, 2, 1);
-  }
-
-  @SuppressWarnings({ "unused", "static-method" }) @Test(
-    expected = ConstraintError.class) public void testCreateLimitTooLargeX()
-    throws ConstraintError
-  {
-    new OctTreeLimit<Cuboid>(4, 4, 4, 5, 4, 4);
-  }
-
-  @SuppressWarnings({ "unused", "static-method" }) @Test(
-    expected = ConstraintError.class) public void testCreateLimitTooLargeY()
-    throws ConstraintError
-  {
-    new OctTreeLimit<Cuboid>(4, 4, 4, 4, 5, 4);
-  }
-
-  @SuppressWarnings({ "unused", "static-method" }) @Test(
-    expected = ConstraintError.class) public void testCreateLimitTooLargeZ()
-    throws ConstraintError
-  {
-    new OctTreeLimit<Cuboid>(4, 4, 4, 4, 4, 5);
-  }
-
-  @SuppressWarnings({ "unused", "static-method" }) @Test(
-    expected = ConstraintError.class) public void testCreateLimitOddX()
-    throws ConstraintError
-  {
-    new OctTreeLimit<Cuboid>(4, 4, 4, 3, 4, 4);
-  }
-
-  @SuppressWarnings({ "unused", "static-method" }) @Test(
-    expected = ConstraintError.class) public void testCreateLimitOddY()
-    throws ConstraintError
-  {
-    new OctTreeLimit<Cuboid>(4, 4, 4, 4, 3, 4);
-  }
-
-  @SuppressWarnings({ "unused", "static-method" }) @Test(
-    expected = ConstraintError.class) public void testCreateLimitOddZ()
-    throws ConstraintError
-  {
-    new OctTreeLimit<Cuboid>(4, 4, 4, 4, 4, 3);
-  }
-
   @SuppressWarnings("static-method") @Test public void testInsertAtRoot()
     throws ConstraintError,
       Exception
@@ -238,23 +238,6 @@ public class OctTreeLimitTest
     final Counter c = new Counter();
     final Cuboid r =
       new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(12, 12, 12));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(9, c.count);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertLimit()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeLimit<Cuboid> q =
-      new OctTreeLimit<Cuboid>(128, 128, 128, 64, 64, 64);
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
 
     final boolean in = q.octTreeInsert(r);
     Assert.assertTrue(in);
@@ -333,6 +316,23 @@ public class OctTreeLimitTest
 
     q.octTreeTraverse(c);
     Assert.assertEquals(1, c.count);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testInsertLimit()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeLimit<Cuboid> q =
+      new OctTreeLimit<Cuboid>(128, 128, 128, 64, 64, 64);
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(9, c.count);
   }
 
   @SuppressWarnings("static-method") @Test public void testInsertOutside()

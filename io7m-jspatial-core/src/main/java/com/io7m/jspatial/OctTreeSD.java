@@ -50,16 +50,18 @@ import com.io7m.jtensors.VectorReadable3I;
  * </p>
  */
 
-@NotThreadSafe public class OctTreeSD<T extends OctTreeMember<T>> implements
+@NotThreadSafe public final class OctTreeSD<T extends OctTreeMember<T>> implements
   OctTreeSDInterface<T>
 {
   final class Octant implements BoundingVolume
   {
     private final @Nonnull VectorI3I  lower;
     private final @Nonnull VectorI3I  upper;
-    final int                         size_x;
-    final int                         size_y;
-    final int                         size_z;
+
+    protected final int               quadrant_size_x;
+    protected final int               quadrant_size_y;
+    protected final int               quadrant_size_z;
+
     private @CheckForNull Octant      x0y0z0;
     private @CheckForNull Octant      x1y0z0;
     private @CheckForNull Octant      x0y1z0;
@@ -69,6 +71,7 @@ import com.io7m.jtensors.VectorReadable3I;
     private @CheckForNull Octant      x0y1z1;
     private @CheckForNull Octant      x1y1z1;
     private boolean                   leaf;
+
     private final @Nonnull TreeSet<T> octant_objects_dynamic;
     private final @Nonnull TreeSet<T> octant_objects_static;
 
@@ -78,9 +81,9 @@ import com.io7m.jtensors.VectorReadable3I;
     {
       this.lower = lower;
       this.upper = upper;
-      this.size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
-      this.size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
-      this.size_z = Dimensions.getSpanSizeZ(this.lower, this.upper);
+      this.quadrant_size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
+      this.quadrant_size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
+      this.quadrant_size_z = Dimensions.getSpanSizeZ(this.lower, this.upper);
 
       this.octant_objects_dynamic = new TreeSet<T>();
       this.octant_objects_static = new TreeSet<T>();
@@ -108,10 +111,10 @@ import com.io7m.jtensors.VectorReadable3I;
 
     private boolean canSplit()
     {
-      if (this.leaf) {
-        return (this.size_x >= 2) && (this.size_y >= 2) && (this.size_z >= 2);
-      }
-      return false;
+      return this.leaf
+        && (this.quadrant_size_x >= 2)
+        && (this.quadrant_size_y >= 2)
+        && (this.quadrant_size_z >= 2);
     }
 
     void clear()
@@ -186,7 +189,7 @@ import com.io7m.jtensors.VectorReadable3I;
      * Insertion base case: item may or may not fit within node.
      */
 
-    @SuppressWarnings("synthetic-access") private boolean insertBase(
+    private boolean insertBase(
       final @Nonnull T item,
       final @Nonnull SDType type)
     {
@@ -207,7 +210,7 @@ import com.io7m.jtensors.VectorReadable3I;
      * inserted into the "global" object list.
      */
 
-    @SuppressWarnings("synthetic-access") private boolean insertObject(
+    private boolean insertObject(
       final @Nonnull T item,
       final @Nonnull SDType type)
     {
@@ -358,7 +361,7 @@ import com.io7m.jtensors.VectorReadable3I;
       }
     }
 
-    @SuppressWarnings("synthetic-access") boolean remove(
+    boolean remove(
       final @Nonnull T item)
     {
       if ((OctTreeSD.this.objects_all_dynamic.contains(item) == false)
@@ -366,13 +369,15 @@ import com.io7m.jtensors.VectorReadable3I;
         return false;
       }
 
-      // If an object is in objects_all, then it must be within the
-      // bounds of the tree, according to insert().
+      /**
+       * If an object is in objects_all, then it must be within the bounds of
+       * the tree, according to insert().
+       */
       assert BoundingVolumeCheck.containedWithin(this, item);
       return this.removeStep(item);
     }
 
-    @SuppressWarnings("synthetic-access") private boolean removeStep(
+    private boolean removeStep(
       final @Nonnull T item)
     {
       if (this.octant_objects_dynamic.contains(item)) {
@@ -414,8 +419,10 @@ import com.io7m.jtensors.VectorReadable3I;
         }
       }
 
-      // The object must be in the tree, according to objects_all.
-      // Therefore it must be in this node, or one of the child octants.
+      /**
+       * The object must be in the tree, according to objects_all. Therefore
+       * it must be in this node, or one of the child octants.
+       */
       throw new UnreachableCodeException();
     }
 
@@ -624,9 +631,9 @@ import com.io7m.jtensors.VectorReadable3I;
     }
   }
 
-  private final @Nonnull Octant     root;
-  private final @Nonnull TreeSet<T> objects_all_dynamic;
-  private final @Nonnull TreeSet<T> objects_all_static;
+  private final @Nonnull Octant       root;
+  protected final @Nonnull TreeSet<T> objects_all_dynamic;
+  protected final @Nonnull TreeSet<T> objects_all_static;
 
   /**
    * Construct an octtree of width <code>size_x</code>, depth
@@ -682,17 +689,17 @@ import com.io7m.jtensors.VectorReadable3I;
 
   @Override public int octTreeGetSizeX()
   {
-    return this.root.size_x;
+    return this.root.quadrant_size_x;
   }
 
   @Override public int octTreeGetSizeY()
   {
-    return this.root.size_y;
+    return this.root.quadrant_size_y;
   }
 
   @Override public int octTreeGetSizeZ()
   {
-    return this.root.size_z;
+    return this.root.quadrant_size_z;
   }
 
   @Override public boolean octTreeInsert(
