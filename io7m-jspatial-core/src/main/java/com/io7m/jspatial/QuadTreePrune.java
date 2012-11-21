@@ -36,6 +36,12 @@ import com.io7m.jtensors.VectorReadable2I;
  * A quadtree implementation based on {@link QuadTreeBasic} but implementing
  * empty node pruning when an object is removed from the tree.
  * </p>
+ * <p>
+ * An implementation that aggressively removes empty nodes from the tree
+ * increases garbage collection pressure, but reduces the number of nodes that
+ * must be traversed when enumerating objects. This improves the performance
+ * of area and raycast queries.
+ * </p>
  */
 
 @NotThreadSafe public final class QuadTreePrune<T extends QuadTreeMember<T>> implements

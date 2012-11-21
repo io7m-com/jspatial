@@ -32,7 +32,47 @@
         <s:subsection-title>Overview</s:subsection-title>
         <s:paragraph>
           The <s:term type="package">jspatial</s:term> package implements
-          several spatial data structures.
+          several spatial data structures, such as octtrees and quadtrees.
+        </s:paragraph>
+      </s:subsection>
+      
+      <s:subsection>
+        <s:subsection-title>Simplicity</s:subsection-title>
+        <s:paragraph>
+          The <s:term type="package">jspatial</s:term> package strives for
+          simplicity in interface and implementation. Most implementations
+          of the data structures included are less than <s:term type="constant">700</s:term>
+          lines of code (including comments and annotations).
+        </s:paragraph>
+        <s:paragraph>
+          The intention is to allow for ease of understanding of the structures
+          and algorithms involved, to increase confidence in their correctness
+          and to ease auditing.
+        </s:paragraph>
+      </s:subsection>
+      
+      <s:subsection>
+        <s:subsection-title>Efficiency</s:subsection-title>
+        <s:paragraph>
+          The package includes multiple implementations of the specified data
+          structures, all sharing a common interface. The implementations provided
+          have differing and documented performance characteristics, to allow
+          programmers to select the implementation that best fits the usage patterns
+          of any given program. Implementations can be switched without modifying
+          existing code.
+        </s:paragraph>
+      </s:subsection>
+      
+      <s:subsection>
+        <s:subsection-title>Correctness</s:subsection-title>
+        <s:paragraph>
+          The package includes a large battery of automated tests that attempt to verify
+          the correctness of the included implementations. As of the time of writing,
+          the tests manage over 96% coverage for all code
+          <s:footnote>
+            Some of the code is specifically and deliberately unreachable but the
+            compiler is unable to verify this without flow analysis.
+          </s:footnote>.
         </s:paragraph>
       </s:subsection>
     </s:section>
@@ -54,7 +94,7 @@
         <s:paragraph>
           Regular releases are made to the
           <s:link-external target="http://search.maven.org/#search|ga|1|io7m-jspatial">Central Repository</s:link-external>,
-          so it's possible to use the <s:term type="package">NAME</s:term>
+          so it's possible to use the <s:term type="package">jspatial</s:term>
           package in your projects with the following Maven dependency:
         </s:paragraph>
         <s:paragraph>
@@ -87,6 +127,16 @@
             <s:table-column-name>VM-Version</s:table-column-name>
           </s:table-head>
           <s:table-body>
+<s:table-row xmlns:s="http://www.io7m.com/schemas/structural/1.0.0">
+  <s:table-cell>Linux</s:table-cell>
+  <s:table-cell>3.6.6-1-ARCH</s:table-cell>
+  <s:table-cell>x86_64</s:table-cell>
+  <s:table-cell>Sun Microsystems Inc.</s:table-cell>
+  <s:table-cell>1.6.0_24</s:table-cell>
+  <s:table-cell>OpenJDK 64-Bit Server VM</s:table-cell>
+  <s:table-cell>Sun Microsystems Inc.</s:table-cell>
+  <s:table-cell>20.0-b12</s:table-cell>
+</s:table-row>
           </s:table-body>
         </s:table>
       </s:formal-item>
@@ -102,7 +152,7 @@
     <s:section>
       <s:section-title>License</s:section-title>
       <s:paragraph>
-        All files distributed with the <s:term type="package">NAME</s:term>
+        All files distributed with the <s:term type="package">jspatial</s:term>
         package are placed under the following license:
         <s:verbatim type="license"><![CDATA[Copyright © 2012 http://io7m.com
 
@@ -127,6 +177,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
     <s:part-contents/>
     <s:section>
       <s:section-title>QuadTrees</s:section-title>
+      
       <s:subsection>
         <s:subsection-title>Overview</s:subsection-title>
         <s:paragraph>
@@ -147,6 +198,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
           </s:list-unordered>
         </s:formal-item>
       </s:subsection>
+      
       <s:subsection>
         <s:subsection-title>Usage</s:subsection-title>
         <s:paragraph>
@@ -161,7 +213,64 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
           objects have some form of total order to allow <s:term type="type">quadtree</s:term>
           implementations to use efficient <s:term type="type">Set</s:term> data structures internally.
         </s:paragraph>
+        <s:paragraph>
+          All quadtree implementations have constructors that take values of type
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeConfig.html">QuadTreeConfig</s:link-external>,
+          which allow the specification of various properties such as the size of the resulting trees.
+        </s:paragraph>
       </s:subsection>
+      
+      <s:subsection>
+        <s:subsection-title>Choosing an implementation</s:subsection-title>
+        <s:paragraph>
+          Each of the available implementations have different properties and performance
+          characteristics, and therefore the choice of implementation is program-specific
+          (as some usage patterns will see better performance with some implementations
+          than others).
+        </s:paragraph>
+        <s:paragraph>
+          For example, the performance of
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeInterface.html#quadTreeQueryAreaContaining(com.io7m.jspatial.BoundingArea, java.util.SortedSet)">area</s:link-external>
+          and
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeInterface.html#quadTreeQueryRaycast(com.io7m.jspatial.RayI2D, java.util.SortedSet)">raycast</s:link-external>
+          queries is dependent upon the number of nodes in the tree. A smaller number of nodes means
+          that fewer nodes may potentially be queried by the algorithms. Therefore, an
+          implementation that aggressively prunes empty nodes such as
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreePrune.html">QuadTreePrune</s:link-external>,
+          or an implementation that artificially limits the number of nodes created such as
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeLimit.html">QuadTreeLimit</s:link-external>
+          will give better performance for those queries.
+        </s:paragraph>
+        <s:paragraph>
+          On the other hand, constantly creating and deleting internal nodes increases pressure
+          on the garbage collector. If garbage collector pressure is an issue, implementations
+          that do not prune or limit nodes such as
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeBasic.html">QuadTreeBasic</s:link-external>
+          or
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeSD.html">QuadTreeSD</s:link-external>
+          may be preferable.
+        </s:paragraph>
+        <s:paragraph>
+          Many games and simulations work by repeatedly inserting all objects in a scene
+          into some form of spatial data structure such as quadtrees. The tree is emptied once
+          per frame and all objects in the scene are reinserted each time. Often, many objects
+          in a scene are immovable and will therefore be inserted into the same position in the
+          tree every time. This is obviously redundant and wasteful, and therefore a common optimization
+          is to distinguish between immovable and movable objects within the tree and then provide
+          efficient operations for removing only movable objects from the tree. The
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeSD.html">QuadTreeSD</s:link-external>
+          implementation provides this optimization.
+        </s:paragraph>
+        <s:paragraph>
+          It is recommended that programs are written against the
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeInterface.html">QuadTreeInterface</s:link-external>
+          or
+          <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeInterfaceSD.html">QuadTreeInterfaceSD</s:link-external>
+          interfaces, as this allows for easy switching of concrete implementations without
+          having to modify existing code. 
+        </s:paragraph>
+      </s:subsection>
+      
       <s:subsection>
         <s:subsection-title>Example</s:subsection-title>
         <s:formal-item kind="example">
@@ -380,6 +489,7 @@ public final class TrivialQuad
 
     <s:section>
       <s:section-title>OctTrees</s:section-title>
+      
       <s:subsection>
         <s:subsection-title>Overview</s:subsection-title>
         <s:paragraph>
@@ -400,6 +510,7 @@ public final class TrivialQuad
           </s:list-unordered>
         </s:formal-item>
       </s:subsection>
+      
       <s:subsection>
         <s:subsection-title>Usage</s:subsection-title>
         <s:paragraph>
@@ -414,7 +525,64 @@ public final class TrivialQuad
           objects have some form of total order to allow <s:term type="type">octtree</s:term>
           implementations to use efficient <s:term type="type">Set</s:term> data structures internally.
         </s:paragraph>
+        <s:paragraph>
+          All octtree implementations have constructors that take values of type
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeConfig.html">OctTreeConfig</s:link-external>,
+          which allow the specification of various properties such as the size of the resulting trees.
+        </s:paragraph>
       </s:subsection>
+      
+      <s:subsection>
+        <s:subsection-title>Choosing an implementation</s:subsection-title>
+        <s:paragraph>
+          Each of the available implementations have different properties and performance
+          characteristics, and therefore the choice of implementation is program-specific
+          (as some usage patterns will see better performance with some implementations
+          than others).
+        </s:paragraph>
+        <s:paragraph>
+          For example, the performance of
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeInterface.html#octTreeQueryAreaContaining(com.io7m.jspatial.BoundingVolume, java.util.SortedSet)">area</s:link-external>
+          and
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeInterface.html#octTreeQueryRaycast(com.io7m.jspatial.RayI3D, java.util.SortedSet)">raycast</s:link-external>
+          queries is dependent upon the number of nodes in the tree. A smaller number of nodes means
+          that fewer nodes may potentially be queried by the algorithms. Therefore, an
+          implementation that aggressively prunes empty nodes such as
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreePrune.html">OctTreePrune</s:link-external>,
+          or an implementation that artificially limits the number of nodes created such as
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeLimit.html">OctTreeLimit</s:link-external>
+          will give better performance for those queries.
+        </s:paragraph>
+        <s:paragraph>
+          On the other hand, constantly creating and deleting internal nodes increases pressure
+          on the garbage collector. If garbage collector pressure is an issue, implementations
+          that do not prune or limit nodes such as
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeBasic.html">OctTreeBasic</s:link-external>
+          or
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeSD.html">OctTreeSD</s:link-external>
+          may be preferable.
+        </s:paragraph>
+        <s:paragraph>
+          Many games and simulations work by repeatedly inserting all objects in a scene
+          into some form of spatial data structure such as octtrees. The tree is emptied once
+          per frame and all objects in the scene are reinserted each time. Often, many objects
+          in a scene are immovable and will therefore be inserted into the same position in the
+          tree every time. This is obviously redundant and wasteful, and therefore a common optimization
+          is to distinguish between immovable and movable objects within the tree and then provide
+          efficient operations for removing only movable objects from the tree. The
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeSD.html">OctTreeSD</s:link-external>
+          implementation provides this optimization.
+        </s:paragraph>
+        <s:paragraph>
+          It is recommended that programs are written against the
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeInterface.html">OctTreeInterface</s:link-external>
+          or
+          <s:link-external target="javadoc/com/io7m/jspatial/OctTreeInterfaceSD.html">OctTreeInterfaceSD</s:link-external>
+          interfaces, as this allows for easy switching of concrete implementations without
+          having to modify existing code. 
+        </s:paragraph>
+      </s:subsection>
+      
       <s:subsection>
         <s:subsection-title>Example</s:subsection-title>
         <s:formal-item kind="example">
