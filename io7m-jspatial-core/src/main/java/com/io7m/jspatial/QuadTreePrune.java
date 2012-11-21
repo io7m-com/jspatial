@@ -428,19 +428,6 @@ import com.io7m.jtensors.VectorReadable2I;
     }
 
     /**
-     * Attempt to turn this node and as many ancestors if this node back into
-     * leaves as possible.
-     */
-
-    private void unsplitAttemptRecursive()
-    {
-      this.unsplitAttempt();
-      if (this.parent != null) {
-        this.parent.unsplitAttemptRecursive();
-      }
-    }
-
-    /**
      * Attempt to turn this node back into a leaf.
      */
 
@@ -460,6 +447,19 @@ import com.io7m.jtensors.VectorReadable2I;
           this.x1y0 = null;
           this.x1y1 = null;
         }
+      }
+    }
+
+    /**
+     * Attempt to turn this node and as many ancestors if this node back into
+     * leaves as possible.
+     */
+
+    private void unsplitAttemptRecursive()
+    {
+      this.unsplitAttempt();
+      if (this.parent != null) {
+        this.parent.unsplitAttemptRecursive();
       }
     }
 

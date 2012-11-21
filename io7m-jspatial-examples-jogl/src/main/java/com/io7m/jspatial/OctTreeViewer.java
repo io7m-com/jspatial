@@ -729,6 +729,8 @@ public final class OctTreeViewer implements Runnable
           v.run();
         } catch (final ConstraintError e) {
           OctTreeViewer.fatal(e);
+        } catch (final Throwable e) {
+          OctTreeViewer.fatal(e);
         }
       }
     });
@@ -741,22 +743,14 @@ public final class OctTreeViewer implements Runnable
 
   protected final VectorM3F                                                                   camera_focus;
   protected final VectorM3F                                                                   camera_position;
-  protected double                                                                            camera_orientation      =
-                                                                                                                        0.0;
-  protected double                                                                            camera_velocity_forward =
-                                                                                                                        0.0;
-  protected double                                                                            camera_velocity_side    =
-                                                                                                                        0.0;
-  protected double                                                                            camera_velocity_up      =
-                                                                                                                        0.0;
-  protected double                                                                            camera_rotate_velocity  =
-                                                                                                                        0.0;
-  protected double                                                                            camera_orbit_velocity   =
-                                                                                                                        0.0;
-  protected double                                                                            camera_orbit_offset     =
-                                                                                                                        32.0;
-  protected Input                                                                             input_state             =
-                                                                                                                        new Input();
+  protected double                                                                            camera_orientation;
+  protected double                                                                            camera_velocity_forward;
+  protected double                                                                            camera_velocity_side;
+  protected double                                                                            camera_velocity_up;
+  protected double                                                                            camera_rotate_velocity;
+  protected double                                                                            camera_orbit_velocity;
+  protected double                                                                            camera_orbit_offset;
+  protected Input                                                                             input_state;
 
   private final JPanel                                                                        canvas_container;
   private final JPanel                                                                        control_container;
@@ -772,16 +766,23 @@ public final class OctTreeViewer implements Runnable
   private final AtomicLong                                                                    current_id;
 
   public OctTreeViewer()
-    throws ConstraintError
+    throws Throwable
   {
+    this.input_state = new Input();
+
     this.camera_position = new VectorM3F(286.9f, 177.14f, 273.5f);
     this.camera_focus = new VectorM3F(-10f, 2f, -5.8f);
     this.camera_orientation = 3.89f;
     this.camera_orbit_offset = 408f;
+    this.camera_velocity_forward = 0.0;
+    this.camera_velocity_side = 0.0;
+    this.camera_velocity_up = 0.0;
+    this.camera_rotate_velocity = 0.0;
+    this.camera_orbit_velocity = 0.0;
 
     this.current_id = new AtomicLong();
     this.octtree =
-      new OctTreeBasic<Cuboid>(
+      new OctTreePrune<Cuboid>(
         OctTreeViewer.TREE_SIZE_X,
         OctTreeViewer.TREE_SIZE_Y,
         OctTreeViewer.TREE_SIZE_Z);
@@ -828,17 +829,9 @@ public final class OctTreeViewer implements Runnable
 
   protected void commandClear()
   {
-    try {
-      this.octtree =
-        new OctTreeBasic<Cuboid>(
-          OctTreeViewer.TREE_SIZE_X,
-          OctTreeViewer.TREE_SIZE_Y,
-          OctTreeViewer.TREE_SIZE_Z);
-      this.raycast_active = false;
-      this.volume_selected = false;
-    } catch (final ConstraintError e) {
-      OctTreeViewer.fatal(e);
-    }
+    this.octtree.octTreeClear();
+    this.commandSelectReset();
+    this.raycast_active = false;
   }
 
   /**
@@ -1029,6 +1022,23 @@ public final class OctTreeViewer implements Runnable
             throws ConstraintError
         {
           return new OctTreeSD<Cuboid>(
+            OctTreeViewer.TREE_SIZE_X,
+            OctTreeViewer.TREE_SIZE_Y,
+            OctTreeViewer.TREE_SIZE_Z);
+        }
+      });
+
+    this.octtree_constructors.put(
+      "OctTreePrune",
+      new PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>() {
+        @SuppressWarnings("unused") @Override public
+          OctTreeInterface<Cuboid>
+          call(
+            final Unit _)
+            throws ConstraintError
+        {
+          System.err.println("Selected OctTreePrune");
+          return new OctTreePrune<Cuboid>(
             OctTreeViewer.TREE_SIZE_X,
             OctTreeViewer.TREE_SIZE_Y,
             OctTreeViewer.TREE_SIZE_Z);
