@@ -738,8 +738,10 @@ public final class OctTreeViewer implements Runnable
 
   private final GLCanvas                                                                      canvas;
   private final JPanel                                                                        panel;
+
   private OctTreeInterface<Cuboid>                                                            octtree;
   protected final HashMap<String, PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>> octtree_constructors;
+  protected final OctTreeConfig                                                               octtree_config;
 
   protected final VectorM3F                                                                   camera_focus;
   protected final VectorM3F                                                                   camera_position;
@@ -781,11 +783,13 @@ public final class OctTreeViewer implements Runnable
     this.camera_orbit_velocity = 0.0;
 
     this.current_id = new AtomicLong();
-    this.octtree =
-      new OctTreePrune<Cuboid>(
-        OctTreeViewer.TREE_SIZE_X,
-        OctTreeViewer.TREE_SIZE_Y,
-        OctTreeViewer.TREE_SIZE_Z);
+
+    this.octtree_config = new OctTreeConfig();
+    this.octtree_config.setSizeX(OctTreeViewer.TREE_SIZE_X);
+    this.octtree_config.setSizeY(OctTreeViewer.TREE_SIZE_Y);
+    this.octtree_config.setSizeZ(OctTreeViewer.TREE_SIZE_Z);
+
+    this.octtree = new OctTreePrune<Cuboid>(this.octtree_config);
     this.octtree_constructors =
       new HashMap<String, PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>>();
     this.initializeConstructors();
@@ -1005,10 +1009,7 @@ public final class OctTreeViewer implements Runnable
             final Unit _)
             throws ConstraintError
         {
-          return new OctTreeBasic<Cuboid>(
-            OctTreeViewer.TREE_SIZE_X,
-            OctTreeViewer.TREE_SIZE_Y,
-            OctTreeViewer.TREE_SIZE_Z);
+          return new OctTreeBasic<Cuboid>(OctTreeViewer.this.octtree_config);
         }
       });
 
@@ -1021,10 +1022,7 @@ public final class OctTreeViewer implements Runnable
             final Unit _)
             throws ConstraintError
         {
-          return new OctTreeSD<Cuboid>(
-            OctTreeViewer.TREE_SIZE_X,
-            OctTreeViewer.TREE_SIZE_Y,
-            OctTreeViewer.TREE_SIZE_Z);
+          return new OctTreeSD<Cuboid>(OctTreeViewer.this.octtree_config);
         }
       });
 
@@ -1037,10 +1035,7 @@ public final class OctTreeViewer implements Runnable
             final Unit _)
             throws ConstraintError
         {
-          return new OctTreePrune<Cuboid>(
-            OctTreeViewer.TREE_SIZE_X,
-            OctTreeViewer.TREE_SIZE_Y,
-            OctTreeViewer.TREE_SIZE_Z);
+          return new OctTreePrune<Cuboid>(OctTreeViewer.this.octtree_config);
         }
       });
 
@@ -1053,13 +1048,7 @@ public final class OctTreeViewer implements Runnable
             final Unit _)
             throws ConstraintError
         {
-          return new OctTreeLimit<Cuboid>(
-            OctTreeViewer.TREE_SIZE_X,
-            OctTreeViewer.TREE_SIZE_Y,
-            OctTreeViewer.TREE_SIZE_Z,
-            32,
-            32,
-            32);
+          return new OctTreeLimit<Cuboid>(OctTreeViewer.this.octtree_config);
         }
       });
   }

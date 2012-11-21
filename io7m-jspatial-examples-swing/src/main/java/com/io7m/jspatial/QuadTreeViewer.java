@@ -232,6 +232,7 @@ public final class QuadTreeViewer implements Runnable
 
   protected QuadTreeInterface<Rectangle>                                                          quadtree;
   protected final HashMap<String, PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>> quadtree_constructors;
+  protected final QuadTreeConfig                                                                  quadtree_config;
 
   private final AtomicLong                                                                        current_id;
 
@@ -240,10 +241,11 @@ public final class QuadTreeViewer implements Runnable
   {
     this.current_id = new AtomicLong();
 
-    this.quadtree =
-      new QuadTreeBasic<Rectangle>(
-        QuadTreeViewer.TREE_SIZE_X,
-        QuadTreeViewer.TREE_SIZE_Y);
+    this.quadtree_config = new QuadTreeConfig();
+    this.quadtree_config.setSizeX(QuadTreeViewer.TREE_SIZE_X);
+    this.quadtree_config.setSizeY(QuadTreeViewer.TREE_SIZE_Y);
+
+    this.quadtree = new QuadTreeBasic<Rectangle>(this.quadtree_config);
     this.quadtree_constructors =
       new HashMap<String, PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>>();
     this.initializeConstructors();
@@ -440,8 +442,7 @@ public final class QuadTreeViewer implements Runnable
             throws ConstraintError
         {
           return new QuadTreeBasic<Rectangle>(
-            QuadTreeViewer.TREE_SIZE_X,
-            QuadTreeViewer.TREE_SIZE_Y);
+            QuadTreeViewer.this.quadtree_config);
         }
       });
 
@@ -455,8 +456,7 @@ public final class QuadTreeViewer implements Runnable
             throws ConstraintError
         {
           return new QuadTreeSD<Rectangle>(
-            QuadTreeViewer.TREE_SIZE_X,
-            QuadTreeViewer.TREE_SIZE_Y);
+            QuadTreeViewer.this.quadtree_config);
         }
       });
 
@@ -470,8 +470,7 @@ public final class QuadTreeViewer implements Runnable
             throws ConstraintError
         {
           return new QuadTreePrune<Rectangle>(
-            QuadTreeViewer.TREE_SIZE_X,
-            QuadTreeViewer.TREE_SIZE_Y);
+            QuadTreeViewer.this.quadtree_config);
         }
       });
 
@@ -485,10 +484,7 @@ public final class QuadTreeViewer implements Runnable
             throws ConstraintError
         {
           return new QuadTreeLimit<Rectangle>(
-            QuadTreeViewer.TREE_SIZE_X,
-            QuadTreeViewer.TREE_SIZE_Y,
-            32,
-            32);
+            QuadTreeViewer.this.quadtree_config);
         }
       });
   }
