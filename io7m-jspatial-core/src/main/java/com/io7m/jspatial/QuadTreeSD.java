@@ -560,7 +560,7 @@ import com.io7m.jtensors.VectorReadable2I;
   protected final @Nonnull SortedSet<T> objects_all_dynamic;
 
   /**
-   * Construct an octtree of width <code>size_x</code>, and height
+   * Construct a quadtree of width <code>size_x</code>, and height
    * <code>size_y</code>.
    * 
    * @throws ConstraintError

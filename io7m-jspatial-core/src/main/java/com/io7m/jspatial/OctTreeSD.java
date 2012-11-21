@@ -58,9 +58,9 @@ import com.io7m.jtensors.VectorReadable3I;
     private final @Nonnull VectorI3I  lower;
     private final @Nonnull VectorI3I  upper;
 
-    protected final int               quadrant_size_x;
-    protected final int               quadrant_size_y;
-    protected final int               quadrant_size_z;
+    protected final int               octant_size_x;
+    protected final int               octant_size_y;
+    protected final int               octant_size_z;
 
     private @CheckForNull Octant      x0y0z0;
     private @CheckForNull Octant      x1y0z0;
@@ -81,9 +81,9 @@ import com.io7m.jtensors.VectorReadable3I;
     {
       this.lower = lower;
       this.upper = upper;
-      this.quadrant_size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
-      this.quadrant_size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
-      this.quadrant_size_z = Dimensions.getSpanSizeZ(this.lower, this.upper);
+      this.octant_size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
+      this.octant_size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
+      this.octant_size_z = Dimensions.getSpanSizeZ(this.lower, this.upper);
 
       this.octant_objects_dynamic = new TreeSet<T>();
       this.octant_objects_static = new TreeSet<T>();
@@ -112,9 +112,9 @@ import com.io7m.jtensors.VectorReadable3I;
     private boolean canSplit()
     {
       return this.leaf
-        && (this.quadrant_size_x >= 2)
-        && (this.quadrant_size_y >= 2)
-        && (this.quadrant_size_z >= 2);
+        && (this.octant_size_x >= 2)
+        && (this.octant_size_y >= 2)
+        && (this.octant_size_z >= 2);
     }
 
     void clear()
@@ -689,17 +689,17 @@ import com.io7m.jtensors.VectorReadable3I;
 
   @Override public int octTreeGetSizeX()
   {
-    return this.root.quadrant_size_x;
+    return this.root.octant_size_x;
   }
 
   @Override public int octTreeGetSizeY()
   {
-    return this.root.quadrant_size_y;
+    return this.root.octant_size_y;
   }
 
   @Override public int octTreeGetSizeZ()
   {
-    return this.root.quadrant_size_z;
+    return this.root.octant_size_z;
   }
 
   @Override public boolean octTreeInsert(

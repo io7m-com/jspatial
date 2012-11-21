@@ -18,12 +18,12 @@ package com.io7m.jspatial;
 
 /**
  * The type of objects that can be placed into an octtree. Objects are
- * required to have:
+ * required to:
  * 
  * <ul>
- * <li>Unique and totally ordered identifiers, in order to allow for "set"
+ * <li>Be comparable and have a total order, in order to allow for "set"
  * semantics within the tree.</li>
- * <li>Axis-aligned bounding boxes, for spatial queries.</li>
+ * <li>Have axis-aligned bounding boxes, for spatial queries.</li>
  * </ul>
  */
 

@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import com.io7m.jtensors.VectorReadable3I;
 
 /**
- * The type of procedures used when iterating over quadrants in octtrees.
+ * The type of procedures used when iterating over octants in octtrees.
  */
 
 public interface OctTreeTraversal
