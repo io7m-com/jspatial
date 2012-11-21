@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jspatial.MutableArea;
 import com.io7m.jspatial.QuadTreeBasic;
+import com.io7m.jspatial.QuadTreeConfig;
 import com.io7m.jspatial.QuadTreeMember;
 import com.io7m.jspatial.QuadTreeRaycastResult;
 import com.io7m.jspatial.RayI2D;
@@ -88,8 +89,11 @@ public final class TrivialQuad
      * implementation the package provides.
      */
 
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(128);
+    config.setSizeY(128);
     final QuadTreeBasic<Something> tree =
-      new QuadTreeBasic<Something>(128, 128);
+      new QuadTreeBasic<Something>(config);
 
     /**
      * Insert four objects into the tree. The sizes and positions of the

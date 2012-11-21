@@ -92,10 +92,7 @@ import com.io7m.jtensors.VectorReadable3I;
 
     private boolean canSplit()
     {
-      return this.leaf
-        && (this.size_x >= 2)
-        && (this.size_y >= 2)
-        && (this.size_z >= 2);
+      return (this.size_x >= 2) && (this.size_y >= 2) && (this.size_z >= 2);
     }
 
     void clear()
@@ -299,8 +296,10 @@ import com.io7m.jtensors.VectorReadable3I;
         return false;
       }
 
-      // If an object is in objects_all, then it must be within the
-      // bounds of the tree, according to insert().
+      /**
+       * If an object is in objects_all, then it must be within the bounds of
+       * the tree, according to insert().
+       */
       assert BoundingVolumeCheck.containedWithin(this, item);
       return this.removeStep(item);
     }
@@ -342,8 +341,10 @@ import com.io7m.jtensors.VectorReadable3I;
         }
       }
 
-      // The object must be in the tree, according to objects_all.
-      // Therefore it must be in this node, or one of the child octants.
+      /**
+       * The object must be in the tree, according to objects_all. Therefore
+       * it must be in this node, or one of the child octants.
+       */
       throw new UnreachableCodeException();
     }
 
@@ -545,29 +546,7 @@ import com.io7m.jtensors.VectorReadable3I;
   private final @Nonnull Octant     root;
   private final @Nonnull TreeSet<T> objects_all;
 
-  /**
-   * Construct an octtree of width <code>size_x</code>, depth
-   * <code>size_z</code>, and height <code>size_y</code>.
-   * 
-   * @throws ConstraintError
-   *           Iff any of the following conditions hold:
-   *           <ul>
-   *           <li>
-   *           <code>(size_x >= 2 && size_x <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li>
-   *           <code>(size_y >= 2 && size_y <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li>
-   *           <code>(size_z >= 2 && size_z <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li><code>size_x</code> is not divisible by <code>2</code></li>
-   *           <li><code>size_y</code> is not divisible by <code>2</code></li>
-   *           <li><code>size_z</code> is not divisible by <code>2</code></li>
-   *           </ul>
-   */
-
-  public OctTreeBasic(
+  private OctTreeBasic(
     final int size_x,
     final int size_y,
     final int size_z)
@@ -586,6 +565,38 @@ import com.io7m.jtensors.VectorReadable3I;
         size_x - 1,
         size_y - 1,
         size_z - 1));
+  }
+
+  /**
+   * Construct an octtree using the provided configuration parameters.
+   * 
+   * @throws ConstraintError
+   *           Iff any of the following conditions hold:
+   *           <ul>
+   *           <li><code>config == null</code></li>
+   *           <li>
+   *           <code>(config.getSizeX() >= 2 && config.getSizeX() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(config.getSizeY() >= 2 && config.getSizeY() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(config.getSizeZ() >= 2 && config.getSizeZ() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li><code>config.getSizeX()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li><code>config.getSizeY()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li><code>config.getSizeZ()</code> is not divisible by
+   *           <code>2</code></li>
+   *           </ul>
+   */
+
+  public OctTreeBasic(
+    final @Nonnull OctTreeConfig config)
+    throws ConstraintError
+  {
+    this(config.getSizeX(), config.getSizeY(), config.getSizeZ());
   }
 
   @Override public void octTreeClear()

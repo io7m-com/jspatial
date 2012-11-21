@@ -8,421 +8,137 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.io7m.jaux.Constraints.ConstraintError;
-import com.io7m.jaux.functional.Function;
-import com.io7m.jspatial.QuadTreePrune.Quadrants;
+import com.io7m.jaux.UnreachableCodeException;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
-import com.io7m.jtensors.VectorReadable2I;
 
-public class QuadTreePruneTest
+public final class QuadTreePruneTest extends QuadTreeCommonTests
 {
-  private static class Counter implements QuadTreeTraversal
+  @Override <T extends QuadTreeMember<T>> QuadTreeInterface<T> makeQuad128()
   {
-    int count = 0;
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(128);
+    config.setSizeY(128);
 
-    Counter()
-    {
-
+    try {
+      return new QuadTreePrune<T>(config);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
     }
 
-    @SuppressWarnings("unused") @Override public void visit(
-      final int depth,
-      final VectorReadable2I lower,
-      final VectorReadable2I upper)
-      throws Exception
-    {
-      ++this.count;
-    }
+    throw new UnreachableCodeException();
   }
 
-  private static abstract class IterationChecker0 implements
-    Function<Rectangle, Boolean>
+  @Override <T extends QuadTreeMember<T>> QuadTreeInterface<T> makeQuad16()
   {
-    boolean found_r0 = false;
-    boolean found_r1 = false;
-    boolean found_r2 = false;
-    boolean found_r3 = false;
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(16);
+    config.setSizeY(16);
 
-    IterationChecker0()
-    {
-
+    try {
+      return new QuadTreePrune<T>(config);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
     }
+
+    throw new UnreachableCodeException();
   }
 
-  private static abstract class IterationChecker1 implements
-    Function<Rectangle, Boolean>
+  @Override <T extends QuadTreeMember<T>> QuadTreeInterface<T> makeQuad2()
   {
-    int count = 0;
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(2);
+    config.setSizeY(2);
 
-    IterationChecker1()
-    {
-
+    try {
+      return new QuadTreePrune<T>(config);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
     }
+
+    throw new UnreachableCodeException();
   }
 
-  private static class IterationCounter implements
-    Function<Rectangle, Boolean>
+  @Override <T extends QuadTreeMember<T>> QuadTreeInterface<T> makeQuad32()
   {
-    int count = 0;
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(32);
+    config.setSizeY(32);
 
-    IterationCounter()
-    {
-
+    try {
+      return new QuadTreePrune<T>(config);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
     }
 
-    @SuppressWarnings("unused") @Override public Boolean call(
-      final Rectangle x)
-    {
-      ++this.count;
-      return Boolean.TRUE;
-    }
+    throw new UnreachableCodeException();
   }
 
-  @SuppressWarnings("static-method") @Test public void testClear()
-    throws ConstraintError,
-      Exception
+  @Override <T extends QuadTreeMember<T>> QuadTreeInterface<T> makeQuad512()
   {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(128, 128);
-    final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
-    final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
-    final Rectangle r2 =
-      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
-    final Rectangle r3 =
-      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(512);
+    config.setSizeY(512);
 
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r2);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r3);
-    Assert.assertTrue(in);
-
-    {
-      final IterationCounter counter = new IterationCounter();
-      q.quadTreeIterateObjects(counter);
-      Assert.assertEquals(4, counter.count);
+    try {
+      return new QuadTreePrune<T>(config);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
     }
 
-    {
-      final IterationCounter counter = new IterationCounter();
-      q.quadTreeClear();
-      q.quadTreeIterateObjects(counter);
-      Assert.assertEquals(0, counter.count);
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public void testCountInitial()
-    throws Exception,
-      ConstraintError
-  {
-    final QuadTreePrune<Rectangle> qt = new QuadTreePrune<Rectangle>(8, 8);
-    final Counter c = new Counter();
-
-    qt.quadTreeTraverse(c);
-    Assert.assertEquals(1, c.count);
-  }
-
-  @SuppressWarnings({ "static-method" }) @Test public void testCreate()
-    throws ConstraintError
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(2, 2);
-    Assert.assertEquals(2, q.quadTreeGetSizeX());
-    Assert.assertEquals(2, q.quadTreeGetSizeY());
+    throw new UnreachableCodeException();
   }
 
   @SuppressWarnings({ "unused", "static-method" }) @Test(
     expected = ConstraintError.class) public void testCreateOddX()
     throws ConstraintError
   {
-    new QuadTreePrune<Rectangle>(3, 2);
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(3);
+    config.setSizeY(2);
+
+    new QuadTreePrune<Rectangle>(config);
   }
 
   @SuppressWarnings({ "unused", "static-method" }) @Test(
     expected = ConstraintError.class) public void testCreateOddY()
     throws ConstraintError
   {
-    new QuadTreePrune<Rectangle>(2, 3);
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(2);
+    config.setSizeY(3);
+
+    new QuadTreePrune<Rectangle>(config);
   }
 
   @SuppressWarnings({ "unused", "static-method" }) @Test(
     expected = ConstraintError.class) public void testCreateTooSmallX()
     throws ConstraintError
   {
-    new QuadTreePrune<Rectangle>(1, 2);
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(1);
+    config.setSizeY(2);
+
+    new QuadTreePrune<Rectangle>(config);
   }
 
   @SuppressWarnings({ "unused", "static-method" }) @Test(
     expected = ConstraintError.class) public void testCreateTooSmallY()
     throws ConstraintError
   {
-    new QuadTreePrune<Rectangle>(2, 1);
-  }
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(2);
+    config.setSizeY(1);
 
-  @SuppressWarnings("static-method") @Test public
-    void
-    testInsertAtImmediateRootChildren()
-      throws ConstraintError,
-        Exception
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(16, 16);
-    final Counter c = new Counter();
-    final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
-    final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(8, 0), new VectorI2I(15, 7));
-    final Rectangle r2 =
-      new Rectangle(2, new VectorI2I(0, 8), new VectorI2I(7, 15));
-    final Rectangle r3 =
-      new Rectangle(3, new VectorI2I(8, 8), new VectorI2I(15, 15));
-
-    {
-      final VectorReadable2I bal = r0.boundingAreaLower();
-      final VectorReadable2I bau = r0.boundingAreaUpper();
-      Assert.assertEquals(8, Dimensions.getSpanSizeX(bal, bau));
-      Assert.assertEquals(8, Dimensions.getSpanSizeY(bal, bau));
-    }
-
-    {
-      final VectorReadable2I bal = r1.boundingAreaLower();
-      final VectorReadable2I bau = r1.boundingAreaUpper();
-      Assert.assertEquals(8, Dimensions.getSpanSizeX(bal, bau));
-      Assert.assertEquals(8, Dimensions.getSpanSizeY(bal, bau));
-    }
-
-    {
-      final VectorReadable2I bal = r2.boundingAreaLower();
-      final VectorReadable2I bau = r2.boundingAreaUpper();
-      Assert.assertEquals(8, Dimensions.getSpanSizeX(bal, bau));
-      Assert.assertEquals(8, Dimensions.getSpanSizeY(bal, bau));
-    }
-
-    {
-      final VectorReadable2I bal = r3.boundingAreaLower();
-      final VectorReadable2I bau = r3.boundingAreaUpper();
-      Assert.assertEquals(8, Dimensions.getSpanSizeX(bal, bau));
-      Assert.assertEquals(8, Dimensions.getSpanSizeY(bal, bau));
-    }
-
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r2);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r3);
-    Assert.assertTrue(in);
-
-    q.quadTreeTraverse(c);
-    Assert.assertEquals(21, c.count);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertAtRoot()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(16, 16);
-    final Counter c = new Counter();
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
-
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.quadTreeTraverse(c);
-    Assert.assertEquals(5, c.count);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertDuplicate()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(16, 16);
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
-
-    boolean in = false;
-    in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r);
-    Assert.assertFalse(in);
-  }
-
-  @SuppressWarnings("static-method") @Test(expected = ConstraintError.class) public
-    void
-    testInsertIllFormed()
-      throws ConstraintError,
-        Exception
-  {
-    QuadTreePrune<Rectangle> q = null;
-    Rectangle r = null;
-
-    try {
-      q = new QuadTreePrune<Rectangle>(16, 16);
-      r = new Rectangle(0, new VectorI2I(12, 12), new VectorI2I(0, 0));
-    } catch (final ConstraintError e) {
-      Assert.fail(e.toString());
-    }
-
-    assert q != null;
-    q.quadTreeInsert(r);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertOutside()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(16, 16);
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(18, 18), new VectorI2I(28, 28));
-
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertFalse(in);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertTiny()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(16, 16);
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
-
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(
-        0,
-        new VectorI2I(0, 0),
-        new VectorI2I(15, 15)), items);
-      Assert.assertEquals(1, items.size());
-    }
-  }
-
-  @Test public void testIterate()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(16, 16);
-    final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
-    final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(8, 0), new VectorI2I(15, 7));
-    final Rectangle r2 =
-      new Rectangle(2, new VectorI2I(0, 8), new VectorI2I(7, 15));
-    final Rectangle r3 =
-      new Rectangle(3, new VectorI2I(8, 8), new VectorI2I(15, 15));
-
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r2);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r3);
-    Assert.assertTrue(in);
-
-    final IterationChecker0 counter = new IterationChecker0() {
-      @Override public Boolean call(
-        final Rectangle x)
-      {
-        if (x == r0) {
-          this.found_r0 = true;
-        }
-        if (x == r1) {
-          this.found_r1 = true;
-        }
-        if (x == r2) {
-          this.found_r2 = true;
-        }
-        if (x == r3) {
-          this.found_r3 = true;
-        }
-
-        return Boolean.TRUE;
-      }
-    };
-
-    q.quadTreeIterateObjects(counter);
-
-    Assert.assertTrue(counter.found_r0);
-    Assert.assertTrue(counter.found_r1);
-    Assert.assertTrue(counter.found_r2);
-    Assert.assertTrue(counter.found_r3);
-  }
-
-  @SuppressWarnings("static-method") @Test(expected = ConstraintError.class) public
-    void
-    testIterateNull()
-      throws ConstraintError,
-        Exception
-  {
-    QuadTreePrune<Rectangle> q = null;
-
-    try {
-      q = new QuadTreePrune<Rectangle>(16, 16);
-    } catch (final ConstraintError e) {
-      Assert.fail(e.toString());
-    }
-
-    assert q != null;
-    q.quadTreeIterateObjects(null);
-  }
-
-  @Test public void testIterateStopEarly()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(16, 16);
-    final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
-    final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(8, 0), new VectorI2I(15, 7));
-    final Rectangle r2 =
-      new Rectangle(2, new VectorI2I(0, 8), new VectorI2I(7, 15));
-    final Rectangle r3 =
-      new Rectangle(3, new VectorI2I(8, 8), new VectorI2I(15, 15));
-
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r2);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r3);
-    Assert.assertTrue(in);
-
-    final IterationChecker1 counter = new IterationChecker1() {
-      @SuppressWarnings("unused") @Override public Boolean call(
-        final Rectangle x)
-      {
-        ++this.count;
-        if (this.count >= 2) {
-          return Boolean.FALSE;
-        }
-        return Boolean.TRUE;
-      }
-    };
-
-    q.quadTreeIterateObjects(counter);
-
-    Assert.assertEquals(2, counter.count);
+    new QuadTreePrune<Rectangle>(config);
   }
 
   @SuppressWarnings("static-method") @Test public void testQuadrantsSimple()
   {
     final VectorI2I lower = new VectorI2I(8, 8);
     final VectorI2I upper = new VectorI2I(15, 15);
-    final Quadrants q = new Quadrants(lower, upper);
+    final QuadTreePrune.Quadrants q =
+      new QuadTreePrune.Quadrants(lower, upper);
 
     Assert.assertEquals(8, q.x0y0_lower.x);
     Assert.assertEquals(8, q.x0y0_lower.y);
@@ -445,305 +161,13 @@ public class QuadTreePruneTest
     Assert.assertEquals(15, q.x1y1_upper.y);
   }
 
-  @SuppressWarnings("static-method") @Test public void testQuadrantString()
-    throws ConstraintError
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(128, 128);
-    final SortedSet<QuadTreeRaycastResult<QuadTreePrune<Rectangle>.Quadrant>> items =
-      new TreeSet<QuadTreeRaycastResult<QuadTreePrune<Rectangle>.Quadrant>>();
-
-    q.quadTreeQueryRaycastQuadrants(new RayI2D(VectorI2D.ZERO, new VectorI2D(
-      1.0,
-      1.0)), items);
-
-    final QuadTreeRaycastResult<QuadTreePrune<Rectangle>.Quadrant> rr =
-      items.first();
-    final QuadTreePrune<Rectangle>.Quadrant qr = rr.getObject();
-
-    System.err.println(qr.toString());
-  }
-
-  @SuppressWarnings("static-method") @Test public void testQueryContaining()
-    throws ConstraintError
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(128, 128);
-    final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
-    final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
-    final Rectangle r2 =
-      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
-    final Rectangle r3 =
-      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
-
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r2);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r3);
-    Assert.assertTrue(in);
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(0, new VectorI2I(
-        8 - 4,
-        8 - 4), new VectorI2I(48 + 4, 48 + 4)), items);
-      Assert.assertEquals(1, items.size());
-      Assert.assertTrue(items.contains(r0));
-    }
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(0, new VectorI2I(
-        8 - 4,
-        80 - 4), new VectorI2I(48 + 2, 120 + 4)), items);
-      Assert.assertEquals(1, items.size());
-      Assert.assertTrue(items.contains(r1));
-    }
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(0, new VectorI2I(
-        80 - 4,
-        8 - 4), new VectorI2I(120 + 4, 48 + 4)), items);
-      Assert.assertEquals(1, items.size());
-      Assert.assertTrue(items.contains(r2));
-    }
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(0, new VectorI2I(
-        80 - 4,
-        80 - 4), new VectorI2I(120 + 4, 120 + 4)), items);
-      Assert.assertEquals(1, items.size());
-      Assert.assertTrue(items.contains(r3));
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public
-    void
-    testQueryContainingExact()
-      throws ConstraintError
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(128, 128);
-    final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
-    final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
-    final Rectangle r2 =
-      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
-    final Rectangle r3 =
-      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
-
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r2);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r3);
-    Assert.assertTrue(in);
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaContaining(new Rectangle(
-        0,
-        new VectorI2I(0, 0),
-        new VectorI2I(127, 127)), items);
-      Assert.assertEquals(4, items.size());
-      Assert.assertTrue(items.contains(r0));
-      Assert.assertTrue(items.contains(r1));
-      Assert.assertTrue(items.contains(r2));
-      Assert.assertTrue(items.contains(r3));
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public void testQueryOverlapping()
-    throws ConstraintError
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(128, 128);
-    final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
-    final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
-    final Rectangle r2 =
-      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
-    final Rectangle r3 =
-      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
-
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r2);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r3);
-    Assert.assertTrue(in);
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
-        8 - 2,
-        8 - 2), new VectorI2I(8 + 2, 8 + 2)), items);
-      Assert.assertEquals(1, items.size());
-      Assert.assertTrue(items.contains(r0));
-    }
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
-        8 - 2,
-        80 - 2), new VectorI2I(8 + 2, 80 + 2)), items);
-      Assert.assertEquals(1, items.size());
-      Assert.assertTrue(items.contains(r1));
-    }
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
-        80 - 2,
-        8 - 2), new VectorI2I(80 + 2, 8 + 2)), items);
-      Assert.assertEquals(1, items.size());
-      Assert.assertTrue(items.contains(r2));
-    }
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
-        80 - 2,
-        80 - 2), new VectorI2I(80 + 2, 80 + 2)), items);
-      Assert.assertEquals(1, items.size());
-      Assert.assertTrue(items.contains(r3));
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public
-    void
-    testQueryOverlappingExact()
-      throws ConstraintError
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(128, 128);
-    final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(8, 8), new VectorI2I(48, 48));
-    final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(8, 80), new VectorI2I(48, 120));
-    final Rectangle r2 =
-      new Rectangle(2, new VectorI2I(80, 8), new VectorI2I(120, 48));
-    final Rectangle r3 =
-      new Rectangle(3, new VectorI2I(80, 80), new VectorI2I(120, 120));
-
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r2);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r3);
-    Assert.assertTrue(in);
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
-        8 + 2,
-        8 + 2), new VectorI2I(120 - 2, 120 - 2)), items);
-      Assert.assertEquals(4, items.size());
-      Assert.assertTrue(items.contains(r0));
-      Assert.assertTrue(items.contains(r1));
-      Assert.assertTrue(items.contains(r2));
-      Assert.assertTrue(items.contains(r3));
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public
-    void
-    testQueryOverlappingNotAll()
-      throws ConstraintError
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(128, 128);
-    final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(127, 127));
-    final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(4, 4), new VectorI2I(127, 127));
-
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(
-        0,
-        new VectorI2I(0, 0),
-        new VectorI2I(2, 2)), items);
-      Assert.assertEquals(1, items.size());
-      Assert.assertTrue(items.contains(r0));
-    }
-
-    {
-      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
-      q.quadTreeQueryAreaOverlapping(new Rectangle(0, new VectorI2I(
-        127 - 4,
-        127 - 4), new VectorI2I(127, 127)), items);
-      Assert.assertEquals(2, items.size());
-      Assert.assertTrue(items.contains(r0));
-      Assert.assertTrue(items.contains(r1));
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public void testRaycast()
-    throws ConstraintError
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(512, 512);
-
-    q.quadTreeInsert(new Rectangle(0, new VectorI2I(32, 32), new VectorI2I(
-      80,
-      80)));
-    q.quadTreeInsert(new Rectangle(1, new VectorI2I(400, 32), new VectorI2I(
-      400 + 32,
-      80)));
-    q.quadTreeInsert(new Rectangle(2, new VectorI2I(400, 400), new VectorI2I(
-      480,
-      480)));
-
-    final RayI2D ray =
-      new RayI2D(VectorI2D.ZERO, VectorI2D.normalize(new VectorI2D(511, 511)));
-    final SortedSet<QuadTreeRaycastResult<Rectangle>> items =
-      new TreeSet<QuadTreeRaycastResult<Rectangle>>();
-    q.quadTreeQueryRaycast(ray, items);
-
-    Assert.assertEquals(2, items.size());
-
-    final Iterator<QuadTreeRaycastResult<Rectangle>> iter = items.iterator();
-
-    {
-      final QuadTreeRaycastResult<Rectangle> rr = iter.next();
-      final Rectangle r = rr.getObject();
-      Assert.assertEquals(32, r.boundingAreaLower().getXI());
-      Assert.assertEquals(32, r.boundingAreaLower().getYI());
-    }
-
-    {
-      final QuadTreeRaycastResult<Rectangle> rr = iter.next();
-      final Rectangle r = rr.getObject();
-      Assert.assertEquals(400, r.boundingAreaLower().getXI());
-      Assert.assertEquals(400, r.boundingAreaLower().getYI());
-    }
-
-    Assert.assertFalse(iter.hasNext());
-  }
-
   @SuppressWarnings("static-method") @Test public void testRaycastQuadrants()
     throws ConstraintError
   {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(512, 512);
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(512);
+    config.setSizeY(512);
+    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(config);
 
     q.quadTreeInsert(new Rectangle(0, new VectorI2I(32, 32), new VectorI2I(
       80,
@@ -831,7 +255,10 @@ public class QuadTreePruneTest
     testRaycastQuadrantsNegativeRay()
       throws ConstraintError
   {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(512, 512);
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(512);
+    config.setSizeY(512);
+    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(config);
 
     final RayI2D ray =
       new RayI2D(new VectorI2D(512, 512), VectorI2D.normalize(new VectorI2D(
@@ -844,33 +271,13 @@ public class QuadTreePruneTest
     Assert.assertEquals(1, items.size());
   }
 
-  @SuppressWarnings("static-method") @Test public void testRemove()
+  @Test public void testRemovePrune()
     throws ConstraintError,
       Exception
   {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(16, 16);
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
-
-    boolean in = false;
-    in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r);
-    Assert.assertFalse(in);
-
-    boolean removed = false;
-    removed = q.quadTreeRemove(r);
-    Assert.assertTrue(removed);
-    removed = q.quadTreeRemove(r);
-    Assert.assertFalse(removed);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testRemovePrune()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(128, 128);
-    final Rectangle[] rectangles = TestUtilities.makeRectangles(0, 128);
+    final QuadTreeInterface<Rectangle> q = this.makeQuad128();
+    final Rectangle[] rectangles =
+      TestUtilities.makeRectangles(0, q.quadTreeGetSizeX());
 
     for (final Rectangle r : rectangles) {
       {
@@ -957,45 +364,93 @@ public class QuadTreePruneTest
     }
   }
 
-  @SuppressWarnings("static-method") @Test public void testRemoveSub()
+  @Test public void testRemovePruneNotLeafNotEmpty()
     throws ConstraintError,
       Exception
   {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(32, 32);
+    final QuadTreeInterface<Rectangle> q = this.makeQuad16();
+
+    /**
+     * The rectangles are larger than the smallest quadrant size, and as a
+     * result, will not be inserted into leaf nodes. Removing one of them will
+     * trigger an attempt to prune nodes, which will fail due to a non-empty
+     * non-leaf node.
+     */
+
     final Rectangle r0 =
-      new Rectangle(0, new VectorI2I(2, 2), new VectorI2I(4, 4));
+      new Rectangle(0, new VectorI2I(1, 1), new VectorI2I(7, 7));
     final Rectangle r1 =
-      new Rectangle(1, new VectorI2I(18, 2), new VectorI2I(20, 4));
-    final Rectangle r2 =
-      new Rectangle(2, new VectorI2I(2, 18), new VectorI2I(4, 20));
-    final Rectangle r3 =
-      new Rectangle(3, new VectorI2I(18, 18), new VectorI2I(20, 20));
+      new Rectangle(1, new VectorI2I(1, 1), new VectorI2I(7, 7));
 
-    boolean in = false;
-    in = q.quadTreeInsert(r0);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r1);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r2);
-    Assert.assertTrue(in);
-    in = q.quadTreeInsert(r3);
-    Assert.assertTrue(in);
+    {
+      final boolean in = q.quadTreeInsert(r0);
+      Assert.assertTrue(in);
+    }
 
-    boolean removed = false;
-    removed = q.quadTreeRemove(r0);
-    Assert.assertTrue(removed);
-    removed = q.quadTreeRemove(r1);
-    Assert.assertTrue(removed);
-    removed = q.quadTreeRemove(r2);
-    Assert.assertTrue(removed);
-    removed = q.quadTreeRemove(r3);
-    Assert.assertTrue(removed);
+    {
+      final boolean in = q.quadTreeInsert(r1);
+      Assert.assertTrue(in);
+    }
+
+    {
+      // (4 ^ 0) + (4 ^ 1) + 4
+      final Counter counter = new Counter();
+      q.quadTreeTraverse(counter);
+      Assert.assertEquals(9, counter.count);
+    }
+
+    {
+      final boolean removed = q.quadTreeRemove(r0);
+      Assert.assertTrue(removed);
+    }
+
+    {
+      // (4 ^ 0) + (4 ^ 1)
+      final Counter counter = new Counter();
+      q.quadTreeTraverse(counter);
+      Assert.assertEquals(5, counter.count);
+    }
   }
 
-  @SuppressWarnings("static-method") @Test public void testToString()
-    throws ConstraintError
+  @SuppressWarnings("static-method") @Test public void testInsertSplitNotX()
+    throws ConstraintError,
+      Exception
   {
-    final QuadTreePrune<Rectangle> q = new QuadTreePrune<Rectangle>(128, 128);
-    System.err.println(q.toString());
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(2);
+    config.setSizeY(4);
+    final QuadTreeInterface<Rectangle> q =
+      new QuadTreePrune<Rectangle>(config);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
+
+    final boolean in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+
+    final Counter counter = new Counter();
+    q.quadTreeTraverse(counter);
+    Assert.assertEquals(5, counter.count);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testInsertSplitNotY()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(4);
+    config.setSizeY(2);
+    final QuadTreeInterface<Rectangle> q =
+      new QuadTreePrune<Rectangle>(config);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
+
+    final boolean in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+
+    final Counter counter = new Counter();
+    q.quadTreeTraverse(counter);
+    Assert.assertEquals(5, counter.count);
   }
 }

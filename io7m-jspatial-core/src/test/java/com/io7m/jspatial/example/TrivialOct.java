@@ -12,6 +12,7 @@ import org.junit.Test;
 import com.io7m.jaux.Constraints.ConstraintError;
 import com.io7m.jspatial.MutableVolume;
 import com.io7m.jspatial.OctTreeBasic;
+import com.io7m.jspatial.OctTreeConfig;
 import com.io7m.jspatial.OctTreeMember;
 import com.io7m.jspatial.OctTreeRaycastResult;
 import com.io7m.jspatial.RayI3D;
@@ -88,8 +89,11 @@ public final class TrivialOct
      * implementation the package provides.
      */
 
-    final OctTreeBasic<Something> tree =
-      new OctTreeBasic<Something>(128, 128, 128);
+    final OctTreeConfig config = new OctTreeConfig();
+    config.setSizeX(128);
+    config.setSizeY(128);
+    config.setSizeZ(128);
+    final OctTreeBasic<Something> tree = new OctTreeBasic<Something>(config);
 
     /**
      * Insert eight objects into the tree. The sizes and positions of the

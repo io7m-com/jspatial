@@ -176,9 +176,7 @@ import com.io7m.jtensors.VectorReadable2I;
 
     private boolean canSplit()
     {
-      return this.leaf
-        && (this.quadrant_size_x >= 2)
-        && (this.quadrant_size_y >= 2);
+      return (this.quadrant_size_x >= 2) && (this.quadrant_size_y >= 2);
     }
 
     void clear()
@@ -430,21 +428,6 @@ import com.io7m.jtensors.VectorReadable2I;
       this.leaf = false;
     }
 
-    @Override public String toString()
-    {
-      final StringBuilder builder = new StringBuilder();
-      builder.append("[Quadrant ");
-      builder.append(this.lower);
-      builder.append(" ");
-      builder.append(this.upper);
-      builder.append(" ");
-      builder.append(this.leaf);
-      builder.append(" ");
-      builder.append(this.quadrant_objects);
-      builder.append("]");
-      return builder.toString();
-    }
-
     void traverse(
       final int depth,
       final @Nonnull QuadTreeTraversal traversal)
@@ -512,25 +495,7 @@ import com.io7m.jtensors.VectorReadable2I;
   private final @Nonnull Quadrant       root;
   protected final @Nonnull SortedSet<T> objects_all;
 
-  /**
-   * Construct a quadtree of width <code>size_x</code>, and height
-   * <code>size_y</code>.
-   * 
-   * @throws ConstraintError
-   *           Iff any of the following conditions hold:
-   *           <ul>
-   *           <li>
-   *           <code>(size_x >= 2 && size_x <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li>
-   *           <code>(size_y >= 2 && size_y <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li><code>size_x</code> is not divisible by <code>2</code></li>
-   *           <li><code>size_y</code> is not divisible by <code>2</code></li>
-   *           </ul>
-   */
-
-  public QuadTreeBasic(
+  private QuadTreeBasic(
     final int size_x,
     final int size_y)
     throws ConstraintError
@@ -543,6 +508,33 @@ import com.io7m.jtensors.VectorReadable2I;
     this.objects_all = new TreeSet<T>();
     this.root =
       new Quadrant(new VectorI2I(0, 0), new VectorI2I(size_x - 1, size_y - 1));
+  }
+
+  /**
+   * Construct a quadtree using the provided configuration parameters.
+   * 
+   * @throws ConstraintError
+   *           Iff any of the following conditions hold:
+   *           <ul>
+   *           <li><code>config == null</code></li>
+   *           <li>
+   *           <code>(config.getSizeX() >= 2 && config.getSizeX() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(config.getSizeY() >= 2 && config.getSizeY() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li><code>config.getSizeX()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li><code>config.getSizeY()</code> is not divisible by
+   *           <code>2</code></li>
+   *           </ul>
+   */
+
+  public QuadTreeBasic(
+    final @Nonnull QuadTreeConfig config)
+    throws ConstraintError
+  {
+    this(config.getSizeX(), config.getSizeY());
   }
 
   @Override public void quadTreeClear()
