@@ -474,6 +474,23 @@ public final class QuadTreeViewer implements Runnable
             QuadTreeViewer.TREE_SIZE_Y);
         }
       });
+
+    this.quadtree_constructors.put(
+      "QuadTreeLimit",
+      new PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>() {
+        @SuppressWarnings("unused") @Override public
+          QuadTreeInterface<Rectangle>
+          call(
+            final Unit _)
+            throws ConstraintError
+        {
+          return new QuadTreeLimit<Rectangle>(
+            QuadTreeViewer.TREE_SIZE_X,
+            QuadTreeViewer.TREE_SIZE_Y,
+            32,
+            32);
+        }
+      });
   }
 
   /**
