@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document
+  xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+
+  <properties>
+    <title>io7m-jspatial-core</title>
+  </properties>
+
+  <body>
+    <subsection name="jspatial-core">
+      The <var>jspatial-core</var> package contains the core data structures and
+      algorithms of the <a href="http://mvn.io7m.com/jspatial">jspatial</a> package.
+    </subsection>
+  </body>
+
+</document>

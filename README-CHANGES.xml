@@ -3,10 +3,10 @@
   <c:project>io7m-jspatial</c:project>
 
   <c:release ticket-system="com.io7m.fossil.jspatial">
-    <c:date>2012-11-14</c:date>
-    <c:version>0.2.0</c:version>
+    <c:date>2012-11-21</c:date>
+    <c:version>1.0.0</c:version>
     <c:item>
-      <c:date>2012-11-14</c:date>
+      <c:date>2012-11-21</c:date>
       <c:type-code-new/>
       <c:summary>Initial version</c:summary>
     </c:item>
