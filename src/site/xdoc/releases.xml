@@ -121,12 +121,42 @@
           </tr>
           <tr class="page_table_row">
             <td class="page_table_column">2012-11-22</td>
+            <td class="page_table_column">305774</td>
+            <td class="page_table_column">
+              <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-examples-swing-1.0.0-bin.zip.asc">asc</a>
+            </td>
+            <td class="page_table_column">
+              <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-examples-swing-1.0.0-bin.zip">io7m-jspatial-examples-swing-1.0.0-bin.zip</a>
+            </td>
+          </tr>
+          <tr class="page_table_row">
+            <td class="page_table_column">2012-11-22</td>
             <td class="page_table_column">471150</td>
             <td class="page_table_column">
               <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-1.0.0.zip.asc">asc</a>
             </td>
             <td class="page_table_column">
               <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-1.0.0.zip">io7m-jspatial-1.0.0.zip</a>
+            </td>
+          </tr>
+          <tr class="page_table_row">
+            <td class="page_table_column">2012-11-22</td>
+            <td class="page_table_column">210567</td>
+            <td class="page_table_column">
+              <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-1.0.0-documentation.zip.asc">asc</a>
+            </td>
+            <td class="page_table_column">
+              <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-1.0.0-documentation.zip">io7m-jspatial-1.0.0-documentation.zip</a>
+            </td>
+          </tr>
+          <tr class="page_table_row">
+            <td class="page_table_column">2012-11-22</td>
+            <td class="page_table_column">6607436</td>
+            <td class="page_table_column">
+              <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-examples-jogl-1.0.0-bin.zip.asc">asc</a>
+            </td>
+            <td class="page_table_column">
+              <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-examples-jogl-1.0.0-bin.zip">io7m-jspatial-examples-jogl-1.0.0-bin.zip</a>
             </td>
           </tr>
         </tbody>
@@ -166,11 +196,11 @@
 <table xmlns="http://www.w3.org/1999/xhtml" class="changelog page_table"
        summary="Changes">
    <tr class="page_table_row">
-      <td class="page_table_column">2012-11-14</td>
-      <td class="page_table_column">Release: io7m-jspatial 0.2.0</td>
+      <td class="page_table_column">2012-11-21</td>
+      <td class="page_table_column">Release: io7m-jspatial 1.0.0</td>
    </tr>
    <tr class="page_table_row">
-      <td class="page_table_column">2012-11-14</td>
+      <td class="page_table_column">2012-11-21</td>
       <td class="page_table_column">Code new: Initial version</td>
    </tr>
 </table>
