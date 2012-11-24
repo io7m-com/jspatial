@@ -4,6 +4,16 @@
 
   <c:release ticket-system="com.io7m.fossil.jspatial">
     <c:date>2012-11-24</c:date>
+    <c:version>1.2.0</c:version>
+    <c:item>
+      <c:date>2012-11-24</c:date>
+      <c:type-code-fix/>
+      <c:summary>Use jtensors 4.1.0</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release ticket-system="com.io7m.fossil.jspatial">
+    <c:date>2012-11-24</c:date>
     <c:version>1.1.0</c:version>
     <c:item>
       <c:date>2012-11-24</c:date>

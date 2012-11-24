@@ -5,7 +5,7 @@
   <artifactId>io7m-jspatial-core</artifactId>
   <name>io7m-jspatial-core</name>
   <description>Common API code</description>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
   <url>http://mvn.io7m.com/jspatial-core</url>
   <packaging>jar</packaging>
 
@@ -57,7 +57,7 @@
     <dependency>
       <groupId>com.io7m.jtensors</groupId>
       <artifactId>io7m-jtensors</artifactId>
-      <version>4.0.0</version>
+      <version>4.1.0</version>
     </dependency>
     <dependency>
       <groupId>com.io7m.jaux</groupId>
