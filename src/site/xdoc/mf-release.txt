@@ -12,3 +12,17 @@
 2012-11-22:io7m-jspatial-1.0.0.zip:471150
 2012-11-22:io7m-jspatial-1.0.0-documentation.zip:210567
 2012-11-22:io7m-jspatial-examples-jogl-1.0.0-bin.zip:6607436
+2012-11-24:io7m-jspatial-examples-jogl-1.1.0.jar:37792
+2012-11-24:io7m-jspatial-core-1.1.0.jar:95660
+2012-11-24:io7m-jspatial-examples-jogl-1.1.0-javadoc.jar:28441
+2012-11-24:io7m-jspatial-examples-swing-1.1.0-javadoc.jar:23034
+2012-11-24:io7m-jspatial-core-1.1.0-javadoc.jar:181903
+2012-11-24:io7m-jspatial-core-1.1.0-tests.jar:84861
+2012-11-24:io7m-jspatial-examples-jogl-1.1.0-sources.jar:9033
+2012-11-24:io7m-jspatial-examples-swing-1.1.0.jar:30303
+2012-11-24:io7m-jspatial-core-1.1.0-sources.jar:64339
+2012-11-24:io7m-jspatial-examples-swing-1.1.0-sources.jar:6788
+2012-11-24:io7m-jspatial-1.1.0-documentation.zip:210645
+2012-11-24:io7m-jspatial-examples-jogl-1.1.0-bin.zip:6607172
+2012-11-24:io7m-jspatial-1.1.0.zip:480522
+2012-11-24:io7m-jspatial-examples-swing-1.1.0-bin.zip:305522
