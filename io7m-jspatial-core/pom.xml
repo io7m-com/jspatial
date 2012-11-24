@@ -57,7 +57,7 @@
     <dependency>
       <groupId>com.io7m.jtensors</groupId>
       <artifactId>io7m-jtensors</artifactId>
-      <version>3.0.0</version>
+      <version>4.0.0</version>
     </dependency>
     <dependency>
       <groupId>com.io7m.jaux</groupId>
