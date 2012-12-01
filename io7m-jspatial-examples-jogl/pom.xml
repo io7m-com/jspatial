@@ -67,12 +67,12 @@
     <dependency>
       <groupId>com.io7m.jtensors</groupId>
       <artifactId>io7m-jtensors</artifactId>
-      <version>4.1.0</version>
+      <version>[4.1.0, 5.0.0)</version>
     </dependency>
     <dependency>
       <groupId>com.io7m.jaux</groupId>
       <artifactId>io7m-jaux</artifactId>
-      <version>2.3.0</version>
+      <version>[2.3.0, 3.0.0)</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
