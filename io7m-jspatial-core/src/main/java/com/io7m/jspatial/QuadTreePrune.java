@@ -49,8 +49,8 @@ import com.io7m.jtensors.VectorReadable2I;
 {
   final class Quadrant implements BoundingArea
   {
-    private final @Nonnull VectorI2I     lower;
-    private final @Nonnull VectorI2I     upper;
+    final @Nonnull VectorI2I             lower;
+    final @Nonnull VectorI2I             upper;
 
     private final @CheckForNull Quadrant parent;
     private @CheckForNull Quadrant       x0y0;
@@ -693,7 +693,7 @@ import com.io7m.jtensors.VectorReadable2I;
     this.root.traverse(0, traversal);
   }
 
-  @SuppressWarnings("synthetic-access") @Override public String toString()
+  @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
     builder.append("[QuadTree ");

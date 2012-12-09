@@ -145,7 +145,7 @@ import com.io7m.jtensors.VectorReadable3I;
      * Insertion base case: item may or may not fit within node.
      */
 
-    @SuppressWarnings("synthetic-access") private boolean insertBase(
+    private boolean insertBase(
       final @Nonnull T item)
     {
       if (OctTreeBasic.this.objects_all.contains(item)) {
@@ -161,8 +161,7 @@ import com.io7m.jtensors.VectorReadable3I;
      * Insert the given object into the current octant's object list, and also
      * inserted into the "global" object list.
      */
-
-    @SuppressWarnings("synthetic-access") private boolean insertObject(
+    private boolean insertObject(
       final @Nonnull T item)
     {
       OctTreeBasic.this.objects_all.add(item);
@@ -289,7 +288,7 @@ import com.io7m.jtensors.VectorReadable3I;
       }
     }
 
-    @SuppressWarnings("synthetic-access") boolean remove(
+    boolean remove(
       final @Nonnull T item)
     {
       if (OctTreeBasic.this.objects_all.contains(item) == false) {
@@ -304,7 +303,7 @@ import com.io7m.jtensors.VectorReadable3I;
       return this.removeStep(item);
     }
 
-    @SuppressWarnings("synthetic-access") private boolean removeStep(
+    private boolean removeStep(
       final @Nonnull T item)
     {
       if (this.octant_objects.contains(item)) {
@@ -543,8 +542,8 @@ import com.io7m.jtensors.VectorReadable3I;
     }
   }
 
-  private final @Nonnull Octant     root;
-  private final @Nonnull TreeSet<T> objects_all;
+  private final @Nonnull Octant       root;
+  protected final @Nonnull TreeSet<T> objects_all;
 
   private OctTreeBasic(
     final @Nonnull VectorReadable3I position,
