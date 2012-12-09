@@ -29,6 +29,9 @@ import com.io7m.jtensors.VectorReadable3I;
  * an volume of width <code>1</code>, height <code>1</code>, and depth
  * <code>1</code> because <code>0</code> is simultaneously the lowermost and
  * uppermost valid value for each axis.
+ * 
+ * The results are undefined if the values returned by the interface functions
+ * change after the object is inserted into the tree.
  */
 
 public interface BoundingVolume

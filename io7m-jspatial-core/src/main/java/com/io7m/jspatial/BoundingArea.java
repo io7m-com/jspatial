@@ -29,6 +29,9 @@ import com.io7m.jtensors.VectorReadable2I;
  * area of width <code>1</code> and height <code>1</code> because
  * <code>0</code> is simultaneously the lowermost and uppermost valid value
  * for each axis.
+ * 
+ * The results are undefined if the values returned by the interface functions
+ * change after the object is inserted into the tree.
  */
 
 public interface BoundingArea
