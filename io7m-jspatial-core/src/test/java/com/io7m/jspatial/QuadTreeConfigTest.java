@@ -95,6 +95,13 @@ public class QuadTreeConfigTest
     Assert.assertEquals(QuadTreeConfig.QUADTREE_DEFAULT_SIZE_Y, c
       .getSize()
       .getYI());
+
+    Assert.assertEquals(QuadTreeConfig.QUADTREE_DEFAULT_POSITION.getXI(), c
+      .getPosition()
+      .getXI());
+    Assert.assertEquals(QuadTreeConfig.QUADTREE_DEFAULT_POSITION.getYI(), c
+      .getPosition()
+      .getYI());
   }
 
   @SuppressWarnings("static-method") @Test public void testSetIdentities()
@@ -107,6 +114,9 @@ public class QuadTreeConfigTest
     c.setMinimumSizeX(5);
     c.setMinimumSizeY(7);
 
+    c.setPositionX(20);
+    c.setPositionY(21);
+
     Assert.assertEquals(5, c.getMinimumSizeX());
     Assert.assertEquals(7, c.getMinimumSizeY());
 
@@ -118,6 +128,9 @@ public class QuadTreeConfigTest
 
     Assert.assertEquals(2, c.getSize().getXI());
     Assert.assertEquals(4, c.getSize().getYI());
+
+    Assert.assertEquals(20, c.getPositionX());
+    Assert.assertEquals(21, c.getPositionY());
   }
 
   @SuppressWarnings("static-method") @Test public void testToString()

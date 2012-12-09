@@ -43,8 +43,8 @@ import com.io7m.jtensors.VectorReadable2I;
 {
   final class Quadrant implements BoundingArea
   {
-    private final @Nonnull VectorI2I    lower;
-    private final @Nonnull VectorI2I    upper;
+    final @Nonnull VectorI2I            lower;
+    final @Nonnull VectorI2I            upper;
 
     private @CheckForNull Quadrant      x0y0;
     private @CheckForNull Quadrant      x1y0;
@@ -147,8 +147,8 @@ import com.io7m.jtensors.VectorReadable2I;
 
     private boolean canSplit()
     {
-      return (this.quadrant_size_x >= (QuadTreeLimit.this.minimum_size_x << 1))
-        && (this.quadrant_size_y >= (QuadTreeLimit.this.minimum_size_y << 1));
+      return (this.quadrant_size_x >= (QuadTreeLimit.this.minimum_size.x << 1))
+        && (this.quadrant_size_y >= (QuadTreeLimit.this.minimum_size.y << 1));
     }
 
     void clear()
@@ -468,36 +468,48 @@ import com.io7m.jtensors.VectorReadable2I;
 
   private final @Nonnull Quadrant       root;
   protected final @Nonnull SortedSet<T> objects_all;
-  protected final int                   minimum_size_x;
-  protected final int                   minimum_size_y;
+  protected final @Nonnull VectorI2I    minimum_size;
 
   private QuadTreeLimit(
-    final int size_x,
-    final int size_y,
-    final int minimum_size_x,
-    final int minimum_size_y)
+    final @Nonnull VectorReadable2I position,
+    final @Nonnull VectorReadable2I size,
+    final @Nonnull VectorReadable2I size_minimum)
     throws ConstraintError
   {
-    Constraints.constrainRange(size_x, 2, Integer.MAX_VALUE, "X size");
-    Constraints.constrainRange(size_y, 2, Integer.MAX_VALUE, "Y size");
-    Constraints.constrainArbitrary((size_x % 2) == 0, "X size is even");
-    Constraints.constrainArbitrary((size_y % 2) == 0, "Y size is even");
+    Constraints.constrainNotNull(position, "Position");
+    Constraints.constrainNotNull(size, "Size");
 
-    Constraints.constrainRange(minimum_size_x, 2, size_x, "Minimum X size");
-    Constraints.constrainRange(minimum_size_y, 2, size_y, "Minimum Y size");
+    Constraints.constrainRange(size.getXI(), 2, Integer.MAX_VALUE, "X size");
+    Constraints.constrainRange(size.getYI(), 2, Integer.MAX_VALUE, "Y size");
+    Constraints.constrainArbitrary((size.getXI() % 2) == 0, "X size is even");
+    Constraints.constrainArbitrary((size.getYI() % 2) == 0, "Y size is even");
+
+    Constraints.constrainRange(
+      size_minimum.getXI(),
+      2,
+      size.getXI(),
+      "Minimum X size");
+    Constraints.constrainRange(
+      size_minimum.getYI(),
+      2,
+      size.getYI(),
+      "Minimum Y size");
     Constraints.constrainArbitrary(
-      (minimum_size_x % 2) == 0,
+      (size_minimum.getXI() % 2) == 0,
       "X size is even");
     Constraints.constrainArbitrary(
-      (minimum_size_y % 2) == 0,
+      (size_minimum.getYI() % 2) == 0,
       "Y size is even");
 
     this.objects_all = new TreeSet<T>();
-    this.minimum_size_x = minimum_size_x;
-    this.minimum_size_y = minimum_size_y;
+    this.minimum_size = new VectorI2I(size_minimum);
 
-    this.root =
-      new Quadrant(new VectorI2I(0, 0), new VectorI2I(size_x - 1, size_y - 1));
+    final VectorI2I lower = new VectorI2I(position);
+    final VectorI2I upper =
+      new VectorI2I(
+        (position.getXI() + size.getXI()) - 1,
+        (position.getYI() + size.getYI()) - 1);
+    this.root = new Quadrant(lower, upper);
   }
 
   /**
@@ -533,11 +545,7 @@ import com.io7m.jtensors.VectorReadable2I;
     final @Nonnull QuadTreeConfig config)
     throws ConstraintError
   {
-    this(
-      config.getSizeX(),
-      config.getSizeY(),
-      config.getMinimumSizeX(),
-      config.getMinimumSizeY());
+    this(config.getPosition(), config.getSize(), config.getMinimumSize());
   }
 
   @Override public void quadTreeClear()
@@ -669,7 +677,7 @@ import com.io7m.jtensors.VectorReadable2I;
     this.root.traverse(0, traversal);
   }
 
-  @SuppressWarnings("synthetic-access") @Override public String toString()
+  @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
     builder.append("[QuadTreeLimit ");
@@ -680,5 +688,15 @@ import com.io7m.jtensors.VectorReadable2I;
     builder.append(this.objects_all);
     builder.append("]");
     return builder.toString();
+  }
+
+  @Override public int quadTreeGetPositionX()
+  {
+    return this.root.lower.x;
+  }
+
+  @Override public int quadTreeGetPositionY()
+  {
+    return this.root.lower.y;
   }
 }

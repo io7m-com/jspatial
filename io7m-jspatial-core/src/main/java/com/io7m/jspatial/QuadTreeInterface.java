@@ -49,6 +49,18 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
   int quadTreeGetSizeY();
 
   /**
+   * Retrieve the position of the lower corner of the quadtree on the X axis.
+   */
+
+  int quadTreeGetPositionX();
+
+  /**
+   * Retrieve the position of the lower corner of the quadtree on the Y axis.
+   */
+
+  int quadTreeGetPositionY();
+
+  /**
    * Insert the object <code>item</code> into the quadtree.
    * <p>
    * The function returns <code>false</code> if the object could not be

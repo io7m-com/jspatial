@@ -43,8 +43,8 @@ import com.io7m.jtensors.VectorReadable3I;
 {
   final class Octant implements BoundingVolume
   {
-    private final @Nonnull VectorI3I  lower;
-    private final @Nonnull VectorI3I  upper;
+    final @Nonnull VectorI3I          lower;
+    final @Nonnull VectorI3I          upper;
 
     protected final int               size_x;
     protected final int               size_y;
@@ -557,44 +557,59 @@ import com.io7m.jtensors.VectorReadable3I;
   protected final int                 minimum_size_z;
 
   private OctTreeLimit(
-    final int size_x,
-    final int size_y,
-    final int size_z,
-    final int minimum_size_x,
-    final int minimum_size_y,
-    final int minimum_size_z)
+    final @Nonnull VectorReadable3I position,
+    final @Nonnull VectorReadable3I size,
+    final @Nonnull VectorReadable3I minimum_size)
     throws ConstraintError
   {
-    Constraints.constrainRange(size_x, 2, Integer.MAX_VALUE, "X size");
-    Constraints.constrainRange(size_y, 2, Integer.MAX_VALUE, "Y size");
-    Constraints.constrainRange(size_z, 2, Integer.MAX_VALUE, "Z size");
-    Constraints.constrainArbitrary((size_x % 2) == 0, "X size is even");
-    Constraints.constrainArbitrary((size_y % 2) == 0, "Y size is even");
-    Constraints.constrainArbitrary((size_z % 2) == 0, "Z size is even");
+    Constraints.constrainNotNull(position, "Position");
+    Constraints.constrainNotNull(size, "Size");
 
-    Constraints.constrainRange(minimum_size_x, 2, size_x, "Minimum X size");
-    Constraints.constrainRange(minimum_size_y, 2, size_y, "Minimum Y size");
-    Constraints.constrainRange(minimum_size_z, 2, size_z, "Minimum Z size");
+    Constraints.constrainRange(size.getXI(), 2, Integer.MAX_VALUE, "X size");
+    Constraints.constrainRange(size.getYI(), 2, Integer.MAX_VALUE, "Y size");
+    Constraints.constrainRange(size.getZI(), 2, Integer.MAX_VALUE, "Z size");
+    Constraints.constrainArbitrary((size.getXI() % 2) == 0, "X size is even");
+    Constraints.constrainArbitrary((size.getYI() % 2) == 0, "Y size is even");
+    Constraints.constrainArbitrary((size.getZI() % 2) == 0, "Z size is even");
+
+    Constraints.constrainRange(
+      minimum_size.getXI(),
+      2,
+      size.getXI(),
+      "Minimum X size");
+    Constraints.constrainRange(
+      minimum_size.getYI(),
+      2,
+      size.getYI(),
+      "Minimum Y size");
+    Constraints.constrainRange(
+      minimum_size.getZI(),
+      2,
+      size.getZI(),
+      "Minimum Z size");
     Constraints.constrainArbitrary(
-      (minimum_size_x % 2) == 0,
-      "X size is even");
+      (minimum_size.getXI() % 2) == 0,
+      "Minimum X size is even");
     Constraints.constrainArbitrary(
-      (minimum_size_y % 2) == 0,
-      "Y size is even");
+      (minimum_size.getYI() % 2) == 0,
+      "Minimum Y size is even");
     Constraints.constrainArbitrary(
-      (minimum_size_z % 2) == 0,
-      "Z size is even");
+      (minimum_size.getZI() % 2) == 0,
+      "Minimum Z size is even");
 
     this.objects_all = new TreeSet<T>();
-    this.minimum_size_x = minimum_size_x;
-    this.minimum_size_y = minimum_size_y;
-    this.minimum_size_z = minimum_size_z;
 
-    this.root =
-      new Octant(new VectorI3I(0, 0, 0), new VectorI3I(
-        size_x - 1,
-        size_y - 1,
-        size_z - 1));
+    this.minimum_size_x = minimum_size.getXI();
+    this.minimum_size_y = minimum_size.getYI();
+    this.minimum_size_z = minimum_size.getZI();
+
+    final VectorI3I lower = new VectorI3I(position);
+    final VectorI3I upper =
+      new VectorI3I(
+        (position.getXI() + size.getXI()) - 1,
+        (position.getYI() + size.getYI()) - 1,
+        (position.getZI() + size.getZI()) - 1);
+    this.root = new Octant(lower, upper);
   }
 
   /**
@@ -641,8 +656,7 @@ import com.io7m.jtensors.VectorReadable3I;
     final @Nonnull OctTreeConfig config)
     throws ConstraintError
   {
-    this(config.getSizeX(), config.getSizeY(), config.getSizeZ(), config
-      .getMinimumSizeX(), config.getMinimumSizeY(), config.getMinimumSizeZ());
+    this(config.getPosition(), config.getSize(), config.getMinimumSize());
   }
 
   @Override public void octTreeClear()
@@ -753,7 +767,7 @@ import com.io7m.jtensors.VectorReadable3I;
     this.root.traverse(0, traversal);
   }
 
-  @SuppressWarnings("synthetic-access") @Override public String toString()
+  @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
     builder.append("[OctTree ");
@@ -764,5 +778,20 @@ import com.io7m.jtensors.VectorReadable3I;
     builder.append(this.objects_all);
     builder.append("]");
     return builder.toString();
+  }
+
+  @Override public int octTreeGetPositionX()
+  {
+    return this.root.lower.x;
+  }
+
+  @Override public int octTreeGetPositionY()
+  {
+    return this.root.lower.y;
+  }
+
+  @Override public int octTreeGetPositionZ()
+  {
+    return this.root.lower.z;
   }
 }

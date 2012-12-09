@@ -64,6 +64,16 @@ public abstract class OctTreeCommonTests
     }
   }
 
+  abstract
+    <T extends OctTreeMember<T>>
+    OctTreeInterface<T>
+    makeOct128Offset64();
+
+  abstract
+    <T extends OctTreeMember<T>>
+    OctTreeInterface<T>
+    makeOct128OffsetM64();
+
   abstract <T extends OctTreeMember<T>> OctTreeInterface<T> makeOct128();
 
   abstract <T extends OctTreeMember<T>> OctTreeInterface<T> makeOct16();
@@ -133,10 +143,35 @@ public abstract class OctTreeCommonTests
 
   @Test public final void testCreate()
   {
-    final OctTreeInterface<Cuboid> q = this.makeOct128();
-    Assert.assertEquals(128, q.octTreeGetSizeX());
-    Assert.assertEquals(128, q.octTreeGetSizeY());
-    Assert.assertEquals(128, q.octTreeGetSizeZ());
+    {
+      final OctTreeInterface<Cuboid> q = this.makeOct128();
+      Assert.assertEquals(128, q.octTreeGetSizeX());
+      Assert.assertEquals(128, q.octTreeGetSizeY());
+      Assert.assertEquals(128, q.octTreeGetSizeZ());
+      Assert.assertEquals(0, q.octTreeGetPositionX());
+      Assert.assertEquals(0, q.octTreeGetPositionY());
+      Assert.assertEquals(0, q.octTreeGetPositionZ());
+    }
+
+    {
+      final OctTreeInterface<Cuboid> q = this.makeOct128Offset64();
+      Assert.assertEquals(128, q.octTreeGetSizeX());
+      Assert.assertEquals(128, q.octTreeGetSizeY());
+      Assert.assertEquals(128, q.octTreeGetSizeZ());
+      Assert.assertEquals(64, q.octTreeGetPositionX());
+      Assert.assertEquals(64, q.octTreeGetPositionY());
+      Assert.assertEquals(64, q.octTreeGetPositionZ());
+    }
+
+    {
+      final OctTreeInterface<Cuboid> q = this.makeOct128OffsetM64();
+      Assert.assertEquals(128, q.octTreeGetSizeX());
+      Assert.assertEquals(128, q.octTreeGetSizeY());
+      Assert.assertEquals(128, q.octTreeGetSizeZ());
+      Assert.assertEquals(-64, q.octTreeGetPositionX());
+      Assert.assertEquals(-64, q.octTreeGetPositionY());
+      Assert.assertEquals(-64, q.octTreeGetPositionZ());
+    }
   }
 
   @Test public final void testInsertAtRoot()

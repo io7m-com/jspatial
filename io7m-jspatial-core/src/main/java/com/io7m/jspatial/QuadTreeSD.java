@@ -54,8 +54,8 @@ import com.io7m.jtensors.VectorReadable2I;
 {
   final class Quadrant implements BoundingArea
   {
-    private final @Nonnull VectorI2I    lower;
-    private final @Nonnull VectorI2I    upper;
+    final @Nonnull VectorI2I            lower;
+    final @Nonnull VectorI2I            upper;
 
     private @CheckForNull Quadrant      x0y0;
     private @CheckForNull Quadrant      x1y0;
@@ -541,19 +541,27 @@ import com.io7m.jtensors.VectorReadable2I;
   protected final @Nonnull SortedSet<T> objects_all_dynamic;
 
   private QuadTreeSD(
-    final int size_x,
-    final int size_y)
+    final @Nonnull VectorReadable2I position,
+    final @Nonnull VectorReadable2I size)
     throws ConstraintError
   {
-    Constraints.constrainRange(size_x, 2, Integer.MAX_VALUE, "X size");
-    Constraints.constrainRange(size_y, 2, Integer.MAX_VALUE, "Y size");
-    Constraints.constrainArbitrary((size_x % 2) == 0, "X size is even");
-    Constraints.constrainArbitrary((size_y % 2) == 0, "Y size is even");
+    Constraints.constrainNotNull(position, "Position");
+    Constraints.constrainNotNull(size, "Size");
+
+    Constraints.constrainRange(size.getXI(), 2, Integer.MAX_VALUE, "X size");
+    Constraints.constrainRange(size.getYI(), 2, Integer.MAX_VALUE, "Y size");
+    Constraints.constrainArbitrary((size.getXI() % 2) == 0, "X size is even");
+    Constraints.constrainArbitrary((size.getYI() % 2) == 0, "Y size is even");
 
     this.objects_all_static = new TreeSet<T>();
     this.objects_all_dynamic = new TreeSet<T>();
-    this.root =
-      new Quadrant(new VectorI2I(0, 0), new VectorI2I(size_x - 1, size_y - 1));
+
+    final VectorI2I lower = new VectorI2I(position);
+    final VectorI2I upper =
+      new VectorI2I(
+        (position.getXI() + size.getXI()) - 1,
+        (position.getYI() + size.getYI()) - 1);
+    this.root = new Quadrant(lower, upper);
   }
 
   /**
@@ -580,7 +588,7 @@ import com.io7m.jtensors.VectorReadable2I;
     final @Nonnull QuadTreeConfig config)
     throws ConstraintError
   {
-    this(config.getSizeX(), config.getSizeY());
+    this(config.getPosition(), config.getSize());
   }
 
   @Override public void quadTreeClear()
@@ -744,7 +752,7 @@ import com.io7m.jtensors.VectorReadable2I;
     this.root.traverse(0, traversal);
   }
 
-  @SuppressWarnings("synthetic-access") @Override public String toString()
+  @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
     builder.append("[QuadTree ");
@@ -757,5 +765,15 @@ import com.io7m.jtensors.VectorReadable2I;
     builder.append(this.objects_all_dynamic);
     builder.append("]");
     return builder.toString();
+  }
+
+  @Override public int quadTreeGetPositionX()
+  {
+    return this.root.lower.x;
+  }
+
+  @Override public int quadTreeGetPositionY()
+  {
+    return this.root.lower.y;
   }
 }

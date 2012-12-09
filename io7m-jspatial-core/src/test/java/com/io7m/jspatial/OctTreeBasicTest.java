@@ -401,4 +401,35 @@ public final class OctTreeBasicTest extends OctTreeCommonTests
     Assert.assertEquals(9, c.count);
   }
 
+  @Override
+    <T extends OctTreeMember<T>>
+    OctTreeInterface<T>
+    makeOct128Offset64()
+  {
+    try {
+      final OctTreeConfig c = new OctTreeConfig();
+      c.setPosition(new VectorI3I(64, 64, 64));
+      return new OctTreeBasic<T>(c);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
+    }
+
+    throw new UnreachableCodeException();
+  }
+
+  @Override
+    <T extends OctTreeMember<T>>
+    OctTreeInterface<T>
+    makeOct128OffsetM64()
+  {
+    try {
+      final OctTreeConfig c = new OctTreeConfig();
+      c.setPosition(new VectorI3I(-64, -64, -64));
+      return new OctTreeBasic<T>(c);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
+    }
+
+    throw new UnreachableCodeException();
+  }
 }

@@ -105,6 +105,16 @@ public class OctTreeConfigTest
     Assert.assertEquals(OctTreeConfig.OCTTREE_DEFAULT_SIZE_Z, c
       .getSize()
       .getZI());
+
+    Assert.assertEquals(
+      OctTreeConfig.OCTTREE_DEFAULT_POSITION.getXI(),
+      c.getPositionX());
+    Assert.assertEquals(
+      OctTreeConfig.OCTTREE_DEFAULT_POSITION.getYI(),
+      c.getPositionY());
+    Assert.assertEquals(
+      OctTreeConfig.OCTTREE_DEFAULT_POSITION.getZI(),
+      c.getPositionZ());
   }
 
   @SuppressWarnings("static-method") @Test public void testSetIdentities()
@@ -118,6 +128,10 @@ public class OctTreeConfigTest
     c.setMinimumSizeX(5);
     c.setMinimumSizeY(7);
     c.setMinimumSizeZ(11);
+
+    c.setPositionX(20);
+    c.setPositionY(21);
+    c.setPositionZ(22);
 
     Assert.assertEquals(5, c.getMinimumSizeX());
     Assert.assertEquals(7, c.getMinimumSizeY());
@@ -134,6 +148,10 @@ public class OctTreeConfigTest
     Assert.assertEquals(2, c.getSize().getXI());
     Assert.assertEquals(4, c.getSize().getYI());
     Assert.assertEquals(6, c.getSize().getZI());
+
+    Assert.assertEquals(20, c.getPositionX());
+    Assert.assertEquals(21, c.getPositionY());
+    Assert.assertEquals(22, c.getPositionZ());
   }
 
   @SuppressWarnings("static-method") @Test public void testToString()

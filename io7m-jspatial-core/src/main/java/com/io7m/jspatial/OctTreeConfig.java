@@ -18,6 +18,7 @@ package com.io7m.jspatial;
 
 import javax.annotation.Nonnull;
 
+import com.io7m.jtensors.VectorI3I;
 import com.io7m.jtensors.VectorM3I;
 import com.io7m.jtensors.VectorReadable3I;
 
@@ -27,15 +28,17 @@ import com.io7m.jtensors.VectorReadable3I;
 
 public final class OctTreeConfig
 {
-  private final @Nonnull VectorM3I size;
-  private final @Nonnull VectorM3I minimum_size;
+  private final @Nonnull VectorM3I              size;
+  private final @Nonnull VectorM3I              minimum_size;
+  private final @Nonnull VectorM3I              position;
 
-  public static final int          OCTTREE_DEFAULT_SIZE_X;
-  public static final int          OCTTREE_DEFAULT_SIZE_Y;
-  public static final int          OCTTREE_DEFAULT_SIZE_Z;
-  public static final int          OCTTREE_DEFAULT_MINIMUM_OCTANT_SIZE_X;
-  public static final int          OCTTREE_DEFAULT_MINIMUM_OCTANT_SIZE_Y;
-  public static final int          OCTTREE_DEFAULT_MINIMUM_OCTANT_SIZE_Z;
+  public static final int                       OCTTREE_DEFAULT_SIZE_X;
+  public static final int                       OCTTREE_DEFAULT_SIZE_Y;
+  public static final int                       OCTTREE_DEFAULT_SIZE_Z;
+  public static final int                       OCTTREE_DEFAULT_MINIMUM_OCTANT_SIZE_X;
+  public static final int                       OCTTREE_DEFAULT_MINIMUM_OCTANT_SIZE_Y;
+  public static final int                       OCTTREE_DEFAULT_MINIMUM_OCTANT_SIZE_Z;
+  public static final @Nonnull VectorReadable3I OCTTREE_DEFAULT_POSITION;
 
   static {
     OCTTREE_DEFAULT_SIZE_X = 128;
@@ -44,6 +47,7 @@ public final class OctTreeConfig
     OCTTREE_DEFAULT_MINIMUM_OCTANT_SIZE_X = 2;
     OCTTREE_DEFAULT_MINIMUM_OCTANT_SIZE_Y = 2;
     OCTTREE_DEFAULT_MINIMUM_OCTANT_SIZE_Z = 2;
+    OCTTREE_DEFAULT_POSITION = VectorI3I.ZERO;
   }
 
   /**
@@ -59,6 +63,9 @@ public final class OctTreeConfig
 
   public OctTreeConfig()
   {
+    this.position = new VectorM3I();
+    VectorM3I.copy(OctTreeConfig.OCTTREE_DEFAULT_POSITION, this.position);
+
     this.size =
       new VectorM3I(
         OctTreeConfig.OCTTREE_DEFAULT_SIZE_X,
@@ -128,6 +135,45 @@ public final class OctTreeConfig
   public int getMinimumSizeZ()
   {
     return this.minimum_size.z;
+  }
+
+  /**
+   * Retrieve the position of the lower XYZ corner of the intended octtree.
+   */
+
+  public @Nonnull VectorReadable3I getPosition()
+  {
+    return this.position;
+  }
+
+  /**
+   * Retrieve the position on the X axis of the lower corner of the intended
+   * octtree.
+   */
+
+  public int getPositionX()
+  {
+    return this.position.getXI();
+  }
+
+  /**
+   * Retrieve the position on the Y axis of the lower corner of the intended
+   * octtree.
+   */
+
+  public int getPositionY()
+  {
+    return this.position.getYI();
+  }
+
+  /**
+   * Retrieve the position on the Z axis of the lower corner of the intended
+   * octtree.
+   */
+
+  public int getPositionZ()
+  {
+    return this.position.getZI();
   }
 
   /**
@@ -206,6 +252,46 @@ public final class OctTreeConfig
   }
 
   /**
+   * Set the position of the lower XYZ corner of the intended octtree.
+   */
+
+  public void setPosition(
+    final @Nonnull VectorReadable3I position)
+  {
+    VectorM3I.copy(position, this.position);
+  }
+
+  /**
+   * Set the position on the X axis of the intended octtree.
+   */
+
+  public void setPositionX(
+    final int x)
+  {
+    this.position.x = x;
+  }
+
+  /**
+   * Set the position on the Y axis of the intended octtree.
+   */
+
+  public void setPositionY(
+    final int y)
+  {
+    this.position.y = y;
+  }
+
+  /**
+   * Set the position on the Z axis of the intended octtree.
+   */
+
+  public void setPositionZ(
+    final int z)
+  {
+    this.position.z = z;
+  }
+
+  /**
    * Set the size on the X axis of the intended octtree.
    */
 
@@ -242,6 +328,8 @@ public final class OctTreeConfig
     builder.append(this.size);
     builder.append(" ");
     builder.append(this.minimum_size);
+    builder.append(" ");
+    builder.append(this.position);
     builder.append("]");
     return builder.toString();
   }

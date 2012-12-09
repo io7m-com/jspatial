@@ -19,7 +19,7 @@
 <s:document
   xmlns:s="http://www.io7m.com/schemas/structural/1.0.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
-  <s:document-title>io7m-jspatial 1.2.0 Documentation</s:document-title>
+  <s:document-title>io7m-jspatial 1.3.0 Documentation</s:document-title>
   <s:document-style>documentation.css</s:document-style>
   <s:document-contents/>
 
@@ -35,7 +35,7 @@
           several spatial data structures, such as octtrees and quadtrees.
         </s:paragraph>
       </s:subsection>
-      
+
       <s:subsection>
         <s:subsection-title>Simplicity</s:subsection-title>
         <s:paragraph>
@@ -50,7 +50,7 @@
           and to ease auditing.
         </s:paragraph>
       </s:subsection>
-      
+
       <s:subsection>
         <s:subsection-title>Efficiency</s:subsection-title>
         <s:paragraph>
@@ -62,7 +62,7 @@
           existing code.
         </s:paragraph>
       </s:subsection>
-      
+
       <s:subsection>
         <s:subsection-title>Correctness</s:subsection-title>
         <s:paragraph>
@@ -99,9 +99,9 @@
         </s:paragraph>
         <s:paragraph>
           <s:verbatim type="example"><![CDATA[<dependency>
-  <groupId>com.io7m.jspatial</groupId>
+  <groupId>com.io7m.jspatial.core</groupId>
   <artifactId>io7m-jspatial-core</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0</version>
 </dependency>]]></s:verbatim>
         </s:paragraph>
       </s:subsection>
@@ -216,7 +216,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
     <s:part-contents/>
     <s:section>
       <s:section-title>QuadTrees</s:section-title>
-      
+
       <s:subsection>
         <s:subsection-title>Overview</s:subsection-title>
         <s:paragraph>
@@ -237,7 +237,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
           </s:list-unordered>
         </s:formal-item>
       </s:subsection>
-      
+
       <s:subsection>
         <s:subsection-title>Usage</s:subsection-title>
         <s:paragraph>
@@ -258,7 +258,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
           which allow the specification of various properties such as the size of the resulting trees.
         </s:paragraph>
       </s:subsection>
-      
+
       <s:subsection>
         <s:subsection-title>Choosing an implementation</s:subsection-title>
         <s:paragraph>
@@ -306,10 +306,10 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
           or
           <s:link-external target="javadoc/com/io7m/jspatial/QuadTreeInterfaceSD.html">QuadTreeInterfaceSD</s:link-external>
           interfaces, as this allows for easy switching of concrete implementations without
-          having to modify existing code. 
+          having to modify existing code.
         </s:paragraph>
       </s:subsection>
-      
+
       <s:subsection>
         <s:subsection-title>Example</s:subsection-title>
         <s:formal-item kind="example">
@@ -528,7 +528,7 @@ public final class TrivialQuad
 
     <s:section>
       <s:section-title>OctTrees</s:section-title>
-      
+
       <s:subsection>
         <s:subsection-title>Overview</s:subsection-title>
         <s:paragraph>
@@ -549,7 +549,7 @@ public final class TrivialQuad
           </s:list-unordered>
         </s:formal-item>
       </s:subsection>
-      
+
       <s:subsection>
         <s:subsection-title>Usage</s:subsection-title>
         <s:paragraph>
@@ -570,7 +570,7 @@ public final class TrivialQuad
           which allow the specification of various properties such as the size of the resulting trees.
         </s:paragraph>
       </s:subsection>
-      
+
       <s:subsection>
         <s:subsection-title>Choosing an implementation</s:subsection-title>
         <s:paragraph>
@@ -618,10 +618,10 @@ public final class TrivialQuad
           or
           <s:link-external target="javadoc/com/io7m/jspatial/OctTreeInterfaceSD.html">OctTreeInterfaceSD</s:link-external>
           interfaces, as this allows for easy switching of concrete implementations without
-          having to modify existing code. 
+          having to modify existing code.
         </s:paragraph>
       </s:subsection>
-      
+
       <s:subsection>
         <s:subsection-title>Example</s:subsection-title>
         <s:formal-item kind="example">
@@ -850,7 +850,7 @@ public final class TrivialOct
     /**
      * Now, cast a ray from (16,16,16) towards (128,128,16), and check that
      * the expected objects were intersected by the ray.
-     * 
+     *
      * Note that objects are returned in order of increasing distance: The
      * nearest object intersected by the ray will be the first in the returned
      * set.

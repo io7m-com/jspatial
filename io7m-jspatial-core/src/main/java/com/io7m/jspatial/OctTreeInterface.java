@@ -37,6 +37,24 @@ public interface OctTreeInterface<T extends OctTreeMember<T>>
   void octTreeClear();
 
   /**
+   * Retrieve the X axis value of the lower corner of the octtree.
+   */
+
+  int octTreeGetPositionX();
+
+  /**
+   * Retrieve the Y axis value of the lower corner of the octtree.
+   */
+
+  int octTreeGetPositionY();
+
+  /**
+   * Retrieve the Z axis value of the lower corner of the octtree.
+   */
+
+  int octTreeGetPositionZ();
+
+  /**
    * Retrieve the maximum size of the octtree on the X axis.
    */
 

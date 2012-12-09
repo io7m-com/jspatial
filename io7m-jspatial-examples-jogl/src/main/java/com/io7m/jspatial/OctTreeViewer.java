@@ -439,7 +439,7 @@ public final class OctTreeViewer implements Runnable
       for (int x = -1024; x < 1024; ++x) {
         gl.glBegin(GL.GL_LINES);
         {
-          gl.glColor4d(0.5, 0.5, 0.5, 0.1);
+          gl.glColor4d(1, 1, 1, 0.0125);
           gl.glVertex3d(x, 0, 1024);
           gl.glVertex3d(x, 0, -1024);
         }
@@ -460,7 +460,7 @@ public final class OctTreeViewer implements Runnable
       for (int z = -1024; z < 1024; ++z) {
         gl.glBegin(GL.GL_LINES);
         {
-          gl.glColor4d(0.5, 0.5, 0.5, 0.1);
+          gl.glColor4d(1, 1, 1, 0.0125);
           gl.glVertex3d(-1024, 0, z);
           gl.glVertex3d(1024, 0, z);
         }
@@ -696,9 +696,23 @@ public final class OctTreeViewer implements Runnable
   private static final double CAMERA_SPEED_ANGULAR = 0.3;
   private static final double CAMERA_FRICTION      = 0.85;
 
-  private static final int    TREE_SIZE_X          = 128;
-  private static final int    TREE_SIZE_Y          = 128;
-  private static final int    TREE_SIZE_Z          = 128;
+  private static final int    TREE_POSITION_X;
+  private static final int    TREE_POSITION_Y;
+  private static final int    TREE_POSITION_Z;
+
+  private static final int    TREE_SIZE_X;
+  private static final int    TREE_SIZE_Y;
+  private static final int    TREE_SIZE_Z;
+
+  static {
+    TREE_SIZE_X = 256;
+    TREE_SIZE_Y = 256;
+    TREE_SIZE_Z = 256;
+
+    TREE_POSITION_X = -(OctTreeViewer.TREE_SIZE_X / 2);
+    TREE_POSITION_Y = -(OctTreeViewer.TREE_SIZE_Y / 2);
+    TREE_POSITION_Z = -(OctTreeViewer.TREE_SIZE_Z / 2);
+  }
 
   static <T extends Throwable> void error(
     final T e)
@@ -786,6 +800,10 @@ public final class OctTreeViewer implements Runnable
     this.current_id = new AtomicLong();
 
     this.octtree_config = new OctTreeConfig();
+    this.octtree_config.setPosition(new VectorI3I(
+      -OctTreeViewer.TREE_SIZE_X / 2,
+      -OctTreeViewer.TREE_SIZE_Y / 2,
+      -OctTreeViewer.TREE_SIZE_Z / 2));
     this.octtree_config.setSizeX(OctTreeViewer.TREE_SIZE_X);
     this.octtree_config.setSizeY(OctTreeViewer.TREE_SIZE_Y);
     this.octtree_config.setSizeZ(OctTreeViewer.TREE_SIZE_Z);
@@ -914,9 +932,15 @@ public final class OctTreeViewer implements Runnable
         final int height = (int) (2 + (Math.random() * 16));
         final int depth = (int) (2 + (Math.random() * 16));
 
-        final int x0 = (int) (Math.random() * OctTreeViewer.TREE_SIZE_X);
-        final int y0 = (int) (Math.random() * OctTreeViewer.TREE_SIZE_Y);
-        final int z0 = (int) (Math.random() * OctTreeViewer.TREE_SIZE_Z);
+        final int x0 =
+          (int) (Math.random() * OctTreeViewer.TREE_SIZE_X)
+            + OctTreeViewer.TREE_POSITION_X;
+        final int y0 =
+          (int) (Math.random() * OctTreeViewer.TREE_SIZE_Y)
+            + OctTreeViewer.TREE_POSITION_Y;
+        final int z0 =
+          (int) (Math.random() * OctTreeViewer.TREE_SIZE_Z)
+            + OctTreeViewer.TREE_POSITION_Z;
 
         final int x1 = Math.min(x0 + width, OctTreeViewer.TREE_SIZE_X - 1);
         final int y1 = Math.min(y0 + height, OctTreeViewer.TREE_SIZE_Y - 1);
