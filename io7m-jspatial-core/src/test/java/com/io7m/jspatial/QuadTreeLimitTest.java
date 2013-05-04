@@ -182,7 +182,7 @@ public final class QuadTreeLimitTest extends QuadTreeCommonTests
     Assert.assertTrue(in);
 
     q.quadTreeTraverse(new QuadTreeTraversal() {
-      @SuppressWarnings("unused") @Override public void visit(
+      @Override public void visit(
         final int depth,
         final @Nonnull VectorReadable2I lower,
         final @Nonnull VectorReadable2I upper)

@@ -3,6 +3,31 @@
   <c:project>io7m-jspatial</c:project>
 
   <c:release ticket-system="com.io7m.fossil.jspatial">
+    <c:date>2013-05-04</c:date>
+    <c:version>2.0.0</c:version>
+    <c:item>
+      <c:date>2012-05-04</c:date>
+      <c:type-code-fix/>
+      <c:summary>Require Java 7 and update example Swing viewers to use JDK7 widgets (with generics)</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2012-05-04</c:date>
+      <c:type-code-fix/>
+      <c:summary>Use jtensors 5.*</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2012-05-04</c:date>
+      <c:type-code-fix/>
+      <c:summary>Explicitly demand a fixed-function OpenGL implementation in the Octtree viewer</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2012-05-04</c:date>
+      <c:type-code-fix/>
+      <c:summary>Use jaux 2.4.* for more predictable unit test behaviour with floating point values</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release ticket-system="com.io7m.fossil.jspatial">
     <c:date>2012-12-09</c:date>
     <c:version>1.3.0</c:version>
     <c:item>

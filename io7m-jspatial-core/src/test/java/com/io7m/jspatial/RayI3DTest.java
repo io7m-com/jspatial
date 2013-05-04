@@ -3,7 +3,8 @@ package com.io7m.jspatial;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.io7m.jaux.ApproximatelyEqualDouble;
+import com.io7m.jaux.AlmostEqualDouble;
+import com.io7m.jaux.AlmostEqualDouble.ContextRelative;
 import com.io7m.jtensors.VectorI3D;
 
 public class RayI3DTest
@@ -102,17 +103,22 @@ public class RayI3DTest
   @SuppressWarnings("static-method") @Test public void testRayZero()
   {
     final RayI3D ray = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
+    final ContextRelative context = new AlmostEqualDouble.ContextRelative();
 
-    Assert.assertTrue(ApproximatelyEqualDouble.approximatelyEqual(
+    Assert.assertTrue(AlmostEqualDouble.almostEqual(
+      context,
       ray.origin.x,
       ray.origin.y));
-    Assert.assertTrue(ApproximatelyEqualDouble.approximatelyEqual(
+    Assert.assertTrue(AlmostEqualDouble.almostEqual(
+      context,
       ray.direction.x,
       ray.direction.y));
-    Assert.assertTrue(ApproximatelyEqualDouble.approximatelyEqual(
+    Assert.assertTrue(AlmostEqualDouble.almostEqual(
+      context,
       ray.origin.x,
       ray.origin.z));
-    Assert.assertTrue(ApproximatelyEqualDouble.approximatelyEqual(
+    Assert.assertTrue(AlmostEqualDouble.almostEqual(
+      context,
       ray.direction.x,
       ray.direction.z));
     Assert.assertTrue(ray.direction_inverse.x == Double.POSITIVE_INFINITY);

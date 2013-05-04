@@ -65,6 +65,16 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors</artifactId>
+      <version>[5.0.0, 6.0.0)</version>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jaux</groupId>
+      <artifactId>io7m-jaux</artifactId>
+      <version>[2.4.0, 3.0.0)</version>
+    </dependency>
+    <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
       <version>2.0.1</version>
@@ -150,14 +160,14 @@
         </configuration>
       </plugin>
 
-      <!-- Require JDK >= 1.6 -->
+      <!-- Require JDK >= 1.7 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.5.1</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
 

@@ -188,7 +188,7 @@ public final class QuadTreeSDTest extends QuadTreeCommonTests
     }
 
     final IterationChecker1 counter = new IterationChecker1() {
-      @SuppressWarnings("unused") @Override public Boolean call(
+      @Override public Boolean call(
         final Rectangle x)
       {
         ++this.count;
@@ -221,7 +221,7 @@ public final class QuadTreeSDTest extends QuadTreeCommonTests
     }
 
     final IterationChecker1 counter = new IterationChecker1() {
-      @SuppressWarnings("unused") @Override public Boolean call(
+      @Override public Boolean call(
         final Rectangle x)
       {
         ++this.count;

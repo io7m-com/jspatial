@@ -36,7 +36,9 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GL2GL3;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
@@ -219,7 +221,7 @@ public final class OctTreeViewer implements Runnable
     }
 
     @Override public void keyTyped(
-      @SuppressWarnings("unused") final KeyEvent e)
+      final KeyEvent e)
     {
       // Nothing
     }
@@ -267,16 +269,19 @@ public final class OctTreeViewer implements Runnable
       }
     }
 
-    @SuppressWarnings("unused") @Override public void dispose(
+    @Override public void dispose(
       final GLAutoDrawable drawable)
     {
       // Nothing
     }
 
-    @SuppressWarnings("unused") @Override public void init(
+    @Override public void init(
       final GLAutoDrawable drawable)
     {
-      // Nothing
+      final GL2 gl = drawable.getGL().getGL2();
+      System.err.println("Version  : " + gl.glGetString(GL.GL_VERSION));
+      System.err.println("Vendor   : " + gl.glGetString(GL.GL_VENDOR));
+      System.err.println("Renderer : " + gl.glGetString(GL.GL_RENDERER));
     }
 
     private void move()
@@ -481,7 +486,7 @@ public final class OctTreeViewer implements Runnable
       gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
       OctTreeViewer.this.octtree.octTreeTraverse(new OctTreeTraversal() {
-        @SuppressWarnings("unused") @Override public void visit(
+        @Override public void visit(
           final int depth,
           final @Nonnull VectorReadable3I lower,
           final @Nonnull VectorReadable3I upper)
@@ -678,7 +683,7 @@ public final class OctTreeViewer implements Runnable
       gl.glDisable(GL.GL_BLEND);
     }
 
-    @SuppressWarnings("unused") @Override public void reshape(
+    @Override public void reshape(
       final GLAutoDrawable drawable,
       final int x,
       final int y,
@@ -1043,11 +1048,9 @@ public final class OctTreeViewer implements Runnable
     this.octtree_constructors.put(
       "OctTreeBasic",
       new PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>() {
-        @SuppressWarnings("unused") @Override public
-          OctTreeInterface<Cuboid>
-          call(
-            final Unit _)
-            throws ConstraintError
+        @Override public OctTreeInterface<Cuboid> call(
+          final Unit _)
+          throws ConstraintError
         {
           return new OctTreeBasic<Cuboid>(OctTreeViewer.this.octtree_config);
         }
@@ -1056,11 +1059,9 @@ public final class OctTreeViewer implements Runnable
     this.octtree_constructors.put(
       "OctTreeSD",
       new PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>() {
-        @SuppressWarnings("unused") @Override public
-          OctTreeInterface<Cuboid>
-          call(
-            final Unit _)
-            throws ConstraintError
+        @Override public OctTreeInterface<Cuboid> call(
+          final Unit _)
+          throws ConstraintError
         {
           return new OctTreeSD<Cuboid>(OctTreeViewer.this.octtree_config);
         }
@@ -1069,11 +1070,9 @@ public final class OctTreeViewer implements Runnable
     this.octtree_constructors.put(
       "OctTreePrune",
       new PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>() {
-        @SuppressWarnings("unused") @Override public
-          OctTreeInterface<Cuboid>
-          call(
-            final Unit _)
-            throws ConstraintError
+        @Override public OctTreeInterface<Cuboid> call(
+          final Unit _)
+          throws ConstraintError
         {
           return new OctTreePrune<Cuboid>(OctTreeViewer.this.octtree_config);
         }
@@ -1082,11 +1081,9 @@ public final class OctTreeViewer implements Runnable
     this.octtree_constructors.put(
       "OctTreeLimit",
       new PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable>() {
-        @SuppressWarnings("unused") @Override public
-          OctTreeInterface<Cuboid>
-          call(
-            final Unit _)
-            throws ConstraintError
+        @Override public OctTreeInterface<Cuboid> call(
+          final Unit _)
+          throws ConstraintError
         {
           return new OctTreeLimit<Cuboid>(OctTreeViewer.this.octtree_config);
         }
@@ -1095,7 +1092,11 @@ public final class OctTreeViewer implements Runnable
 
   private GLCanvas makeGLCanvas()
   {
-    final GLCanvas c = new GLCanvas();
+    System.err.println("Opening GL context");
+
+    final GLProfile profile = GLProfile.getMaxFixedFunc(true);
+    final GLCapabilities caps = new GLCapabilities(profile);
+    final GLCanvas c = new GLCanvas(caps);
     c.setSize(OctTreeViewer.CANVAS_SIZE_X, OctTreeViewer.CANVAS_SIZE_Y);
     c.setMinimumSize(new Dimension(
       OctTreeViewer.CANVAS_SIZE_X,
@@ -1129,13 +1130,14 @@ public final class OctTreeViewer implements Runnable
       names.add(key);
     }
 
-    final JComboBox cb = new JComboBox(names);
+    final JComboBox<String> cb = new JComboBox<String>(names);
     cb.addActionListener(new ActionListener() {
       @Override public void actionPerformed(
         final ActionEvent e)
       {
         try {
-          final JComboBox box = (JComboBox) e.getSource();
+          @SuppressWarnings("unchecked") final JComboBox<String> box =
+            (JComboBox<String>) e.getSource();
           final String name = (String) box.getSelectedItem();
           if (OctTreeViewer.this.octtree_constructors.containsKey(name)) {
             final PartialFunction<Unit, OctTreeInterface<Cuboid>, Throwable> f =
@@ -1157,13 +1159,13 @@ public final class OctTreeViewer implements Runnable
 
     input_min_x.addKeyListener(new KeyListener() {
       @Override public void keyTyped(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
 
       @Override public void keyReleased(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         final int x = Integer.parseInt(input_min_x.getText());
         System.err.println("minimum-x: " + x);
@@ -1171,7 +1173,7 @@ public final class OctTreeViewer implements Runnable
       }
 
       @Override public void keyPressed(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
@@ -1179,13 +1181,13 @@ public final class OctTreeViewer implements Runnable
 
     input_min_y.addKeyListener(new KeyListener() {
       @Override public void keyTyped(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
 
       @Override public void keyReleased(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         final int y = Integer.parseInt(input_min_y.getText());
         System.err.println("minimum-y: " + y);
@@ -1193,7 +1195,7 @@ public final class OctTreeViewer implements Runnable
       }
 
       @Override public void keyPressed(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
@@ -1201,13 +1203,13 @@ public final class OctTreeViewer implements Runnable
 
     input_min_z.addKeyListener(new KeyListener() {
       @Override public void keyTyped(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
 
       @Override public void keyReleased(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         final int z = Integer.parseInt(input_min_z.getText());
         System.err.println("minimum-z: " + z);
@@ -1215,7 +1217,7 @@ public final class OctTreeViewer implements Runnable
       }
 
       @Override public void keyPressed(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
@@ -1253,7 +1255,7 @@ public final class OctTreeViewer implements Runnable
     final JButton reload = new JButton("Reload");
     reload.addActionListener(new ActionListener() {
       @Override public void actionPerformed(
-        @SuppressWarnings("unused") final ActionEvent _)
+        final ActionEvent _)
       {
         OctTreeViewer.this.commandReload();
       }
@@ -1292,7 +1294,7 @@ public final class OctTreeViewer implements Runnable
     input_z1.setColumns(3);
 
     insert.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
+      @SuppressWarnings({ "synthetic-access" }) @Override public
         void
         actionPerformed(
           final ActionEvent _)
@@ -1431,7 +1433,7 @@ public final class OctTreeViewer implements Runnable
     input_z1.setColumns(3);
 
     cast.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent _)
       {
         final int x0 = Integer.parseInt(input_x0.getText());
@@ -1568,7 +1570,7 @@ public final class OctTreeViewer implements Runnable
       .setToolTipText("Only select objects strictly contained by this volume");
 
     select.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
+      @SuppressWarnings({ "synthetic-access" }) @Override public
         void
         actionPerformed(
           final ActionEvent _)
@@ -1592,7 +1594,7 @@ public final class OctTreeViewer implements Runnable
     });
 
     delete.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent _)
       {
         OctTreeViewer.this.commandDeleteSelected();
@@ -1705,7 +1707,7 @@ public final class OctTreeViewer implements Runnable
     final JButton quit = new JButton("Quit");
 
     clear.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent e)
       {
         OctTreeViewer.this.commandClear();
@@ -1713,7 +1715,7 @@ public final class OctTreeViewer implements Runnable
     });
 
     quit.addActionListener(new ActionListener() {
-      @SuppressWarnings("unused") @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent event)
       {
         OctTreeViewer.this.commandQuit();
@@ -1721,7 +1723,7 @@ public final class OctTreeViewer implements Runnable
     });
 
     random.addActionListener(new ActionListener() {
-      @SuppressWarnings("unused") @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent _)
       {
         OctTreeViewer.this.commandRandomize();

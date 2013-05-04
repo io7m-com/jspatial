@@ -25,7 +25,7 @@ public abstract class OctTreeCommonTests
 
     }
 
-    @SuppressWarnings("unused") @Override public final void visit(
+    @Override public final void visit(
       final int depth,
       final @Nonnull VectorReadable3I lower,
       final @Nonnull VectorReadable3I upper)
@@ -56,7 +56,7 @@ public abstract class OctTreeCommonTests
 
     }
 
-    @SuppressWarnings("unused") @Override public Boolean call(
+    @Override public Boolean call(
       final Cuboid x)
     {
       ++this.count;

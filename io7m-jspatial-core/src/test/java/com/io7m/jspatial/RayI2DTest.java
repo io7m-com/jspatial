@@ -3,7 +3,8 @@ package com.io7m.jspatial;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.io7m.jaux.ApproximatelyEqualDouble;
+import com.io7m.jaux.AlmostEqualDouble;
+import com.io7m.jaux.AlmostEqualDouble.ContextRelative;
 import com.io7m.jtensors.VectorI2D;
 
 public class RayI2DTest
@@ -102,13 +103,17 @@ public class RayI2DTest
   @SuppressWarnings("static-method") @Test public void testRayZero()
   {
     final RayI2D ray = new RayI2D(VectorI2D.ZERO, VectorI2D.ZERO);
+    final ContextRelative context = new AlmostEqualDouble.ContextRelative();
 
-    Assert.assertTrue(ApproximatelyEqualDouble.approximatelyEqual(
+    Assert.assertTrue(AlmostEqualDouble.almostEqual(
+      context,
       ray.origin.x,
       ray.origin.y));
-    Assert.assertTrue(ApproximatelyEqualDouble.approximatelyEqual(
+    Assert.assertTrue(AlmostEqualDouble.almostEqual(
+      context,
       ray.direction.x,
       ray.direction.y));
+
     Assert.assertTrue(ray.direction_inverse.x == Double.POSITIVE_INFINITY);
     Assert.assertTrue(ray.direction_inverse.y == Double.POSITIVE_INFINITY);
   }

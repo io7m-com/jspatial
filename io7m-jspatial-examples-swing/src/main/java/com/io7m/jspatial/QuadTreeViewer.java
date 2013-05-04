@@ -85,7 +85,7 @@ public final class QuadTreeViewer implements Runnable
         QuadTreeViewer.this.quadtree
           .quadTreeTraverse(new QuadTreeTraversal() {
             @Override public void visit(
-              @SuppressWarnings("unused") final int depth,
+              final int depth,
               final @Nonnull VectorReadable2I lower,
               final @Nonnull VectorReadable2I upper)
               throws Exception
@@ -451,11 +451,9 @@ public final class QuadTreeViewer implements Runnable
     this.quadtree_constructors.put(
       "QuadTreeBasic",
       new PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>() {
-        @SuppressWarnings("unused") @Override public
-          QuadTreeInterface<Rectangle>
-          call(
-            final Unit _)
-            throws ConstraintError
+        @Override public QuadTreeInterface<Rectangle> call(
+          final Unit _)
+          throws ConstraintError
         {
           return new QuadTreeBasic<Rectangle>(
             QuadTreeViewer.this.quadtree_config);
@@ -465,11 +463,9 @@ public final class QuadTreeViewer implements Runnable
     this.quadtree_constructors.put(
       "QuadTreeSD",
       new PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>() {
-        @SuppressWarnings("unused") @Override public
-          QuadTreeInterface<Rectangle>
-          call(
-            final Unit _)
-            throws ConstraintError
+        @Override public QuadTreeInterface<Rectangle> call(
+          final Unit _)
+          throws ConstraintError
         {
           return new QuadTreeSD<Rectangle>(
             QuadTreeViewer.this.quadtree_config);
@@ -479,11 +475,9 @@ public final class QuadTreeViewer implements Runnable
     this.quadtree_constructors.put(
       "QuadTreePrune",
       new PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>() {
-        @SuppressWarnings("unused") @Override public
-          QuadTreeInterface<Rectangle>
-          call(
-            final Unit _)
-            throws ConstraintError
+        @Override public QuadTreeInterface<Rectangle> call(
+          final Unit _)
+          throws ConstraintError
         {
           return new QuadTreePrune<Rectangle>(
             QuadTreeViewer.this.quadtree_config);
@@ -493,11 +487,9 @@ public final class QuadTreeViewer implements Runnable
     this.quadtree_constructors.put(
       "QuadTreeLimit",
       new PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable>() {
-        @SuppressWarnings("unused") @Override public
-          QuadTreeInterface<Rectangle>
-          call(
-            final Unit _)
-            throws ConstraintError
+        @Override public QuadTreeInterface<Rectangle> call(
+          final Unit _)
+          throws ConstraintError
         {
           return new QuadTreeLimit<Rectangle>(
             QuadTreeViewer.this.quadtree_config);
@@ -520,13 +512,14 @@ public final class QuadTreeViewer implements Runnable
       names.add(key);
     }
 
-    final JComboBox cb = new JComboBox(names);
+    final JComboBox<String> cb = new JComboBox<String>(names);
     cb.addActionListener(new ActionListener() {
       @Override public void actionPerformed(
         final ActionEvent e)
       {
         try {
-          final JComboBox box = (JComboBox) e.getSource();
+          @SuppressWarnings("unchecked") final JComboBox<String> box =
+            (JComboBox<String>) e.getSource();
           final String name = (String) box.getSelectedItem();
           if (QuadTreeViewer.this.quadtree_constructors.containsKey(name)) {
             final PartialFunction<Unit, QuadTreeInterface<Rectangle>, Throwable> f =
@@ -548,13 +541,13 @@ public final class QuadTreeViewer implements Runnable
 
     input_min_x.addKeyListener(new KeyListener() {
       @Override public void keyTyped(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
 
       @Override public void keyReleased(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         final int x = Integer.parseInt(input_min_x.getText());
         System.err.println("minimum-x: " + x);
@@ -562,7 +555,7 @@ public final class QuadTreeViewer implements Runnable
       }
 
       @Override public void keyPressed(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
@@ -570,13 +563,13 @@ public final class QuadTreeViewer implements Runnable
 
     input_min_y.addKeyListener(new KeyListener() {
       @Override public void keyTyped(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
 
       @Override public void keyReleased(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         final int y = Integer.parseInt(input_min_y.getText());
         System.err.println("minimum-y: " + y);
@@ -584,7 +577,7 @@ public final class QuadTreeViewer implements Runnable
       }
 
       @Override public void keyPressed(
-        @SuppressWarnings("unused") final KeyEvent _)
+        final KeyEvent _)
       {
         // Nothing.
       }
@@ -616,7 +609,7 @@ public final class QuadTreeViewer implements Runnable
     final JButton reload = new JButton("Reload");
     reload.addActionListener(new ActionListener() {
       @Override public void actionPerformed(
-        @SuppressWarnings("unused") final ActionEvent _)
+        final ActionEvent _)
       {
         QuadTreeViewer.this.commandReload();
       }
@@ -654,7 +647,7 @@ public final class QuadTreeViewer implements Runnable
     input_y1.setColumns(3);
 
     insert.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
+      @SuppressWarnings({ "synthetic-access" }) @Override public
         void
         actionPerformed(
           final ActionEvent _)
@@ -766,7 +759,7 @@ public final class QuadTreeViewer implements Runnable
     input_y1.setColumns(3);
 
     cast.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent _)
       {
         final int x0 = Integer.parseInt(input_x0.getText());
@@ -878,7 +871,7 @@ public final class QuadTreeViewer implements Runnable
       .setToolTipText("Only select objects strictly contained by this area");
 
     select.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused", "synthetic-access" }) @Override public
+      @SuppressWarnings({ "synthetic-access" }) @Override public
         void
         actionPerformed(
           final ActionEvent _)
@@ -900,7 +893,7 @@ public final class QuadTreeViewer implements Runnable
     });
 
     delete.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent _)
       {
         QuadTreeViewer.this.commandDeleteSelected();
@@ -1019,7 +1012,7 @@ public final class QuadTreeViewer implements Runnable
     final JButton quit = new JButton("Quit");
 
     clear.addActionListener(new ActionListener() {
-      @SuppressWarnings({ "unused" }) @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent e)
       {
         QuadTreeViewer.this.commandClear();
@@ -1027,7 +1020,7 @@ public final class QuadTreeViewer implements Runnable
     });
 
     quit.addActionListener(new ActionListener() {
-      @SuppressWarnings("unused") @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent event)
       {
         QuadTreeViewer.this.commandQuit();
@@ -1035,7 +1028,7 @@ public final class QuadTreeViewer implements Runnable
     });
 
     random.addActionListener(new ActionListener() {
-      @SuppressWarnings("unused") @Override public void actionPerformed(
+      @Override public void actionPerformed(
         final ActionEvent _)
       {
         QuadTreeViewer.this.commandRandomize();

@@ -24,7 +24,7 @@ public abstract class QuadTreeCommonTests
 
     }
 
-    @SuppressWarnings("unused") @Override public void visit(
+    @Override public void visit(
       final int depth,
       final VectorReadable2I lower,
       final VectorReadable2I upper)
@@ -69,7 +69,7 @@ public abstract class QuadTreeCommonTests
 
     }
 
-    @SuppressWarnings("unused") @Override public Boolean call(
+    @Override public Boolean call(
       final Rectangle x)
     {
       ++this.count;
@@ -361,7 +361,7 @@ public abstract class QuadTreeCommonTests
     Assert.assertTrue(in);
 
     final IterationChecker1 counter = new IterationChecker1() {
-      @SuppressWarnings("unused") @Override public Boolean call(
+      @Override public Boolean call(
         final Rectangle x)
       {
         ++this.count;
