@@ -494,6 +494,19 @@
               <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-1.2.0-documentation.zip">io7m-jspatial-1.2.0-documentation.zip</a>
             </td>
           </tr>
+          <tr class="page_table_row">
+            <td class="page_table_column">2013-06-15</td>
+            <td class="page_table_column">223985</td>
+            <td class="page_table_column">
+              <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-2.0.0-documentation.zip.asc">asc</a>
+            </td>
+            <td class="page_table_column">
+              <a class="page_link_file" href="http://io7m.com/software/jspatial/doc/2.0.0/d1.xhtml">io7m-jspatial 2.0.0</a>
+            </td>
+            <td class="page_table_column">
+              <a class="page_link_file" href="http://distribution.io7m.com/jspatial/io7m-jspatial-2.0.0-documentation.zip">io7m-jspatial-2.0.0-documentation.zip</a>
+            </td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -501,6 +514,34 @@
     <section name="Changes">
 <table xmlns="http://www.w3.org/1999/xhtml" class="changelog page_table"
        summary="Changes">
+   <tr class="page_table_row">
+      <td class="page_table_column">2013-06-15</td>
+      <td class="page_table_column">Release: io7m-jspatial 2.0.0</td>
+   </tr>
+   <tr class="page_table_row">
+      <td class="page_table_column">2012-05-04</td>
+      <td class="page_table_column">Code change: Require Java 7 and update example Swing viewers to use JDK7 widgets (with generics)</td>
+   </tr>
+   <tr class="page_table_row">
+      <td class="page_table_column">2012-05-04</td>
+      <td class="page_table_column">Code change: Use jtensors 5.*</td>
+   </tr>
+   <tr class="page_table_row">
+      <td class="page_table_column">2012-05-04</td>
+      <td class="page_table_column">Code fix: Explicitly demand a fixed-function OpenGL implementation in the Octtree viewer</td>
+   </tr>
+   <tr class="page_table_row">
+      <td class="page_table_column">2012-05-04</td>
+      <td class="page_table_column">Code change: Use jaux 2.4.* for more predictable unit test behaviour with floating point values</td>
+   </tr>
+   <tr class="page_table_row">
+      <td class="page_table_column">2012-12-09</td>
+      <td class="page_table_column">Release: io7m-jspatial 1.3.0</td>
+   </tr>
+   <tr class="page_table_row">
+      <td class="page_table_column">2012-12-09</td>
+      <td class="page_table_column">Code new: Allow trees that are not rooted at (0,0,0). See OctTreeConfig.setPosition() and QuadTreeConfig.setPosition().</td>
+   </tr>
    <tr class="page_table_row">
       <td class="page_table_column">2012-11-24</td>
       <td class="page_table_column">Release: io7m-jspatial 1.2.0</td>
