@@ -8,7 +8,7 @@
   <artifactId>io7m-jspatial-examples-jogl</artifactId>
   <name>io7m-jspatial-examples-jogl</name>
   <description>API examples using Swing/JOGL</description>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>2.0.0</version>
   <url>http://mvn.io7m.com/jspatial-examples-jogl</url>
   <packaging>jar</packaging>
 
@@ -55,12 +55,12 @@
     <dependency>
       <groupId>com.io7m.jspatial.core</groupId>
       <artifactId>io7m-jspatial-core</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>2.0.0</version>
     </dependency>
     <dependency>
       <groupId>com.io7m.jspatial.core</groupId>
       <artifactId>io7m-jspatial-core</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
+      <version>2.0.0</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
@@ -83,17 +83,17 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
-      <version>4.10</version>
+      <version>4.11</version>
     </dependency>
     <dependency>
     	<groupId>org.jogamp.jogl</groupId>
     	<artifactId>jogl-all-main</artifactId>
-    	<version>2.0.2-rc20130404</version>
+    	<version>2.0.2-rc-20130611</version>
     </dependency>
     <dependency>
     	<groupId>org.jogamp.gluegen</groupId>
     	<artifactId>gluegen-rt-main</artifactId>
-    	<version>2.0.2-rc20130404</version>
+    	<version>2.0.2-rc-20130611</version>
     </dependency>
   </dependencies>
 
@@ -163,7 +163,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.12.4</version>
+        <version>2.14.1</version>
         <configuration>
           <forkMode>once</forkMode>
           <redirectTestOutputToFile>true</redirectTestOutputToFile>
@@ -174,7 +174,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.5.1</version>
+        <version>3.1</version>
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
@@ -220,7 +220,7 @@
       <!-- Produce application archive -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.3</version>
+        <version>2.4</version>
         <configuration>
           <descriptors>
             <descriptor>assembly-app.xml</descriptor>

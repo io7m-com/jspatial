@@ -1,1 +1,1 @@
-io7m-jspatial 1.2.0
+io7m-jspatial 2.0.0

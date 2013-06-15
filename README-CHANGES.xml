@@ -3,16 +3,16 @@
   <c:project>io7m-jspatial</c:project>
 
   <c:release ticket-system="com.io7m.fossil.jspatial">
-    <c:date>2013-05-04</c:date>
+    <c:date>2013-06-15</c:date>
     <c:version>2.0.0</c:version>
     <c:item>
       <c:date>2012-05-04</c:date>
-      <c:type-code-fix/>
+      <c:type-code-change/>
       <c:summary>Require Java 7 and update example Swing viewers to use JDK7 widgets (with generics)</c:summary>
     </c:item>
     <c:item>
       <c:date>2012-05-04</c:date>
-      <c:type-code-fix/>
+      <c:type-code-change/>
       <c:summary>Use jtensors 5.*</c:summary>
     </c:item>
     <c:item>
@@ -22,7 +22,7 @@
     </c:item>
     <c:item>
       <c:date>2012-05-04</c:date>
-      <c:type-code-fix/>
+      <c:type-code-change/>
       <c:summary>Use jaux 2.4.* for more predictable unit test behaviour with floating point values</c:summary>
     </c:item>
   </c:release>
