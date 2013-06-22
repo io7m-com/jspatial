@@ -25,20 +25,22 @@ import javax.annotation.concurrent.Immutable;
  * by their scalar distance from the origin of the ray.
  * </p>
  * <p>
- * Note that although the <code>QuadTreeRaycastResult</code> class is
+ * Note that although the <code>QuadTreeRaycastResultD</code> class is
  * immutable, whether or not the object of type <code>T</code> returned by
  * {@link #getObject()} is mutable depends entirely on the user and therefore
  * thread-safety is also the responsibility of the user.
  * </p>
+ * 
+ * @since 2.1.0
  */
 
-@Immutable public final class QuadTreeRaycastResult<T extends BoundingArea> implements
-  Comparable<QuadTreeRaycastResult<T>>
+@Immutable public final class QuadTreeRaycastResultD<T extends BoundingAreaD> implements
+  Comparable<QuadTreeRaycastResultD<T>>
 {
   private final double     distance;
   private final @Nonnull T object;
 
-  QuadTreeRaycastResult(
+  QuadTreeRaycastResultD(
     final @Nonnull T object,
     final double distance)
   {
@@ -47,7 +49,7 @@ import javax.annotation.concurrent.Immutable;
   }
 
   @Override public int compareTo(
-    final @Nonnull QuadTreeRaycastResult<T> other)
+    final @Nonnull QuadTreeRaycastResultD<T> other)
   {
     return Double.compare(this.distance, other.distance);
   }
@@ -64,7 +66,7 @@ import javax.annotation.concurrent.Immutable;
     if (this.getClass() != obj.getClass()) {
       return false;
     }
-    final QuadTreeRaycastResult<?> other = (QuadTreeRaycastResult<?>) obj;
+    final QuadTreeRaycastResultD<?> other = (QuadTreeRaycastResultD<?>) obj;
     if (Double.doubleToLongBits(this.distance) != Double
       .doubleToLongBits(other.distance)) {
       return false;
@@ -107,7 +109,7 @@ import javax.annotation.concurrent.Immutable;
   @Override public String toString()
   {
     final StringBuilder builder = new StringBuilder();
-    builder.append("[QuadTreeRaycastResult ");
+    builder.append("[QuadTreeRaycastResultF ");
     builder.append(this.distance);
     builder.append(" ");
     builder.append(this.object);

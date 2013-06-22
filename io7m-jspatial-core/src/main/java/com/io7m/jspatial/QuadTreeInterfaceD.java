@@ -25,10 +25,13 @@ import com.io7m.jaux.functional.Function;
 import com.io7m.jtensors.VectorI2D;
 
 /**
- * The interface provided by quadtree implementations.
+ * The interface provided by quadtree implementations with double-precision
+ * floating point coordinate values.
+ * 
+ * @since 2.1.0
  */
 
-public interface QuadTreeInterface<T extends QuadTreeMember<T>>
+public interface QuadTreeInterfaceD<T extends QuadTreeMemberD<T>>
 {
   /**
    * <p>
@@ -44,7 +47,7 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
    * </p>
    */
 
-  int quadTreeGetPositionX();
+  double quadTreeGetPositionX();
 
   /**
    * <p>
@@ -52,7 +55,7 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
    * </p>
    */
 
-  int quadTreeGetPositionY();
+  double quadTreeGetPositionY();
 
   /**
    * <p>
@@ -60,7 +63,7 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
    * </p>
    */
 
-  int quadTreeGetSizeX();
+  double quadTreeGetSizeX();
 
   /**
    * <p>
@@ -68,7 +71,7 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
    * </p>
    */
 
-  int quadTreeGetSizeY();
+  double quadTreeGetSizeY();
 
   /**
    * <p>
@@ -129,11 +132,11 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
    *           </ul>
    * 
    * 
-   * @see BoundingAreaCheck#wellFormed(BoundingArea)
+   * @see BoundingAreaCheck#wellFormedD(BoundingAreaD)
    */
 
   void quadTreeQueryAreaContaining(
-    final @Nonnull BoundingArea area,
+    final @Nonnull BoundingAreaD area,
     final @Nonnull SortedSet<T> items)
     throws ConstraintError;
 
@@ -151,11 +154,11 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
    * @throws ConstraintError
    *           Iff <code>area</code> is not well formed
    * 
-   * @see BoundingAreaCheck#wellFormed(BoundingArea)
+   * @see BoundingAreaCheck#wellFormedD(BoundingAreaD)
    */
 
   void quadTreeQueryAreaOverlapping(
-    final @Nonnull BoundingArea area,
+    final @Nonnull BoundingAreaD area,
     final @Nonnull SortedSet<T> items)
     throws ConstraintError;
 
@@ -184,7 +187,7 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
 
   void quadTreeQueryRaycast(
     final @Nonnull RayI2D ray,
-    final @Nonnull SortedSet<QuadTreeRaycastResult<T>> items)
+    final @Nonnull SortedSet<QuadTreeRaycastResultD<T>> items)
     throws ConstraintError;
 
   /**
@@ -225,7 +228,7 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
    */
 
   void quadTreeTraverse(
-    final @Nonnull QuadTreeTraversal traversal)
+    final @Nonnull QuadTreeTraversalD traversal)
     throws Exception,
       ConstraintError;
 }
