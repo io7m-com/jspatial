@@ -20,7 +20,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.io7m.jaux.UnreachableCodeException;
+import com.io7m.jtensors.VectorReadable2D;
+import com.io7m.jtensors.VectorReadable2F;
 import com.io7m.jtensors.VectorReadable2I;
+import com.io7m.jtensors.VectorReadable3D;
+import com.io7m.jtensors.VectorReadable3F;
 import com.io7m.jtensors.VectorReadable3I;
 
 @ThreadSafe final class Dimensions
@@ -40,6 +44,36 @@ import com.io7m.jtensors.VectorReadable3I;
   }
 
   /**
+   * Return the span on the X axis of the inclusive range defined by the given
+   * points.
+   * 
+   * @return upper.getXD() - lower.getXD()) + 1
+   * @since 2.1.0
+   */
+
+  static double getSpanSizeXD(
+    final @Nonnull VectorReadable2D lower,
+    final @Nonnull VectorReadable2D upper)
+  {
+    return (upper.getXD() - lower.getXD()) + 1;
+  }
+
+  /**
+   * Return the span on the X axis of the inclusive range defined by the given
+   * points.
+   * 
+   * @return upper.getXF() - lower.getXF()) + 1
+   * @since 2.1.0
+   */
+
+  static float getSpanSizeXF(
+    final @Nonnull VectorReadable2F lower,
+    final @Nonnull VectorReadable2F upper)
+  {
+    return (upper.getXF() - lower.getXF()) + 1;
+  }
+
+  /**
    * Return the span on the Y axis of the inclusive range defined by the given
    * points.
    * 
@@ -54,6 +88,36 @@ import com.io7m.jtensors.VectorReadable3I;
   }
 
   /**
+   * Return the span on the Y axis of the inclusive range defined by the given
+   * points.
+   * 
+   * @return upper.getYD() - lower.getYD()) + 1
+   * @since 2.1.0
+   */
+
+  static double getSpanSizeYD(
+    final @Nonnull VectorReadable2D lower,
+    final @Nonnull VectorReadable2D upper)
+  {
+    return (upper.getYD() - lower.getYD()) + 1;
+  }
+
+  /**
+   * Return the span on the Y axis of the inclusive range defined by the given
+   * points.
+   * 
+   * @return upper.getYF() - lower.getYF()) + 1
+   * @since 2.1.0
+   */
+
+  static float getSpanSizeYF(
+    final @Nonnull VectorReadable2F lower,
+    final @Nonnull VectorReadable2F upper)
+  {
+    return (upper.getYF() - lower.getYF()) + 1;
+  }
+
+  /**
    * Return the span on the Z axis of the inclusive range defined by the given
    * points.
    * 
@@ -65,6 +129,36 @@ import com.io7m.jtensors.VectorReadable3I;
     final @Nonnull VectorReadable3I upper)
   {
     return (upper.getZI() - lower.getZI()) + 1;
+  }
+
+  /**
+   * Return the span on the Z axis of the inclusive range defined by the given
+   * points.
+   * 
+   * @return upper.getZD() - lower.getZD()) + 1
+   * @since 2.1.0
+   */
+
+  static double getSpanSizeZD(
+    final @Nonnull VectorReadable3D lower,
+    final @Nonnull VectorReadable3D upper)
+  {
+    return (upper.getZD() - lower.getZD()) + 1;
+  }
+
+  /**
+   * Return the span on the Z axis of the inclusive range defined by the given
+   * points.
+   * 
+   * @return upper.getZF() - lower.getZF()) + 1
+   * @since 2.1.0
+   */
+
+  static float getSpanSizeZF(
+    final @Nonnull VectorReadable3F lower,
+    final @Nonnull VectorReadable3F upper)
+  {
+    return (upper.getZF() - lower.getZF()) + 1;
   }
 
   /**
