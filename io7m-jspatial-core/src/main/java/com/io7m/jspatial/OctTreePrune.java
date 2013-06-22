@@ -606,34 +606,6 @@ import com.io7m.jtensors.VectorReadable3I;
   private final @Nonnull VectorReadable3I size;
   private final @Nonnull VectorReadable3I position;
 
-  private OctTreePrune(
-    final @Nonnull VectorReadable3I position,
-    final @Nonnull VectorReadable3I size)
-    throws ConstraintError
-  {
-    Constraints.constrainNotNull(position, "Position");
-    Constraints.constrainNotNull(size, "Size");
-
-    Constraints.constrainRange(size.getXI(), 2, Integer.MAX_VALUE, "X size");
-    Constraints.constrainRange(size.getYI(), 2, Integer.MAX_VALUE, "Y size");
-    Constraints.constrainRange(size.getZI(), 2, Integer.MAX_VALUE, "Z size");
-    Constraints.constrainArbitrary((size.getXI() % 2) == 0, "X size is even");
-    Constraints.constrainArbitrary((size.getYI() % 2) == 0, "Y size is even");
-    Constraints.constrainArbitrary((size.getZI() % 2) == 0, "Z size is even");
-
-    this.objects_all = new TreeSet<T>();
-    this.size = new VectorI3I(size);
-    this.position = new VectorI3I(position);
-
-    final VectorI3I lower = new VectorI3I(position);
-    final VectorI3I upper =
-      new VectorI3I(
-        (position.getXI() + size.getXI()) - 1,
-        (position.getYI() + size.getYI()) - 1,
-        (position.getZI() + size.getZI()) - 1);
-    this.root = new Octant(null, lower, upper);
-  }
-
   /**
    * Construct an octtree using the provided configuration parameters.
    * 
@@ -666,6 +638,34 @@ import com.io7m.jtensors.VectorReadable3I;
     this(config.getPosition(), config.getSize());
   }
 
+  private OctTreePrune(
+    final @Nonnull VectorReadable3I position,
+    final @Nonnull VectorReadable3I size)
+    throws ConstraintError
+  {
+    Constraints.constrainNotNull(position, "Position");
+    Constraints.constrainNotNull(size, "Size");
+
+    Constraints.constrainRange(size.getXI(), 2, Integer.MAX_VALUE, "X size");
+    Constraints.constrainRange(size.getYI(), 2, Integer.MAX_VALUE, "Y size");
+    Constraints.constrainRange(size.getZI(), 2, Integer.MAX_VALUE, "Z size");
+    Constraints.constrainArbitrary((size.getXI() % 2) == 0, "X size is even");
+    Constraints.constrainArbitrary((size.getYI() % 2) == 0, "Y size is even");
+    Constraints.constrainArbitrary((size.getZI() % 2) == 0, "Z size is even");
+
+    this.objects_all = new TreeSet<T>();
+    this.size = new VectorI3I(size);
+    this.position = new VectorI3I(position);
+
+    final VectorI3I lower = new VectorI3I(position);
+    final VectorI3I upper =
+      new VectorI3I(
+        (position.getXI() + size.getXI()) - 1,
+        (position.getYI() + size.getYI()) - 1,
+        (position.getZI() + size.getZI()) - 1);
+    this.root = new Octant(null, lower, upper);
+  }
+
   @Override public void octTreeClear()
   {
     this.objects_all.clear();
@@ -676,6 +676,21 @@ import com.io7m.jtensors.VectorReadable3I;
         (this.position.getYI() + this.size.getYI()) - 1,
         (this.position.getZI() + this.size.getZI()) - 1);
     this.root = new Octant(null, lower, upper);
+  }
+
+  @Override public int octTreeGetPositionX()
+  {
+    return this.root.lower.x;
+  }
+
+  @Override public int octTreeGetPositionY()
+  {
+    return this.root.lower.y;
+  }
+
+  @Override public int octTreeGetPositionZ()
+  {
+    return this.root.lower.z;
   }
 
   @Override public int octTreeGetSizeX()
@@ -791,20 +806,5 @@ import com.io7m.jtensors.VectorReadable3I;
     builder.append(this.objects_all);
     builder.append("]");
     return builder.toString();
-  }
-
-  @Override public int octTreeGetPositionX()
-  {
-    return this.root.lower.x;
-  }
-
-  @Override public int octTreeGetPositionY()
-  {
-    return this.root.lower.y;
-  }
-
-  @Override public int octTreeGetPositionZ()
-  {
-    return this.root.lower.z;
   }
 }

@@ -20,6 +20,38 @@ public final class OctTreeLimitTest extends OctTreeCommonTests
     throw new UnreachableCodeException();
   }
 
+  @Override
+    <T extends OctTreeMember<T>>
+    OctTreeInterface<T>
+    makeOct128Offset64()
+  {
+    try {
+      final OctTreeConfig c = new OctTreeConfig();
+      c.setPosition(new VectorI3I(64, 64, 64));
+      return new OctTreeLimit<T>(c);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
+    }
+
+    throw new UnreachableCodeException();
+  }
+
+  @Override
+    <T extends OctTreeMember<T>>
+    OctTreeInterface<T>
+    makeOct128OffsetM64()
+  {
+    try {
+      final OctTreeConfig c = new OctTreeConfig();
+      c.setPosition(new VectorI3I(-64, -64, -64));
+      return new OctTreeLimit<T>(c);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
+    }
+
+    throw new UnreachableCodeException();
+  }
+
   @Override <T extends OctTreeMember<T>> OctTreeInterface<T> makeOct16()
   {
     try {
@@ -468,37 +500,5 @@ public final class OctTreeLimitTest extends OctTreeCommonTests
 
     q.octTreeTraverse(c);
     Assert.assertEquals(1, c.count);
-  }
-
-  @Override
-    <T extends OctTreeMember<T>>
-    OctTreeInterface<T>
-    makeOct128Offset64()
-  {
-    try {
-      final OctTreeConfig c = new OctTreeConfig();
-      c.setPosition(new VectorI3I(64, 64, 64));
-      return new OctTreeLimit<T>(c);
-    } catch (final ConstraintError e) {
-      Assert.fail(e.getMessage());
-    }
-
-    throw new UnreachableCodeException();
-  }
-
-  @Override
-    <T extends OctTreeMember<T>>
-    OctTreeInterface<T>
-    makeOct128OffsetM64()
-  {
-    try {
-      final OctTreeConfig c = new OctTreeConfig();
-      c.setPosition(new VectorI3I(-64, -64, -64));
-      return new OctTreeLimit<T>(c);
-    } catch (final ConstraintError e) {
-      Assert.fail(e.getMessage());
-    }
-
-    throw new UnreachableCodeException();
   }
 }

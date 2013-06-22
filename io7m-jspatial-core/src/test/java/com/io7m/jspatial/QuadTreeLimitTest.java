@@ -194,6 +194,52 @@ public final class QuadTreeLimitTest extends QuadTreeCommonTests
     });
   }
 
+  @SuppressWarnings("static-method") @Test public void testInsertSplitNotX()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(128);
+    config.setSizeY(128);
+    config.setMinimumSizeX(128);
+    config.setMinimumSizeY(2);
+    final QuadTreeInterface<Rectangle> q =
+      new QuadTreeLimit<Rectangle>(config);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
+
+    final boolean in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+
+    final Counter counter = new Counter();
+    q.quadTreeTraverse(counter);
+    Assert.assertEquals(1, counter.count);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testInsertSplitNotY()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(128);
+    config.setSizeY(128);
+    config.setMinimumSizeX(2);
+    config.setMinimumSizeY(128);
+    final QuadTreeInterface<Rectangle> q =
+      new QuadTreeLimit<Rectangle>(config);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
+
+    final boolean in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+
+    final Counter counter = new Counter();
+    q.quadTreeTraverse(counter);
+    Assert.assertEquals(1, counter.count);
+  }
+
   @SuppressWarnings("static-method") @Test public void testQuadrantsSimple()
   {
     final VectorI2I lower = new VectorI2I(8, 8);
@@ -330,51 +376,5 @@ public final class QuadTreeLimitTest extends QuadTreeCommonTests
     q.quadTreeQueryRaycastQuadrants(ray, items);
 
     Assert.assertEquals(1, items.size());
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertSplitNotX()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreeConfig config = new QuadTreeConfig();
-    config.setSizeX(128);
-    config.setSizeY(128);
-    config.setMinimumSizeX(128);
-    config.setMinimumSizeY(2);
-    final QuadTreeInterface<Rectangle> q =
-      new QuadTreeLimit<Rectangle>(config);
-
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
-
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-
-    final Counter counter = new Counter();
-    q.quadTreeTraverse(counter);
-    Assert.assertEquals(1, counter.count);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertSplitNotY()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreeConfig config = new QuadTreeConfig();
-    config.setSizeX(128);
-    config.setSizeY(128);
-    config.setMinimumSizeX(2);
-    config.setMinimumSizeY(128);
-    final QuadTreeInterface<Rectangle> q =
-      new QuadTreeLimit<Rectangle>(config);
-
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
-
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-
-    final Counter counter = new Counter();
-    q.quadTreeTraverse(counter);
-    Assert.assertEquals(1, counter.count);
   }
 }

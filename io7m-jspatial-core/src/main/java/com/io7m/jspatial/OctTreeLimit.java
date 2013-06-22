@@ -556,6 +556,53 @@ import com.io7m.jtensors.VectorReadable3I;
   protected final int                 minimum_size_y;
   protected final int                 minimum_size_z;
 
+  /**
+   * Construct an octtree using the provided configuration parameters.
+   * 
+   * @throws ConstraintError
+   *           Iff any of the following conditions hold:
+   *           <ul>
+   *           <li><code>config == null</code></li>
+   *           <li>
+   *           <code>(config.getSizeX() >= 2 && config.getSizeX() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(config.getSizeY() >= 2 && config.getSizeY() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(config.getSizeZ() >= 2 && config.getSizeZ() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li><code>config.getSizeX()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li><code>config.getSizeY()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li><code>config.getSizeZ()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li>
+   *           <code>(2 <= config.getMinimumSizeX() <= config.getSizeX()) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(2 <= config.getMinimumSizeY() <= config.getSizeY()) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(2 <= config.getMinimumSizeZ() <= config.getSizeZ()) == false</code>
+   *           </li>
+   *           <li><code>config.getMinimumSizeX()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li><code>config.getMinimumSizeY()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li><code>config.getMinimumSizeZ()</code> is not divisible by
+   *           <code>2</code></li>
+   *           </ul>
+   */
+
+  public OctTreeLimit(
+    final @Nonnull OctTreeConfig config)
+    throws ConstraintError
+  {
+    this(config.getPosition(), config.getSize(), config.getMinimumSize());
+  }
+
   private OctTreeLimit(
     final @Nonnull VectorReadable3I position,
     final @Nonnull VectorReadable3I size,
@@ -612,57 +659,25 @@ import com.io7m.jtensors.VectorReadable3I;
     this.root = new Octant(lower, upper);
   }
 
-  /**
-   * Construct an octtree using the provided configuration parameters.
-   * 
-   * @throws ConstraintError
-   *           Iff any of the following conditions hold:
-   *           <ul>
-   *           <li><code>config == null</code></li>
-   *           <li>
-   *           <code>(config.getSizeX() >= 2 && config.getSizeX() <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li>
-   *           <code>(config.getSizeY() >= 2 && config.getSizeY() <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li>
-   *           <code>(config.getSizeZ() >= 2 && config.getSizeZ() <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li><code>config.getSizeX()</code> is not divisible by
-   *           <code>2</code></li>
-   *           <li><code>config.getSizeY()</code> is not divisible by
-   *           <code>2</code></li>
-   *           <li><code>config.getSizeZ()</code> is not divisible by
-   *           <code>2</code></li>
-   *           <li>
-   *           <code>(2 <= config.getMinimumSizeX() <= config.getSizeX()) == false</code>
-   *           </li>
-   *           <li>
-   *           <code>(2 <= config.getMinimumSizeY() <= config.getSizeY()) == false</code>
-   *           </li>
-   *           <li>
-   *           <code>(2 <= config.getMinimumSizeZ() <= config.getSizeZ()) == false</code>
-   *           </li>
-   *           <li><code>config.getMinimumSizeX()</code> is not divisible by
-   *           <code>2</code></li>
-   *           <li><code>config.getMinimumSizeY()</code> is not divisible by
-   *           <code>2</code></li>
-   *           <li><code>config.getMinimumSizeZ()</code> is not divisible by
-   *           <code>2</code></li>
-   *           </ul>
-   */
-
-  public OctTreeLimit(
-    final @Nonnull OctTreeConfig config)
-    throws ConstraintError
-  {
-    this(config.getPosition(), config.getSize(), config.getMinimumSize());
-  }
-
   @Override public void octTreeClear()
   {
     this.objects_all.clear();
     this.root.clear();
+  }
+
+  @Override public int octTreeGetPositionX()
+  {
+    return this.root.lower.x;
+  }
+
+  @Override public int octTreeGetPositionY()
+  {
+    return this.root.lower.y;
+  }
+
+  @Override public int octTreeGetPositionZ()
+  {
+    return this.root.lower.z;
   }
 
   @Override public int octTreeGetSizeX()
@@ -778,20 +793,5 @@ import com.io7m.jtensors.VectorReadable3I;
     builder.append(this.objects_all);
     builder.append("]");
     return builder.toString();
-  }
-
-  @Override public int octTreeGetPositionX()
-  {
-    return this.root.lower.x;
-  }
-
-  @Override public int octTreeGetPositionY()
-  {
-    return this.root.lower.y;
-  }
-
-  @Override public int octTreeGetPositionZ()
-  {
-    return this.root.lower.z;
   }
 }

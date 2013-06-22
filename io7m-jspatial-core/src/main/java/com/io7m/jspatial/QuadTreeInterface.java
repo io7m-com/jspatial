@@ -37,18 +37,6 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
   void quadTreeClear();
 
   /**
-   * Retrieve the maximum size of the quadtree on the X axis.
-   */
-
-  int quadTreeGetSizeX();
-
-  /**
-   * Retrieve the maximum size of the quadtree on the Y axis.
-   */
-
-  int quadTreeGetSizeY();
-
-  /**
    * Retrieve the position of the lower corner of the quadtree on the X axis.
    */
 
@@ -59,6 +47,18 @@ public interface QuadTreeInterface<T extends QuadTreeMember<T>>
    */
 
   int quadTreeGetPositionY();
+
+  /**
+   * Retrieve the maximum size of the quadtree on the X axis.
+   */
+
+  int quadTreeGetSizeX();
+
+  /**
+   * Retrieve the maximum size of the quadtree on the Y axis.
+   */
+
+  int quadTreeGetSizeY();
 
   /**
    * Insert the object <code>item</code> into the quadtree.

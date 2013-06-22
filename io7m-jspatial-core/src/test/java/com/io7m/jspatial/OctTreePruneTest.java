@@ -20,6 +20,38 @@ public final class OctTreePruneTest extends OctTreeCommonTests
     throw new UnreachableCodeException();
   }
 
+  @Override
+    <T extends OctTreeMember<T>>
+    OctTreeInterface<T>
+    makeOct128Offset64()
+  {
+    try {
+      final OctTreeConfig c = new OctTreeConfig();
+      c.setPosition(new VectorI3I(64, 64, 64));
+      return new OctTreePrune<T>(c);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
+    }
+
+    throw new UnreachableCodeException();
+  }
+
+  @Override
+    <T extends OctTreeMember<T>>
+    OctTreeInterface<T>
+    makeOct128OffsetM64()
+  {
+    try {
+      final OctTreeConfig c = new OctTreeConfig();
+      c.setPosition(new VectorI3I(-64, -64, -64));
+      return new OctTreePrune<T>(c);
+    } catch (final ConstraintError e) {
+      Assert.fail(e.getMessage());
+    }
+
+    throw new UnreachableCodeException();
+  }
+
   @Override <T extends OctTreeMember<T>> OctTreeInterface<T> makeOct16()
   {
     try {
@@ -283,6 +315,142 @@ public final class OctTreePruneTest extends OctTreeCommonTests
     Assert.assertEquals(9, c.count);
   }
 
+  @Test public final void testInsertSplit()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeInterface<Cuboid> q = this.makeOct128();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(57, c.count);
+  }
+
+  @Test public final void testInsertSplitNot()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeInterface<Cuboid> q = this.makeOct2();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(9, c.count);
+  }
+
+  @Test public final void testInsertSplitXNotYNotZ()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeInterface<Cuboid> q = this.makeOct4_2_2();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(9, c.count);
+  }
+
+  @Test public final void testInsertSplitXYNotZ()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeInterface<Cuboid> q = this.makeOct4_4_2();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(9, c.count);
+  }
+
+  @Test public final void testInsertSplitXZNotY()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeInterface<Cuboid> q = this.makeOct4_2_4();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(9, c.count);
+  }
+
+  @Test public final void testInsertSplitYNotZNotZ()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeInterface<Cuboid> q = this.makeOct2_4_2();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(9, c.count);
+  }
+
+  @Test public final void testInsertSplitYZNotX()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeInterface<Cuboid> q = this.makeOct2_4_4();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(9, c.count);
+  }
+
+  @Test public final void testInsertSplitZNotXNotY()
+    throws ConstraintError,
+      Exception
+  {
+    final OctTreeInterface<Cuboid> q = this.makeOct2_2_4();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(9, c.count);
+  }
+
   @Test public void testRemovePrune()
     throws ConstraintError,
       Exception
@@ -466,173 +634,5 @@ public final class OctTreePruneTest extends OctTreeCommonTests
       q.octTreeTraverse(counter);
       Assert.assertEquals(9, counter.count);
     }
-  }
-
-  @Test public final void testInsertSplit()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeInterface<Cuboid> q = this.makeOct128();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(57, c.count);
-  }
-
-  @Test public final void testInsertSplitNot()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeInterface<Cuboid> q = this.makeOct2();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(9, c.count);
-  }
-
-  @Test public final void testInsertSplitXNotYNotZ()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeInterface<Cuboid> q = this.makeOct4_2_2();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(9, c.count);
-  }
-
-  @Test public final void testInsertSplitXYNotZ()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeInterface<Cuboid> q = this.makeOct4_4_2();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(9, c.count);
-  }
-
-  @Test public final void testInsertSplitXZNotY()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeInterface<Cuboid> q = this.makeOct4_2_4();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(9, c.count);
-  }
-
-  @Test public final void testInsertSplitYNotZNotZ()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeInterface<Cuboid> q = this.makeOct2_4_2();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(9, c.count);
-  }
-
-  @Test public final void testInsertSplitYZNotX()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeInterface<Cuboid> q = this.makeOct2_4_4();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(9, c.count);
-  }
-
-  @Test public final void testInsertSplitZNotXNotY()
-    throws ConstraintError,
-      Exception
-  {
-    final OctTreeInterface<Cuboid> q = this.makeOct2_2_4();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(9, c.count);
-  }
-
-  @Override
-    <T extends OctTreeMember<T>>
-    OctTreeInterface<T>
-    makeOct128Offset64()
-  {
-    try {
-      final OctTreeConfig c = new OctTreeConfig();
-      c.setPosition(new VectorI3I(64, 64, 64));
-      return new OctTreePrune<T>(c);
-    } catch (final ConstraintError e) {
-      Assert.fail(e.getMessage());
-    }
-
-    throw new UnreachableCodeException();
-  }
-
-  @Override
-    <T extends OctTreeMember<T>>
-    OctTreeInterface<T>
-    makeOct128OffsetM64()
-  {
-    try {
-      final OctTreeConfig c = new OctTreeConfig();
-      c.setPosition(new VectorI3I(-64, -64, -64));
-      return new OctTreePrune<T>(c);
-    } catch (final ConstraintError e) {
-      Assert.fail(e.getMessage());
-    }
-
-    throw new UnreachableCodeException();
   }
 }

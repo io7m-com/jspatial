@@ -18,11 +18,12 @@ package com.io7m.jspatial;
 
 import javax.annotation.Nonnull;
 
-import com.io7m.jtensors.VectorReadable2I;
+import com.io7m.jtensors.VectorReadable2F;
 
 /**
  * <p>
- * The type of objects with bounding areas.
+ * The type of objects with bounding areas, defined with single-precision
+ * floating point coordinate values.
  * </p>
  * <p>
  * Ranges are inclusive, and therefore it is impossible for a bounding area to
@@ -36,19 +37,21 @@ import com.io7m.jtensors.VectorReadable2I;
  * The results are undefined if the values returned by the interface functions
  * change after the object is inserted into the tree.
  * </p>
+ * 
+ * @since 2.1.0
  */
 
-public interface BoundingArea
+public interface BoundingAreaF
 {
   /**
    * Retrieve the lower corner of the area.
    */
 
-  @Nonnull VectorReadable2I boundingAreaLower();
+  @Nonnull VectorReadable2F boundingAreaLowerF();
 
   /**
    * Retrieve the upper corner of the area.
    */
 
-  @Nonnull VectorReadable2I boundingAreaUpper();
+  @Nonnull VectorReadable2F boundingAreaUpperF();
 }

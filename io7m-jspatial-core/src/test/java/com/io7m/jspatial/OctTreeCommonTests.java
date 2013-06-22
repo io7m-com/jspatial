@@ -64,6 +64,8 @@ public abstract class OctTreeCommonTests
     }
   }
 
+  abstract <T extends OctTreeMember<T>> OctTreeInterface<T> makeOct128();
+
   abstract
     <T extends OctTreeMember<T>>
     OctTreeInterface<T>
@@ -73,8 +75,6 @@ public abstract class OctTreeCommonTests
     <T extends OctTreeMember<T>>
     OctTreeInterface<T>
     makeOct128OffsetM64();
-
-  abstract <T extends OctTreeMember<T>> OctTreeInterface<T> makeOct128();
 
   abstract <T extends OctTreeMember<T>> OctTreeInterface<T> makeOct16();
 

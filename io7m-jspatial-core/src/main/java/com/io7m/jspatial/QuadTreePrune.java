@@ -512,31 +512,6 @@ import com.io7m.jtensors.VectorReadable2I;
   protected final @Nonnull VectorI2I    size;
   protected final @Nonnull VectorI2I    position;
 
-  private QuadTreePrune(
-    final @Nonnull VectorReadable2I position,
-    final @Nonnull VectorReadable2I size)
-    throws ConstraintError
-  {
-    Constraints.constrainNotNull(position, "Position");
-    Constraints.constrainNotNull(size, "Size");
-
-    Constraints.constrainRange(size.getXI(), 2, Integer.MAX_VALUE, "X size");
-    Constraints.constrainRange(size.getYI(), 2, Integer.MAX_VALUE, "Y size");
-    Constraints.constrainArbitrary((size.getXI() % 2) == 0, "X size is even");
-    Constraints.constrainArbitrary((size.getYI() % 2) == 0, "Y size is even");
-
-    this.objects_all = new TreeSet<T>();
-    this.position = new VectorI2I(position);
-    this.size = new VectorI2I(size);
-
-    final VectorI2I lower = new VectorI2I(position);
-    final VectorI2I upper =
-      new VectorI2I(
-        (position.getXI() + size.getXI()) - 1,
-        (position.getYI() + size.getYI()) - 1);
-    this.root = new Quadrant(null, lower, upper);
-  }
-
   /**
    * Construct a quadtree using the provided configuration parameters.
    * 
@@ -564,10 +539,45 @@ import com.io7m.jtensors.VectorReadable2I;
     this(config.getPosition(), config.getSize());
   }
 
+  private QuadTreePrune(
+    final @Nonnull VectorReadable2I position,
+    final @Nonnull VectorReadable2I size)
+    throws ConstraintError
+  {
+    Constraints.constrainNotNull(position, "Position");
+    Constraints.constrainNotNull(size, "Size");
+
+    Constraints.constrainRange(size.getXI(), 2, Integer.MAX_VALUE, "X size");
+    Constraints.constrainRange(size.getYI(), 2, Integer.MAX_VALUE, "Y size");
+    Constraints.constrainArbitrary((size.getXI() % 2) == 0, "X size is even");
+    Constraints.constrainArbitrary((size.getYI() % 2) == 0, "Y size is even");
+
+    this.objects_all = new TreeSet<T>();
+    this.position = new VectorI2I(position);
+    this.size = new VectorI2I(size);
+
+    final VectorI2I lower = new VectorI2I(position);
+    final VectorI2I upper =
+      new VectorI2I(
+        (position.getXI() + size.getXI()) - 1,
+        (position.getYI() + size.getYI()) - 1);
+    this.root = new Quadrant(null, lower, upper);
+  }
+
   @Override public void quadTreeClear()
   {
     this.root = new Quadrant(null, this.position, this.size);
     this.objects_all.clear();
+  }
+
+  @Override public int quadTreeGetPositionX()
+  {
+    return this.position.x;
+  }
+
+  @Override public int quadTreeGetPositionY()
+  {
+    return this.position.y;
   }
 
   @Override public int quadTreeGetSizeX()
@@ -704,15 +714,5 @@ import com.io7m.jtensors.VectorReadable2I;
     builder.append(this.objects_all);
     builder.append("]");
     return builder.toString();
-  }
-
-  @Override public int quadTreeGetPositionX()
-  {
-    return this.position.x;
-  }
-
-  @Override public int quadTreeGetPositionY()
-  {
-    return this.position.y;
   }
 }

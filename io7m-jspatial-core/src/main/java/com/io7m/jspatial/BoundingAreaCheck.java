@@ -25,6 +25,8 @@ import com.io7m.jaux.UnreachableCodeException;
  * Overlap and containment checks between bounding areas.
  * 
  * @see BoundingArea
+ * @see BoundingAreaF
+ * @see BoundingAreaD
  */
 
 @ThreadSafe public final class BoundingAreaCheck
@@ -85,6 +87,106 @@ import com.io7m.jaux.UnreachableCodeException;
   }
 
   /**
+   * Determine whether <code>b</code> overlaps <code>a</code>, or is
+   * completely contained by <code>a</code>.
+   * 
+   * @since 2.1.0
+   */
+
+  static @Nonnull Result checkAgainstD(
+    final @Nonnull BoundingAreaD container,
+    final @Nonnull BoundingAreaD item)
+  {
+    final double c_x0 = container.boundingAreaLowerD().getXD();
+    final double c_x1 = container.boundingAreaUpperD().getXD();
+    final double c_y0 = container.boundingAreaLowerD().getYD();
+    final double c_y1 = container.boundingAreaUpperD().getYD();
+
+    final double i_x0 = item.boundingAreaLowerD().getXD();
+    final double i_x1 = item.boundingAreaUpperD().getXD();
+    final double i_y0 = item.boundingAreaLowerD().getYD();
+    final double i_y1 = item.boundingAreaUpperD().getYD();
+
+    // Check for containment
+    if (BoundingAreaCheck.containsD(
+      c_x0,
+      c_x1,
+      c_y0,
+      c_y1,
+      i_x0,
+      i_x1,
+      i_y0,
+      i_y1)) {
+      return Result.RESULT_CONTAINED_WITHIN;
+    }
+
+    // Check for overlap.
+    if (BoundingAreaCheck.overlapsD(
+      c_x0,
+      c_x1,
+      c_y0,
+      c_y1,
+      i_x0,
+      i_x1,
+      i_y0,
+      i_y1)) {
+      return Result.RESULT_OVERLAP;
+    }
+
+    return Result.RESULT_NO_OVERLAP;
+  }
+
+  /**
+   * Determine whether <code>b</code> overlaps <code>a</code>, or is
+   * completely contained by <code>a</code>.
+   * 
+   * @since 2.1.0
+   */
+
+  static @Nonnull Result checkAgainstF(
+    final @Nonnull BoundingAreaF container,
+    final @Nonnull BoundingAreaF item)
+  {
+    final float c_x0 = container.boundingAreaLowerF().getXF();
+    final float c_x1 = container.boundingAreaUpperF().getXF();
+    final float c_y0 = container.boundingAreaLowerF().getYF();
+    final float c_y1 = container.boundingAreaUpperF().getYF();
+
+    final float i_x0 = item.boundingAreaLowerF().getXF();
+    final float i_x1 = item.boundingAreaUpperF().getXF();
+    final float i_y0 = item.boundingAreaLowerF().getYF();
+    final float i_y1 = item.boundingAreaUpperF().getYF();
+
+    // Check for containment
+    if (BoundingAreaCheck.containsF(
+      c_x0,
+      c_x1,
+      c_y0,
+      c_y1,
+      i_x0,
+      i_x1,
+      i_y0,
+      i_y1)) {
+      return Result.RESULT_CONTAINED_WITHIN;
+    }
+
+    // Check for overlap.
+    if (BoundingAreaCheck.overlapsF(
+      c_x0,
+      c_x1,
+      c_y0,
+      c_y1,
+      i_x0,
+      i_x1,
+      i_y0,
+      i_y1)) {
+      return Result.RESULT_OVERLAP;
+    }
+
+    return Result.RESULT_NO_OVERLAP;
+  }
+
+  /**
    * Return <code>true</code> iff <code>item</code> is completely contained
    * within <code>container</code>.
    */
@@ -114,6 +216,70 @@ import com.io7m.jaux.UnreachableCodeException;
       i_y1);
   }
 
+  /**
+   * Return <code>true</code> iff <code>item</code> is completely contained
+   * within <code>container</code>.
+   * 
+   * @since 2.1.0
+   */
+
+  static boolean containedWithinD(
+    final @Nonnull BoundingAreaD container,
+    final @Nonnull BoundingAreaD item)
+  {
+    final double c_x0 = container.boundingAreaLowerD().getXD();
+    final double c_x1 = container.boundingAreaUpperD().getXD();
+    final double c_y0 = container.boundingAreaLowerD().getYD();
+    final double c_y1 = container.boundingAreaUpperD().getYD();
+
+    final double i_x0 = item.boundingAreaLowerD().getXD();
+    final double i_x1 = item.boundingAreaUpperD().getXD();
+    final double i_y0 = item.boundingAreaLowerD().getYD();
+    final double i_y1 = item.boundingAreaUpperD().getYD();
+
+    return BoundingAreaCheck.containsD(
+      c_x0,
+      c_x1,
+      c_y0,
+      c_y1,
+      i_x0,
+      i_x1,
+      i_y0,
+      i_y1);
+  }
+
+  /**
+   * Return <code>true</code> iff <code>item</code> is completely contained
+   * within <code>container</code>.
+   * 
+   * @since 2.1.0
+   */
+
+  static boolean containedWithinF(
+    final @Nonnull BoundingAreaF container,
+    final @Nonnull BoundingAreaF item)
+  {
+    final float c_x0 = container.boundingAreaLowerF().getXF();
+    final float c_x1 = container.boundingAreaUpperF().getXF();
+    final float c_y0 = container.boundingAreaLowerF().getYF();
+    final float c_y1 = container.boundingAreaUpperF().getYF();
+
+    final float i_x0 = item.boundingAreaLowerF().getXF();
+    final float i_x1 = item.boundingAreaUpperF().getXF();
+    final float i_y0 = item.boundingAreaLowerF().getYF();
+    final float i_y1 = item.boundingAreaUpperF().getYF();
+
+    return BoundingAreaCheck.containsF(
+      c_x0,
+      c_x1,
+      c_y0,
+      c_y1,
+      i_x0,
+      i_x1,
+      i_y0,
+      i_y1);
+  }
+
   static boolean contains(
     final int a_x0,
     final int a_x1,
@@ -123,6 +289,42 @@ import com.io7m.jaux.UnreachableCodeException;
     final int b_x1,
     final int b_y0,
     final int b_y1)
+  {
+    final boolean c0 = b_x0 >= a_x0;
+    final boolean c1 = b_x1 <= a_x1;
+    final boolean c2 = b_y0 >= a_y0;
+    final boolean c3 = b_y1 <= a_y1;
+
+    return (c0 && c1 && c2 && c3);
+  }
+
+  static boolean containsD(
+    final double a_x0,
+    final double a_x1,
+    final double a_y0,
+    final double a_y1,
+    final double b_x0,
+    final double b_x1,
+    final double b_y0,
+    final double b_y1)
+  {
+    final boolean c0 = b_x0 >= a_x0;
+    final boolean c1 = b_x1 <= a_x1;
+    final boolean c2 = b_y0 >= a_y0;
+    final boolean c3 = b_y1 <= a_y1;
+
+    return (c0 && c1 && c2 && c3);
+  }
+
+  static boolean containsF(
+    final float a_x0,
+    final float a_x1,
+    final float a_y0,
+    final float a_y1,
+    final float b_x0,
+    final float b_x1,
+    final float b_y0,
+    final float b_y1)
   {
     final boolean c0 = b_x0 >= a_x0;
     final boolean c1 = b_x1 <= a_x1;
@@ -181,6 +383,106 @@ import com.io7m.jaux.UnreachableCodeException;
   }
 
   /**
+   * Return <code>true</code> iff <code>item</code> overlaps
+   * <code>container</code>.
+   * 
+   * @since 2.1.0
+   */
+
+  static boolean overlapsAreaD(
+    final @Nonnull BoundingAreaD container,
+    final @Nonnull BoundingAreaD item)
+  {
+    final double c_x0 = container.boundingAreaLowerD().getXD();
+    final double c_x1 = container.boundingAreaUpperD().getXD();
+    final double c_y0 = container.boundingAreaLowerD().getYD();
+    final double c_y1 = container.boundingAreaUpperD().getYD();
+
+    final double i_x0 = item.boundingAreaLowerD().getXD();
+    final double i_x1 = item.boundingAreaUpperD().getXD();
+    final double i_y0 = item.boundingAreaLowerD().getYD();
+    final double i_y1 = item.boundingAreaUpperD().getYD();
+
+    return BoundingAreaCheck.overlapsD(
+      c_x0,
+      c_x1,
+      c_y0,
+      c_y1,
+      i_x0,
+      i_x1,
+      i_y0,
+      i_y1);
+  }
+
+  /**
+   * Return <code>true</code> iff <code>item</code> overlaps
+   * <code>container</code>.
+   * 
+   * @since 2.1.0
+   */
+
+  static boolean overlapsAreaF(
+    final @Nonnull BoundingAreaF container,
+    final @Nonnull BoundingAreaF item)
+  {
+    final float c_x0 = container.boundingAreaLowerF().getXF();
+    final float c_x1 = container.boundingAreaUpperF().getXF();
+    final float c_y0 = container.boundingAreaLowerF().getYF();
+    final float c_y1 = container.boundingAreaUpperF().getYF();
+
+    final float i_x0 = item.boundingAreaLowerF().getXF();
+    final float i_x1 = item.boundingAreaUpperF().getXF();
+    final float i_y0 = item.boundingAreaLowerF().getYF();
+    final float i_y1 = item.boundingAreaUpperF().getYF();
+
+    return BoundingAreaCheck.overlapsF(
+      c_x0,
+      c_x1,
+      c_y0,
+      c_y1,
+      i_x0,
+      i_x1,
+      i_y0,
+      i_y1);
+  }
+
+  static boolean overlapsD(
+    final double a_x0,
+    final double a_x1,
+    final double a_y0,
+    final double a_y1,
+    final double b_x0,
+    final double b_x1,
+    final double b_y0,
+    final double b_y1)
+  {
+    final boolean c0 = a_x0 < b_x1;
+    final boolean c1 = a_x1 > b_x0;
+    final boolean c2 = a_y0 < b_y1;
+    final boolean c3 = a_y1 > b_y0;
+
+    return c0 && c1 && c2 && c3;
+  }
+
+  static boolean overlapsF(
+    final float a_x0,
+    final float a_x1,
+    final float a_y0,
+    final float a_y1,
+    final float b_x0,
+    final float b_x1,
+    final float b_y0,
+    final float b_y1)
+  {
+    final boolean c0 = a_x0 < b_x1;
+    final boolean c1 = a_x1 > b_x0;
+    final boolean c2 = a_y0 < b_y1;
+    final boolean c3 = a_y1 > b_y0;
+
+    return c0 && c1 && c2 && c3;
+  }
+
+  /**
    * Branchless optimization of the Kay-Kajiya slab ray/AABB intersection test
    * by Tavian Barnes.
    * 
@@ -230,6 +532,60 @@ import com.io7m.jaux.UnreachableCodeException;
     if (container.boundingAreaLower().getYI() > container
       .boundingAreaUpper()
       .getYI()) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Return <code>true</code> iff the given bounding area is well formed. That
+   * is, iff
+   * <code>container.boundingAreaLower().getXD() <= container.boundingAreaUpper().getXD()</code>
+   * and
+   * <code>container.boundingAreaLower().getYD() <= container.boundingAreaUpper().getYD()</code>
+   * .
+   * 
+   * @since 2.1.0
+   */
+
+  static boolean wellFormedD(
+    final @Nonnull BoundingAreaD container)
+  {
+    if (container.boundingAreaLowerD().getXD() > container
+      .boundingAreaUpperD()
+      .getXD()) {
+      return false;
+    }
+    if (container.boundingAreaLowerD().getYD() > container
+      .boundingAreaUpperD()
+      .getYD()) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Return <code>true</code> iff the given bounding area is well formed. That
+   * is, iff
+   * <code>container.boundingAreaLower().getXF() <= container.boundingAreaUpper().getXF()</code>
+   * and
+   * <code>container.boundingAreaLower().getYF() <= container.boundingAreaUpper().getYF()</code>
+   * .
+   * 
+   * @since 2.1.0
+   */
+
+  static boolean wellFormedF(
+    final @Nonnull BoundingAreaF container)
+  {
+    if (container.boundingAreaLowerF().getXF() > container
+      .boundingAreaUpperF()
+      .getXF()) {
+      return false;
+    }
+    if (container.boundingAreaLowerF().getYF() > container
+      .boundingAreaUpperF()
+      .getYF()) {
       return false;
     }
     return true;

@@ -470,6 +470,42 @@ import com.io7m.jtensors.VectorReadable2I;
   protected final @Nonnull SortedSet<T> objects_all;
   protected final @Nonnull VectorI2I    minimum_size;
 
+  /**
+   * Construct a quadtree using the provided configuration parameters.
+   * 
+   * @throws ConstraintError
+   *           Iff any of the following conditions hold:
+   *           <ul>
+   *           <li><code>config == null</code></li>
+   *           <li>
+   *           <code>(config.getSizeX() >= 2 && config.getSizeX() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(config.getSizeY() >= 2 && config.getSizeY() <= Integer.MAX_VALUE) == false</code>
+   *           </li>
+   *           <li><code>config.getSizeX()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li><code>config.getSizeY()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <code>(2 <= config.getMinimumSizeX() <= config.getSizeX()) == false</code>
+   *           </li>
+   *           <li>
+   *           <code>(2 <= config.getMinimumSizeY() <= config.getSizeY()) == false</code>
+   *           </li>
+   *           <li><code>config.getMinimumSizeX()</code> is not divisible by
+   *           <code>2</code></li>
+   *           <li><code>config.getMinimumSizeY()</code> is not divisible by
+   *           <code>2</code></li>
+   *           </ul>
+   */
+
+  public QuadTreeLimit(
+    final @Nonnull QuadTreeConfig config)
+    throws ConstraintError
+  {
+    this(config.getPosition(), config.getSize(), config.getMinimumSize());
+  }
+
   private QuadTreeLimit(
     final @Nonnull VectorReadable2I position,
     final @Nonnull VectorReadable2I size,
@@ -512,46 +548,20 @@ import com.io7m.jtensors.VectorReadable2I;
     this.root = new Quadrant(lower, upper);
   }
 
-  /**
-   * Construct a quadtree using the provided configuration parameters.
-   * 
-   * @throws ConstraintError
-   *           Iff any of the following conditions hold:
-   *           <ul>
-   *           <li><code>config == null</code></li>
-   *           <li>
-   *           <code>(config.getSizeX() >= 2 && config.getSizeX() <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li>
-   *           <code>(config.getSizeY() >= 2 && config.getSizeY() <= Integer.MAX_VALUE) == false</code>
-   *           </li>
-   *           <li><code>config.getSizeX()</code> is not divisible by
-   *           <code>2</code></li>
-   *           <li><code>config.getSizeY()</code> is not divisible by
-   *           <code>2</code></li>
-   *           <code>(2 <= config.getMinimumSizeX() <= config.getSizeX()) == false</code>
-   *           </li>
-   *           <li>
-   *           <code>(2 <= config.getMinimumSizeY() <= config.getSizeY()) == false</code>
-   *           </li>
-   *           <li><code>config.getMinimumSizeX()</code> is not divisible by
-   *           <code>2</code></li>
-   *           <li><code>config.getMinimumSizeY()</code> is not divisible by
-   *           <code>2</code></li>
-   *           </ul>
-   */
-
-  public QuadTreeLimit(
-    final @Nonnull QuadTreeConfig config)
-    throws ConstraintError
-  {
-    this(config.getPosition(), config.getSize(), config.getMinimumSize());
-  }
-
   @Override public void quadTreeClear()
   {
     this.root.clear();
     this.objects_all.clear();
+  }
+
+  @Override public int quadTreeGetPositionX()
+  {
+    return this.root.lower.x;
+  }
+
+  @Override public int quadTreeGetPositionY()
+  {
+    return this.root.lower.y;
   }
 
   @Override public int quadTreeGetSizeX()
@@ -688,15 +698,5 @@ import com.io7m.jtensors.VectorReadable2I;
     builder.append(this.objects_all);
     builder.append("]");
     return builder.toString();
-  }
-
-  @Override public int quadTreeGetPositionX()
-  {
-    return this.root.lower.x;
-  }
-
-  @Override public int quadTreeGetPositionY()
-  {
-    return this.root.lower.y;
   }
 }

@@ -133,6 +133,48 @@ public final class QuadTreeBasicTest extends QuadTreeCommonTests
     new QuadTreeBasic<Rectangle>(config);
   }
 
+  @SuppressWarnings("static-method") @Test public void testInsertSplitNotX()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(2);
+    config.setSizeY(4);
+    final QuadTreeInterface<Rectangle> q =
+      new QuadTreeBasic<Rectangle>(config);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
+
+    final boolean in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+
+    final Counter counter = new Counter();
+    q.quadTreeTraverse(counter);
+    Assert.assertEquals(5, counter.count);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testInsertSplitNotY()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(4);
+    config.setSizeY(2);
+    final QuadTreeInterface<Rectangle> q =
+      new QuadTreeBasic<Rectangle>(config);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
+
+    final boolean in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+
+    final Counter counter = new Counter();
+    q.quadTreeTraverse(counter);
+    Assert.assertEquals(5, counter.count);
+  }
+
   @SuppressWarnings("static-method") @Test public void testQuadrantsSimple()
   {
     final VectorI2I lower = new VectorI2I(8, 8);
@@ -269,47 +311,5 @@ public final class QuadTreeBasicTest extends QuadTreeCommonTests
     q.quadTreeQueryRaycastQuadrants(ray, items);
 
     Assert.assertEquals(1, items.size());
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertSplitNotX()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreeConfig config = new QuadTreeConfig();
-    config.setSizeX(2);
-    config.setSizeY(4);
-    final QuadTreeInterface<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(config);
-
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
-
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-
-    final Counter counter = new Counter();
-    q.quadTreeTraverse(counter);
-    Assert.assertEquals(5, counter.count);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertSplitNotY()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreeConfig config = new QuadTreeConfig();
-    config.setSizeX(4);
-    config.setSizeY(2);
-    final QuadTreeInterface<Rectangle> q =
-      new QuadTreeBasic<Rectangle>(config);
-
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
-
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-
-    final Counter counter = new Counter();
-    q.quadTreeTraverse(counter);
-    Assert.assertEquals(5, counter.count);
   }
 }

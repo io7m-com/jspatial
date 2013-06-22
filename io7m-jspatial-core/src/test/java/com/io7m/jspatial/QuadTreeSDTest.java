@@ -89,6 +89,41 @@ public final class QuadTreeSDTest extends QuadTreeCommonTests
     throw new UnreachableCodeException();
   }
 
+  @SuppressWarnings("static-method") @Test public void testClearDynamic()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(32);
+    config.setSizeY(32);
+    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(config);
+    final Rectangle[] dynamics = TestUtilities.makeRectangles(0, 32);
+    final Rectangle[] statics = TestUtilities.makeRectangles(10, 32);
+
+    for (final Rectangle r : dynamics) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+      Assert.assertTrue(in);
+    }
+    for (final Rectangle r : statics) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+      Assert.assertTrue(in);
+    }
+
+    {
+      final IterationCounter counter = new IterationCounter();
+      q.quadTreeIterateObjects(counter);
+      Assert.assertEquals(8, counter.count);
+    }
+
+    q.quadTreeSDClearDynamic();
+
+    {
+      final IterationCounter counter = new IterationCounter();
+      q.quadTreeIterateObjects(counter);
+      Assert.assertEquals(4, counter.count);
+    }
+  }
+
   @SuppressWarnings({ "unused", "static-method" }) @Test(
     expected = ConstraintError.class) public void testCreateSDXOdd()
     throws ConstraintError
@@ -127,6 +162,46 @@ public final class QuadTreeSDTest extends QuadTreeCommonTests
     config.setSizeX(2);
     config.setSizeY(1);
     final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(config);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testInsertSplitNotX()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(2);
+    config.setSizeY(4);
+    final QuadTreeInterface<Rectangle> q = new QuadTreeSD<Rectangle>(config);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
+
+    final boolean in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+
+    final Counter counter = new Counter();
+    q.quadTreeTraverse(counter);
+    Assert.assertEquals(5, counter.count);
+  }
+
+  @SuppressWarnings("static-method") @Test public void testInsertSplitNotY()
+    throws ConstraintError,
+      Exception
+  {
+    final QuadTreeConfig config = new QuadTreeConfig();
+    config.setSizeX(4);
+    config.setSizeY(2);
+    final QuadTreeInterface<Rectangle> q = new QuadTreeSD<Rectangle>(config);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
+
+    final boolean in = q.quadTreeInsert(r);
+    Assert.assertTrue(in);
+
+    final Counter counter = new Counter();
+    q.quadTreeTraverse(counter);
+    Assert.assertEquals(5, counter.count);
   }
 
   @SuppressWarnings("static-method") @Test public
@@ -521,81 +596,6 @@ public final class QuadTreeSDTest extends QuadTreeCommonTests
     for (final Rectangle r : rectangles) {
       final boolean removed = q.quadTreeRemove(r);
       Assert.assertTrue(removed);
-    }
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertSplitNotX()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreeConfig config = new QuadTreeConfig();
-    config.setSizeX(2);
-    config.setSizeY(4);
-    final QuadTreeInterface<Rectangle> q = new QuadTreeSD<Rectangle>(config);
-
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
-
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-
-    final Counter counter = new Counter();
-    q.quadTreeTraverse(counter);
-    Assert.assertEquals(5, counter.count);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testInsertSplitNotY()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreeConfig config = new QuadTreeConfig();
-    config.setSizeX(4);
-    config.setSizeY(2);
-    final QuadTreeInterface<Rectangle> q = new QuadTreeSD<Rectangle>(config);
-
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
-
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
-
-    final Counter counter = new Counter();
-    q.quadTreeTraverse(counter);
-    Assert.assertEquals(5, counter.count);
-  }
-
-  @SuppressWarnings("static-method") @Test public void testClearDynamic()
-    throws ConstraintError,
-      Exception
-  {
-    final QuadTreeConfig config = new QuadTreeConfig();
-    config.setSizeX(32);
-    config.setSizeY(32);
-    final QuadTreeSD<Rectangle> q = new QuadTreeSD<Rectangle>(config);
-    final Rectangle[] dynamics = TestUtilities.makeRectangles(0, 32);
-    final Rectangle[] statics = TestUtilities.makeRectangles(10, 32);
-
-    for (final Rectangle r : dynamics) {
-      final boolean in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
-      Assert.assertTrue(in);
-    }
-    for (final Rectangle r : statics) {
-      final boolean in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
-      Assert.assertTrue(in);
-    }
-
-    {
-      final IterationCounter counter = new IterationCounter();
-      q.quadTreeIterateObjects(counter);
-      Assert.assertEquals(8, counter.count);
-    }
-
-    q.quadTreeSDClearDynamic();
-
-    {
-      final IterationCounter counter = new IterationCounter();
-      q.quadTreeIterateObjects(counter);
-      Assert.assertEquals(4, counter.count);
     }
   }
 }
