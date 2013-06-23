@@ -26,12 +26,11 @@ import com.io7m.jtensors.VectorReadable2F;
  * floating point coordinate values.
  * </p>
  * <p>
- * Ranges are inclusive, and therefore it is impossible for a bounding area to
- * be of zero width or height: An area with the lower corner at
- * <code>[0,0]</code> and the upper corner at <code>[0,0]</code> describes an
- * area of width <code>1</code> and height <code>1</code> because
- * <code>0</code> is simultaneously the lowermost and uppermost valid value
- * for each axis.
+ * Note that in contrast to {@link BoundingArea}, the ranges given have an
+ * inclusive lower bound and exclusive upper bound. Therefore, an area with
+ * the lower corner at <code>[0,0]</code> and upper corner also at
+ * <code>[0,0]</code> describes an area of width <code>0</code> and height
+ * <code>0</code>.
  * </p>
  * <p>
  * The results are undefined if the values returned by the interface functions
