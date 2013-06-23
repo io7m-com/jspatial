@@ -63,7 +63,7 @@ public interface QuadTreeInterfaceD<T extends QuadTreeMemberD<T>>
    * </p>
    */
 
-  double quadTreeGetSizeX();
+  int quadTreeGetSizeX();
 
   /**
    * <p>
@@ -71,7 +71,7 @@ public interface QuadTreeInterfaceD<T extends QuadTreeMemberD<T>>
    * </p>
    */
 
-  double quadTreeGetSizeY();
+  int quadTreeGetSizeY();
 
   /**
    * <p>
