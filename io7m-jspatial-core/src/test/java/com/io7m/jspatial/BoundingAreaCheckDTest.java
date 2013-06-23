@@ -5,86 +5,85 @@ import org.junit.Test;
 
 import com.io7m.jspatial.BoundingAreaCheck.Result;
 import com.io7m.jtensors.VectorI2D;
-import com.io7m.jtensors.VectorI2I;
 
-public class BoundingAreaCheckTest
+public final class BoundingAreaCheckDTest
 {
   @SuppressWarnings("static-method") @Test public
     void
-    testContainedAsymmetric()
+    testDContainedAsymmetric()
   {
-    final Rectangle rect0 =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
-    final Rectangle rect1 =
-      new Rectangle(1, new VectorI2I(2, 2), new VectorI2I(5, 5));
+    final RectangleD rect0 =
+      new RectangleD(0, new VectorI2D(0, 0), new VectorI2D(7, 7));
+    final RectangleD rect1 =
+      new RectangleD(1, new VectorI2D(2, 2), new VectorI2D(5, 5));
 
     {
-      final Result r = BoundingAreaCheck.checkAgainst(rect0, rect1);
+      final Result r = BoundingAreaCheck.checkAgainstD(rect0, rect1);
       Assert.assertEquals(Result.RESULT_CONTAINED_WITHIN, r);
     }
 
     {
-      final Result r = BoundingAreaCheck.checkAgainst(rect1, rect0);
+      final Result r = BoundingAreaCheck.checkAgainstD(rect1, rect0);
       Assert.assertEquals(Result.RESULT_OVERLAP, r);
     }
   }
 
-  @SuppressWarnings("static-method") @Test public void testContainedNot0()
+  @SuppressWarnings("static-method") @Test public void testDContainedNot0()
   {
-    final Rectangle rect0 =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(2, 2));
+    final RectangleD rect0 =
+      new RectangleD(0, new VectorI2D(0, 0), new VectorI2D(2, 2));
 
     {
-      final Rectangle rect1 =
-        new Rectangle(1, new VectorI2I(3, 3), new VectorI2I(5, 5));
-      final Result r0 = BoundingAreaCheck.checkAgainst(rect0, rect1);
+      final RectangleD rect1 =
+        new RectangleD(1, new VectorI2D(3, 3), new VectorI2D(5, 5));
+      final Result r0 = BoundingAreaCheck.checkAgainstD(rect0, rect1);
       Assert.assertEquals(Result.RESULT_NO_OVERLAP, r0);
-      final Result r1 = BoundingAreaCheck.checkAgainst(rect1, rect0);
+      final Result r1 = BoundingAreaCheck.checkAgainstD(rect1, rect0);
       Assert.assertEquals(Result.RESULT_NO_OVERLAP, r1);
     }
 
     {
-      final Rectangle rect1 =
-        new Rectangle(1, new VectorI2I(0, 3), new VectorI2I(5, 5));
-      final Result r0 = BoundingAreaCheck.checkAgainst(rect0, rect1);
+      final RectangleD rect1 =
+        new RectangleD(1, new VectorI2D(0, 3), new VectorI2D(5, 5));
+      final Result r0 = BoundingAreaCheck.checkAgainstD(rect0, rect1);
       Assert.assertEquals(Result.RESULT_NO_OVERLAP, r0);
-      final Result r1 = BoundingAreaCheck.checkAgainst(rect1, rect0);
+      final Result r1 = BoundingAreaCheck.checkAgainstD(rect1, rect0);
       Assert.assertEquals(Result.RESULT_NO_OVERLAP, r1);
     }
 
     {
-      final Rectangle rect1 =
-        new Rectangle(1, new VectorI2I(3, 0), new VectorI2I(5, 5));
-      final Result r0 = BoundingAreaCheck.checkAgainst(rect0, rect1);
+      final RectangleD rect1 =
+        new RectangleD(1, new VectorI2D(3, 0), new VectorI2D(5, 5));
+      final Result r0 = BoundingAreaCheck.checkAgainstD(rect0, rect1);
       Assert.assertEquals(Result.RESULT_NO_OVERLAP, r0);
-      final Result r1 = BoundingAreaCheck.checkAgainst(rect1, rect0);
+      final Result r1 = BoundingAreaCheck.checkAgainstD(rect1, rect0);
       Assert.assertEquals(Result.RESULT_NO_OVERLAP, r1);
     }
   }
 
   @SuppressWarnings("static-method") @Test public
     void
-    testContainedReflexive()
+    testDContainedIrreflexive()
   {
-    final Rectangle rect =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
+    final RectangleD rect =
+      new RectangleD(0, new VectorI2D(0, 0), new VectorI2D(7, 7));
 
-    final Result r = BoundingAreaCheck.checkAgainst(rect, rect);
-    Assert.assertEquals(Result.RESULT_CONTAINED_WITHIN, r);
+    final Result r = BoundingAreaCheck.checkAgainstD(rect, rect);
+    Assert.assertFalse(r == Result.RESULT_CONTAINED_WITHIN);
   }
 
-  @SuppressWarnings("static-method") @Test public void testContainedSimple()
+  @SuppressWarnings("static-method") @Test public void testDContainedSimple()
   {
-    final Rectangle container =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(15, 15));
-    final Rectangle item =
-      new Rectangle(1, new VectorI2I(0, 0), new VectorI2I(7, 7));
+    final RectangleD container =
+      new RectangleD(0, new VectorI2D(0, 0), new VectorI2D(15, 15));
+    final RectangleD item =
+      new RectangleD(1, new VectorI2D(0, 0), new VectorI2D(7, 7));
 
-    final boolean in = BoundingAreaCheck.containedWithin(container, item);
+    final boolean in = BoundingAreaCheck.containedWithinD(container, item);
     Assert.assertTrue(in);
   }
 
-  @SuppressWarnings("static-method") @Test public void testContainsNot_0()
+  @SuppressWarnings("static-method") @Test public void testDContainsNot_0()
   {
     final int a_x0 = 0;
     final int a_y0 = 0;
@@ -96,7 +95,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = 8;
     final int b_y1 = 8;
 
-    Assert.assertFalse(BoundingAreaCheck.contains(
+    Assert.assertFalse(BoundingAreaCheck.containsD(
       a_x0,
       a_x1,
       a_y0,
@@ -107,7 +106,7 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testContainsNot_1()
+  @SuppressWarnings("static-method") @Test public void testDContainsNot_1()
   {
     final int a_x0 = 5;
     final int a_y0 = 0;
@@ -119,7 +118,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = 8;
     final int b_y1 = 8;
 
-    Assert.assertFalse(BoundingAreaCheck.contains(
+    Assert.assertFalse(BoundingAreaCheck.containsD(
       a_x0,
       a_x1,
       a_y0,
@@ -130,7 +129,7 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testContainsNot_2()
+  @SuppressWarnings("static-method") @Test public void testDContainsNot_2()
   {
     final int a_x0 = 0;
     final int a_y0 = 0;
@@ -142,7 +141,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = 2; // branch: b_x1 <= a_x1 == false
     final int b_y1 = 8;
 
-    Assert.assertFalse(BoundingAreaCheck.contains(
+    Assert.assertFalse(BoundingAreaCheck.containsD(
       a_x0,
       a_x1,
       a_y0,
@@ -153,7 +152,7 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testContainsNot_3()
+  @SuppressWarnings("static-method") @Test public void testDContainsNot_3()
   {
     final int a_x0 = 0;
     final int a_y0 = 0;
@@ -165,7 +164,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = 8;
     final int b_y1 = 8;
 
-    Assert.assertFalse(BoundingAreaCheck.contains(
+    Assert.assertFalse(BoundingAreaCheck.containsD(
       a_x0,
       a_x1,
       a_y0,
@@ -176,7 +175,7 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testContainsNot_4()
+  @SuppressWarnings("static-method") @Test public void testDContainsNot_4()
   {
     final int a_x0 = 0;
     final int a_y0 = 0;
@@ -188,7 +187,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = 8;
     final int b_y1 = 3; // branch: b_y1 <= a_y1 == true
 
-    Assert.assertFalse(BoundingAreaCheck.contains(
+    Assert.assertFalse(BoundingAreaCheck.containsD(
       a_x0,
       a_x1,
       a_y0,
@@ -199,7 +198,7 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testOverlapsNot_0()
+  @SuppressWarnings("static-method") @Test public void testDOverlapsNot_0()
   {
     final int a_x0 = 0;
     final int a_y0 = 0;
@@ -211,7 +210,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = 8;
     final int b_y1 = 8;
 
-    Assert.assertFalse(BoundingAreaCheck.overlaps(
+    Assert.assertFalse(BoundingAreaCheck.overlapsD(
       a_x0,
       a_x1,
       a_y0,
@@ -222,7 +221,7 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testOverlapsNot_1()
+  @SuppressWarnings("static-method") @Test public void testDOverlapsNot_1()
   {
     final int a_x0 = 0;
     final int a_y0 = 0;
@@ -234,7 +233,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = -1; // branch: a_x0 < b_x1 == false
     final int b_y1 = 8;
 
-    Assert.assertFalse(BoundingAreaCheck.overlaps(
+    Assert.assertFalse(BoundingAreaCheck.overlapsD(
       a_x0,
       a_x1,
       a_y0,
@@ -245,7 +244,7 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testOverlapsNot_2()
+  @SuppressWarnings("static-method") @Test public void testDOverlapsNot_2()
   {
     final int a_x0 = 0;
     final int a_y0 = 0;
@@ -257,7 +256,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = 8;
     final int b_y1 = 8;
 
-    Assert.assertFalse(BoundingAreaCheck.overlaps(
+    Assert.assertFalse(BoundingAreaCheck.overlapsD(
       a_x0,
       a_x1,
       a_y0,
@@ -268,7 +267,7 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testOverlapsNot_3()
+  @SuppressWarnings("static-method") @Test public void testDOverlapsNot_3()
   {
     final int a_x0 = 0;
     final int a_y0 = 8;
@@ -280,7 +279,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = 8;
     final int b_y1 = 8; // branch: a_y0 < b_y1 == false
 
-    Assert.assertFalse(BoundingAreaCheck.overlaps(
+    Assert.assertFalse(BoundingAreaCheck.overlapsD(
       a_x0,
       a_x1,
       a_y0,
@@ -291,7 +290,7 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testOverlapsNot_4()
+  @SuppressWarnings("static-method") @Test public void testDOverlapsNot_4()
   {
     final int a_x0 = 0;
     final int a_y0 = 0;
@@ -303,7 +302,7 @@ public class BoundingAreaCheckTest
     final int b_x1 = 8;
     final int b_y1 = 8;
 
-    Assert.assertFalse(BoundingAreaCheck.overlaps(
+    Assert.assertFalse(BoundingAreaCheck.overlapsD(
       a_x0,
       a_x1,
       a_y0,
@@ -314,10 +313,10 @@ public class BoundingAreaCheckTest
       b_y1));
   }
 
-  @SuppressWarnings("static-method") @Test public void testRayIntersection()
+  @SuppressWarnings("static-method") @Test public void testDRayIntersection()
   {
-    final VectorI2I lower = new VectorI2I(2, 2);
-    final VectorI2I upper = new VectorI2I(4, 4);
+    final VectorI2D lower = new VectorI2D(2, 2);
+    final VectorI2D upper = new VectorI2D(4, 4);
 
     {
       // Intersect -X edge in +X direction
@@ -384,28 +383,48 @@ public class BoundingAreaCheckTest
     }
   }
 
-  @SuppressWarnings("static-method") @Test public void testWellFormed()
+  @SuppressWarnings("static-method") @Test public void testDWellFormed()
   {
-    final Rectangle rect =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(7, 7));
+    final RectangleD rect =
+      new RectangleD(0, new VectorI2D(0, 0), new VectorI2D(7, 7));
 
-    Assert.assertTrue(BoundingAreaCheck.wellFormed(rect));
+    Assert.assertTrue(BoundingAreaCheck.wellFormedD(rect));
   }
 
-  @SuppressWarnings("static-method") @Test public void testWellFormedNotX()
+  @SuppressWarnings("static-method") @Test public
+    void
+    testDWellFormedNotXEq()
   {
-    final Rectangle rect =
-      new Rectangle(0, new VectorI2I(8, 0), new VectorI2I(7, 7));
+    final RectangleD rect =
+      new RectangleD(0, new VectorI2D(0, 0), new VectorI2D(0, 7));
 
-    Assert.assertFalse(BoundingAreaCheck.wellFormed(rect));
+    Assert.assertFalse(BoundingAreaCheck.wellFormedD(rect));
   }
 
-  @SuppressWarnings("static-method") @Test public void testWellFormedNotY()
+  @SuppressWarnings("static-method") @Test public void testDWellFormedNotX()
   {
-    final Rectangle rect =
-      new Rectangle(0, new VectorI2I(0, 8), new VectorI2I(7, 7));
+    final RectangleD rect =
+      new RectangleD(0, new VectorI2D(8, 0), new VectorI2D(7, 7));
 
-    Assert.assertFalse(BoundingAreaCheck.wellFormed(rect));
+    Assert.assertFalse(BoundingAreaCheck.wellFormedD(rect));
+  }
+
+  @SuppressWarnings("static-method") @Test public void testDWellFormedNotY()
+  {
+    final RectangleD rect =
+      new RectangleD(0, new VectorI2D(0, 8), new VectorI2D(7, 7));
+
+    Assert.assertFalse(BoundingAreaCheck.wellFormedD(rect));
+  }
+
+  @SuppressWarnings("static-method") @Test public
+    void
+    testDWellFormedNotYEq()
+  {
+    final RectangleD rect =
+      new RectangleD(0, new VectorI2D(0, 0), new VectorI2D(7, 0));
+
+    Assert.assertFalse(BoundingAreaCheck.wellFormedD(rect));
   }
 
 }

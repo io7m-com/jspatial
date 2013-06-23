@@ -25,8 +25,6 @@ import com.io7m.jaux.UnreachableCodeException;
  * Overlap and containment checks between bounding areas.
  * 
  * @see BoundingArea
- * @see BoundingAreaF
- * @see BoundingAreaD
  */
 
 @ThreadSafe public final class BoundingAreaCheck
@@ -309,9 +307,9 @@ import com.io7m.jaux.UnreachableCodeException;
     final double b_y1)
   {
     final boolean c0 = b_x0 >= a_x0;
-    final boolean c1 = b_x1 <= a_x1;
+    final boolean c1 = b_x1 < a_x1;
     final boolean c2 = b_y0 >= a_y0;
-    final boolean c3 = b_y1 <= a_y1;
+    final boolean c3 = b_y1 < a_y1;
 
     return (c0 && c1 && c2 && c3);
   }
@@ -327,9 +325,9 @@ import com.io7m.jaux.UnreachableCodeException;
     final float b_y1)
   {
     final boolean c0 = b_x0 >= a_x0;
-    final boolean c1 = b_x1 <= a_x1;
+    final boolean c1 = b_x1 < a_x1;
     final boolean c2 = b_y0 >= a_y0;
-    final boolean c3 = b_y1 <= a_y1;
+    final boolean c3 = b_y1 < a_y1;
 
     return (c0 && c1 && c2 && c3);
   }
@@ -540,10 +538,11 @@ import com.io7m.jaux.UnreachableCodeException;
   /**
    * Return <code>true</code> iff the given bounding area is well formed. That
    * is, iff
-   * <code>container.boundingAreaLower().getXD() <= container.boundingAreaUpper().getXD()</code>
+   * <code>container.boundingAreaLowerD().getXD() < container.boundingAreaUpperD().getXD()</code>
    * and
-   * <code>container.boundingAreaLower().getYD() <= container.boundingAreaUpper().getYD()</code>
-   * .
+   * <code>container.boundingAreaLowerD().getYD() < container.boundingAreaUpperD().getYD()</code>
+   * . Note that the upper bound is exclusive, in contrast to the inclusive
+   * upper bound of {@link BoundingArea}.
    * 
    * @since 2.1.0
    */
@@ -551,12 +550,12 @@ import com.io7m.jaux.UnreachableCodeException;
   static boolean wellFormedD(
     final @Nonnull BoundingAreaD container)
   {
-    if (container.boundingAreaLowerD().getXD() > container
+    if (container.boundingAreaLowerD().getXD() >= container
       .boundingAreaUpperD()
       .getXD()) {
       return false;
     }
-    if (container.boundingAreaLowerD().getYD() > container
+    if (container.boundingAreaLowerD().getYD() >= container
       .boundingAreaUpperD()
       .getYD()) {
       return false;
@@ -567,10 +566,11 @@ import com.io7m.jaux.UnreachableCodeException;
   /**
    * Return <code>true</code> iff the given bounding area is well formed. That
    * is, iff
-   * <code>container.boundingAreaLower().getXF() <= container.boundingAreaUpper().getXF()</code>
+   * <code>container.boundingAreaLowerF().getXF() < container.boundingAreaUpperF().getXF()</code>
    * and
-   * <code>container.boundingAreaLower().getYF() <= container.boundingAreaUpper().getYF()</code>
-   * .
+   * <code>container.boundingAreaLowerF().getYF() < container.boundingAreaUpperF().getYF()</code>
+   * . Note that the upper bound is exclusive, in contrast to the inclusive
+   * upper bound of {@link BoundingArea}.
    * 
    * @since 2.1.0
    */
@@ -578,12 +578,12 @@ import com.io7m.jaux.UnreachableCodeException;
   static boolean wellFormedF(
     final @Nonnull BoundingAreaF container)
   {
-    if (container.boundingAreaLowerF().getXF() > container
+    if (container.boundingAreaLowerF().getXF() >= container
       .boundingAreaUpperF()
       .getXF()) {
       return false;
     }
-    if (container.boundingAreaLowerF().getYF() > container
+    if (container.boundingAreaLowerF().getYF() >= container
       .boundingAreaUpperF()
       .getYF()) {
       return false;

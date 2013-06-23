@@ -33,8 +33,21 @@ import com.io7m.jtensors.VectorReadable2I;
  * for each axis.
  * </p>
  * <p>
- * The results are undefined if the values returned by the interface functions
- * change after the object is inserted into the tree.
+ * The values returned by the interface functions are expected to be constant
+ * over calls to {@linkplain QuadTreeInterface quadtree} insertion functions.
+ * That is, if:
+ * <ol>
+ * <li>An object <code>O</code> implements {@link BoundingArea}</li>
+ * <li>The values of <code>O.{@link #boundingAreaLower()}</code> and
+ * <code>O.{@link #boundingAreaUpper()}</code> are taken.</li>
+ * <li><code>O</code> is inserted into the tree <code>T</code></li>
+ * <li>The values of <code>O.{@link #boundingAreaLower()}</code> and
+ * <code>O.{@link #boundingAreaUpper()}</code> are taken again and return
+ * different results from the first calls.</li>
+ * </ol>
+ * </p>
+ * <p>
+ * ... Then the results are undefined.
  * </p>
  */
 
