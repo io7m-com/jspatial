@@ -13,6 +13,9 @@
       <p>
         The <var>jspatial</var> package implements a set of spatial data structures.
       </p>
+      <p>
+        <img src="viewer.png" alt="Octtree viewer" width="454" height="277"/>
+      </p>
     </subsection>
     <subsection name="features">
       <ul>
