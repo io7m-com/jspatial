@@ -538,9 +538,9 @@ import com.io7m.jaux.UnreachableCodeException;
   /**
    * Return <code>true</code> iff the given bounding area is well formed. That
    * is, iff
-   * <code>container.boundingAreaLowerD().getXD() < container.boundingAreaUpperD().getXD()</code>
+   * <code>container.boundingAreaLowerD().getXD() <= container.boundingAreaUpperD().getXD()</code>
    * and
-   * <code>container.boundingAreaLowerD().getYD() < container.boundingAreaUpperD().getYD()</code>
+   * <code>container.boundingAreaLowerD().getYD() <= container.boundingAreaUpperD().getYD()</code>
    * . Note that the upper bound is exclusive, in contrast to the inclusive
    * upper bound of {@link BoundingArea}.
    * 
