@@ -38,6 +38,16 @@
     </site>
   </distributionManagement>
 
+  <mailingLists>
+    <mailingList>
+      <name>io7m-jspatial</name>
+      <subscribe>io7m-jspatial-join@lists.io7m.com</subscribe>
+      <unsubscribe>io7m-jspatial-leave@lists.io7m.com</unsubscribe>
+      <post>io7m-jspatial@lists.io7m.com</post>
+      <archive>http://lists.io7m.com/io7m-jspatial/archive</archive>
+    </mailingList>
+  </mailingLists>
+
   <prerequisites>
     <maven>2.2.1</maven>
   </prerequisites>
