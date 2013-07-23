@@ -492,7 +492,7 @@ public final class OctTreeViewer implements Runnable
           final @Nonnull VectorReadable3I upper)
           throws Exception
         {
-          gl.glBegin(GL2.GL_QUADS);
+          gl.glBegin(GL2GL3.GL_QUADS);
           {
             gl.glColor4d(1.0, 1.0, 1.0, 0.05);
 
@@ -528,7 +528,7 @@ public final class OctTreeViewer implements Runnable
             final VectorReadable3I lower = x.boundingVolumeLower();
             final VectorReadable3I upper = x.boundingVolumeUpper();
 
-            gl.glBegin(GL2.GL_QUADS);
+            gl.glBegin(GL2GL3.GL_QUADS);
             {
               gl.glColor4d(0.8, 0.8, 0.8, 0.8);
 
@@ -565,7 +565,7 @@ public final class OctTreeViewer implements Runnable
           final VectorReadable3I upper =
             OctTreeViewer.this.volume_select.boundingVolumeUpper();
 
-          gl.glBegin(GL2.GL_QUADS);
+          gl.glBegin(GL2GL3.GL_QUADS);
           {
             gl.glColor4d(1.0, 1.0, 0.0, 0.2);
 
@@ -596,7 +596,7 @@ public final class OctTreeViewer implements Runnable
           final VectorReadable3I lower = c.boundingVolumeLower();
           final VectorReadable3I upper = c.boundingVolumeUpper();
 
-          gl.glBegin(GL2.GL_QUADS);
+          gl.glBegin(GL2GL3.GL_QUADS);
           {
             gl.glColor4d(1.0, 0.0, 0.0, 0.2);
 
@@ -652,7 +652,7 @@ public final class OctTreeViewer implements Runnable
           final VectorReadable3I lower = c.boundingVolumeLower();
           final VectorReadable3I upper = c.boundingVolumeUpper();
 
-          gl.glBegin(GL2.GL_QUADS);
+          gl.glBegin(GL2GL3.GL_QUADS);
           {
             gl.glColor4d(0.0, 1.0, 1.0, 0.3);
 
