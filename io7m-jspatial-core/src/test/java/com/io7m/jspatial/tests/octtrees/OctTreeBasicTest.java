@@ -11,7 +11,7 @@ import com.io7m.jtensors.VectorI3I;
 import com.io7m.junreachable.UnreachableCodeException;
 
 @SuppressWarnings({ "static-method" }) public final class OctTreeBasicTest extends
-  OctTreeCommonTests
+OctTreeCommonTests
 {
   @Override <T extends OctTreeMemberType<T>> OctTreeType<T> makeOct128()
   {
@@ -19,6 +19,38 @@ import com.io7m.junreachable.UnreachableCodeException;
       return OctTreeBasic.newOctTree(
         new VectorI3I(128, 128, 128),
         VectorI3I.ZERO);
+    } catch (final Exception e) {
+      Assert.fail(e.getMessage());
+    }
+
+    throw new UnreachableCodeException();
+  }
+
+  @Override
+  <T extends OctTreeMemberType<T>>
+  OctTreeType<T>
+  makeOct128Offset64()
+  {
+    try {
+      return OctTreeBasic.newOctTree(
+        new VectorI3I(128, 128, 128),
+        new VectorI3I(64, 64, 64));
+    } catch (final Exception e) {
+      Assert.fail(e.getMessage());
+    }
+
+    throw new UnreachableCodeException();
+  }
+
+  @Override
+  <T extends OctTreeMemberType<T>>
+  OctTreeType<T>
+  makeOct128OffsetM64()
+  {
+    try {
+      return OctTreeBasic.newOctTree(
+        new VectorI3I(128, 128, 128),
+        new VectorI3I(-64, -64, -64));
     } catch (final Exception e) {
       Assert.fail(e.getMessage());
     }
@@ -117,64 +149,64 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateBasicOddX()
+  void
+  testCreateBasicOddX()
   {
     OctTreeBasic.newOctTree(new VectorI3I(3, 4, 4), VectorI3I.ZERO);
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateBasicOddY()
+  void
+  testCreateBasicOddY()
   {
     OctTreeBasic.newOctTree(new VectorI3I(4, 3, 4), VectorI3I.ZERO);
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateBasicOddZ()
+  void
+  testCreateBasicOddZ()
   {
     OctTreeBasic.newOctTree(new VectorI3I(4, 4, 3), VectorI3I.ZERO);
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateBasicTooSmallX()
+  void
+  testCreateBasicTooSmallX()
   {
     OctTreeBasic.newOctTree(new VectorI3I(0, 4, 4), VectorI3I.ZERO);
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateBasicTooSmallY()
+  void
+  testCreateBasicTooSmallY()
   {
     OctTreeBasic.newOctTree(new VectorI3I(4, 0, 4), VectorI3I.ZERO);
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateBasicTooSmallZ()
+  void
+  testCreateBasicTooSmallZ()
   {
     OctTreeBasic.newOctTree(new VectorI3I(4, 4, 0), VectorI3I.ZERO);
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateOddX()
+  void
+  testCreateOddX()
   {
     OctTreeBasic.newOctTree(new VectorI3I(3, 2, 2), VectorI3I.ZERO);
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateOddY()
+  void
+  testCreateOddY()
   {
     OctTreeBasic.newOctTree(new VectorI3I(2, 3, 2), VectorI3I.ZERO);
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateOddZ()
+  void
+  testCreateOddZ()
   {
     OctTreeBasic.newOctTree(new VectorI3I(2, 2, 3), VectorI3I.ZERO);
   }
@@ -321,37 +353,5 @@ import com.io7m.junreachable.UnreachableCodeException;
 
     q.octTreeTraverse(c);
     Assert.assertEquals(9, c.count);
-  }
-
-  @Override
-    <T extends OctTreeMemberType<T>>
-    OctTreeType<T>
-    makeOct128Offset64()
-  {
-    try {
-      return OctTreeBasic.newOctTree(
-        new VectorI3I(128, 128, 128),
-        new VectorI3I(64, 64, 64));
-    } catch (final Exception e) {
-      Assert.fail(e.getMessage());
-    }
-
-    throw new UnreachableCodeException();
-  }
-
-  @Override
-    <T extends OctTreeMemberType<T>>
-    OctTreeType<T>
-    makeOct128OffsetM64()
-  {
-    try {
-      return OctTreeBasic.newOctTree(
-        new VectorI3I(128, 128, 128),
-        new VectorI3I(-64, -64, -64));
-    } catch (final Exception e) {
-      Assert.fail(e.getMessage());
-    }
-
-    throw new UnreachableCodeException();
   }
 }

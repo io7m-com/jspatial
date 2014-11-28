@@ -12,7 +12,7 @@ import com.io7m.jtensors.VectorI3I;
 import com.io7m.junreachable.UnreachableCodeException;
 
 @SuppressWarnings({ "static-method", "null" }) public final class OctTreePruneLimitTest extends
-  OctTreeCommonTests
+OctTreeCommonTests
 {
   @Override <T extends OctTreeMemberType<T>> OctTreeType<T> makeOct128()
   {
@@ -28,94 +28,38 @@ import com.io7m.junreachable.UnreachableCodeException;
     throw new UnreachableCodeException();
   }
 
-  @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitOddX()
+  @Override
+  <T extends OctTreeMemberType<T>>
+  OctTreeType<T>
+  makeOct128Offset64()
   {
-    OctTreePruneLimit.newOctTree(
-      new VectorI3I(4, 4, 4),
-      VectorI3I.ZERO,
-      new VectorI3I(3, 4, 4));
+    try {
+      return OctTreePruneLimit.newOctTree(
+        new VectorI3I(128, 128, 128),
+        new VectorI3I(64, 64, 64),
+        new VectorI3I(2, 2, 2));
+    } catch (final Exception e) {
+      Assert.fail(e.getMessage());
+    }
+
+    throw new UnreachableCodeException();
   }
 
-  @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitOddY()
+  @Override
+  <T extends OctTreeMemberType<T>>
+  OctTreeType<T>
+  makeOct128OffsetM64()
   {
-    OctTreePruneLimit.newOctTree(
-      new VectorI3I(4, 4, 4),
-      VectorI3I.ZERO,
-      new VectorI3I(4, 3, 4));
-  }
+    try {
+      return OctTreePruneLimit.newOctTree(
+        new VectorI3I(128, 128, 128),
+        new VectorI3I(-64, -64, -64),
+        new VectorI3I(2, 2, 2));
+    } catch (final Exception e) {
+      Assert.fail(e.getMessage());
+    }
 
-  @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitOddZ()
-  {
-    OctTreePruneLimit.newOctTree(
-      new VectorI3I(4, 4, 4),
-      VectorI3I.ZERO,
-      new VectorI3I(4, 4, 3));
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitTooLargeX()
-  {
-    OctTreePruneLimit.newOctTree(
-      new VectorI3I(4, 4, 4),
-      VectorI3I.ZERO,
-      new VectorI3I(5, 4, 4));
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitTooLargeY()
-  {
-    OctTreePruneLimit.newOctTree(
-      new VectorI3I(4, 4, 4),
-      VectorI3I.ZERO,
-      new VectorI3I(4, 5, 4));
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitTooLargeZ()
-  {
-    OctTreePruneLimit.newOctTree(
-      new VectorI3I(4, 4, 4),
-      VectorI3I.ZERO,
-      new VectorI3I(4, 4, 5));
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitTooSmallX()
-  {
-    OctTreePruneLimit.newOctTree(
-      new VectorI3I(4, 4, 4),
-      VectorI3I.ZERO,
-      new VectorI3I(1, 2, 2));
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitTooSmallY()
-  {
-    OctTreePruneLimit.newOctTree(
-      new VectorI3I(4, 4, 4),
-      VectorI3I.ZERO,
-      new VectorI3I(2, 1, 2));
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitTooSmallZ()
-  {
-    OctTreePruneLimit.newOctTree(
-      new VectorI3I(4, 4, 4),
-      VectorI3I.ZERO,
-      new VectorI3I(2, 2, 1));
+    throw new UnreachableCodeException();
   }
 
   @Override <T extends OctTreeMemberType<T>> OctTreeType<T> makeOct16()
@@ -231,8 +175,98 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateOddX()
+  void
+  testCreateLimitOddX()
+  {
+    OctTreePruneLimit.newOctTree(
+      new VectorI3I(4, 4, 4),
+      VectorI3I.ZERO,
+      new VectorI3I(3, 4, 4));
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateLimitOddY()
+  {
+    OctTreePruneLimit.newOctTree(
+      new VectorI3I(4, 4, 4),
+      VectorI3I.ZERO,
+      new VectorI3I(4, 3, 4));
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateLimitOddZ()
+  {
+    OctTreePruneLimit.newOctTree(
+      new VectorI3I(4, 4, 4),
+      VectorI3I.ZERO,
+      new VectorI3I(4, 4, 3));
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateLimitTooLargeX()
+  {
+    OctTreePruneLimit.newOctTree(
+      new VectorI3I(4, 4, 4),
+      VectorI3I.ZERO,
+      new VectorI3I(5, 4, 4));
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateLimitTooLargeY()
+  {
+    OctTreePruneLimit.newOctTree(
+      new VectorI3I(4, 4, 4),
+      VectorI3I.ZERO,
+      new VectorI3I(4, 5, 4));
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateLimitTooLargeZ()
+  {
+    OctTreePruneLimit.newOctTree(
+      new VectorI3I(4, 4, 4),
+      VectorI3I.ZERO,
+      new VectorI3I(4, 4, 5));
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateLimitTooSmallX()
+  {
+    OctTreePruneLimit.newOctTree(
+      new VectorI3I(4, 4, 4),
+      VectorI3I.ZERO,
+      new VectorI3I(1, 2, 2));
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateLimitTooSmallY()
+  {
+    OctTreePruneLimit.newOctTree(
+      new VectorI3I(4, 4, 4),
+      VectorI3I.ZERO,
+      new VectorI3I(2, 1, 2));
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateLimitTooSmallZ()
+  {
+    OctTreePruneLimit.newOctTree(
+      new VectorI3I(4, 4, 4),
+      VectorI3I.ZERO,
+      new VectorI3I(2, 2, 1));
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateOddX()
   {
     OctTreePruneLimit.newOctTree(new VectorI3I(3, 2, 2), new VectorI3I(
       0,
@@ -241,8 +275,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateOddY()
+  void
+  testCreateOddY()
   {
     OctTreePruneLimit.newOctTree(new VectorI3I(2, 3, 2), new VectorI3I(
       0,
@@ -251,8 +285,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateOddZ()
+  void
+  testCreateOddZ()
   {
     OctTreePruneLimit.newOctTree(new VectorI3I(2, 2, 3), new VectorI3I(
       0,
@@ -261,8 +295,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreatePruneOddX()
+  void
+  testCreatePruneOddX()
   {
     OctTreePruneLimit.newOctTree(new VectorI3I(3, 4, 4), new VectorI3I(
       0,
@@ -271,8 +305,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreatePruneOddY()
+  void
+  testCreatePruneOddY()
   {
     OctTreePruneLimit.newOctTree(new VectorI3I(4, 3, 4), new VectorI3I(
       0,
@@ -281,8 +315,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreatePruneOddZ()
+  void
+  testCreatePruneOddZ()
   {
     OctTreePruneLimit.newOctTree(new VectorI3I(4, 4, 3), new VectorI3I(
       0,
@@ -291,8 +325,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateTooSmallX()
+  void
+  testCreateTooSmallX()
   {
     OctTreePruneLimit.newOctTree(new VectorI3I(1, 2, 2), new VectorI3I(
       0,
@@ -301,8 +335,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateTooSmallY()
+  void
+  testCreateTooSmallY()
   {
     OctTreePruneLimit.newOctTree(new VectorI3I(2, 1, 2), new VectorI3I(
       0,
@@ -311,8 +345,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateTooSmallZ()
+  void
+  testCreateTooSmallZ()
   {
     OctTreePruneLimit.newOctTree(new VectorI3I(2, 2, 1), new VectorI3I(
       0,
@@ -324,6 +358,134 @@ import com.io7m.junreachable.UnreachableCodeException;
     throws Exception
   {
     final OctTreeType<Cuboid> q = this.makeOct2();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(1, c.count);
+  }
+
+  @Test public final void testInsertSplit()
+    throws Exception
+  {
+    final OctTreeType<Cuboid> q = this.makeOct128();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(49, c.count);
+  }
+
+  @Test public final void testInsertSplitNot()
+    throws Exception
+  {
+    final OctTreeType<Cuboid> q = this.makeOct2();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(1, c.count);
+  }
+
+  @Test public final void testInsertSplitXNotYNotZ()
+    throws Exception
+  {
+    final OctTreeType<Cuboid> q = this.makeOct4_2_2();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(1, c.count);
+  }
+
+  @Test public final void testInsertSplitXYNotZ()
+    throws Exception
+  {
+    final OctTreeType<Cuboid> q = this.makeOct4_4_2();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(1, c.count);
+  }
+
+  @Test public final void testInsertSplitXZNotY()
+    throws Exception
+  {
+    final OctTreeType<Cuboid> q = this.makeOct4_2_4();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(1, c.count);
+  }
+
+  @Test public final void testInsertSplitYNotZNotZ()
+    throws Exception
+  {
+    final OctTreeType<Cuboid> q = this.makeOct2_4_2();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(1, c.count);
+  }
+
+  @Test public final void testInsertSplitYZNotX()
+    throws Exception
+  {
+    final OctTreeType<Cuboid> q = this.makeOct2_4_4();
+
+    final Counter c = new Counter();
+    final Cuboid r =
+      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
+
+    final boolean in = q.octTreeInsert(r);
+    Assert.assertTrue(in);
+
+    q.octTreeTraverse(c);
+    Assert.assertEquals(1, c.count);
+  }
+
+  @Test public final void testInsertSplitZNotXNotY()
+    throws Exception
+  {
+    final OctTreeType<Cuboid> q = this.makeOct2_2_4();
 
     final Counter c = new Counter();
     final Cuboid r =
@@ -517,167 +679,5 @@ import com.io7m.junreachable.UnreachableCodeException;
       q.octTreeTraverse(counter);
       Assert.assertEquals(9, counter.count);
     }
-  }
-
-  @Test public final void testInsertSplit()
-    throws Exception
-  {
-    final OctTreeType<Cuboid> q = this.makeOct128();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(49, c.count);
-  }
-
-  @Test public final void testInsertSplitNot()
-    throws Exception
-  {
-    final OctTreeType<Cuboid> q = this.makeOct2();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(1, c.count);
-  }
-
-  @Test public final void testInsertSplitXNotYNotZ()
-    throws Exception
-  {
-    final OctTreeType<Cuboid> q = this.makeOct4_2_2();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(1, c.count);
-  }
-
-  @Test public final void testInsertSplitXYNotZ()
-    throws Exception
-  {
-    final OctTreeType<Cuboid> q = this.makeOct4_4_2();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(1, c.count);
-  }
-
-  @Test public final void testInsertSplitXZNotY()
-    throws Exception
-  {
-    final OctTreeType<Cuboid> q = this.makeOct4_2_4();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(1, c.count);
-  }
-
-  @Test public final void testInsertSplitYNotZNotZ()
-    throws Exception
-  {
-    final OctTreeType<Cuboid> q = this.makeOct2_4_2();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(1, c.count);
-  }
-
-  @Test public final void testInsertSplitYZNotX()
-    throws Exception
-  {
-    final OctTreeType<Cuboid> q = this.makeOct2_4_4();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(1, c.count);
-  }
-
-  @Test public final void testInsertSplitZNotXNotY()
-    throws Exception
-  {
-    final OctTreeType<Cuboid> q = this.makeOct2_2_4();
-
-    final Counter c = new Counter();
-    final Cuboid r =
-      new Cuboid(0, new VectorI3I(0, 0, 0), new VectorI3I(0, 0, 0));
-
-    final boolean in = q.octTreeInsert(r);
-    Assert.assertTrue(in);
-
-    q.octTreeTraverse(c);
-    Assert.assertEquals(1, c.count);
-  }
-
-  @Override
-    <T extends OctTreeMemberType<T>>
-    OctTreeType<T>
-    makeOct128Offset64()
-  {
-    try {
-      return OctTreePruneLimit.newOctTree(
-        new VectorI3I(128, 128, 128),
-        new VectorI3I(64, 64, 64),
-        new VectorI3I(2, 2, 2));
-    } catch (final Exception e) {
-      Assert.fail(e.getMessage());
-    }
-
-    throw new UnreachableCodeException();
-  }
-
-  @Override
-    <T extends OctTreeMemberType<T>>
-    OctTreeType<T>
-    makeOct128OffsetM64()
-  {
-    try {
-      return OctTreePruneLimit.newOctTree(
-        new VectorI3I(128, 128, 128),
-        new VectorI3I(-64, -64, -64),
-        new VectorI3I(2, 2, 2));
-    } catch (final Exception e) {
-      Assert.fail(e.getMessage());
-    }
-
-    throw new UnreachableCodeException();
   }
 }

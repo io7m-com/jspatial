@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- *
+ * 
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -25,167 +25,6 @@ import com.io7m.jtensors.VectorI3I;
 
 public final class Octants
 {
-  private final VectorI3I x0y0z0_lower;
-  private final VectorI3I x0y0z0_upper;
-  private final VectorI3I x1y0z0_lower;
-  private final VectorI3I x1y0z0_upper;
-  private final VectorI3I x0y1z0_lower;
-  private final VectorI3I x0y1z0_upper;
-  private final VectorI3I x1y1z0_lower;
-  private final VectorI3I x1y1z0_upper;
-  private final VectorI3I x0y0z1_lower;
-  private final VectorI3I x0y0z1_upper;
-  private final VectorI3I x1y0z1_lower;
-  private final VectorI3I x1y0z1_upper;
-  private final VectorI3I x0y1z1_lower;
-  private final VectorI3I x0y1z1_upper;
-  private final VectorI3I x1y1z1_lower;
-  private final VectorI3I x1y1z1_upper;
-
-  /**
-   * @return The lower corner of the <code>(x0, y0, z0)</code> octant.
-   */
-
-  public VectorI3I getX0Y0Z0Lower()
-  {
-    return this.x0y0z0_lower;
-  }
-
-  /**
-   * @return The upper corner of the <code>(x0, y0, z0)</code> octant.
-   */
-
-  public VectorI3I getX0Y0Z0Upper()
-  {
-    return this.x0y0z0_upper;
-  }
-
-  /**
-   * @return The lower corner of the <code>(x1, y0, z0)</code> octant.
-   */
-
-  public VectorI3I getX1Y0Z0Lower()
-  {
-    return this.x1y0z0_lower;
-  }
-
-  /**
-   * @return The upper corner of the <code>(x1, y0, z0)</code> octant.
-   */
-
-  public VectorI3I getX1Y0Z0Upper()
-  {
-    return this.x1y0z0_upper;
-  }
-
-  /**
-   * @return The lower corner of the <code>(x0, y1, z0)</code> octant.
-   */
-
-  public VectorI3I getX0Y1Z0Lower()
-  {
-    return this.x0y1z0_lower;
-  }
-
-  /**
-   * @return The upper corner of the <code>(x0, y1, z0)</code> octant.
-   */
-
-  public VectorI3I getX0Y1Z0Upper()
-  {
-    return this.x0y1z0_upper;
-  }
-
-  /**
-   * @return The lower corner of the <code>(x1, y1, z0)</code> octant.
-   */
-
-  public VectorI3I getX1Y1Z0Lower()
-  {
-    return this.x1y1z0_lower;
-  }
-
-  /**
-   * @return The upper corner of the <code>(x1, y1, z0)</code> octant.
-   */
-
-  public VectorI3I getX1Y1Z0Upper()
-  {
-    return this.x1y1z0_upper;
-  }
-
-  /**
-   * @return The lower corner of the <code>(x0, y0, z1)</code> octant.
-   */
-
-  public VectorI3I getX0Y0Z1Lower()
-  {
-    return this.x0y0z1_lower;
-  }
-
-  /**
-   * @return The upper corner of the <code>(x0, y0, z1)</code> octant.
-   */
-
-  public VectorI3I getX0Y0Z1Upper()
-  {
-    return this.x0y0z1_upper;
-  }
-
-  /**
-   * @return The lower corner of the <code>(x1, y0, z1)</code> octant.
-   */
-
-  public VectorI3I getX1Y0Z1Lower()
-  {
-    return this.x1y0z1_lower;
-  }
-
-  /**
-   * @return The upper corner of the <code>(x1, y0, z1)</code> octant.
-   */
-
-  public VectorI3I getX1Y0Z1Upper()
-  {
-    return this.x1y0z1_upper;
-  }
-
-  /**
-   * @return The lower corner of the <code>(x0, y1, z1)</code> octant.
-   */
-
-  public VectorI3I getX0Y1Z1Lower()
-  {
-    return this.x0y1z1_lower;
-  }
-
-  /**
-   * @return The upper corner of the <code>(x0, y1, z1)</code> octant.
-   */
-
-  public VectorI3I getX0Y1Z1Upper()
-  {
-    return this.x0y1z1_upper;
-  }
-
-  /**
-   * @return The lower corner of the <code>(x1, y1, z1)</code> octant.
-   */
-
-  public VectorI3I getX1Y1Z1Lower()
-  {
-    return this.x1y1z1_lower;
-  }
-
-  /**
-   * @return The upper corner of the <code>(x1, y1, z1)</code> octant.
-   */
-
-  public VectorI3I getX1Y1Z1Upper()
-  {
-    return this.x1y1z1_upper;
-  }
-
   /**
    * Split an octant defined by the two points <code>lower</code> and
    * <code>upper</code> into eight octants.
@@ -276,6 +115,24 @@ public final class Octants
       in_x1y1z1_upper);
   }
 
+  private final VectorI3I x0y0z0_lower;
+  private final VectorI3I x0y0z0_upper;
+  private final VectorI3I x0y0z1_lower;
+  private final VectorI3I x0y0z1_upper;
+  private final VectorI3I x0y1z0_lower;
+  private final VectorI3I x0y1z0_upper;
+  private final VectorI3I x0y1z1_lower;
+  private final VectorI3I x0y1z1_upper;
+  private final VectorI3I x1y0z0_lower;
+  private final VectorI3I x1y0z0_upper;
+  private final VectorI3I x1y0z1_lower;
+  private final VectorI3I x1y0z1_upper;
+  private final VectorI3I x1y1z0_lower;
+  private final VectorI3I x1y1z0_upper;
+  private final VectorI3I x1y1z1_lower;
+
+  private final VectorI3I x1y1z1_upper;
+
   private Octants(
     final VectorI3I in_x0y0z0_lower,
     final VectorI3I in_x0y0z0_upper,
@@ -310,5 +167,149 @@ public final class Octants
     this.x0y1z1_upper = in_x0y1z1_upper;
     this.x1y1z1_lower = in_x1y1z1_lower;
     this.x1y1z1_upper = in_x1y1z1_upper;
+  }
+
+  /**
+   * @return The lower corner of the <code>(x0, y0, z0)</code> octant.
+   */
+
+  public VectorI3I getX0Y0Z0Lower()
+  {
+    return this.x0y0z0_lower;
+  }
+
+  /**
+   * @return The upper corner of the <code>(x0, y0, z0)</code> octant.
+   */
+
+  public VectorI3I getX0Y0Z0Upper()
+  {
+    return this.x0y0z0_upper;
+  }
+
+  /**
+   * @return The lower corner of the <code>(x0, y0, z1)</code> octant.
+   */
+
+  public VectorI3I getX0Y0Z1Lower()
+  {
+    return this.x0y0z1_lower;
+  }
+
+  /**
+   * @return The upper corner of the <code>(x0, y0, z1)</code> octant.
+   */
+
+  public VectorI3I getX0Y0Z1Upper()
+  {
+    return this.x0y0z1_upper;
+  }
+
+  /**
+   * @return The lower corner of the <code>(x0, y1, z0)</code> octant.
+   */
+
+  public VectorI3I getX0Y1Z0Lower()
+  {
+    return this.x0y1z0_lower;
+  }
+
+  /**
+   * @return The upper corner of the <code>(x0, y1, z0)</code> octant.
+   */
+
+  public VectorI3I getX0Y1Z0Upper()
+  {
+    return this.x0y1z0_upper;
+  }
+
+  /**
+   * @return The lower corner of the <code>(x0, y1, z1)</code> octant.
+   */
+
+  public VectorI3I getX0Y1Z1Lower()
+  {
+    return this.x0y1z1_lower;
+  }
+
+  /**
+   * @return The upper corner of the <code>(x0, y1, z1)</code> octant.
+   */
+
+  public VectorI3I getX0Y1Z1Upper()
+  {
+    return this.x0y1z1_upper;
+  }
+
+  /**
+   * @return The lower corner of the <code>(x1, y0, z0)</code> octant.
+   */
+
+  public VectorI3I getX1Y0Z0Lower()
+  {
+    return this.x1y0z0_lower;
+  }
+
+  /**
+   * @return The upper corner of the <code>(x1, y0, z0)</code> octant.
+   */
+
+  public VectorI3I getX1Y0Z0Upper()
+  {
+    return this.x1y0z0_upper;
+  }
+
+  /**
+   * @return The lower corner of the <code>(x1, y0, z1)</code> octant.
+   */
+
+  public VectorI3I getX1Y0Z1Lower()
+  {
+    return this.x1y0z1_lower;
+  }
+
+  /**
+   * @return The upper corner of the <code>(x1, y0, z1)</code> octant.
+   */
+
+  public VectorI3I getX1Y0Z1Upper()
+  {
+    return this.x1y0z1_upper;
+  }
+
+  /**
+   * @return The lower corner of the <code>(x1, y1, z0)</code> octant.
+   */
+
+  public VectorI3I getX1Y1Z0Lower()
+  {
+    return this.x1y1z0_lower;
+  }
+
+  /**
+   * @return The upper corner of the <code>(x1, y1, z0)</code> octant.
+   */
+
+  public VectorI3I getX1Y1Z0Upper()
+  {
+    return this.x1y1z0_upper;
+  }
+
+  /**
+   * @return The lower corner of the <code>(x1, y1, z1)</code> octant.
+   */
+
+  public VectorI3I getX1Y1Z1Lower()
+  {
+    return this.x1y1z1_lower;
+  }
+
+  /**
+   * @return The upper corner of the <code>(x1, y1, z1)</code> octant.
+   */
+
+  public VectorI3I getX1Y1Z1Upper()
+  {
+    return this.x1y1z1_upper;
   }
 }

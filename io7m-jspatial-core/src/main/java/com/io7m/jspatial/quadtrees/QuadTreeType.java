@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- *
+ * 
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- *
+ * 
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -80,7 +80,7 @@ public interface QuadTreeType<T extends QuadTreeMemberType<T>>
 
   boolean quadTreeInsert(
     T item)
-    throws IllegalArgumentException;
+      throws IllegalArgumentException;
 
   /**
    * Pass each object in the quadtree to <code>f.call()</code>, in no
@@ -97,7 +97,7 @@ public interface QuadTreeType<T extends QuadTreeMemberType<T>>
 
   <E extends Throwable> void quadTreeIterateObjects(
     PartialFunctionType<T, Boolean, E> f)
-    throws E;
+      throws E;
 
   /**
    * Returns all objects in the tree that are completely contained within
@@ -116,7 +116,7 @@ public interface QuadTreeType<T extends QuadTreeMemberType<T>>
   void quadTreeQueryAreaContaining(
     BoundingAreaType area,
     SortedSet<T> items)
-    throws IllegalArgumentException;
+      throws IllegalArgumentException;
 
   /**
    * Returns all objects in the tree that are at least partially contained
@@ -136,7 +136,7 @@ public interface QuadTreeType<T extends QuadTreeMemberType<T>>
   void quadTreeQueryAreaOverlapping(
     BoundingAreaType area,
     SortedSet<T> items)
-    throws IllegalArgumentException;
+      throws IllegalArgumentException;
 
   /**
    * Returns the objects intersected by the ray <code>ray</code> in
@@ -148,7 +148,7 @@ public interface QuadTreeType<T extends QuadTreeMemberType<T>>
    *
    * @see com.io7m.jtensors.VectorI2D#distance(com.io7m.jtensors.VectorReadable2DType,
    *      com.io7m.jtensors.VectorReadable2DType)
-   * 
+   *
    * @param items
    *          The returned objects
    * @param ray
@@ -203,5 +203,5 @@ public interface QuadTreeType<T extends QuadTreeMemberType<T>>
 
   <E extends Throwable> void quadTreeTraverse(
     QuadTreeTraversalType<E> traversal)
-    throws E;
+      throws E;
 }

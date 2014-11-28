@@ -26,12 +26,11 @@ import com.io7m.jtensors.VectorReadable2IType;
   static class Something implements QuadTreeMemberType<Something>
   {
     /**
-     * The lower and upper corners of this object's axis-aligned bounding box.
+     * A "pool" of unique identifiers, shared between all objects of type
+     * <code>Something</code>.
      */
 
-    private final VectorM2I         lower;
-    private final VectorM2I         upper;
-
+    private static final AtomicLong pool = new AtomicLong(0);
     /**
      * The unique identifier of this object.
      */
@@ -39,20 +38,21 @@ import com.io7m.jtensors.VectorReadable2IType;
     private final long              id;
 
     /**
-     * A "pool" of unique identifiers, shared between all objects of type
-     * <code>Something</code>.
+     * The lower and upper corners of this object's axis-aligned bounding box.
      */
 
-    private static final AtomicLong pool = new AtomicLong(0);
+    private final VectorM2I         lower;
+
+    private final VectorM2I         upper;
 
     Something(
       final VectorM2I in_lower,
       final VectorM2I in_upper)
-    {
+      {
       this.id = Something.pool.incrementAndGet();
       this.lower = in_lower;
       this.upper = in_upper;
-    }
+      }
 
     @Override public VectorReadable2IType boundingAreaLower()
     {

@@ -8,9 +8,9 @@ import com.io7m.jtensors.VectorReadable2IType;
 
 public final class Rectangle implements QuadTreeMemberType<Rectangle>
 {
+  private final long      id;
   private final VectorI2I lower;
   private final VectorI2I upper;
-  private final long      id;
 
   public Rectangle(
     final long in_id,

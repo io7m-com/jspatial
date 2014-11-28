@@ -20,7 +20,7 @@ import com.io7m.jtensors.VectorReadable2IType;
 import com.io7m.junreachable.UnreachableCodeException;
 
 @SuppressWarnings({ "static-method" }) public final class QuadTreeBasicTest extends
-  QuadTreeCommonTests
+QuadTreeCommonTests
 {
   @Override <T extends QuadTreeMemberType<T>> QuadTreeType<T> makeQuad128()
   {
@@ -88,9 +88,9 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateOddX()
-      throws Exception
+  void
+  testCreateOddX()
+    throws Exception
   {
     final VectorReadable2IType size = new VectorI2I(3, 2);
     final VectorReadable2IType position = VectorI2I.ZERO;
@@ -98,9 +98,9 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateOddY()
-      throws Exception
+  void
+  testCreateOddY()
+    throws Exception
   {
     final VectorReadable2IType size = new VectorI2I(2, 3);
     final VectorReadable2IType position = VectorI2I.ZERO;
@@ -108,9 +108,9 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateTooSmallX()
-      throws Exception
+  void
+  testCreateTooSmallX()
+    throws Exception
   {
     final VectorReadable2IType size = new VectorI2I(1, 2);
     final VectorReadable2IType position = VectorI2I.ZERO;
@@ -118,9 +118,9 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateTooSmallY()
-      throws Exception
+  void
+  testCreateTooSmallY()
+    throws Exception
   {
     final VectorReadable2IType size = new VectorI2I(2, 1);
     final VectorReadable2IType position = VectorI2I.ZERO;

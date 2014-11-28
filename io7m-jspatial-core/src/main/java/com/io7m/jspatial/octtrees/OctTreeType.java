@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -92,7 +92,7 @@ public interface OctTreeType<T extends OctTreeMemberType<T>>
 
   boolean octTreeInsert(
     T item)
-    throws IllegalArgumentException;
+      throws IllegalArgumentException;
 
   /**
    * Pass each object in the octtree to <code>f.call()</code>, in no
@@ -109,7 +109,7 @@ public interface OctTreeType<T extends OctTreeMemberType<T>>
 
   <E extends Throwable> void octTreeIterateObjects(
     PartialFunctionType<T, Boolean, E> f)
-    throws E;
+      throws E;
 
   /**
    * Returns the objects intersected by the ray <code>ray</code> in
@@ -121,7 +121,7 @@ public interface OctTreeType<T extends OctTreeMemberType<T>>
    *
    * @see com.io7m.jtensors.VectorI3D#distance(com.io7m.jtensors.VectorReadable3DType,
    *      com.io7m.jtensors.VectorReadable3DType)
-   * 
+   *
    * @param ray
    *          The ray
    * @param items
@@ -135,7 +135,7 @@ public interface OctTreeType<T extends OctTreeMemberType<T>>
   void octTreeQueryRaycast(
     RayI3D ray,
     SortedSet<OctTreeRaycastResult<T>> items)
-    throws IllegalArgumentException;
+      throws IllegalArgumentException;
 
   /**
    * Returns all objects in the tree that are completely contained within
@@ -154,7 +154,7 @@ public interface OctTreeType<T extends OctTreeMemberType<T>>
   void octTreeQueryVolumeContaining(
     BoundingVolumeType volume,
     SortedSet<T> items)
-    throws IllegalArgumentException;
+      throws IllegalArgumentException;
 
   /**
    * Returns all objects in the tree that are overlapped by
@@ -173,7 +173,7 @@ public interface OctTreeType<T extends OctTreeMemberType<T>>
   void octTreeQueryVolumeOverlapping(
     BoundingVolumeType volume,
     SortedSet<T> items)
-    throws IllegalArgumentException;
+      throws IllegalArgumentException;
 
   /**
    * Remove the object <code>item</code> from the octtree.
@@ -195,7 +195,7 @@ public interface OctTreeType<T extends OctTreeMemberType<T>>
 
   boolean octTreeRemove(
     T item)
-    throws IllegalArgumentException;
+      throws IllegalArgumentException;
 
   /**
    * Pass each node of the given octtree to <code>traversal.visit()</code>, in
@@ -211,6 +211,6 @@ public interface OctTreeType<T extends OctTreeMemberType<T>>
 
   <E extends Throwable> void octTreeTraverse(
     OctTreeTraversalType<E> traversal)
-    throws E;
+      throws E;
 
 }

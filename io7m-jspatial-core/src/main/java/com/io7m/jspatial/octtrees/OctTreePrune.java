@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -48,27 +48,8 @@ import com.io7m.junreachable.UnreachableCodeException;
  */
 
 @SuppressWarnings("synthetic-access") public final class OctTreePrune<T extends OctTreeMemberType<T>> implements
-  OctTreeType<T>
+OctTreeType<T>
 {
-  /**
-   * Construct a new octtree with the given size and position.
-   *
-   * @param size
-   *          The size.
-   * @param position
-   *          The position.
-   * @return A new octtree.
-   * @param <T>
-   *          The precise type of octtree members.
-   */
-
-  public static <T extends OctTreeMemberType<T>> OctTreeType<T> newOctTree(
-    final VectorReadable3IType size,
-    final VectorReadable3IType position)
-  {
-    return new OctTreePrune<T>(position, size);
-  }
-
   private final class Octant implements OctantType
   {
     private boolean                leaf;
@@ -317,7 +298,7 @@ import com.io7m.junreachable.UnreachableCodeException;
                   object_lower.getXI(),
                   object_lower.getYI(),
                   object_lower.getZI()),
-                ray.getOrigin()));
+                  ray.getOrigin()));
             items.add(r);
           }
         }
@@ -449,7 +430,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     <E extends Throwable> void traverse(
       final int depth,
       final OctTreeTraversalType<E> traversal)
-      throws E
+        throws E
     {
       traversal.visit(depth, this.lower, this.upper);
 
@@ -621,6 +602,25 @@ import com.io7m.junreachable.UnreachableCodeException;
     }
   }
 
+  /**
+   * Construct a new octtree with the given size and position.
+   *
+   * @param size
+   *          The size.
+   * @param position
+   *          The position.
+   * @return A new octtree.
+   * @param <T>
+   *          The precise type of octtree members.
+   */
+
+  public static <T extends OctTreeMemberType<T>> OctTreeType<T> newOctTree(
+    final VectorReadable3IType size,
+    final VectorReadable3IType position)
+    {
+    return new OctTreePrune<T>(position, size);
+    }
+
   private final SortedSet<T>         objects_all;
   private final VectorReadable3IType position;
   private Octant                     root;
@@ -703,7 +703,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 
   @Override public <E extends Throwable> void octTreeIterateObjects(
     final PartialFunctionType<T, Boolean, E> f)
-    throws E
+      throws E
   {
     NullCheck.notNull(f, "Function");
 
@@ -752,7 +752,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 
   @Override public <E extends Throwable> void octTreeTraverse(
     final OctTreeTraversalType<E> traversal)
-    throws E
+      throws E
   {
     NullCheck.notNull(traversal, "Traversal");
     this.root.traverse(0, traversal);

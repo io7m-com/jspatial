@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -54,7 +54,7 @@ import com.io7m.junreachable.UnreachableCodeException;
  */
 
 @SuppressWarnings("synthetic-access") public final class QuadTreeSDBasic<T extends QuadTreeMemberType<T>> implements
-  QuadTreeSDType<T>
+QuadTreeSDType<T>
 {
   final class Quadrant implements QuadrantType
   {
@@ -78,7 +78,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     Quadrant(
       final VectorI2I in_lower,
       final VectorI2I in_upper)
-    {
+      {
       this.upper = in_upper;
       this.lower = in_lower;
       this.x0y0 = null;
@@ -90,7 +90,7 @@ import com.io7m.junreachable.UnreachableCodeException;
       this.quadrant_objects_dynamic = new TreeSet<T>();
       this.quadrant_size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
       this.quadrant_size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
-    }
+      }
 
     void areaContaining(
       final BoundingAreaType area,
@@ -523,7 +523,7 @@ import com.io7m.junreachable.UnreachableCodeException;
     <E extends Throwable> void traverse(
       final int depth,
       final QuadTreeTraversalType<E> traversal)
-      throws E
+        throws E
     {
       traversal.visit(depth, this.lower, this.upper);
       if (this.leaf == false) {
@@ -552,14 +552,14 @@ import com.io7m.junreachable.UnreachableCodeException;
    */
 
   public static
-    <T extends QuadTreeMemberType<T>>
-    QuadTreeSDType<T>
-    newQuadTree(
-      final VectorReadable2IType size,
-      final VectorReadable2IType position)
-  {
+  <T extends QuadTreeMemberType<T>>
+  QuadTreeSDType<T>
+  newQuadTree(
+    final VectorReadable2IType size,
+    final VectorReadable2IType position)
+    {
     return new QuadTreeSDBasic<T>(position, size);
-  }
+    }
 
   private final SortedSet<T> objects_all_dynamic;
   private final SortedSet<T> objects_all_static;
@@ -630,7 +630,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 
   @Override public <E extends Throwable> void quadTreeIterateObjects(
     final PartialFunctionType<T, Boolean, E> f)
-    throws E
+      throws E
   {
     NullCheck.notNull(f, "Function");
 
@@ -702,7 +702,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 
   @Override public <E extends Throwable> void quadTreeTraverse(
     final QuadTreeTraversalType<E> traversal)
-    throws E
+      throws E
   {
     NullCheck.notNull(traversal, "Traversal");
     this.root.traverse(0, traversal);

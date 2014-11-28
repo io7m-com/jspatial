@@ -22,7 +22,7 @@ import com.io7m.jtensors.VectorReadable2IType;
 import com.io7m.junreachable.UnreachableCodeException;
 
 @SuppressWarnings({ "unused", "static-method" }) public final class QuadTreeLimitTest extends
-  QuadTreeCommonTests
+QuadTreeCommonTests
 {
   @Override <T extends QuadTreeMemberType<T>> QuadTreeType<T> makeQuad128()
   {
@@ -95,8 +95,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitXOdd()
+  void
+  testCreateLimitXOdd()
   {
     final VectorReadable2IType size = new VectorI2I(4, 4);
     final VectorReadable2IType position = VectorI2I.ZERO;
@@ -105,8 +105,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitXTooBig()
+  void
+  testCreateLimitXTooBig()
   {
     final VectorReadable2IType size = new VectorI2I(2, 2);
     final VectorReadable2IType position = VectorI2I.ZERO;
@@ -115,8 +115,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitXTooSmall()
+  void
+  testCreateLimitXTooSmall()
   {
     final VectorReadable2IType size = new VectorI2I(2, 2);
     final VectorReadable2IType position = VectorI2I.ZERO;
@@ -125,8 +125,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitYOdd()
+  void
+  testCreateLimitYOdd()
   {
     final VectorReadable2IType size = new VectorI2I(4, 4);
     final VectorReadable2IType position = VectorI2I.ZERO;
@@ -135,8 +135,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitYTooBig()
+  void
+  testCreateLimitYTooBig()
   {
     final VectorReadable2IType size = new VectorI2I(2, 2);
     final VectorReadable2IType position = VectorI2I.ZERO;
@@ -145,8 +145,8 @@ import com.io7m.junreachable.UnreachableCodeException;
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testCreateLimitYTooSmall()
+  void
+  testCreateLimitYTooSmall()
   {
     final VectorReadable2IType size = new VectorI2I(2, 2);
     final VectorReadable2IType position = VectorI2I.ZERO;
@@ -174,7 +174,7 @@ import com.io7m.junreachable.UnreachableCodeException;
         final int depth,
         final VectorReadable2IType lower,
         final VectorReadable2IType upper)
-        throws Exception
+          throws Exception
       {
         Assert.assertTrue(Dimensions.getSpanSizeX(lower, upper) >= 8);
         Assert.assertTrue(Dimensions.getSpanSizeX(lower, upper) >= 8);

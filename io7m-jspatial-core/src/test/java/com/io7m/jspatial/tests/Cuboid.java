@@ -8,9 +8,9 @@ import com.io7m.jtensors.VectorReadable3IType;
 
 public final class Cuboid implements OctTreeMemberType<Cuboid>
 {
+  private final long      id;
   private final VectorI3I lower;
   private final VectorI3I upper;
-  private final long      id;
 
   public Cuboid(
     final long in_id,

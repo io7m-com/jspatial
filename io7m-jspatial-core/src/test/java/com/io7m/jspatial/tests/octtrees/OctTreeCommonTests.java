@@ -22,7 +22,7 @@ import com.io7m.jtensors.VectorReadable3IType;
 @SuppressWarnings({ "null", "unchecked" }) public abstract class OctTreeCommonTests
 {
   protected static final class Counter implements
-    OctTreeTraversalType<Exception>
+  OctTreeTraversalType<Exception>
   {
     int count = 0;
 
@@ -35,14 +35,14 @@ import com.io7m.jtensors.VectorReadable3IType;
       final int depth,
       final VectorReadable3IType lower,
       final VectorReadable3IType upper)
-      throws Exception
+        throws Exception
     {
       ++this.count;
     }
   }
 
   protected static abstract class IterationChecker0 implements
-    PartialFunctionType<Cuboid, Boolean, Exception>
+  PartialFunctionType<Cuboid, Boolean, Exception>
   {
     final TreeSet<Cuboid> got;
 
@@ -53,7 +53,7 @@ import com.io7m.jtensors.VectorReadable3IType;
   }
 
   protected static final class IterationCounter implements
-    PartialFunctionType<Cuboid, Boolean, Exception>
+  PartialFunctionType<Cuboid, Boolean, Exception>
   {
     int count = 0;
 
@@ -70,17 +70,17 @@ import com.io7m.jtensors.VectorReadable3IType;
     }
   }
 
-  abstract
-    <T extends OctTreeMemberType<T>>
-    OctTreeType<T>
-    makeOct128Offset64();
-
-  abstract
-    <T extends OctTreeMemberType<T>>
-    OctTreeType<T>
-    makeOct128OffsetM64();
-
   abstract <T extends OctTreeMemberType<T>> OctTreeType<T> makeOct128();
+
+  abstract
+  <T extends OctTreeMemberType<T>>
+  OctTreeType<T>
+  makeOct128Offset64();
+
+  abstract
+  <T extends OctTreeMemberType<T>>
+  OctTreeType<T>
+  makeOct128OffsetM64();
 
   abstract <T extends OctTreeMemberType<T>> OctTreeType<T> makeOct16();
 
@@ -210,9 +210,9 @@ import com.io7m.jtensors.VectorReadable3IType;
   }
 
   @Test(expected = IllegalArgumentException.class) public final
-    void
-    testInsertIllFormed()
-      throws Exception
+  void
+  testInsertIllFormed()
+    throws Exception
   {
     final OctTreeType<Cuboid> q = this.makeOct128();
     final Cuboid r =
@@ -319,14 +319,14 @@ import com.io7m.jtensors.VectorReadable3IType;
   }
 
   @Test(expected = NullCheckException.class) public final
-    void
-    testIterateNull()
-      throws Exception
+  void
+  testIterateNull()
+    throws Exception
   {
     final OctTreeType<Cuboid> q = this.makeOct128();
     q
-      .octTreeIterateObjects((PartialFunctionType<Cuboid, Boolean, Exception>) TestUtilities
-        .actuallyNull());
+    .octTreeIterateObjects((PartialFunctionType<Cuboid, Boolean, Exception>) TestUtilities
+      .actuallyNull());
   }
 
   @Test public final void testQueryContaining()

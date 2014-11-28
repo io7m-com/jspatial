@@ -24,7 +24,7 @@ import com.io7m.jtensors.VectorReadable2IType;
 public abstract class QuadTreeCommonTests
 {
   protected static final class Counter implements
-    QuadTreeTraversalType<Exception>
+  QuadTreeTraversalType<Exception>
   {
     int count = 0;
 
@@ -37,14 +37,14 @@ public abstract class QuadTreeCommonTests
       final int depth,
       final VectorReadable2IType lower,
       final VectorReadable2IType upper)
-      throws Exception
+        throws Exception
     {
       ++this.count;
     }
   }
 
   protected static abstract class IterationChecker0 implements
-    PartialFunctionType<Rectangle, Boolean, Exception>
+  PartialFunctionType<Rectangle, Boolean, Exception>
   {
     boolean found_r0 = false;
     boolean found_r1 = false;
@@ -58,7 +58,7 @@ public abstract class QuadTreeCommonTests
   }
 
   protected static abstract class IterationChecker1 implements
-    PartialFunctionType<Rectangle, Boolean, Exception>
+  PartialFunctionType<Rectangle, Boolean, Exception>
   {
     int count = 0;
 
@@ -69,7 +69,7 @@ public abstract class QuadTreeCommonTests
   }
 
   protected static final class IterationCounter implements
-    PartialFunctionType<Rectangle, Boolean, Exception>
+  PartialFunctionType<Rectangle, Boolean, Exception>
   {
     int count = 0;
 
@@ -238,9 +238,9 @@ public abstract class QuadTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-    void
-    testInsertIllFormed()
-      throws Exception
+  void
+  testInsertIllFormed()
+    throws Exception
   {
     final QuadTreeType<Rectangle> q = this.makeQuad16();
     final Rectangle r =
@@ -338,7 +338,7 @@ public abstract class QuadTreeCommonTests
     final QuadTreeType<Rectangle> q = this.makeQuad16();
     @SuppressWarnings("unchecked") final PartialFunctionType<Rectangle, Boolean, Exception> f =
       (PartialFunctionType<Rectangle, Boolean, Exception>) TestUtilities
-        .actuallyNull();
+      .actuallyNull();
     q.quadTreeIterateObjects(f);
   }
 

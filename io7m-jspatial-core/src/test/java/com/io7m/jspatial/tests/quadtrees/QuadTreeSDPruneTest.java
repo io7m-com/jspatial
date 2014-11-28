@@ -7,13 +7,12 @@ import java.util.TreeSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.io7m.jspatial.Dimensions;
 import com.io7m.jspatial.RayI2D;
-import com.io7m.jspatial.quadtrees.QuadTreeLimit;
+import com.io7m.jspatial.SDType;
 import com.io7m.jspatial.quadtrees.QuadTreeMemberType;
-import com.io7m.jspatial.quadtrees.QuadTreePruneLimit;
 import com.io7m.jspatial.quadtrees.QuadTreeRaycastResult;
-import com.io7m.jspatial.quadtrees.QuadTreeTraversalType;
+import com.io7m.jspatial.quadtrees.QuadTreeSDPrune;
+import com.io7m.jspatial.quadtrees.QuadTreeSDType;
 import com.io7m.jspatial.quadtrees.QuadTreeType;
 import com.io7m.jspatial.quadtrees.QuadrantType;
 import com.io7m.jspatial.tests.Rectangle;
@@ -23,7 +22,7 @@ import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorReadable2IType;
 import com.io7m.junreachable.UnreachableCodeException;
 
-@SuppressWarnings({ "unused", "static-method" }) public final class QuadTreePruneLimitTest extends
+@SuppressWarnings({ "static-method" }) public final class QuadTreeSDPruneTest extends
 QuadTreeCommonTests
 {
   @Override <T extends QuadTreeMemberType<T>> QuadTreeType<T> makeQuad128()
@@ -31,8 +30,7 @@ QuadTreeCommonTests
     try {
       final VectorReadable2IType size = new VectorI2I(128, 128);
       final VectorReadable2IType position = VectorI2I.ZERO;
-      final VectorReadable2IType size_minimum = new VectorI2I(2, 2);
-      return QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
+      return QuadTreeSDPrune.newQuadTree(size, position);
     } catch (final Exception e) {
       Assert.fail(e.getMessage());
     }
@@ -45,8 +43,7 @@ QuadTreeCommonTests
     try {
       final VectorReadable2IType size = new VectorI2I(16, 16);
       final VectorReadable2IType position = VectorI2I.ZERO;
-      final VectorReadable2IType size_minimum = new VectorI2I(2, 2);
-      return QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
+      return QuadTreeSDPrune.newQuadTree(size, position);
     } catch (final Exception e) {
       Assert.fail(e.getMessage());
     }
@@ -59,8 +56,7 @@ QuadTreeCommonTests
     try {
       final VectorReadable2IType size = new VectorI2I(2, 2);
       final VectorReadable2IType position = VectorI2I.ZERO;
-      final VectorReadable2IType size_minimum = new VectorI2I(2, 2);
-      return QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
+      return QuadTreeSDPrune.newQuadTree(size, position);
     } catch (final Exception e) {
       Assert.fail(e.getMessage());
     }
@@ -73,8 +69,7 @@ QuadTreeCommonTests
     try {
       final VectorReadable2IType size = new VectorI2I(32, 32);
       final VectorReadable2IType position = VectorI2I.ZERO;
-      final VectorReadable2IType size_minimum = new VectorI2I(2, 2);
-      return QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
+      return QuadTreeSDPrune.newQuadTree(size, position);
     } catch (final Exception e) {
       Assert.fail(e.getMessage());
     }
@@ -87,8 +82,7 @@ QuadTreeCommonTests
     try {
       final VectorReadable2IType size = new VectorI2I(512, 512);
       final VectorReadable2IType position = VectorI2I.ZERO;
-      final VectorReadable2IType size_minimum = new VectorI2I(2, 2);
-      return QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
+      return QuadTreeSDPrune.newQuadTree(size, position);
     } catch (final Exception e) {
       Assert.fail(e.getMessage());
     }
@@ -96,102 +90,71 @@ QuadTreeCommonTests
     throw new UnreachableCodeException();
   }
 
-  @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitXOdd()
-  {
-    final VectorReadable2IType size = new VectorI2I(4, 4);
-    final VectorReadable2IType position = VectorI2I.ZERO;
-    final VectorReadable2IType size_minimum = new VectorI2I(3, 2);
-    QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitXTooBig()
-  {
-    final VectorReadable2IType size = new VectorI2I(2, 2);
-    final VectorReadable2IType position = VectorI2I.ZERO;
-    final VectorReadable2IType size_minimum = new VectorI2I(4, 2);
-    QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitXTooSmall()
-  {
-    final VectorReadable2IType size = new VectorI2I(2, 2);
-    final VectorReadable2IType position = VectorI2I.ZERO;
-    final VectorReadable2IType size_minimum = new VectorI2I(1, 2);
-    QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitYOdd()
-  {
-    final VectorReadable2IType size = new VectorI2I(4, 4);
-    final VectorReadable2IType position = VectorI2I.ZERO;
-    final VectorReadable2IType size_minimum = new VectorI2I(2, 3);
-    QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitYTooBig()
-  {
-    final VectorReadable2IType size = new VectorI2I(2, 2);
-    final VectorReadable2IType position = VectorI2I.ZERO;
-    final VectorReadable2IType size_minimum = new VectorI2I(2, 4);
-    QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
-  }
-
-  @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitYTooSmall()
-  {
-    final VectorReadable2IType size = new VectorI2I(2, 2);
-    final VectorReadable2IType position = VectorI2I.ZERO;
-    final VectorReadable2IType size_minimum = new VectorI2I(2, 1);
-    QuadTreePruneLimit.newQuadTree(size, position, size_minimum);
-  }
-
-  @Test public void testInsertLimit()
+  @Test public void testClearDynamic()
     throws Exception
   {
-    final QuadTreeType<Rectangle> q =
-      QuadTreePruneLimit.newQuadTree(
-        new VectorI2I(16, 16),
-        VectorI2I.ZERO,
-        new VectorI2I(8, 8));
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(32, 32), VectorI2I.ZERO);
+    final Rectangle[] dynamics = TestUtilities.makeRectangles(0, 32);
+    final Rectangle[] statics = TestUtilities.makeRectangles(10, 32);
 
-    final Rectangle r =
-      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
+    for (final Rectangle r : dynamics) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+      Assert.assertTrue(in);
+    }
+    for (final Rectangle r : statics) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+      Assert.assertTrue(in);
+    }
 
-    final boolean in = q.quadTreeInsert(r);
-    Assert.assertTrue(in);
+    {
+      final IterationCounter counter = new IterationCounter();
+      q.quadTreeIterateObjects(counter);
+      Assert.assertEquals(8, counter.count);
+    }
 
-    q.quadTreeTraverse(new QuadTreeTraversalType<Exception>() {
-      @Override public void visit(
-        final int depth,
-        final VectorReadable2IType lower,
-        final VectorReadable2IType upper)
-          throws Exception
-      {
-        Assert.assertTrue(Dimensions.getSpanSizeX(lower, upper) >= 8);
-        Assert.assertTrue(Dimensions.getSpanSizeX(lower, upper) >= 8);
-      }
-    });
+    q.quadTreeSDClearDynamic();
+
+    {
+      final IterationCounter counter = new IterationCounter();
+      q.quadTreeIterateObjects(counter);
+      Assert.assertEquals(4, counter.count);
+    }
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateSDXOdd()
+  {
+    QuadTreeSDPrune.newQuadTree(new VectorI2I(3, 2), VectorI2I.ZERO);
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateSDXTooSmall()
+  {
+    QuadTreeSDPrune.newQuadTree(new VectorI2I(1, 2), VectorI2I.ZERO);
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateSDYOdd()
+  {
+    QuadTreeSDPrune.newQuadTree(new VectorI2I(4, 3), VectorI2I.ZERO);
+  }
+
+  @Test(expected = IllegalArgumentException.class) public
+  void
+  testCreateSDYTooSmall()
+  {
+    QuadTreeSDPrune.newQuadTree(new VectorI2I(2, 1), VectorI2I.ZERO);
   }
 
   @Test public void testInsertSplitNotX()
     throws Exception
   {
-    final QuadTreeType<Rectangle> q =
-      QuadTreeLimit.newQuadTree(
-        new VectorI2I(128, 128),
-        VectorI2I.ZERO,
-        new VectorI2I(128, 2));
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(2, 4), VectorI2I.ZERO);
 
     final Rectangle r =
       new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
@@ -201,17 +164,14 @@ QuadTreeCommonTests
 
     final Counter counter = new Counter();
     q.quadTreeTraverse(counter);
-    Assert.assertEquals(1, counter.count);
+    Assert.assertEquals(5, counter.count);
   }
 
   @Test public void testInsertSplitNotY()
     throws Exception
   {
-    final QuadTreeType<Rectangle> q =
-      QuadTreeLimit.newQuadTree(
-        new VectorI2I(128, 128),
-        VectorI2I.ZERO,
-        new VectorI2I(2, 128));
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(4, 2), VectorI2I.ZERO);
 
     final Rectangle r =
       new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(0, 0));
@@ -221,16 +181,202 @@ QuadTreeCommonTests
 
     final Counter counter = new Counter();
     q.quadTreeTraverse(counter);
-    Assert.assertEquals(1, counter.count);
+    Assert.assertEquals(5, counter.count);
+  }
+
+  @Test public void testInsertTypeDynamicCollision()
+    throws Exception
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(16, 16), VectorI2I.ZERO);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
+
+    boolean in = false;
+    in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+    Assert.assertTrue(in);
+    in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+    Assert.assertFalse(in);
+  }
+
+  @Test public void testInsertTypeStaticCollision()
+    throws Exception
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(16, 16), VectorI2I.ZERO);
+
+    final Rectangle r =
+      new Rectangle(0, new VectorI2I(0, 0), new VectorI2I(12, 12));
+
+    boolean in = false;
+    in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+    Assert.assertTrue(in);
+    in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+    Assert.assertFalse(in);
+  }
+
+  @Test public void testIterateStopEarlyDynamic()
+    throws Exception
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(16, 16), VectorI2I.ZERO);
+
+    final Rectangle[] rectangles = TestUtilities.makeRectangles(0, 16);
+
+    for (final Rectangle r : rectangles) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+      Assert.assertTrue(in);
+    }
+
+    final IterationChecker1 counter = new IterationChecker1() {
+      @Override public Boolean call(
+        final Rectangle x)
+      {
+        ++this.count;
+        if (this.count >= 2) {
+          return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+      }
+    };
+
+    q.quadTreeIterateObjects(counter);
+
+    Assert.assertEquals(2, counter.count);
+  }
+
+  @Test public void testIterateStopEarlyStatic()
+    throws Exception
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(16, 16), VectorI2I.ZERO);
+
+    final Rectangle[] rectangles = TestUtilities.makeRectangles(0, 16);
+
+    for (final Rectangle r : rectangles) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+      Assert.assertTrue(in);
+    }
+
+    final IterationChecker1 counter = new IterationChecker1() {
+      @Override public Boolean call(
+        final Rectangle x)
+      {
+        ++this.count;
+        if (this.count >= 2) {
+          return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+      }
+    };
+
+    q.quadTreeIterateObjects(counter);
+
+    Assert.assertEquals(2, counter.count);
+  }
+
+  @Test public void testQueryContainingStatic()
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(128, 128), VectorI2I.ZERO);
+
+    final boolean in =
+      q.quadTreeInsertSD(new Rectangle(
+        0,
+        new VectorI2I(66, 66),
+        new VectorI2I(127, 127)), SDType.SD_STATIC);
+    Assert.assertTrue(in);
+
+    {
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaContaining(new Rectangle(
+        0,
+        new VectorI2I(66, 66),
+        new VectorI2I(127, 127)), items);
+
+      Assert.assertEquals(1, items.size());
+    }
+  }
+
+  @Test public void testQueryContainingStaticNot()
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(128, 128), VectorI2I.ZERO);
+
+    final boolean in =
+      q.quadTreeInsertSD(new Rectangle(
+        0,
+        new VectorI2I(66, 66),
+        new VectorI2I(127, 127)), SDType.SD_STATIC);
+    Assert.assertTrue(in);
+
+    {
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaContaining(new Rectangle(
+        0,
+        new VectorI2I(0, 0),
+        new VectorI2I(65, 65)), items);
+
+      Assert.assertEquals(0, items.size());
+    }
+  }
+
+  @Test public void testQueryOverlappingStatic()
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(128, 128), VectorI2I.ZERO);
+
+    final Rectangle[] dynamics = TestUtilities.makeRectangles(0, 128);
+    final Rectangle[] statics = TestUtilities.makeRectangles(10, 128);
+
+    for (final Rectangle r : dynamics) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+      Assert.assertTrue(in);
+    }
+    for (final Rectangle r : statics) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+      Assert.assertTrue(in);
+    }
+
+    {
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(
+        0,
+        new VectorI2I(16, 16),
+        new VectorI2I(80, 80)), items);
+
+      Assert.assertEquals(8, items.size());
+    }
+  }
+
+  @Test public void testQueryOverlappingStaticNot()
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(128, 128), VectorI2I.ZERO);
+
+    final boolean in =
+      q.quadTreeInsertSD(new Rectangle(
+        0,
+        new VectorI2I(66, 66),
+        new VectorI2I(127, 127)), SDType.SD_STATIC);
+    Assert.assertTrue(in);
+
+    {
+      final SortedSet<Rectangle> items = new TreeSet<Rectangle>();
+      q.quadTreeQueryAreaOverlapping(new Rectangle(
+        0,
+        new VectorI2I(0, 0),
+        new VectorI2I(65, 65)), items);
+
+      Assert.assertEquals(0, items.size());
+    }
   }
 
   @Test public void testRaycastQuadrants()
   {
-    final QuadTreeType<Rectangle> q =
-      QuadTreePruneLimit.newQuadTree(
-        new VectorI2I(512, 512),
-        VectorI2I.ZERO,
-        new VectorI2I(2, 2));
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(512, 512), VectorI2I.ZERO);
 
     q.quadTreeInsert(new Rectangle(0, new VectorI2I(32, 32), new VectorI2I(
       80,
@@ -309,11 +455,8 @@ QuadTreeCommonTests
 
   @Test public void testRaycastQuadrantsNegativeRay()
   {
-    final QuadTreeType<Rectangle> q =
-      QuadTreePruneLimit.newQuadTree(
-        new VectorI2I(512, 512),
-        VectorI2I.ZERO,
-        new VectorI2I(2, 2));
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(512, 512), VectorI2I.ZERO);
 
     final RayI2D ray =
       new RayI2D(new VectorI2D(512, 512), VectorI2D.normalize(new VectorI2D(
@@ -465,4 +608,39 @@ QuadTreeCommonTests
     }
   }
 
+  @Test public void testRemoveSubDynamic()
+    throws Exception
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(32, 32), VectorI2I.ZERO);
+    final Rectangle[] rectangles = TestUtilities.makeRectangles(0, 32);
+
+    for (final Rectangle r : rectangles) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_DYNAMIC);
+      Assert.assertTrue(in);
+    }
+
+    for (final Rectangle r : rectangles) {
+      final boolean removed = q.quadTreeRemove(r);
+      Assert.assertTrue(removed);
+    }
+  }
+
+  @Test public void testRemoveSubStatic()
+    throws Exception
+  {
+    final QuadTreeSDType<Rectangle> q =
+      QuadTreeSDPrune.newQuadTree(new VectorI2I(32, 32), VectorI2I.ZERO);
+    final Rectangle[] rectangles = TestUtilities.makeRectangles(0, 32);
+
+    for (final Rectangle r : rectangles) {
+      final boolean in = q.quadTreeInsertSD(r, SDType.SD_STATIC);
+      Assert.assertTrue(in);
+    }
+
+    for (final Rectangle r : rectangles) {
+      final boolean removed = q.quadTreeRemove(r);
+      Assert.assertTrue(removed);
+    }
+  }
 }

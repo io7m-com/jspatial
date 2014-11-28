@@ -17,7 +17,6 @@
 package com.io7m.jspatial.quadtrees;
 
 import com.io7m.jtensors.VectorM2I;
-import com.io7m.junreachable.UnimplementedCodeException;
 
 /**
  * The default implementation of the {@link QuadTreeBuilderType}.
@@ -83,12 +82,18 @@ public final class QuadTreeBuilder<T extends QuadTreeMemberType<T>> implements
   {
     if (this.prune) {
       if (this.limit) {
-        throw new UnimplementedCodeException();
+        return QuadTreeSDPruneLimit.newQuadTree(
+          this.size,
+          this.position,
+          this.limit_size);
       }
-      throw new UnimplementedCodeException();
+      return QuadTreeSDPrune.newQuadTree(this.size, this.position);
     }
     if (this.limit) {
-      throw new UnimplementedCodeException();
+      return QuadTreeSDLimit.newQuadTree(
+        this.size,
+        this.position,
+        this.limit_size);
     }
     return QuadTreeSDBasic.newQuadTree(this.size, this.position);
   }

@@ -8,6 +8,16 @@ import com.io7m.jtensors.VectorI3I;
 
 public final class TestUtilities
 {
+  private static final Object z = null;
+
+  @SuppressWarnings({ "null", "unchecked" }) static @NonNull public
+  <A>
+  A
+  actuallyNull()
+  {
+    return (A) TestUtilities.z;
+  }
+
   public static Cuboid[] makeCuboids(
     final long id_first,
     final int container_size)
@@ -143,15 +153,5 @@ public final class TestUtilities
         new VectorI2I(x_root + rectangle_size, y_root + rectangle_size));
 
     return rectangles;
-  }
-
-  private static final Object z = null;
-
-  @SuppressWarnings({ "null", "unchecked" }) static @NonNull public
-    <A>
-    A
-    actuallyNull()
-  {
-    return (A) TestUtilities.z;
   }
 }

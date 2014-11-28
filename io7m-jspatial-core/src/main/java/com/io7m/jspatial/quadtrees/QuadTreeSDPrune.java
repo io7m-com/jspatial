@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -26,6 +26,7 @@ import com.io7m.jspatial.BoundingAreaCheck;
 import com.io7m.jspatial.BoundingAreaType;
 import com.io7m.jspatial.Dimensions;
 import com.io7m.jspatial.RayI2D;
+import com.io7m.jspatial.SDType;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorReadable2IType;
@@ -33,7 +34,7 @@ import com.io7m.junreachable.UnreachableCodeException;
 
 /**
  * <p>
- * A quadtree implementation based on {@link QuadTreeBasic} but implementing
+ * A quadtree implementation based on {@link QuadTreeSDBasic} but implementing
  * empty node pruning when an object is removed from the tree.
  * </p>
  * <p>
@@ -47,15 +48,16 @@ import com.io7m.junreachable.UnreachableCodeException;
  *          The type of objects contained within the tree.
  */
 
-@SuppressWarnings("synthetic-access") public final class QuadTreePrune<T extends QuadTreeMemberType<T>> implements
-QuadTreeType<T>
+@SuppressWarnings("synthetic-access") public final class QuadTreeSDPrune<T extends QuadTreeMemberType<T>> implements
+QuadTreeSDType<T>
 {
   final class Quadrant implements QuadrantType
   {
     private boolean                  leaf;
     private final VectorI2I          lower;
     private final @Nullable Quadrant parent;
-    private final SortedSet<T>       quadrant_objects;
+    private final SortedSet<T>       quadrant_objects_dynamic;
+    private final SortedSet<T>       quadrant_objects_static;
     private final int                quadrant_size_x;
     private final int                quadrant_size_y;
     private final VectorI2I          upper;
@@ -82,7 +84,8 @@ QuadTreeType<T>
       this.x0y1 = null;
       this.x1y1 = null;
       this.leaf = true;
-      this.quadrant_objects = new TreeSet<T>();
+      this.quadrant_objects_static = new TreeSet<T>();
+      this.quadrant_objects_dynamic = new TreeSet<T>();
       this.quadrant_size_x = Dimensions.getSpanSizeX(this.lower, this.upper);
       this.quadrant_size_y = Dimensions.getSpanSizeY(this.lower, this.upper);
       }
@@ -106,7 +109,13 @@ QuadTreeType<T>
        * therefore some items may still be contained within <code>area</code>.
        */
 
-      for (final T object : this.quadrant_objects) {
+      for (final T object : this.quadrant_objects_static) {
+        assert object != null;
+        if (BoundingAreaCheck.containedWithin(area, object)) {
+          items.add(object);
+        }
+      }
+      for (final T object : this.quadrant_objects_dynamic) {
         assert object != null;
         if (BoundingAreaCheck.containedWithin(area, object)) {
           items.add(object);
@@ -135,7 +144,13 @@ QuadTreeType<T>
        */
 
       if (BoundingAreaCheck.overlapsArea(area, this)) {
-        for (final T object : this.quadrant_objects) {
+        for (final T object : this.quadrant_objects_static) {
+          assert object != null;
+          if (BoundingAreaCheck.overlapsArea(area, object)) {
+            items.add(object);
+          }
+        }
+        for (final T object : this.quadrant_objects_dynamic) {
           assert object != null;
           if (BoundingAreaCheck.overlapsArea(area, object)) {
             items.add(object);
@@ -170,10 +185,42 @@ QuadTreeType<T>
       return (this.quadrant_size_x >= 2) && (this.quadrant_size_y >= 2);
     }
 
+    void clear()
+    {
+      this.quadrant_objects_static.clear();
+      this.quadrant_objects_dynamic.clear();
+      if (this.leaf == false) {
+        assert this.x0y0 != null;
+        this.x0y0.clear();
+        assert this.x1y0 != null;
+        this.x1y0.clear();
+        assert this.x0y1 != null;
+        this.x0y1.clear();
+        assert this.x1y1 != null;
+        this.x1y1.clear();
+      }
+    }
+
+    void clearDynamic()
+    {
+      this.quadrant_objects_dynamic.clear();
+      if (this.leaf == false) {
+        assert this.x0y0 != null;
+        this.x0y0.clearDynamic();
+        assert this.x1y0 != null;
+        this.x1y0.clearDynamic();
+        assert this.x0y1 != null;
+        this.x0y1.clearDynamic();
+        assert this.x1y1 != null;
+        this.x1y1.clearDynamic();
+      }
+    }
+
     private void collectRecursive(
       final SortedSet<T> items)
     {
-      items.addAll(this.quadrant_objects);
+      items.addAll(this.quadrant_objects_static);
+      items.addAll(this.quadrant_objects_dynamic);
       if (this.leaf == false) {
         assert this.x0y0 != null;
         this.x0y0.collectRecursive(items);
@@ -195,9 +242,10 @@ QuadTreeType<T>
      */
 
     boolean insert(
-      final T item)
+      final T item,
+      final SDType type)
     {
-      return this.insertBase(item);
+      return this.insertBase(item, type);
     }
 
     /**
@@ -205,13 +253,17 @@ QuadTreeType<T>
      */
 
     private boolean insertBase(
-      final T item)
+      final T item,
+      final SDType type)
     {
-      if (QuadTreePrune.this.objects_all.contains(item)) {
+      if (QuadTreeSDPrune.this.objects_all_static.contains(item)) {
+        return false;
+      }
+      if (QuadTreeSDPrune.this.objects_all_dynamic.contains(item)) {
         return false;
       }
       if (BoundingAreaCheck.containedWithin(this, item)) {
-        return this.insertStep(item);
+        return this.insertStep(item, type);
       }
       return false;
     }
@@ -222,11 +274,25 @@ QuadTreeType<T>
      */
 
     private boolean insertObject(
-      final T item)
+      final T item,
+      final SDType type)
     {
-      QuadTreePrune.this.objects_all.add(item);
-      this.quadrant_objects.add(item);
-      return true;
+      switch (type) {
+        case SD_DYNAMIC:
+        {
+          QuadTreeSDPrune.this.objects_all_dynamic.add(item);
+          this.quadrant_objects_dynamic.add(item);
+          return true;
+        }
+        case SD_STATIC:
+        {
+          QuadTreeSDPrune.this.objects_all_static.add(item);
+          this.quadrant_objects_static.add(item);
+          return true;
+        }
+      }
+
+      throw new UnreachableCodeException();
     }
 
     /**
@@ -235,7 +301,8 @@ QuadTreeType<T>
      */
 
     private boolean insertStep(
-      final T item)
+      final T item,
+      final SDType type)
     {
       /**
        * The object can fit in this node, but perhaps it is possible to fit it
@@ -255,7 +322,7 @@ QuadTreeType<T>
            * The node is a leaf, but cannot be split further. Insert directly.
            */
 
-          return this.insertObject(item);
+          return this.insertObject(item, type);
         }
       }
 
@@ -264,32 +331,31 @@ QuadTreeType<T>
        */
 
       assert this.leaf == false;
-
       assert this.x0y0 != null;
       if (BoundingAreaCheck.containedWithin(this.x0y0, item)) {
         assert this.x0y0 != null;
-        return this.x0y0.insertStep(item);
+        return this.x0y0.insertStep(item, type);
       }
       assert this.x1y0 != null;
       if (BoundingAreaCheck.containedWithin(this.x1y0, item)) {
         assert this.x1y0 != null;
-        return this.x1y0.insertStep(item);
+        return this.x1y0.insertStep(item, type);
       }
       assert this.x0y1 != null;
       if (BoundingAreaCheck.containedWithin(this.x0y1, item)) {
         assert this.x0y1 != null;
-        return this.x0y1.insertStep(item);
+        return this.x0y1.insertStep(item, type);
       }
       assert this.x1y1 != null;
       if (BoundingAreaCheck.containedWithin(this.x1y1, item)) {
         assert this.x1y1 != null;
-        return this.x1y1.insertStep(item);
+        return this.x1y1.insertStep(item, type);
       }
 
       /**
        * Otherwise, insert the object into this node.
        */
-      return this.insertObject(item);
+      return this.insertObject(item, type);
     }
 
     void raycast(
@@ -303,26 +369,8 @@ QuadTreeType<T>
         this.upper.getXI(),
         this.upper.getYI())) {
 
-        for (final T object : this.quadrant_objects) {
-          final VectorReadable2IType object_lower =
-            object.boundingAreaLower();
-          final VectorReadable2IType object_upper =
-            object.boundingAreaUpper();
-
-          if (BoundingAreaCheck.rayBoxIntersects(
-            ray,
-            object_lower.getXI(),
-            object_lower.getYI(),
-            object_upper.getXI(),
-            object_upper.getYI())) {
-
-            final QuadTreeRaycastResult<T> r =
-              new QuadTreeRaycastResult<T>(object, VectorI2D.distance(
-                new VectorI2D(object_lower.getXI(), object_lower.getYI()),
-                ray.getOrigin()));
-            items.add(r);
-          }
-        }
+        this.raycastCheckObjects(ray, this.quadrant_objects_static, items);
+        this.raycastCheckObjects(ray, this.quadrant_objects_dynamic, items);
 
         if (this.leaf == false) {
           assert this.x0y0 != null;
@@ -333,6 +381,31 @@ QuadTreeType<T>
           this.x1y0.raycast(ray, items);
           assert this.x1y1 != null;
           this.x1y1.raycast(ray, items);
+        }
+      }
+    }
+
+    void raycastCheckObjects(
+      final RayI2D ray,
+      final SortedSet<T> objects,
+      final SortedSet<QuadTreeRaycastResult<T>> items)
+    {
+      for (final T object : objects) {
+        final VectorReadable2IType object_lower = object.boundingAreaLower();
+        final VectorReadable2IType object_upper = object.boundingAreaUpper();
+
+        if (BoundingAreaCheck.rayBoxIntersects(
+          ray,
+          object_lower.getXI(),
+          object_lower.getYI(),
+          object_upper.getXI(),
+          object_upper.getYI())) {
+
+          final QuadTreeRaycastResult<T> r =
+            new QuadTreeRaycastResult<T>(object, VectorI2D.distance(
+              new VectorI2D(object_lower.getXI(), object_lower.getYI()),
+              ray.getOrigin()));
+          items.add(r);
         }
       }
     }
@@ -371,7 +444,8 @@ QuadTreeType<T>
     boolean remove(
       final T item)
     {
-      if (QuadTreePrune.this.objects_all.contains(item) == false) {
+      if ((QuadTreeSDPrune.this.objects_all_dynamic.contains(item) == false)
+        && (QuadTreeSDPrune.this.objects_all_static.contains(item) == false)) {
         return false;
       }
 
@@ -379,7 +453,6 @@ QuadTreeType<T>
        * If an object is in objects_all, then it must be within the bounds of
        * the tree, according to insert().
        */
-
       assert BoundingAreaCheck.containedWithin(this, item);
       return this.removeStep(item);
     }
@@ -387,9 +460,16 @@ QuadTreeType<T>
     private boolean removeStep(
       final T item)
     {
-      if (this.quadrant_objects.contains(item)) {
-        this.quadrant_objects.remove(item);
-        QuadTreePrune.this.objects_all.remove(item);
+      if (this.quadrant_objects_dynamic.contains(item)) {
+        this.quadrant_objects_dynamic.remove(item);
+        QuadTreeSDPrune.this.objects_all_dynamic.remove(item);
+        this.unsplitAttemptRecursive();
+        return true;
+      }
+
+      if (this.quadrant_objects_static.contains(item)) {
+        this.quadrant_objects_static.remove(item);
+        QuadTreeSDPrune.this.objects_all_static.remove(item);
         this.unsplitAttemptRecursive();
         return true;
       }
@@ -423,7 +503,6 @@ QuadTreeType<T>
        * The object must be in the tree, according to remove(). Therefore it
        * must be in this node, or one of the child quadrants.
        */
-
       throw new UnreachableCodeException();
     }
 
@@ -460,10 +539,6 @@ QuadTreeType<T>
         this.x1y1.traverse(depth + 1, traversal);
       }
     }
-
-    /**
-     * Attempt to turn this node back into a leaf.
-     */
 
     private void unsplitAttempt()
     {
@@ -503,7 +578,9 @@ QuadTreeType<T>
 
     private boolean unsplitCanPrune()
     {
-      return (this.leaf == true) && this.quadrant_objects.isEmpty();
+      return (this.leaf == true)
+        && this.quadrant_objects_dynamic.isEmpty()
+        && this.quadrant_objects_static.isEmpty();
     }
   }
 
@@ -521,74 +598,78 @@ QuadTreeType<T>
 
   public static
   <T extends QuadTreeMemberType<T>>
-  QuadTreeType<T>
+  QuadTreeSDType<T>
   newQuadTree(
     final VectorReadable2IType size,
     final VectorReadable2IType position)
     {
-    return new QuadTreePrune<T>(position, size);
+    return new QuadTreeSDPrune<T>(position, size);
     }
 
-  private final SortedSet<T> objects_all;
-  private final VectorI2I    position;
-  private Quadrant           root;
-  private final VectorI2I    size;
+  private final SortedSet<T> objects_all_dynamic;
+  private final SortedSet<T> objects_all_static;
+  private final Quadrant     root;
 
-  private QuadTreePrune(
-    final VectorReadable2IType in_position,
-    final VectorReadable2IType in_size)
+  private QuadTreeSDPrune(
+    final VectorReadable2IType position,
+    final VectorReadable2IType size)
   {
-    NullCheck.notNull(in_position, "Position");
-    NullCheck.notNull(in_size, "Size");
-    QuadTreeChecks.checkSize(
-      "Quadtree size",
-      in_size.getXI(),
-      in_size.getYI());
+    NullCheck.notNull(position, "Position");
+    NullCheck.notNull(size, "Size");
+    QuadTreeChecks.checkSize("Quadtree size", size.getXI(), size.getYI());
 
-    this.position = new VectorI2I(in_position);
-    this.size = new VectorI2I(in_size);
+    this.objects_all_static = new TreeSet<T>();
+    this.objects_all_dynamic = new TreeSet<T>();
 
-    this.objects_all = new TreeSet<T>();
-
-    final VectorI2I lower = new VectorI2I(this.position);
+    final VectorI2I lower = new VectorI2I(position);
     final VectorI2I upper =
       new VectorI2I(
-        (this.position.getXI() + this.size.getXI()) - 1,
-        (this.position.getYI() + this.size.getYI()) - 1);
+        (position.getXI() + size.getXI()) - 1,
+        (position.getYI() + size.getYI()) - 1);
     this.root = new Quadrant(null, lower, upper);
   }
 
   @Override public void quadTreeClear()
   {
-    this.root = new Quadrant(null, this.position, this.size);
-    this.objects_all.clear();
+    this.root.clear();
+    this.objects_all_static.clear();
+    this.objects_all_dynamic.clear();
   }
 
   @Override public int quadTreeGetPositionX()
   {
-    return this.position.getXI();
+    return this.root.lower.getXI();
   }
 
   @Override public int quadTreeGetPositionY()
   {
-    return this.position.getYI();
+    return this.root.lower.getYI();
   }
 
   @Override public int quadTreeGetSizeX()
   {
-    return this.size.getXI();
+    return this.root.quadrant_size_x;
   }
 
   @Override public int quadTreeGetSizeY()
   {
-    return this.size.getYI();
+    return this.root.quadrant_size_y;
   }
 
   @Override public boolean quadTreeInsert(
     final T item)
   {
     BoundingAreaCheck.checkWellFormed(item);
-    return this.root.insert(item);
+    return this.root.insert(item, SDType.SD_DYNAMIC);
+  }
+
+  @Override public boolean quadTreeInsertSD(
+    final T item,
+    final SDType type)
+  {
+    BoundingAreaCheck.checkWellFormed(item);
+    NullCheck.notNull(type, "Type");
+    return this.root.insert(item, type);
   }
 
   @Override public <E extends Throwable> void quadTreeIterateObjects(
@@ -597,7 +678,15 @@ QuadTreeType<T>
   {
     NullCheck.notNull(f, "Function");
 
-    for (final T item : this.objects_all) {
+    for (final T item : this.objects_all_static) {
+      assert item != null;
+      final Boolean next = f.call(item);
+      if (next.booleanValue() == false) {
+        break;
+      }
+    }
+
+    for (final T item : this.objects_all_dynamic) {
       assert item != null;
       final Boolean next = f.call(item);
       if (next.booleanValue() == false) {
@@ -649,6 +738,12 @@ QuadTreeType<T>
     return this.root.remove(item);
   }
 
+  @Override public void quadTreeSDClearDynamic()
+  {
+    this.root.clearDynamic();
+    this.objects_all_dynamic.clear();
+  }
+
   @Override public <E extends Throwable> void quadTreeTraverse(
     final QuadTreeTraversalType<E> traversal)
       throws E
@@ -665,7 +760,9 @@ QuadTreeType<T>
     b.append(" ");
     b.append(this.root.upper);
     b.append(" ");
-    b.append(this.objects_all);
+    b.append(this.objects_all_static);
+    b.append(" ");
+    b.append(this.objects_all_dynamic);
     b.append("]");
     final String r = b.toString();
     assert r != null;

@@ -20,7 +20,7 @@ import com.io7m.jtensors.VectorI2I;
 import com.io7m.junreachable.UnreachableCodeException;
 
 @SuppressWarnings({ "unused", "static-method" }) public final class QuadTreePruneTest extends
-  QuadTreeCommonTests
+QuadTreeCommonTests
 {
   @Override <T extends QuadTreeMemberType<T>> QuadTreeType<T> makeQuad128()
   {
