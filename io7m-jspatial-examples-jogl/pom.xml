@@ -4,13 +4,17 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.io7m.jspatial.examples-jogl</groupId>
+  <parent>
+    <groupId>com.io7m.jspatial</groupId>
+    <artifactId>io7m-jspatial</artifactId>
+    <version>3.0.0</version>
+  </parent>
   <artifactId>io7m-jspatial-examples-jogl</artifactId>
-  <name>io7m-jspatial-examples-jogl</name>
-  <description>API examples using Swing/JOGL</description>
-  <version>2.0.0</version>
-  <url>http://mvn.io7m.com/jspatial-examples-jogl</url>
+
   <packaging>jar</packaging>
+  <description>Spatial data structures (JOGL example viewer)</description>
+  <url>http://mvn.io7m.com/${project.artifactId}/</url>
+  <name>${project.artifactId}</name>
 
   <licenses>
     <license>
@@ -63,37 +67,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.io7m.jspatial.core</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>io7m-jspatial-core</artifactId>
-      <version>2.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jspatial.core</groupId>
-      <artifactId>io7m-jspatial-core</artifactId>
-      <version>2.0.0</version>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jtensors</groupId>
-      <artifactId>io7m-jtensors</artifactId>
-      <version>[5.0.0, 6.0.0)</version>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jaux</groupId>
-      <artifactId>io7m-jaux</artifactId>
-      <version>[2.4.0, 3.0.0)</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>2.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-      <version>4.11</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
     	<groupId>org.jogamp.jogl</groupId>
@@ -221,27 +197,8 @@
           <execution>
             <phase>package</phase>
             <goals>
-               <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Produce application archive -->
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.4</version>
-        <configuration>
-          <descriptors>
-            <descriptor>assembly-app.xml</descriptor>
-          </descriptors>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
+              <goal>jar</goal>
+              <goal>test-jar</goal>
             </goals>
           </execution>
         </executions>

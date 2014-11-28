@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013 <code@io7m.com> http://io7m.com
+ * Copyright © 2014 <code@io7m.com> http://io7m.com
  * 
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,34 +16,60 @@
 
 package com.io7m.jspatial;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.ThreadSafe;
-
-import com.io7m.jaux.UnreachableCodeException;
+import com.io7m.jnull.NullCheck;
+import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.VectorReadable3IType;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
+ * <p>
  * Overlap and containment checks between bounding volumes.
- * 
- * @see BoundingVolume
+ * </p>
+ *
+ * @see BoundingVolumeType
  */
 
-@ThreadSafe public final class BoundingVolumeCheck
+public final class BoundingVolumeCheck
 {
-  static enum Result
+  /**
+   * The result of an overlap or containment check.
+   */
+
+  public static enum Result
   {
-    RESULT_NO_OVERLAP,
-    RESULT_OVERLAP,
+    /**
+     * The object is contained within the query volume.
+     */
+
     RESULT_CONTAINED_WITHIN,
+
+    /**
+     * The object does not overlap the query volume.
+     */
+
+    RESULT_NO_OVERLAP,
+
+    /**
+     * The object is overlapped by the query volume.
+     */
+
+    RESULT_OVERLAP,
   }
 
   /**
    * Determine whether <code>b</code> overlaps <code>a</code>, or is
    * completely contained by <code>a</code>.
+   *
+   * @param container
+   *          The container
+   * @param item
+   *          The item that may be contained
+   * @return The containment result
    */
 
-  static @Nonnull Result checkAgainst(
-    final @Nonnull BoundingVolume container,
-    final @Nonnull BoundingVolume item)
+  public static Result checkAgainst(
+    final BoundingVolumeType container,
+    final BoundingVolumeType item)
   {
     final int c_x0 = container.boundingVolumeLower().getXI();
     final int c_x1 = container.boundingVolumeUpper().getXI();
@@ -97,13 +123,34 @@ import com.io7m.jaux.UnreachableCodeException;
   }
 
   /**
-   * Return <code>true</code> iff <code>item</code> is completely contained
-   * within <code>container</code>.
+   * Evaluates {@link #isWellFormed(BoundingVolumeType)} for the given item
+   * and raises {@link IllegalArgumentException} if the result is
+   * <code>false</code>.
+   *
+   * @param item
+   *          The area.
    */
 
-  static boolean containedWithin(
-    final @Nonnull BoundingVolume container,
-    final @Nonnull BoundingVolume item)
+  public static void checkWellFormed(
+    final BoundingVolumeType item)
+  {
+    if (BoundingVolumeCheck.isWellFormed(item) == false) {
+      throw new IllegalArgumentException("Bounding volume is not well-formed");
+    }
+  }
+
+  /**
+   * @param container
+   *          The container
+   * @param item
+   *          The item that may be contained
+   * @return <code>true</code> iff <code>item</code> is completely contained
+   *         within <code>container</code>.
+   */
+
+  public static boolean containedWithin(
+    final BoundingVolumeType container,
+    final BoundingVolumeType item)
   {
     final int c_x0 = container.boundingVolumeLower().getXI();
     final int c_x1 = container.boundingVolumeUpper().getXI();
@@ -134,7 +181,38 @@ import com.io7m.jaux.UnreachableCodeException;
       i_z1);
   }
 
-  static boolean contains(
+  /**
+   * The area <code>a</code> described by the given vertices contains
+   * <code>b</code>.
+   *
+   * @param a_x0
+   *          The X coordinate of the lower corner of <code>a</code>
+   * @param a_x1
+   *          The X coordinate of the upper corner of <code>a</code>
+   * @param a_y0
+   *          The Y coordinate of the lower corner of <code>a</code>
+   * @param a_y1
+   *          The Y coordinate of the upper corner of <code>a</code>
+   * @param a_z0
+   *          The Z coordinate of the lower corner of <code>a</code>
+   * @param a_z1
+   *          The Z coordinate of the upper corner of <code>a</code>
+   * @param b_x0
+   *          The X coordinate of the lower corner of <code>b</code>
+   * @param b_x1
+   *          The X coordinate of the upper corner of <code>b</code>
+   * @param b_y0
+   *          The Y coordinate of the lower corner of <code>b</code>
+   * @param b_y1
+   *          The Y coordinate of the upper corner of <code>b</code>
+   * @param b_z0
+   *          The Z coordinate of the lower corner of <code>b</code>
+   * @param b_z1
+   *          The Z coordinate of the upper corner of <code>b</code>
+   * @return <code>true</code> if <code>a</code> contains <code>b</code>.
+   */
+
+  public static boolean contains(
     final int a_x0,
     final int a_x1,
     final int a_y0,
@@ -155,10 +233,73 @@ import com.io7m.jaux.UnreachableCodeException;
     final boolean c4 = b_z0 >= a_z0;
     final boolean c5 = b_z1 <= a_z1;
 
-    return (c0 && c1 && c2 && c3 && c4 && c5);
+    return c0 && c1 && c2 && c3 && c4 && c5;
   }
 
-  static boolean overlaps(
+  /**
+   * @param container
+   *          The volume
+   * @return <code>true</code> iff the given bounding volume is well formed.
+   *         That is, iff
+   *         <code>container.boundingVolumeLower().getXI() <= container.boundingVolumeUpper().getXI()</code>
+   *         and
+   *         <code>container.boundingVolumeLower().getYI() <= container.boundingVolumeUpper().getYI()</code>
+   *         and
+   *         <code>container.boundingVolumeLower().getZI() <= container.boundingVolumeUpper().getZI()</code>
+   *         .
+   */
+
+  public static boolean isWellFormed(
+    final BoundingVolumeType container)
+  {
+    NullCheck.notNull(container, "Container");
+
+    final VectorReadable3IType lower = container.boundingVolumeLower();
+    final VectorReadable3IType upper = container.boundingVolumeUpper();
+    if (lower.getXI() > upper.getXI()) {
+      return false;
+    }
+    if (lower.getYI() > upper.getYI()) {
+      return false;
+    }
+    if (lower.getZI() > upper.getZI()) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * The area <code>a</code> described by the given vertices overlaps
+   * <code>b</code>.
+   *
+   * @param a_x0
+   *          The X coordinate of the lower corner of <code>a</code>
+   * @param a_x1
+   *          The X coordinate of the upper corner of <code>a</code>
+   * @param a_y0
+   *          The Y coordinate of the lower corner of <code>a</code>
+   * @param a_y1
+   *          The Y coordinate of the upper corner of <code>a</code>
+   * @param a_z0
+   *          The Z coordinate of the lower corner of <code>a</code>
+   * @param a_z1
+   *          The Z coordinate of the upper corner of <code>a</code>
+   * @param b_x0
+   *          The X coordinate of the lower corner of <code>b</code>
+   * @param b_x1
+   *          The X coordinate of the upper corner of <code>b</code>
+   * @param b_y0
+   *          The Y coordinate of the lower corner of <code>b</code>
+   * @param b_y1
+   *          The Y coordinate of the upper corner of <code>b</code>
+   * @param b_z0
+   *          The Z coordinate of the lower corner of <code>b</code>
+   * @param b_z1
+   *          The Z coordinate of the upper corner of <code>b</code>
+   * @return <code>true</code> if <code>a</code> overlaps <code>b</code>.
+   */
+
+  public static boolean overlaps(
     final int a_x0,
     final int a_x1,
     final int a_y0,
@@ -183,13 +324,17 @@ import com.io7m.jaux.UnreachableCodeException;
   }
 
   /**
-   * Return <code>true</code> iff <code>item</code> overlaps
-   * <code>container</code>.
+   * @param container
+   *          The container
+   * @param item
+   *          The item that may be overlapping
+   * @return <code>true</code> iff <code>item</code> overlaps
+   *         <code>container</code>.
    */
 
-  static boolean overlapsVolume(
-    final @Nonnull BoundingVolume container,
-    final @Nonnull BoundingVolume item)
+  public static boolean overlapsVolume(
+    final BoundingVolumeType container,
+    final BoundingVolumeType item)
   {
     final int c_x0 = container.boundingVolumeLower().getXI();
     final int c_x1 = container.boundingVolumeUpper().getXI();
@@ -223,13 +368,29 @@ import com.io7m.jaux.UnreachableCodeException;
   /**
    * Branchless optimization of the Kay-Kajiya slab ray/AABB intersection test
    * by Tavian Barnes.
-   * 
+   *
+   * @param ray
+   *          The ray
+   * @param x0
+   *          The lower X coordinate
+   * @param y0
+   *          The lower Y coordinate
+   * @param z0
+   *          The lower z coordinate
+   * @param x1
+   *          The upper X coordinate
+   * @param y1
+   *          The upper Y coordinate
+   * @param z1
+   *          The upper z coordinate
+   * @return <code>true</code> if the ray intersects the box given by the
+   *         corners.
    * @see http://tavianator.com/2011/05/fast-branchless-raybounding-box-
    *      intersections/
    */
 
-  static boolean rayBoxIntersects(
-    final @Nonnull RayI3D ray,
+  public static boolean rayBoxIntersects(
+    final RayI3D ray,
     final double x0,
     final double y0,
     final double z0,
@@ -237,55 +398,28 @@ import com.io7m.jaux.UnreachableCodeException;
     final double y1,
     final double z1)
   {
-    final double tx0 = (x0 - ray.origin.x) * ray.direction_inverse.x;
-    final double tx1 = (x1 - ray.origin.x) * ray.direction_inverse.x;
+    final VectorI3D ray_origin = ray.getOrigin();
+    final VectorI3D ray_direction_inv = ray.getDirectionInverse();
+
+    final double tx0 = (x0 - ray_origin.getXD()) * ray_direction_inv.getXD();
+    final double tx1 = (x1 - ray_origin.getXD()) * ray_direction_inv.getXD();
 
     double tmin = Math.min(tx0, tx1);
     double tmax = Math.max(tx0, tx1);
 
-    final double ty0 = (y0 - ray.origin.y) * ray.direction_inverse.y;
-    final double ty1 = (y1 - ray.origin.y) * ray.direction_inverse.y;
+    final double ty0 = (y0 - ray_origin.getYD()) * ray_direction_inv.getYD();
+    final double ty1 = (y1 - ray_origin.getYD()) * ray_direction_inv.getYD();
 
     tmin = Math.max(tmin, Math.min(ty0, ty1));
     tmax = Math.min(tmax, Math.max(ty0, ty1));
 
-    final double tz0 = (z0 - ray.origin.z) * ray.direction_inverse.z;
-    final double tz1 = (z1 - ray.origin.z) * ray.direction_inverse.z;
+    final double tz0 = (z0 - ray_origin.getZD()) * ray_direction_inv.getZD();
+    final double tz1 = (z1 - ray_origin.getZD()) * ray_direction_inv.getZD();
 
     tmin = Math.max(tmin, Math.min(tz0, tz1));
     tmax = Math.min(tmax, Math.max(tz0, tz1));
 
     return ((tmax >= Math.max(0, tmin)) && (tmin < Double.POSITIVE_INFINITY));
-  }
-
-  /**
-   * Return <code>true</code> iff the given bounding area is well formed. That
-   * is, iff
-   * <code>container.boundingVolumeLower().getXI() <= container.boundingVolumeUpper().getXI()</code>
-   * and
-   * <code>container.boundingVolumeLower().getYI() <= container.boundingVolumeUpper().getYI()</code>
-   * .
-   */
-
-  static boolean wellFormed(
-    final @Nonnull BoundingVolume container)
-  {
-    if (container.boundingVolumeLower().getXI() > container
-      .boundingVolumeUpper()
-      .getXI()) {
-      return false;
-    }
-    if (container.boundingVolumeLower().getYI() > container
-      .boundingVolumeUpper()
-      .getYI()) {
-      return false;
-    }
-    if (container.boundingVolumeLower().getZI() > container
-      .boundingVolumeUpper()
-      .getZI()) {
-      return false;
-    }
-    return true;
   }
 
   private BoundingVolumeCheck()

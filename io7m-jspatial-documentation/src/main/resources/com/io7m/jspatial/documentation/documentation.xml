@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright © 2012 http://io7m.com
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  -->
+
+<s:document
+  xmlns:s="http://schemas.io7m.com/structural/2.0.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <s:document-title>${project.parent.name} ${project.version} Documentation</s:document-title>
+  <s:document-style>documentation.css</s:document-style>
+  <s:document-contents/>
+
+  <s:part>
+    <s:part-title>Package Information</s:part-title>
+    <s:part-contents />
+    <s:section>
+      <s:section-title>Orientation</s:section-title>
+      <s:subsection>
+        <s:subsection-title>Overview</s:subsection-title>
+        <s:paragraph>
+          The <s:term s:type="package">${project.parent.name}</s:term> package implements
+          several spatial data structures, such as octtrees and quadtrees.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Simplicity</s:subsection-title>
+        <s:paragraph>
+          The <s:term s:type="package">${project.parent.name}</s:term> package strives for
+          simplicity in interface and implementation. Most implementations
+          of the data structures included are less than <s:term s:type="constant">700</s:term>
+          lines of code (including comments and annotations).
+        </s:paragraph>
+        <s:paragraph>
+          The intention is to allow for ease of understanding of the structures
+          and algorithms involved, to increase confidence in their correctness
+          and to ease auditing.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Efficiency</s:subsection-title>
+        <s:paragraph>
+          The package includes multiple implementations of the specified data
+          structures, all sharing a common interface. The implementations provided
+          have differing and documented performance characteristics, to allow
+          programmers to select the implementation that best fits the usage patterns
+          of any given program. Implementations can be switched without modifying
+          existing code.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Correctness</s:subsection-title>
+        <s:paragraph>
+          The package includes a large battery of automated tests that attempt to verify
+          the correctness of the included implementations. As of the time of writing,
+          the tests manage over 96% coverage for all code
+          <s:footnote>
+            Some of the code is specifically and deliberately unreachable but the
+            compiler is unable to verify this without flow analysis.
+          </s:footnote>.
+        </s:paragraph>
+      </s:subsection>
+    </s:section>
+
+    <s:section>
+      <s:section-title>Installation</s:section-title>
+      <s:subsection>
+        <s:subsection-title>Source compilation</s:subsection-title>
+        <s:paragraph>
+          The project can be compiled and installed with
+          <s:link-external s:target="http://maven.apache.org">Maven</s:link-external>:
+        </s:paragraph>
+        <s:paragraph>
+          <s:verbatim s:type="example"><![CDATA[$ mvn -C clean install]]></s:verbatim>
+        </s:paragraph>
+      </s:subsection>
+      
+      <s:subsection>
+        <s:subsection-title>Maven</s:subsection-title>
+        <s:paragraph>
+          Regular releases are made to the
+          <s:link-external s:target="http://search.maven.org/#search%7Cga%7C1%7Cio7m-jspatial">Central Repository</s:link-external>,
+          so it's possible to use the <s:term s:type="package">${project.parent.name}</s:term>
+          package in your projects with the following Maven dependency:
+        </s:paragraph>
+        <s:paragraph>
+          <s:verbatim s:type="example"><![CDATA[<dependency>
+  <groupId>com.io7m.jspatial</groupId>
+  <artifactId>io7m-jspatial-core</artifactId>
+  <version>[3.0.0, 4.0.0)</version>
+</dependency>]]></s:verbatim>
+        </s:paragraph>
+        <s:paragraph>
+          All <s:link-external s:target="http://io7m.com">io7m.com</s:link-external>
+          packages use Semantic Versioning
+          <s:footnote>
+            <s:link-external s:target="http://semver.org">http://semver.org</s:link-external>
+          </s:footnote>, which implies that it is always safe to use version ranges
+          with an exclusive upper bound equal to the next major version - the API of
+          the package will not change in a backwards-incompatible manner before the
+          next major version.
+        </s:paragraph>
+      </s:subsection>
+    </s:section>
+
+    <s:section>
+      <s:section-title>Platform Specific Issues</s:section-title>
+      <s:paragraph>
+        There are currently no known platform-specific issues.
+      </s:paragraph>
+    </s:section>
+
+    <s:section>
+      <s:section-title>License</s:section-title>
+      <s:paragraph>
+        All files distributed with the <s:term s:type="package"></s:term>
+        package are placed under the following license:
+        <s:verbatim s:type="license"><![CDATA[Copyright © 2014 http://io7m.com
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
+        </s:verbatim>
+      </s:paragraph>
+    </s:section>
+  </s:part>
+
+  <s:part>
+    <s:part-title>Tutorial</s:part-title>
+    <s:part-contents/>
+    <s:section>
+      <s:section-title>QuadTrees</s:section-title>
+
+      <s:subsection>
+        <s:subsection-title>Overview</s:subsection-title>
+        <s:paragraph>
+          A <s:term s:type="type">quadtree</s:term> is a spatial data structure that
+          recursively subdivides space into quadrants. It allows for efficient
+          <s:footnote>
+            Where "efficient" typically means <s:term s:type="expression">O(log₂n)</s:term>
+            time in the average case.
+          </s:footnote>
+          queries over a given 2D area such as:
+        </s:paragraph>
+        <s:formal-item s:kind="example">
+          <s:formal-item-title>QuadTree queries</s:formal-item-title>
+          <s:list-unordered>
+            <s:list-item>Which objects are completely contained within a given area?</s:list-item>
+            <s:list-item>Which objects are overlapped by a given area?</s:list-item>
+            <s:list-item>Which objects are intersected by a given ray?</s:list-item>
+          </s:list-unordered>
+        </s:formal-item>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Usage</s:subsection-title>
+        <s:paragraph>
+          In order to use a <s:term s:type="type">quadtree</s:term>, it's first necessary to
+          pick one of the available <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeType.html">implementations</s:link-external>.
+        </s:paragraph>
+        <s:paragraph>
+          All objects that are to be inserted into the tree must implement the
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeMemberType.html">QuadTreeMemberType</s:link-external>
+          interface. The <s:term s:type="type">QuadTreeMemberType</s:term> interface allows the library to
+          query the axis-aligned bounding boxes of objects within the tree, and also ensures that
+          objects have some form of total order to allow <s:term s:type="type">quadtree</s:term>
+          implementations to use efficient <s:term s:type="type">Set</s:term> data structures internally.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Choosing an implementation</s:subsection-title>
+        <s:paragraph>
+          Each of the available implementations have different properties and performance
+          characteristics, and therefore the choice of implementation is program-specific
+          (as some usage patterns will see better performance with some implementations
+          than others).
+        </s:paragraph>
+        <s:paragraph>
+          For example, the performance of
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeType.html#quadTreeQueryAreaContaining(com.io7m.jspatial.BoundingAreaType,%20java.util.SortedSet)">area</s:link-external>
+          and
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeType.html#quadTreeQueryRaycast(com.io7m.jspatial.RayI2D,%20java.util.SortedSet)">raycast</s:link-external>
+          queries is dependent upon the number of nodes in the tree. A smaller number of nodes means
+          that fewer nodes may potentially be queried by the algorithms. Therefore, an
+          implementation that aggressively prunes empty nodes such as
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreePrune.html">QuadTreePrune</s:link-external>,
+          or an implementation that artificially limits the number of nodes created such as
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeLimit.html">QuadTreeLimit</s:link-external>
+          will give better performance for those queries.
+        </s:paragraph>
+        <s:paragraph>
+          On the other hand, constantly creating and deleting internal nodes increases pressure
+          on the garbage collector. If garbage collector pressure is an issue, implementations
+          that do not prune or limit nodes such as
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeBasic.html">QuadTreeBasic</s:link-external>
+          or
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeSDBasic.html">QuadTreeSDBasic</s:link-external>
+          may be preferable.
+        </s:paragraph>
+        <s:paragraph>
+          Many games and simulations work by repeatedly inserting all objects in a scene
+          into some form of spatial data structure such as quadtrees. The tree is emptied once
+          per frame and all objects in the scene are reinserted each time. Often, many objects
+          in a scene are immovable and will therefore be inserted into the same position in the
+          tree every time. This is obviously redundant and wasteful, and therefore a common optimization
+          is to distinguish between immovable and movable objects within the tree and then provide
+          efficient operations for removing only movable objects from the tree. The
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeSD.html">QuadTreeSD</s:link-external>
+          implementation provides this optimization.
+        </s:paragraph>
+        <s:paragraph>
+          The package only exposes implementations via the
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeType.html">QuadTreeType</s:link-external>
+          and
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeSDType.html">QuadTreeSDType</s:link-external>
+          interfaces, as this allows for easy switching of concrete implementations without
+          having to modify existing code. The package provides a mutable
+          <s:link-external s:target="apidocs/com/io7m/jspatial/quadtrees/QuadTreeBuilderType.html">QuadTreeBuilderType</s:link-external>
+          that is capable of selecting an implementation based on supplied criteria.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Example</s:subsection-title>
+        <s:formal-item s:kind="example">
+          <s:formal-item-title>TrivialQuad</s:formal-item-title>
+          <s:verbatim><xi:include href="com/io7m/jspatial/tests/examples/TrivialQuad.java" parse="text"/></s:verbatim>
+        </s:formal-item>
+      </s:subsection>
+    </s:section>
+
+    <s:section>
+      <s:section-title>OctTrees</s:section-title>
+
+      <s:subsection>
+        <s:subsection-title>Overview</s:subsection-title>
+        <s:paragraph>
+          A <s:term s:type="type">octtree</s:term> is a spatial data structure that
+          recursively subdivides space into octants. It allows for efficient
+          <s:footnote>
+            Where "efficient" typically means <s:term s:type="expression">O(log₂n)</s:term>
+            time in the average case.
+          </s:footnote>
+          queries over a given 3D volume such as:
+        </s:paragraph>
+        <s:formal-item s:kind="example">
+          <s:formal-item-title>OctTree queries</s:formal-item-title>
+          <s:list-unordered>
+            <s:list-item>Which objects are completely contained within a given volume?</s:list-item>
+            <s:list-item>Which objects are overlapped by a given volume?</s:list-item>
+            <s:list-item>Which objects are intersected by a given ray?</s:list-item>
+          </s:list-unordered>
+        </s:formal-item>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Usage</s:subsection-title>
+        <s:paragraph>
+          In order to use an <s:term s:type="type">octtree</s:term>, it's first necessary to
+          pick one of the available <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeType.html">implementations</s:link-external>.
+        </s:paragraph>
+        <s:paragraph>
+          All objects that are to be inserted into the tree must implement the
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeMemberType.html">OctTreeMemberType</s:link-external>
+          interface. The <s:term s:type="type">OctTreeMemberType</s:term> interface allows the library to
+          query the axis-aligned bounding boxes of objects within the tree, and also ensures that
+          objects have some form of total order to allow <s:term s:type="type">octtree</s:term>
+          implementations to use efficient <s:term s:type="type">Set</s:term> data structures internally.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Choosing an implementation</s:subsection-title>
+        <s:paragraph>
+          Each of the available implementations have different properties and performance
+          characteristics, and therefore the choice of implementation is program-specific
+          (as some usage patterns will see better performance with some implementations
+          than others).
+        </s:paragraph>
+        <s:paragraph>
+          For example, the performance of
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeType.html#octTreeQueryVolumeContaining(com.io7m.jspatial.BoundingVolumeType,%20java.util.SortedSet)">volume</s:link-external>
+          and
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeType.html#octTreeQueryRaycast(com.io7m.jspatial.RayI3D,%20java.util.SortedSet)">raycast</s:link-external>
+          queries is dependent upon the number of nodes in the tree. A smaller number of nodes means
+          that fewer nodes may potentially be queried by the algorithms. Therefore, an
+          implementation that aggressively prunes empty nodes such as
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreePrune.html">OctTreePrune</s:link-external>,
+          or an implementation that artificially limits the number of nodes created such as
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeLimit.html">OctTreeLimit</s:link-external>
+          will give better performance for those queries.
+        </s:paragraph>
+        <s:paragraph>
+          On the other hand, constantly creating and deleting internal nodes increases pressure
+          on the garbage collector. If garbage collector pressure is an issue, implementations
+          that do not prune or limit nodes such as
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeBasic.html">OctTreeBasic</s:link-external>
+          or
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeSDBasic.html">OctTreeSDBasic</s:link-external>
+          may be preferable.
+        </s:paragraph>
+        <s:paragraph>
+          Many games and simulations work by repeatedly inserting all objects in a scene
+          into some form of spatial data structure such as octtrees. The tree is emptied once
+          per frame and all objects in the scene are reinserted each time. Often, many objects
+          in a scene are immovable and will therefore be inserted into the same position in the
+          tree every time. This is obviously redundant and wasteful, and therefore a common optimization
+          is to distinguish between immovable and movable objects within the tree and then provide
+          efficient operations for removing only movable objects from the tree. The
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeSDBasic.html">OctTreeSDBasic</s:link-external>
+          implementation provides this optimization.
+        </s:paragraph>
+        <s:paragraph>
+          The package only exposes implementations via the
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeType.html">OctTreeType</s:link-external>
+          and
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeSDType.html">OctTreeSDType</s:link-external>
+          interfaces, as this allows for easy switching of concrete implementations without
+          having to modify existing code. The package provides a mutable
+          <s:link-external s:target="apidocs/com/io7m/jspatial/octtrees/OctTreeBuilderType.html">OctTreeBuilderType</s:link-external>
+          that is capable of selecting an implementation based on supplied criteria.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Example</s:subsection-title>
+        <s:formal-item s:kind="example">
+          <s:formal-item-title>TrivialOct</s:formal-item-title>
+          <s:verbatim><xi:include href="com/io7m/jspatial/tests/examples/TrivialOct.java" parse="text"/></s:verbatim>
+        </s:formal-item>
+      </s:subsection>
+    </s:section>
+  </s:part>
+
+  <s:part>
+    <s:part-title>API Reference</s:part-title>
+    <s:part-contents/>
+    <s:section>
+      <s:section-title>Javadoc</s:section-title>
+      <s:paragraph>
+        API documentation for the package is provided via the
+        included <s:link-external s:target="javadoc">Javadoc</s:link-external>.
+      </s:paragraph>
+    </s:section>
+  </s:part>
+
+</s:document>

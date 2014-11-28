@@ -1,10 +1,10 @@
 /*
- * Copyright © 2013 <code@io7m.com> http://io7m.com
- * 
+ * Copyright © 2014 <code@io7m.com> http://io7m.com
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -16,39 +16,42 @@
 
 package com.io7m.jspatial;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
-
+import com.io7m.jnull.Nullable;
 import com.io7m.jtensors.VectorM2I;
-import com.io7m.jtensors.VectorReadable2I;
+import com.io7m.jtensors.VectorReadable2IType;
 
 /**
  * A trivial mutable area class, provided for convenience and intended to be
- * passed to various area-consuming {@link QuadTreeInterface} methods.
+ * passed to various area-consuming
+ * {@link com.io7m.jspatial.quadtrees.QuadTreeType} methods.
  */
 
-@NotThreadSafe public final class MutableArea implements BoundingArea
+public final class MutableArea implements BoundingAreaType
 {
-  private final @Nonnull VectorM2I lower = new VectorM2I();
-  private final @Nonnull VectorM2I upper = new VectorM2I();
+  private final VectorM2I lower = new VectorM2I();
+  private final VectorM2I upper = new VectorM2I();
+
+  /**
+   * Construct a new mutable area.
+   */
 
   public MutableArea()
   {
     // Nothing.
   }
 
-  @Override public @Nonnull VectorReadable2I boundingAreaLower()
+  @Override public VectorReadable2IType boundingAreaLower()
   {
     return this.lower;
   }
 
-  @Override public @Nonnull VectorReadable2I boundingAreaUpper()
+  @Override public VectorReadable2IType boundingAreaUpper()
   {
     return this.upper;
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -73,38 +76,48 @@ import com.io7m.jtensors.VectorReadable2I;
     return result;
   }
 
-  public void setLowerX(
-    final int x)
-  {
-    this.lower.x = x;
-  }
+  /**
+   * Set the lower corner of the mutable volume.
+   *
+   * @param x
+   *          The X coordinate
+   * @param y
+   *          The Y coordinate
+   */
 
-  public void setLowerY(
+  public void setLower2i(
+    final int x,
     final int y)
   {
-    this.lower.y = y;
+    this.lower.set2I(x, y);
   }
 
-  public void setUpperX(
-    final int x)
-  {
-    this.upper.x = x;
-  }
+  /**
+   * Set the upper corner of the mutable volume.
+   *
+   * @param x
+   *          The X coordinate
+   * @param y
+   *          The Y coordinate
+   */
 
-  public void setUpperY(
+  public void setUpper2i(
+    final int x,
     final int y)
   {
-    this.upper.y = y;
+    this.upper.set2I(x, y);
   }
 
   @Override public String toString()
   {
-    final StringBuilder builder = new StringBuilder();
-    builder.append("[MutableArea  ");
-    builder.append(this.lower);
-    builder.append(" ");
-    builder.append(this.upper);
-    builder.append("]");
-    return builder.toString();
+    final StringBuilder b = new StringBuilder();
+    b.append("[MutableArea  ");
+    b.append(this.lower);
+    b.append(" ");
+    b.append(this.upper);
+    b.append("]");
+    final String r = b.toString();
+    assert r != null;
+    return r;
   }
 }

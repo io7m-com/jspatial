@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="io7m-jspatial-documentation">
+
+  <body>
+    <menu ref="reports"/>
+  </body>
+
+  <skin>
+    <groupId>com.io7m.mvn-skin</groupId>
+    <artifactId>io7m-mvn-skin</artifactId>
+    <version>1.5.0</version>
+  </skin>
+
+</project>

@@ -2,9 +2,7 @@ bin
 build
 doc-out
 ext
-io7m-jspatial-core/target
-io7m-jspatial-examples-jogl/target
-io7m-jspatial-examples-swing/target
+io7m-*/target
 javadoc
 target
 tmp

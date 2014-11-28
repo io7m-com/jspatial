@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.io7m.jspatial</groupId>
+    <artifactId>io7m-jspatial</artifactId>
+    <version>3.0.0</version>
+  </parent>
+  <artifactId>io7m-jspatial-documentation</artifactId>
+
+  <packaging>jar</packaging>
+  <description>Spatial data structures (Documentation)</description>
+  <url>http://mvn.io7m.com/${project.artifactId}/</url>
+  <name>${project.artifactId}</name>
+
+  <licenses>
+    <license>
+      <name>ISC License</name>
+      <url>http://www.opensource.org/licenses/isc-license.txt</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>http://fossil.io7m.com/repo.cgi/io7m-jspatial</url>
+    <connection>scm:http://fossil.io7m.com/repo.cgi/io7m-jspatial</connection>
+    <developerConnection>scm:http://fossil.io7m.com/repo.cgi/io7m-jspatial</developerConnection>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>io7m</id>
+      <name>io7m</name>
+      <email>code@io7m.com</email>
+      <url>http://io7m.com</url>
+    </developer>
+  </developers>
+
+  <issueManagement>
+    <url>http://fossil.io7m.com/repo.cgi/io7m-jspatial</url>
+    <system>Fossil</system>
+  </issueManagement>
+
+  <distributionManagement>
+    <site>
+      <id>io7m</id>
+      <name>io7m.com</name>
+      <url>${project.url}</url>
+    </site>
+  </distributionManagement>
+
+  <mailingLists>
+    <mailingList>
+      <name>io7m-jspatial</name>
+      <subscribe>io7m-jspatial-join@lists.io7m.com</subscribe>
+      <unsubscribe>io7m-jspatial-leave@lists.io7m.com</unsubscribe>
+      <post>io7m-jspatial@lists.io7m.com</post>
+      <archive>http://lists.io7m.com/io7m-jspatial/archive</archive>
+    </mailingList>
+  </mailingLists>
+
+  <prerequisites>
+    <maven>2.2.1</maven>
+  </prerequisites>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.io7m.jstructural</groupId>
+      <artifactId>io7m-jstructural-tools</artifactId>
+      <version>[2.0.0, 3.0.0)</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>io7m-jspatial-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>io7m-jspatial-core</artifactId>
+      <version>${project.version}</version>
+      <classifier>test-sources</classifier>
+    </dependency>
+
+    <!-- Depend on the javadoc for each module, in order to aggregate it. -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>io7m-jspatial-core</artifactId>
+      <version>${project.version}</version>
+      <classifier>javadoc</classifier>
+    </dependency>
+  </dependencies>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.3</version>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <build>
+    <plugins>
+      <!-- Plugin versions -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.5</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.4</version>
+      </plugin>
+
+      <!-- Require JDK >= 1.6 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+
+      <!-- Produce custom manifest in jar files -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Specification-Title>${project.name}</Specification-Title>
+              <Specification-Version>${project.version}</Specification-Version>
+              <Specification-Vendor>io7m.com</Specification-Vendor>
+              <Implementation-Title>${project.name}</Implementation-Title>
+              <Implementation-Version>${project.version}</Implementation-Version>
+              <Implementation-Vendor>io7m.com</Implementation-Vendor>
+              <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+              <Built-By>io7m</Built-By>
+              <Sealed>true</Sealed>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <!-- Create source jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.2.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+              <goal>test-jar</goal>
+            </goals>
+            <configuration>
+              <archive>
+                <manifestEntries>
+                  <Specification-Title>${project.name}</Specification-Title>
+                  <Specification-Version>${project.version}</Specification-Version>
+                  <Specification-Vendor>io7m.com</Specification-Vendor>
+                  <Implementation-Title>${project.name}</Implementation-Title>
+                  <Implementation-Version>${project.version}</Implementation-Version>
+                  <Implementation-Vendor>io7m.com</Implementation-Vendor>
+                  <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+                  <Built-By>io7m</Built-By>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Unpack core shader sources -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.8</version>
+        <executions>
+          <execution>
+            <id>unpack-tests-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeGroupIds>${project.groupId}</includeGroupIds>
+              <includeArtifactIds>io7m-jspatial-core</includeArtifactIds>
+              <includeClassifiers>test-sources</includeClassifiers>
+              <includeTypes>jar</includeTypes>
+              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Copy documentation resources into build directory -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>copy-documentation-resources</id>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/resources/com/io7m/jspatial/documentation/</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Produce documentation -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.2.1</version>
+        <executions>
+          <execution>
+            <id>make-documentation-single</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>com.io7m.jspatial.documentation.MakeDocumentation</mainClass>
+              <arguments>
+                <argument>--xhtml-single</argument>
+                <argument>${project.build.directory}/documentation/documentation.xml</argument>
+                <argument>${project.build.directory}/documentation/</argument>
+                <argument>--xhtml-body-start</argument>
+                <argument>${project.build.directory}/documentation/brand.xml</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>make-documentation-multi</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>com.io7m.jspatial.documentation.MakeDocumentation</mainClass>
+              <arguments>
+                <argument>--xhtml-multi</argument>
+                <argument>${project.build.directory}/documentation/documentation.xml</argument>
+                <argument>${project.build.directory}/documentation/</argument>
+                <argument>--xhtml-body-start</argument>
+                <argument>${project.build.directory}/documentation/brand.xml</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Javadoc handling -->
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <executions>
+          <!-- Produce javadoc jar for Central -->
+          <execution>
+            <id>attach-javadocs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <bottom><![CDATA[Copyright &#169; {currentYear} &lt;code@io7m.com&gt; http://io7m.com]]></bottom>
+              <archive>
+                <manifestEntries>
+                  <Specification-Title>${project.name}</Specification-Title>
+                  <Specification-Version>${project.version}</Specification-Version>
+                  <Specification-Vendor>io7m.com</Specification-Vendor>
+                  <Implementation-Title>${project.name}</Implementation-Title>
+                  <Implementation-Version>${project.version}</Implementation-Version>
+                  <Implementation-Vendor>io7m.com</Implementation-Vendor>
+                  <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
+                  <Built-By>io7m</Built-By>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </execution>
+          <!-- Produce aggregate dependency javadocs -->
+          <execution>
+            <id>javadoc-aggregate</id>
+            <phase>package</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <bottom><![CDATA[Copyright &#169; {currentYear} &lt;code@io7m.com&gt; http://io7m.com]]></bottom>
+              <outputDirectory>${project.build.directory}/apidocs</outputDirectory>
+              <includeDependencySources>true</includeDependencySources>
+              <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
+              <dependencySourceIncludes>
+                <dependencySourceSet>com.io7m.jspatial*</dependencySourceSet>
+              </dependencySourceIncludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Produce documentation archive -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/documentation.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <appendAssemblyId>false</appendAssemblyId>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Unpack the documentation archive to the parent's generated site staging directory. -->
+      <!-- This is arguably abusive, but there appears to be no other way to achieve it. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>truezip-maven-plugin</artifactId>
+        <version>1.2</version>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>copy-site-documentation</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <phase>site</phase>
+            <configuration>
+              <verbose>true</verbose>
+              <fileset>
+                <directory>${project.build.directory}/${project.name}-${project.version}.zip/${project.name}-${project.version}/</directory>
+                <outputDirectory>${project.parent.build.directory}/staging/documentation/</outputDirectory>
+              </fileset>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+    <!-- Allow deployment over ssh -->
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh-external</artifactId>
+        <version>2.2</version>
+      </extension>
+    </extensions>
+
+    <!-- Mark plugins as ignored in Eclipse, does not affect the build. -->
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.sonatype.maven.plugin</groupId>
+                    <artifactId>emma-maven-plugin</artifactId>
+                    <versionRange>[1.2,)</versionRange>
+                    <goals>
+                      <goal>instrument</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <versionRange>[2.8,)</versionRange>
+                    <goals>
+                      <goal>unpack-dependencies</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <!-- Sign artifacts when deploying to io7m -->
+  <profiles>
+    <profile>
+      <id>io7m-deployment-private</id>
+      <activation>
+        <property>
+          <name>io7m.deployment</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

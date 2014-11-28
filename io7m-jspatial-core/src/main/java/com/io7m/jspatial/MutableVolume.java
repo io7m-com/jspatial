@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013 <code@io7m.com> http://io7m.com
+ * Copyright © 2014 <code@io7m.com> http://io7m.com
  * 
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,39 +16,42 @@
 
 package com.io7m.jspatial;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
-
+import com.io7m.jnull.Nullable;
 import com.io7m.jtensors.VectorM3I;
-import com.io7m.jtensors.VectorReadable3I;
+import com.io7m.jtensors.VectorReadable3IType;
 
 /**
  * A trivial mutable volume class, provided for convenience and intended to be
- * passed to various volume-consuming {@link OctTreeInterface} methods.
+ * passed to various volume-consuming
+ * {@link com.io7m.jspatial.octtrees.OctTreeType} methods.
  */
 
-@NotThreadSafe public final class MutableVolume implements BoundingVolume
+public final class MutableVolume implements BoundingVolumeType
 {
-  private final @Nonnull VectorM3I lower = new VectorM3I();
-  private final @Nonnull VectorM3I upper = new VectorM3I();
+  private final VectorM3I lower = new VectorM3I();
+  private final VectorM3I upper = new VectorM3I();
+
+  /**
+   * Construct a new mutable volume.
+   */
 
   public MutableVolume()
   {
     // Nothing.
   }
 
-  @Override public @Nonnull VectorReadable3I boundingVolumeLower()
+  @Override public VectorReadable3IType boundingVolumeLower()
   {
     return this.lower;
   }
 
-  @Override public @Nonnull VectorReadable3I boundingVolumeUpper()
+  @Override public VectorReadable3IType boundingVolumeUpper()
   {
     return this.upper;
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -73,50 +76,54 @@ import com.io7m.jtensors.VectorReadable3I;
     return result;
   }
 
-  public void setLowerX(
-    final int x)
-  {
-    this.lower.x = x;
-  }
+  /**
+   * Set the lower corner of the mutable volume.
+   *
+   * @param x
+   *          The X coordinate
+   * @param y
+   *          The Y coordinate
+   * @param z
+   *          The Z coordinate
+   */
 
-  public void setLowerY(
-    final int y)
-  {
-    this.lower.y = y;
-  }
-
-  public void setLowerZ(
+  public void setLower3i(
+    final int x,
+    final int y,
     final int z)
   {
-    this.lower.z = z;
+    this.lower.set3I(x, y, z);
   }
 
-  public void setUpperX(
-    final int x)
-  {
-    this.upper.x = x;
-  }
+  /**
+   * Set the upper corner of the mutable volume.
+   *
+   * @param x
+   *          The X coordinate
+   * @param y
+   *          The Y coordinate
+   * @param z
+   *          The Z coordinate
+   */
 
-  public void setUpperY(
-    final int y)
-  {
-    this.upper.y = y;
-  }
-
-  public void setUpperZ(
+  public void setUpper3i(
+    final int x,
+    final int y,
     final int z)
   {
-    this.upper.z = z;
+    this.upper.set3I(x, y, z);
   }
 
   @Override public String toString()
   {
-    final StringBuilder builder = new StringBuilder();
-    builder.append("[MutableVolume  ");
-    builder.append(this.lower);
-    builder.append(" ");
-    builder.append(this.upper);
-    builder.append("]");
-    return builder.toString();
+    final StringBuilder b = new StringBuilder();
+    b.append("[MutableVolume  ");
+    b.append(this.lower);
+    b.append(" ");
+    b.append(this.upper);
+    b.append("]");
+    final String r = b.toString();
+    assert r != null;
+    return r;
   }
 }

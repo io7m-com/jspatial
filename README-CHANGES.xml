@@ -3,6 +3,46 @@
   <c:project>io7m-jspatial</c:project>
 
   <c:release ticket-system="com.io7m.fossil.jspatial">
+    <c:date>2014-11-28</c:date>
+    <c:version>3.0.0</c:version>
+    <c:item>
+      <c:date>2014-11-28</c:date>
+      <c:type-code-change/>
+      <c:summary>Remove *Config* classes and replace with static constructor functions and mutable builders</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2014-11-28</c:date>
+      <c:type-code-change/>
+      <c:summary>Rename and suffix all interface types with "Type", in line with io7m conventions</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2014-11-28</c:date>
+      <c:type-code-change/>
+      <c:summary>Replace use of jaux with the new jnull/junreachable packages</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2014-11-28</c:date>
+      <c:type-code-change/>
+      <c:summary>Use jtensors 6.0.1</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2014-11-28</c:date>
+      <c:type-code-new/>
+      <c:summary>Add all configurations of limiting/pruning/SD algorithms</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2014-11-28</c:date>
+      <c:type-code-new/>
+      <c:summary>Use launch4j for Windows executables</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2014-11-28</c:date>
+      <c:type-code-fix/>
+      <c:summary>Rewrite viewers</c:summary>
+    </c:item>
+  </c:release>
+
+  <c:release ticket-system="com.io7m.fossil.jspatial">
     <c:date>2013-06-15</c:date>
     <c:version>2.0.0</c:version>
     <c:item>

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2013 <code@io7m.com> http://io7m.com
+ * Copyright © 2014 <code@io7m.com> http://io7m.com
  * 
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,35 +16,46 @@
 
 package com.io7m.jspatial;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
-
+import com.io7m.jnull.NullCheck;
+import com.io7m.jnull.Nullable;
 import com.io7m.jtensors.VectorI2D;
-import com.io7m.jtensors.VectorReadable2D;
+import com.io7m.jtensors.VectorReadable2DType;
 
 /**
  * Immutable two-dimensional ray type, defined as an origin and a direction
  * vector.
  */
 
-@Immutable public final class RayI2D
+public final class RayI2D
 {
-  final @Nonnull VectorI2D origin;
-  final @Nonnull VectorI2D direction;
-  final @Nonnull VectorI2D direction_inverse;
+  private final VectorI2D direction;
+  private final VectorI2D direction_inverse;
+  private final VectorI2D origin;
+
+  /**
+   * Construct a new immutable ray.
+   *
+   * @param in_origin
+   *          The origin
+   * @param in_direction
+   *          The direction
+   */
 
   public RayI2D(
-    final @Nonnull VectorReadable2D origin,
-    final @Nonnull VectorReadable2D direction)
+    final VectorReadable2DType in_origin,
+    final VectorReadable2DType in_direction)
   {
-    this.origin = new VectorI2D(origin);
-    this.direction = new VectorI2D(direction);
+    this.origin = new VectorI2D(NullCheck.notNull(in_origin, "Origin"));
+    this.direction =
+      new VectorI2D(NullCheck.notNull(in_direction, "Direction"));
     this.direction_inverse =
-      new VectorI2D(1.0 / direction.getXD(), 1.0 / direction.getYD());
+      new VectorI2D(
+        1.0 / this.direction.getXD(),
+        1.0 / this.direction.getYD());
   }
 
   @Override public boolean equals(
-    final Object obj)
+    final @Nullable Object obj)
   {
     if (this == obj) {
       return true;
@@ -66,6 +77,33 @@ import com.io7m.jtensors.VectorReadable2D;
     return true;
   }
 
+  /**
+   * @return The ray direction
+   */
+
+  public VectorI2D getDirection()
+  {
+    return this.direction;
+  }
+
+  /**
+   * @return The inverse of the ray direction
+   */
+
+  public VectorI2D getDirectionInverse()
+  {
+    return this.direction_inverse;
+  }
+
+  /**
+   * @return The ray origin
+   */
+
+  public VectorI2D getOrigin()
+  {
+    return this.origin;
+  }
+
   @Override public int hashCode()
   {
     final int prime = 31;
@@ -78,12 +116,14 @@ import com.io7m.jtensors.VectorReadable2D;
 
   @Override public String toString()
   {
-    final StringBuilder builder = new StringBuilder();
-    builder.append("[RayI2D ");
-    builder.append(this.origin);
-    builder.append(" ");
-    builder.append(this.direction);
-    builder.append("]");
-    return builder.toString();
+    final StringBuilder b = new StringBuilder();
+    b.append("[RayI2D ");
+    b.append(this.origin);
+    b.append(" ");
+    b.append(this.direction);
+    b.append("]");
+    final String r = b.toString();
+    assert r != null;
+    return r;
   }
 }
