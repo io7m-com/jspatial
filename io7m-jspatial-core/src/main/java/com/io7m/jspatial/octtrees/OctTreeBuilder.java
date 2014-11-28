@@ -1,10 +1,10 @@
 /*
  * Copyright © 2014 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -17,7 +17,6 @@
 package com.io7m.jspatial.octtrees;
 
 import com.io7m.jtensors.VectorM3I;
-import com.io7m.junreachable.UnimplementedCodeException;
 
 /**
  * The default implementation of the {@link OctTreeBuilderType}.
@@ -27,7 +26,7 @@ import com.io7m.junreachable.UnimplementedCodeException;
  */
 
 public final class OctTreeBuilder<T extends OctTreeMemberType<T>> implements
-OctTreeBuilderType<T>
+  OctTreeBuilderType<T>
 {
   /**
    * @return A new octtree builder.
@@ -37,9 +36,9 @@ OctTreeBuilderType<T>
    */
 
   public static
-  <T extends OctTreeMemberType<T>>
-  OctTreeBuilderType<T>
-  newBuilder()
+    <T extends OctTreeMemberType<T>>
+    OctTreeBuilderType<T>
+    newBuilder()
   {
     return new OctTreeBuilder<T>();
   }
@@ -83,12 +82,18 @@ OctTreeBuilderType<T>
   {
     if (this.prune) {
       if (this.limit) {
-        throw new UnimplementedCodeException();
+        return OctTreeSDPruneLimit.newOctTree(
+          this.size,
+          this.position,
+          this.limit_size);
       }
-      throw new UnimplementedCodeException();
+      return OctTreeSDPrune.newOctTree(this.size, this.position);
     }
     if (this.limit) {
-      throw new UnimplementedCodeException();
+      return OctTreeSDLimit.newOctTree(
+        this.size,
+        this.position,
+        this.limit_size);
     }
     return OctTreeSDBasic.newOctTree(this.size, this.position);
   }

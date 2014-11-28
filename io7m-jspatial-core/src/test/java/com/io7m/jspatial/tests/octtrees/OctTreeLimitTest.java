@@ -11,7 +11,7 @@ import com.io7m.jtensors.VectorI3I;
 import com.io7m.junreachable.UnreachableCodeException;
 
 @SuppressWarnings({ "static-method" }) public final class OctTreeLimitTest extends
-OctTreeCommonTests
+  OctTreeCommonTests
 {
   @Override <T extends OctTreeMemberType<T>> OctTreeType<T> makeOct128()
   {
@@ -28,9 +28,9 @@ OctTreeCommonTests
   }
 
   @Override
-  <T extends OctTreeMemberType<T>>
-  OctTreeType<T>
-  makeOct128Offset64()
+    <T extends OctTreeMemberType<T>>
+    OctTreeType<T>
+    makeOct128Offset64()
   {
     try {
       return OctTreeLimit.newOctTree(
@@ -45,9 +45,9 @@ OctTreeCommonTests
   }
 
   @Override
-  <T extends OctTreeMemberType<T>>
-  OctTreeType<T>
-  makeOct128OffsetM64()
+    <T extends OctTreeMemberType<T>>
+    OctTreeType<T>
+    makeOct128OffsetM64()
   {
     try {
       return OctTreeLimit.newOctTree(
@@ -174,8 +174,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitOddX()
+    void
+    testCreateLimitOddX()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(4, 4, 4),
@@ -184,8 +184,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitOddY()
+    void
+    testCreateLimitOddY()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(4, 4, 4),
@@ -194,8 +194,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitOddZ()
+    void
+    testCreateLimitOddZ()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(4, 4, 4),
@@ -204,38 +204,38 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitTooLargeX()
+    void
+    testCreateLimitTooLargeX()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(4, 4, 4),
       VectorI3I.ZERO,
-      new VectorI3I(5, 4, 4));
+      new VectorI3I(6, 4, 4));
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitTooLargeY()
+    void
+    testCreateLimitTooLargeY()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(4, 4, 4),
       VectorI3I.ZERO,
-      new VectorI3I(4, 5, 4));
+      new VectorI3I(4, 6, 4));
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitTooLargeZ()
+    void
+    testCreateLimitTooLargeZ()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(4, 4, 4),
       VectorI3I.ZERO,
-      new VectorI3I(4, 4, 5));
+      new VectorI3I(4, 4, 6));
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitTooSmallX()
+    void
+    testCreateLimitTooSmallX()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(4, 4, 4),
@@ -244,8 +244,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitTooSmallY()
+    void
+    testCreateLimitTooSmallY()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(4, 4, 4),
@@ -254,8 +254,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateLimitTooSmallZ()
+    void
+    testCreateLimitTooSmallZ()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(4, 4, 4),
@@ -264,8 +264,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateOddX()
+    void
+    testCreateOddX()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(3, 2, 2),
@@ -274,8 +274,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateOddY()
+    void
+    testCreateOddY()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(2, 3, 2),
@@ -284,8 +284,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateOddZ()
+    void
+    testCreateOddZ()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(2, 2, 3),
@@ -294,8 +294,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateTooSmallX()
+    void
+    testCreateTooSmallX()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(1, 2, 2),
@@ -304,8 +304,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateTooSmallY()
+    void
+    testCreateTooSmallY()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(2, 1, 2),
@@ -314,8 +314,8 @@ OctTreeCommonTests
   }
 
   @Test(expected = IllegalArgumentException.class) public
-  void
-  testCreateTooSmallZ()
+    void
+    testCreateTooSmallZ()
   {
     OctTreeLimit.newOctTree(
       new VectorI3I(2, 2, 1),
