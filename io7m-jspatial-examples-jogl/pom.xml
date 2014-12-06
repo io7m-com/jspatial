@@ -7,7 +7,7 @@
   <parent>
     <groupId>com.io7m.jspatial</groupId>
     <artifactId>io7m-jspatial</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.0-b0</version>
   </parent>
   <artifactId>io7m-jspatial-examples-jogl</artifactId>
 

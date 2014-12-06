@@ -241,11 +241,11 @@ public final class BoundingVolumeCheck
    *          The volume
    * @return <code>true</code> iff the given bounding volume is well formed.
    *         That is, iff
-   *         <code>container.boundingVolumeLower().getXI() <= container.boundingVolumeUpper().getXI()</code>
+   *         <code>container.boundingVolumeLower().getXI() &lt;= container.boundingVolumeUpper().getXI()</code>
    *         and
-   *         <code>container.boundingVolumeLower().getYI() <= container.boundingVolumeUpper().getYI()</code>
+   *         <code>container.boundingVolumeLower().getYI() &lt;= container.boundingVolumeUpper().getYI()</code>
    *         and
-   *         <code>container.boundingVolumeLower().getZI() <= container.boundingVolumeUpper().getZI()</code>
+   *         <code>container.boundingVolumeLower().getZI() &lt;= container.boundingVolumeUpper().getZI()</code>
    *         .
    */
 
@@ -366,9 +366,10 @@ public final class BoundingVolumeCheck
   }
 
   /**
-   * Branchless optimization of the Kay-Kajiya slab ray/AABB intersection test
-   * by Tavian Barnes.
-   *
+   * <p>Branchless optimization of the Kay-Kajiya slab ray/AABB intersection test
+   * by Tavian Barnes.</p>
+   * <p>See <a href="http://tavianator.com/2011/05/fast-branchless-raybounding-box-intersections/">tavianator.com</a>.</p>
+
    * @param ray
    *          The ray
    * @param x0
@@ -385,8 +386,6 @@ public final class BoundingVolumeCheck
    *          The upper z coordinate
    * @return <code>true</code> if the ray intersects the box given by the
    *         corners.
-   * @see http://tavianator.com/2011/05/fast-branchless-raybounding-box-
-   *      intersections/
    */
 
   public static boolean rayBoxIntersects(

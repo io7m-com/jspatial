@@ -205,9 +205,9 @@ public final class BoundingAreaCheck
    *          The bounding area to examine.
    * @return <code>true</code> iff the given bounding area is well formed.
    *         That is, iff
-   *         <code>container.boundingAreaLower().getXI() <= container.boundingAreaUpper().getXI()</code>
+   *         <code>container.boundingAreaLower().getXI() &lt;= container.boundingAreaUpper().getXI()</code>
    *         and
-   *         <code>container.boundingAreaLower().getYI() <= container.boundingAreaUpper().getYI()</code>
+   *         <code>container.boundingAreaLower().getYI() &lt;= container.boundingAreaUpper().getYI()</code>
    *         .
    */
 
@@ -303,8 +303,9 @@ public final class BoundingAreaCheck
   }
 
   /**
-   * Branchless optimization of the Kay-Kajiya slab ray/AABB intersection test
-   * by Tavian Barnes.
+   * <p>Branchless optimization of the Kay-Kajiya slab ray/AABB intersection test
+   * by Tavian Barnes.</p>
+   * <p>See <a href="http://tavianator.com/2011/05/fast-branchless-raybounding-box-intersections/">tavianator.com</a>.</p>
    *
    * @param ray
    *          The ray.
@@ -318,9 +319,6 @@ public final class BoundingAreaCheck
    *          The upper Y coordinate.
    *
    * @return <code>true</code> if the ray is intersecting the box.
-   *
-   * @see http://tavianator.com/2011/05/fast-branchless-raybounding-box-
-   *      intersections/
    */
 
   public static boolean rayBoxIntersects(
