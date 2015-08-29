@@ -1,8 +1,0 @@
-bin
-build
-doc-out
-ext
-io7m-*/target
-javadoc
-target
-tmp
