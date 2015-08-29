@@ -17,7 +17,7 @@
   -->
 
 <s:document
-  xmlns:s="http://schemas.io7m.com/structural/2.0.0"
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
   <s:document-title>${project.parent.name} ${project.version} Documentation</s:document-title>
   <s:document-style>documentation.css</s:document-style>

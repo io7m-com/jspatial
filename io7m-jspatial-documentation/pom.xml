@@ -14,143 +14,29 @@
 
   <packaging>jar</packaging>
   <description>Spatial data structures (Documentation)</description>
-  <url>http://mvn.io7m.com/${project.artifactId}/</url>
+  <url>http://io7m.github.io/jspatial/</url>
   <name>${project.artifactId}</name>
 
-  <licenses>
-    <license>
-      <name>ISC License</name>
-      <url>http://www.opensource.org/licenses/isc-license.txt</url>
-    </license>
-  </licenses>
-
   <scm>
-    <url>http://fossil.io7m.com/repo.cgi/io7m-jspatial</url>
-    <connection>scm:http://fossil.io7m.com/repo.cgi/io7m-jspatial</connection>
-    <developerConnection>scm:http://fossil.io7m.com/repo.cgi/io7m-jspatial</developerConnection>
+    <url>${project.parent.scm.url}</url>
+    <connection>${project.parent.scm.connection}</connection>
+    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
   </scm>
-
-  <developers>
-    <developer>
-      <id>io7m</id>
-      <name>io7m</name>
-      <email>code@io7m.com</email>
-      <url>http://io7m.com</url>
-    </developer>
-  </developers>
-
-  <issueManagement>
-    <url>http://fossil.io7m.com/repo.cgi/io7m-jspatial</url>
-    <system>Fossil</system>
-  </issueManagement>
-
-  <distributionManagement>
-    <site>
-      <id>io7m</id>
-      <name>io7m.com</name>
-      <url>${project.url}</url>
-    </site>
-  </distributionManagement>
-
-  <mailingLists>
-    <mailingList>
-      <name>io7m-jspatial</name>
-      <subscribe>io7m-jspatial-join@lists.io7m.com</subscribe>
-      <unsubscribe>io7m-jspatial-leave@lists.io7m.com</unsubscribe>
-      <post>io7m-jspatial@lists.io7m.com</post>
-      <archive>http://lists.io7m.com/io7m-jspatial/archive</archive>
-    </mailingList>
-  </mailingLists>
-
-  <prerequisites>
-    <maven>2.2.1</maven>
-  </prerequisites>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-  </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.io7m.jstructural</groupId>
-      <artifactId>io7m-jstructural-tools</artifactId>
-      <version>[3.1.0, 4.0.0)</version>
-    </dependency>
-    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>io7m-jspatial-core</artifactId>
       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jspatial-core</artifactId>
-      <version>${project.version}</version>
-      <classifier>test-sources</classifier>
-    </dependency>
-
-    <!-- Depend on the javadoc for each module, in order to aggregate it. -->
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jspatial-core</artifactId>
-      <version>${project.version}</version>
-      <classifier>javadoc</classifier>
     </dependency>
   </dependencies>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.7</version>
-        <configuration>
-          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>3.3</version>
-      </plugin>
-    </plugins>
-  </reporting>
-
   <build>
     <plugins>
-      <!-- Plugin versions -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>2.5</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.7</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-install-plugin</artifactId>
-        <version>2.4</version>
-      </plugin>
-
-      <!-- Require JDK >= 1.6 -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-
       <!-- Produce custom manifest in jar files -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>2.4</version>
         <configuration>
           <archive>
             <manifestEntries>
@@ -172,13 +58,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.2.1</version>
         <executions>
           <execution>
             <phase>package</phase>
             <goals>
-              <goal>jar</goal>
-              <goal>test-jar</goal>
+              <goal>jar-no-fork</goal>
+              <goal>test-jar-no-fork</goal>
             </goals>
             <configuration>
               <archive>
@@ -198,24 +83,40 @@
         </executions>
       </plugin>
 
-      <!-- Unpack core shader sources -->
+      <!-- Unpack sources into documentation directory -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.8</version>
         <executions>
           <execution>
-            <id>unpack-tests-sources</id>
-            <phase>generate-sources</phase>
+            <id>unpack-sources</id>
+            <phase>prepare-package</phase>
             <goals>
-              <goal>unpack-dependencies</goal>
+              <goal>unpack</goal>
             </goals>
             <configuration>
-              <includeGroupIds>${project.groupId}</includeGroupIds>
-              <includeArtifactIds>io7m-jspatial-core</includeArtifactIds>
-              <includeClassifiers>test-sources</includeClassifiers>
-              <includeTypes>jar</includeTypes>
-              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>io7m-jspatial-core</artifactId>
+                  <classifier>sources</classifier>
+                  <version>${project.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+                  <includes>**\/*.java</includes>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>io7m-jspatial-core</artifactId>
+                  <classifier>test-sources</classifier>
+                  <version>${project.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+                  <includes>**\/*.java</includes>
+                </artifactItem>
+              </artifactItems>
             </configuration>
           </execution>
         </executions>
@@ -225,7 +126,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
         <executions>
           <execution>
             <id>copy-documentation-resources</id>
@@ -248,42 +148,33 @@
 
       <!-- Produce documentation -->
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.2.1</version>
+        <groupId>com.io7m.jstructural</groupId>
+        <artifactId>io7m-jstructural-maven-plugin</artifactId>
         <executions>
           <execution>
             <id>make-documentation-single</id>
             <phase>prepare-package</phase>
             <goals>
-              <goal>java</goal>
+              <goal>transform</goal>
             </goals>
             <configuration>
-              <mainClass>com.io7m.jspatial.documentation.MakeDocumentation</mainClass>
-              <arguments>
-                <argument>--xhtml-single</argument>
-                <argument>${project.build.directory}/documentation/documentation.xml</argument>
-                <argument>${project.build.directory}/documentation/</argument>
-                <argument>--xhtml-body-start</argument>
-                <argument>${project.build.directory}/documentation/brand.xml</argument>
-              </arguments>
+              <documentFile>${project.build.directory}/documentation/documentation.xml</documentFile>
+              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+              <brandFile>${project.build.directory}/documentation/brand.xml</brandFile>
+              <pagination>XHTML_SINGLE</pagination>
             </configuration>
           </execution>
           <execution>
             <id>make-documentation-multi</id>
             <phase>prepare-package</phase>
             <goals>
-              <goal>java</goal>
+              <goal>transform</goal>
             </goals>
             <configuration>
-              <mainClass>com.io7m.jspatial.documentation.MakeDocumentation</mainClass>
-              <arguments>
-                <argument>--xhtml-multi</argument>
-                <argument>${project.build.directory}/documentation/documentation.xml</argument>
-                <argument>${project.build.directory}/documentation/</argument>
-                <argument>--xhtml-body-start</argument>
-                <argument>${project.build.directory}/documentation/brand.xml</argument>
-              </arguments>
+              <documentFile>${project.build.directory}/documentation/documentation.xml</documentFile>
+              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+              <brandFile>${project.build.directory}/documentation/brand.xml</brandFile>
+              <pagination>XHTML_MULTI</pagination>
             </configuration>
           </execution>
         </executions>
@@ -291,8 +182,8 @@
 
       <!-- Javadoc handling -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.9.1</version>
         <executions>
           <!-- Produce javadoc jar for Central -->
           <execution>
@@ -339,8 +230,8 @@
 
       <!-- Produce documentation archive -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.4</version>
         <configuration>
           <descriptors>
             <descriptor>src/main/assembly/documentation.xml</descriptor>
@@ -365,7 +256,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>truezip-maven-plugin</artifactId>
-        <version>1.2</version>
         <inherited>false</inherited>
         <executions>
           <execution>
@@ -385,88 +275,6 @@
         </executions>
       </plugin>
     </plugins>
-
-    <!-- Allow deployment over ssh -->
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh-external</artifactId>
-        <version>2.2</version>
-      </extension>
-    </extensions>
-
-    <!-- Mark plugins as ignored in Eclipse, does not affect the build. -->
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.sonatype.maven.plugin</groupId>
-                    <artifactId>emma-maven-plugin</artifactId>
-                    <versionRange>[1.2,)</versionRange>
-                    <goals>
-                      <goal>instrument</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <versionRange>[2.8,)</versionRange>
-                    <goals>
-                      <goal>unpack-dependencies</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
-
-  <!-- Sign artifacts when deploying to io7m -->
-  <profiles>
-    <profile>
-      <id>io7m-deployment-private</id>
-      <activation>
-        <property>
-          <name>io7m.deployment</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.4</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
 </project>

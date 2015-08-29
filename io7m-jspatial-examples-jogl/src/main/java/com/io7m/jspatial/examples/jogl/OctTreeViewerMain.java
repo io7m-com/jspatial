@@ -16,11 +16,28 @@
 
 package com.io7m.jspatial.examples.jogl;
 
+import com.io7m.junreachable.UnreachableCodeException;
+
+/**
+ * The main Octtree viewer.
+ */
+
 public final class OctTreeViewerMain
 {
+  private OctTreeViewerMain()
+  {
+    throw new UnreachableCodeException();
+  }
+
+  /**
+   * Main procedure.
+   *
+   * @param args Command line arguments.
+   */
+
   public static void main(
     final String[] args)
   {
-
+    // Nothing yet
   }
 }

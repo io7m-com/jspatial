@@ -11,7 +11,6 @@
       <item name="License" href="license.html"/>
       <item name="Issues" href="issue-tracking.html"/>
       <item name="Contacts" href="team-list.html"/>
-      <item name="Dependencies" href="dependencies.html"/>
       <item name="Metadata" href="project-info.html"/>
     </menu>
     <menu name="Parent" ref="parent"/>

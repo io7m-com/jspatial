@@ -12,9 +12,10 @@
   <packaging>pom</packaging>
   <name>io7m-jspatial</name>
   <description>Spatial data structures</description>
-  <url>http://mvn.io7m.com/${project.artifactId}/</url>
+  <url>http://io7m.github.io/jspatial/</url>
 
   <modules>
+    <module>io7m-jspatial-checkstyle</module>
     <module>io7m-jspatial-core</module>
     <module>io7m-jspatial-documentation</module>
     <module>io7m-jspatial-examples-jogl</module>
@@ -31,14 +32,14 @@
   <licenses>
     <license>
       <name>ISC License</name>
-      <url>http://www.opensource.org/licenses/isc-license.txt</url>
+      <url>http://io7m.com/license/isc.txt</url>
     </license>
   </licenses>
 
   <scm>
-    <url>http://fossil.io7m.com/repo.cgi/io7m-jspatial</url>
-    <connection>scm:http://fossil.io7m.com/repo.cgi/io7m-jspatial</connection>
-    <developerConnection>scm:http://fossil.io7m.com/repo.cgi/io7m-jspatial</developerConnection>
+    <url>https://github.com/io7m/jspatial</url>
+    <connection>scm:git:https://github.com/io7m/jspatial</connection>
+    <developerConnection>scm:git:https://github.com/io7m/jspatial</developerConnection>
   </scm>
 
   <developers>
@@ -51,27 +52,26 @@
   </developers>
 
   <issueManagement>
-    <url>http://fossil.io7m.com/repo.cgi/io7m-jspatial</url>
-    <system>Fossil</system>
+    <url>http://github.com/io7m/jspatial/issues</url>
+    <system>GitHub Issues</system>
   </issueManagement>
 
   <distributionManagement>
     <site>
-      <id>io7m</id>
-      <name>io7m.com</name>
+      <id>GitHub</id>
+      <name>GitHub</name>
       <url>${project.url}</url>
     </site>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
   </distributionManagement>
 
-  <mailingLists>
-    <mailingList>
-      <name>io7m-jspatial</name>
-      <subscribe>io7m-jspatial-join@lists.io7m.com</subscribe>
-      <unsubscribe>io7m-jspatial-leave@lists.io7m.com</unsubscribe>
-      <post>io7m-jspatial@lists.io7m.com</post>
-      <archive>http://lists.io7m.com/io7m-jspatial/archive</archive>
-    </mailingList>
-  </mailingLists>
+  <ciManagement>
+    <system>Travis CI</system>
+    <url>https://travis-ci.org/io7m/jspatial</url>
+  </ciManagement>
 
   <prerequisites>
     <maven>2.2.1</maven>
@@ -82,7 +82,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.7</version>
+        <version>2.8</version>
         <configuration>
           <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
         </configuration>
@@ -90,7 +90,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.3</version>
+        <version>3.4</version>
+        <configuration>
+          <validate>true</validate>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>com.io7m.changelog</groupId>
@@ -106,69 +109,140 @@
     </plugins>
   </reporting>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.io7m.jtensors</groupId>
+        <artifactId>io7m-jtensors-core</artifactId>
+        <version>[7.0.0-b2, 7.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jogamp.jogl</groupId>
+        <artifactId>jogl-all-main</artifactId>
+        <version>2.3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jogamp.gluegen</groupId>
+        <artifactId>gluegen-rt-main</artifactId>
+        <version>2.3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>net.java.dev.designgridlayout</groupId>
+        <artifactId>designgridlayout</artifactId>
+        <version>1.11</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <build>
-    <plugins>
-      <!-- Plugin versions -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>2.5</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.7</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-install-plugin</artifactId>
-        <version>2.4</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
-      </plugin>
-    </plugins>
+    <pluginManagement>
+      <plugins>
+        <!-- Submodule plugin versions -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.6.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.8.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.5.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.10.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.18.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>2.15</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.5.5</version>
+        </plugin>
+        <plugin>
+          <groupId>com.io7m.jstructural</groupId>
+          <artifactId>io7m-jstructural-maven-plugin</artifactId>
+          <version>4.2.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>truezip-maven-plugin</artifactId>
+          <version>1.2</version>
+        </plugin>
+        <plugin>
+          <groupId>com.akathist.maven.plugins.launch4j</groupId>
+          <artifactId>launch4j-maven-plugin</artifactId>
+          <version>1.5.2</version>
+        </plugin>
+
+        <!-- Require JDK >= 1.7 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.3</version>
+          <configuration>
+            <source>1.7</source>
+            <target>1.7</target>
+          </configuration>
+        </plugin>
+
+        <!-- Sonatype OSSRH deployment -->
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.5</version>
+          <extensions>true</extensions>
+          <configuration>
+            <serverId>sonatype-nexus-staging</serverId>
+            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
 
     <!-- Allow deployment over ssh -->
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-ssh-external</artifactId>
-        <version>2.2</version>
+        <version>2.9</version>
       </extension>
     </extensions>
-
-    <!-- Mark plugins as ignored in Eclipse, does not affect the build. -->
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.sonatype.maven.plugin</groupId>
-                    <artifactId>emma-maven-plugin</artifactId>
-                    <versionRange>[1.2,)</versionRange>
-                    <goals>
-                      <goal>instrument</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
   <!-- Sign artifacts when deploying to io7m -->
@@ -185,7 +259,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.4</version>
+            <version>1.6</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>

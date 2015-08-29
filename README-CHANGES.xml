@@ -2,8 +2,8 @@
 <c:changelog xmlns:c="http://schemas.io7m.com/changelog/2.0.0">
   <c:project>io7m-jspatial</c:project>
 
-  <c:release c:ticket-system="com.io7m.fossil.jspatial">
-    <c:date>2014-11-28</c:date>
+  <c:release c:ticket-system="com.github.io7m.jspatial">
+    <c:date>2015-08-29</c:date>
     <c:version>3.0.0</c:version>
     <c:item>
       <c:date>2014-11-28</c:date>
@@ -110,4 +110,9 @@
   <c:ticket-system xml:id="com.io7m.fossil.jspatial">
     <c:ticket-url>http://fossil.io7m.com/repo.cgi/io7m-jspatial/tktview?name=</c:ticket-url>
   </c:ticket-system>
+
+  <c:ticket-system xml:id="com.github.io7m.jspatial">
+    <c:ticket-url>http://github.com/io7m/jspatial/issues/</c:ticket-url>
+  </c:ticket-system>
+
 </c:changelog>

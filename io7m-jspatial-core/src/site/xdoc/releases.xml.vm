@@ -3,16 +3,13 @@
   xmlns="http://maven.apache.org/XDOC/2.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
-
   <properties>
-    <title>io7m-jspatial-core</title>
+    <title>Releases</title>
   </properties>
-
   <body>
-    <subsection name="jspatial-core">
-      The <var>jspatial-core</var> package contains the core data structures and
-      algorithms of the <a href="http://mvn.io7m.com/jspatial">jspatial</a> package.
-    </subsection>
+    <section name="Releases">
+      See <a href="${project.parent.url}/releases.html">${project.parent.name}</a>
+      for releases and documentation.
+    </section>
   </body>
-
 </document>

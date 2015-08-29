@@ -11,13 +11,16 @@
   <body>
     <subsection name="jspatial">
       <p>
-        The <var>jspatial</var> package implements a set of spatial data structures.
+        The <var>jspatial</var> package implements a set of spatial
+        data structures.
       </p>
       <p>
-        <img src="viewer.png" alt="Octtree viewer" width="454" height="277"/>
+        <a href="viewer.png">
+          <img src="viewer.png" alt="Octtree viewer" width="454" height="277" />
+        </a>
       </p>
     </subsection>
-    <subsection name="features">
+    <subsection name="Features">
       <ul>
         <li>Quadtree implementations, including efficient area and raycast queries.</li>
         <li>Octtree implementations, including efficient volume and raycast queries.</li>
@@ -25,7 +28,7 @@
         <li>Fully documented (Javadoc).</li>
         <li>97% automated unit test coverage.</li>
         <li>ISC license.</li>
-        <li>Platform independent (tested on FreeBSD, Linux, Mac OS X, Solaris, Windows XP).</li>
+        <li>Platform independent: Written in pure Java 6.</li>
         <li>Rendering system independent (the example viewers use Swing and <a href="http://www.jogamp.org/jogl">JOGL</a>, but neither are required to use the library).</li>
       </ul>
     </subsection>

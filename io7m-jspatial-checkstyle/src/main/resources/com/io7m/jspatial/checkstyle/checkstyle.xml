@@ -121,7 +121,6 @@
     <module name="InnerAssignment"/>
     <!-- <module name="InnerTypeLast"/> -->
     <module name="InterfaceIsType"/>
-    <module name="JUnitTestCase"/>
     <module name="JavaNCSS">
       <property name="methodMaximum" value="95"/>
     </module>

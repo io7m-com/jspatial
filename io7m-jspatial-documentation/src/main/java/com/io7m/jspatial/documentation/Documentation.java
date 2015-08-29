@@ -26,6 +26,15 @@ import java.net.URL;
 
 public final class Documentation
 {
+  private Documentation()
+  {
+    throw new AssertionError("Unreachable code!");
+  }
+
+  /**
+   * @return The resource URI of the documentation.
+   */
+
   public static URI getDocumentationXMLLocation()
   {
     try {

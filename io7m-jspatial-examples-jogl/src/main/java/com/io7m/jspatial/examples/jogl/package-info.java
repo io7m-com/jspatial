@@ -14,16 +14,9 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.documentation;
+/**
+ * JOGL example code.
+ */
 
-import com.io7m.jstructural.tools.JSCMain;
+@com.io7m.jnull.NonNullByDefault package com.io7m.jspatial.examples.jogl;
 
-final class MakeDocumentation
-{
-  public static void main(
-    final String[] args)
-    throws Throwable
-  {
-    JSCMain.run(JSCMain.getLog(false), args);
-  }
-}

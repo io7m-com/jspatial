@@ -8,7 +8,8 @@
   </properties>
   <body>
     <section name="Changes">
-      See <a href="${project.parent.url}/releases.html">${project.parent.name}</a> for the package changelog.
+      See <a href="${project.parent.url}/releases.html">${project.parent.name}</a>
+      for the package changelog.
     </section>
   </body>
 </document>
