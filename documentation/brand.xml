@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div class="brand" xmlns="http://www.w3.org/1999/xhtml">
+  <div class="brand_left">
+    <a href="http://io7m.com/">io7m</a>
+  </div>
+  <div class="brand_right">
+    <a href="http://io7m.github.io/jspatial/">io7m-jspatial</a> 3.0.0-b0
+  </div>
+</div>

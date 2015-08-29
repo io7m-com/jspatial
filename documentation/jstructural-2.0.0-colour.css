@@ -1,0 +1,437 @@
+/*
+ * Main body structure.
+ */
+
+.st200_body
+{
+  font-family: serif;
+  text-align:  justify;
+}
+
+.st200_hr
+{
+  height:           1px;
+  border:           0;
+  color:            #ccc;
+  background-color: #ccc;
+}
+
+/*
+ * Navigation bar.
+ */
+
+.st200_navbar
+{
+  font-family: sans-serif;
+}
+.st200_navbar_table
+{
+
+}
+.st200_navbar_table td
+{
+  border: 0;
+}
+.st200_navbar_prev_file_cell
+{
+
+}
+.st200_navbar_up_file_cell
+{
+
+}
+.st200_navbar_next_file_cell
+{
+
+}
+.st200_navbar_prev_title_cell
+{
+
+}
+.st200_navbar_up_title_cell
+{
+
+}
+.st200_navbar_next_title_cell
+{
+
+}
+
+/*
+ * Generic table-of-contents items.
+ */
+
+.st200_contents_item
+{
+
+}
+.st200_contents_item1
+{
+
+}
+.st200_contents_item2
+{
+
+}
+.st200_contents_item3
+{
+
+}
+.st200_contents_item4
+{
+
+}
+
+.st200_contents_item_section
+{
+
+}
+.st200_contents_item_part
+{
+
+}
+.st200_contents_item_subsection
+{
+
+}
+
+/*
+ * Element: document-contents
+ */
+
+.st200_document_contents
+{
+  font-family: sans-serif;
+}
+
+/*
+ * Element: document-title
+ */
+
+.st200_document_title
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/*
+ * Element: footnote
+ */
+
+.st200_footnotes
+{
+
+}
+.st200_footnotes hr
+{
+  height:           1px;
+  border:           0;
+  color:            #ccc;
+  background-color: #ccc;
+}
+.st200_footnote_number
+{
+
+}
+.st200_footnote_body
+{
+
+}
+
+/*
+ * Element: formal-item
+ */
+
+.st200_formal_item
+{
+  border:           1px solid #ccc;
+  padding-top:      1.0em;
+  padding-left:     1.0em;
+  padding-bottom:   1.0em;
+  padding-right:    1.0em;
+}
+
+/*
+ * Element: formal-item-list
+ */
+
+.st200_formal_item_list
+{
+
+}
+.st200_formal_item_list_title
+{
+  font-weight: bold;
+}
+.st200_formal_item_list_item
+{
+
+}
+
+/*
+ * Element: formal-item-title
+ */
+
+.st200_formal_item_title
+{
+
+}
+
+/*
+ * Element: image
+ */
+
+.st200_image
+{
+
+}
+
+/*
+ * Element: link
+ */
+
+.st200_link
+{
+
+}
+.st200_link img
+{
+
+}
+
+/*
+ * Element: link-external
+ */
+
+.st200_link_external
+{
+
+}
+.st200_link_external img
+{
+  border: transparent;
+}
+
+/*
+ * Element: list-item
+ */
+
+.st200_list_item
+{
+
+}
+
+/*
+ * Element: list-ordered
+ */
+
+.st200_list_ordered
+{
+
+}
+
+/*
+ * Element: list-unordered
+ */
+
+.st200_list_unordered
+{
+
+}
+
+/*
+ * Element: paragraph
+ */
+
+.st200_paragraph_container
+{
+
+}
+.st200_paragraph
+{
+
+}
+.st200_paragraph_number
+{
+
+}
+
+/*
+ * Element: part
+ */
+
+.st200_part_container
+{
+
+}
+.st200_part
+{
+
+}
+
+/*
+ * Element: part-title
+ */
+
+.st200_part_title,
+.st200_part_title_number
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/*
+ * Element: part-contents
+ */
+
+.st200_part_contents
+{
+  font-family: sans-serif;
+}
+
+/*
+ * Element: part-title
+ */
+
+.st200_part_title
+{
+
+}
+
+/*
+ * Element: section
+ */
+
+.st200_section_container
+{
+
+}
+.st200_section
+{
+
+}
+
+/*
+ * Element: section-contents
+ */
+
+.st200_section_contents
+{
+  font-family: sans-serif;
+}
+
+/*
+ * Element: section-title
+ */
+
+.st200_section_title
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+.st200_section_title_number
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/*
+ * Element: subsection
+ */
+
+.st200_subsection_container
+{
+
+}
+.st200_subsection
+{
+
+}
+
+/*
+ * Element: subsection-title
+ */
+
+.st200_subsection_title
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+.st200_subsection_title_number
+{
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/*
+ * Element: table
+ */
+
+.st200_table
+{
+
+}
+
+/*
+ * Element: table-cell
+ */
+
+.st200_table_cell
+{
+
+}
+
+/*
+ * Element: table-column-name
+ */
+
+.st200_table_column_name
+{
+
+}
+
+/*
+ * Element: table-head
+ */
+
+.st200_table_head
+{
+
+}
+
+/*
+ * Element: table-head
+ */
+
+.st200_table_head
+{
+
+}
+
+/*
+ * Element: table-row
+ */
+
+.st200_table_row
+{
+
+}
+
+/*
+ * Element: term
+ */
+
+.st200_term
+{
+
+}
+
+/*
+ * Element: verbatim
+ */
+
+.st200_verbatim
+{
+
+}
+

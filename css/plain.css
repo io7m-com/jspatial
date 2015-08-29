@@ -1,0 +1,73 @@
+body {
+  font-size:   90%;
+  font-family: sans-serif;
+  padding:     1em;
+}
+
+h1 { font-size: 95%; font-weight: bold; margin-bottom: 1em; }
+h2 { font-size: 95%; font-weight: bold; margin-bottom: 1em; }
+h3 { font-size: 95%; font-weight: bold; margin-bottom: 1em; }
+h4 { font-size: 95%; font-weight: bold; margin-bottom: 1em; }
+h5 { font-size: 95%; font-weight: bold; margin-bottom: 1em; }
+
+#leftColumn {
+  width:        16em;
+  float:        left;
+  border-right: 1px #eee solid;
+}
+
+#bodyColumn {
+  margin-left:   16em;
+  margin-bottom: 1em;
+  padding-left:  1em;
+  border-left:   1px #eee solid;
+}
+
+#breadcrumbs {
+  margin-bottom: 1em;
+  font-size:     70%;
+}
+
+#banner {
+  font-size:   150%;
+  font-weight: bold;
+}
+
+#footer {
+  padding-top: 2em;
+  text-align:  left;
+  clear:       left;
+  font-size:   70%;
+}
+
+hr {
+  border: 0;
+  height: 0px;
+}
+
+th {
+  font-size:      90%;
+  font-weight:    bold;
+  padding-bottom: 0.2em;
+  padding-right:  2em;
+}
+
+td {
+  padding-right:  2em;
+  vertical-align: top;
+  padding-bottom: 0.2em;
+}
+
+caption     { margin-bottom: 1em; }
+table       { margin-bottom: 1em; }
+div.section { margin-bottom: 1em; }
+p           { margin-bottom: 1em; }
+
+ul ul { margin-left:   1em; }
+ul    { margin-bottom: 1em; }
+
+var { font-family: monospace; }
+
+#bodyColumn ul { list-style-type: square; }
+#bodyColumn li { margin-left: 1em; }
+

@@ -1,0 +1,480 @@
+/*
+ * Main page structure.
+ */
+
+.st200_body
+{
+  max-width: 60em;
+}
+
+.st200_contents
+{
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/*
+ * Generic table-of-contents items.
+ */
+
+.st200_contents_item
+{
+  list-style: none;
+}
+.st200_contents_item1
+{
+
+}
+.st200_contents_item2
+{
+  padding-left: 2.0em;
+}
+.st200_contents_item3
+{
+  padding-left: 2.0em;
+}
+
+.st200_contents_item_section
+{
+
+}
+.st200_contents_item_part
+{
+
+}
+.st200_contents_item_subsection
+{
+
+}
+
+/*
+ * Navigation bar.
+ */
+
+.st200_navbar
+{
+  font-size: 75%;
+}
+.st200_navbar_top
+{
+  margin-top:    1.3em;
+  margin-bottom: 1.0em;
+}
+.st200_navbar_bottom
+{
+  margin-top: 1.0em;
+}
+.st200_navbar_table
+{
+  margin-bottom: 0.0em;
+  width:         100%;
+}
+.st200_navbar_prev_file_cell
+{
+  text-align: left;
+  width: 33%;
+}
+.st200_navbar_up_file_cell
+{
+  text-align: center;
+  width: 33%;
+}
+.st200_navbar_next_file_cell
+{
+  text-align: right;
+  width: 33%;
+}
+.st200_navbar_prev_title_cell
+{
+  text-align: left;
+  width: 33%;
+}
+.st200_navbar_up_title_cell
+{
+  text-align: center;
+  width: 33%;
+}
+.st200_navbar_next_title_cell
+{
+  text-align: right;
+  width: 33%;
+}
+.st200_navbar_top hr
+{
+  margin-top: 1.0em;
+}
+.st200_navbar_bottom hr
+{
+  margin-bottom: 1.0em;
+}
+
+.st200_navbar_top .st200_navbar_prev_title_cell,
+.st200_navbar_top .st200_navbar_next_title_cell,
+.st200_navbar_top .st200_navbar_up_title_cell
+{
+  vertical-align: top;
+}
+
+.st200_navbar_bottom .st200_navbar_prev_title_cell,
+.st200_navbar_bottom .st200_navbar_next_title_cell,
+.st200_navbar_bottom .st200_navbar_up_title_cell
+{
+  vertical-align: bottom;
+}
+
+/*
+ * Element: document-contents
+ */
+
+.st200_document_contents
+{
+  margin-left: 6.2em;
+}
+
+/*
+ * Element: document-title
+ */
+
+.st200_document_title
+{
+  margin-top:    1.2em;
+  margin-left:   5.2em;
+  margin-bottom: 0.7em;
+  font-size:     120%;
+}
+
+/*
+ * Element: footnote
+ */
+
+.st200_footnotes
+{
+
+}
+.st200_footnotes hr
+{
+  margin-bottom: 1.4em;
+}
+.st200_footnote_number
+{
+  float:       left;
+  font-size:   80%;
+  margin-top:  0.25em;
+  margin-left: 0.15em;
+}
+.st200_footnote_body
+{
+  margin-left:    6.2em;
+  margin-bottom:  1.4em;
+  line-height:    1.4em;
+}
+
+/*
+ * Element: formal-item
+ */
+
+.st200_formal_item
+{
+  margin-left:    6.2em;
+  margin-bottom:  1.4em;
+  overflow:       auto;
+}
+
+/*
+ * Element: formal-item-list
+ */
+
+.st200_formal_item_list
+{
+
+}
+.st200_formal_item_list_title
+{
+  margin-bottom: 1.0em;
+}
+
+/*
+ * Element: formal-item-title
+ */
+
+.st200_formal_item_title
+{
+  font-weight:   bold;
+  margin-bottom: 1.0em;
+}
+.st200_formal_item_title_number
+{
+
+}
+
+/*
+ * Element: image
+ */
+
+.st200_image
+{
+
+}
+
+/*
+ * Element: link
+ */
+
+.st200_link
+{
+
+}
+
+/*
+ * Element: link-external
+ */
+
+.st200_link_external
+{
+
+}
+
+/*
+ * Element: list-item
+ */
+
+.st200_list_item
+{
+
+}
+
+.st200_formal_item .st200_list_item
+{
+  padding-bottom: 1em;
+}
+
+/*
+ * Element: list-ordered
+ */
+
+.st200_list_ordered
+{
+
+}
+
+.st200_formal_item .st200_list_ordered
+{
+  padding-right: 2em;
+}
+
+/*
+ * Element: list-unordered
+ */
+
+.st200_list_unordered
+{
+
+}
+
+/*
+ * Element: paragraph
+ */
+
+.st200_paragraph_container
+{
+
+}
+.st200_paragraph
+{
+  margin-left:    6.2em;
+  margin-bottom:  1.4em;
+  line-height:    1.4em;
+}
+.st200_paragraph_number
+{
+  float:       left;
+  font-size:   90%;
+  margin-top:  0.05em;
+  margin-left: 0.15em;
+}
+
+/*
+ * Element: part
+ */
+
+.st200_part_container
+{
+
+}
+.st200_part
+{
+  margin-bottom: 1.0em;
+}
+
+/*
+ * Element: part-title
+ */
+
+.st200_part_title
+{
+  margin-left:   5.2em;
+  margin-bottom: 0.7em;
+  font-size:     120%;
+}
+.st200_part_title_number
+{
+  float:       left;
+  font-size:   120%;
+}
+
+/*
+ * Element: part-contents
+ */
+
+.st200_part_contents_outer
+{
+  margin-left: 6.2em;
+}
+.st200_part_contents
+{
+
+}
+
+/*
+ * Element: section
+ */
+
+.st200_section_container
+{
+
+}
+.st200_section
+{
+  margin-bottom: 1.0em;
+}
+
+/*
+ * Element: section-contents
+ */
+
+.st200_section_contents_outer
+{
+  margin-left: 6.2em;
+}
+.st200_section_contents
+{
+
+}
+
+/*
+ * Element: section-title
+ */
+
+.st200_section_title
+{
+  margin-left:   5.2em;
+  margin-bottom: 0.7em;
+  font-size:     120%;
+}
+.st200_section_title_number
+{
+  float:       left;
+  font-size:   120%;
+}
+
+/*
+ * Element: subsection
+ */
+
+.st200_subsection_container
+{
+
+}
+.st200_subsection
+{
+  margin-bottom: 1.8em;
+}
+
+/*
+ * Element: subsection-title
+ */
+
+.st200_subsection_title
+{
+  margin-left:   6.2em;
+  margin-bottom: 1.0em;
+  font-size:     100%;
+}
+.st200_subsection_title_number
+{
+  float:       left;
+  font-size:   100%;
+}
+
+/*
+ * Element: table
+ */
+
+.st200_table
+{
+  padding-top: 1.0em;
+}
+
+/*
+ * Element: table-cell
+ */
+
+.st200_table_cell
+{
+
+}
+
+/*
+ * Element: table-column-name
+ */
+
+.st200_table_column_name
+{
+
+}
+
+/*
+ * Element: table-head
+ */
+
+.st200_table_head
+{
+
+}
+
+/*
+ * Element: table-head
+ */
+
+.st200_table_head
+{
+
+}
+
+/*
+ * Element: table-row
+ */
+
+.st200_table_row
+{
+
+}
+
+/*
+ * Element: term
+ */
+
+.st200_term
+{
+
+}
+
+/*
+ * Element: verbatim
+ */
+
+.st200_verbatim
+{
+
+}
+
