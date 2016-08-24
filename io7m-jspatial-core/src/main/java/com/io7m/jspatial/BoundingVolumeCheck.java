@@ -35,7 +35,7 @@ public final class BoundingVolumeCheck
    * The result of an overlap or containment check.
    */
 
-  public static enum Result
+  public enum Result
   {
     /**
      * The object is contained within the query volume.

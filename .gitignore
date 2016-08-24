@@ -1,4 +1,13 @@
-*/target
-.idea/libraries
-.idea/workspace.xml
+*.iml
+*.ipr
+*.iws
+.checkstyle
+.classpath
+.fslckout
+.idea
+.project
+.settings
+bin
+out
+pom.xml.versionsBackup
 target

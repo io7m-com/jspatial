@@ -8,14 +8,14 @@
   <parent>
     <groupId>com.io7m.jspatial</groupId>
     <artifactId>io7m-jspatial</artifactId>
-    <version>3.0.0-b0</version>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>io7m-jspatial-documentation</artifactId>
 
   <packaging>jar</packaging>
+  <name>io7m-jspatial-documentation</name>
   <description>Spatial data structures (Documentation)</description>
   <url>http://io7m.github.io/jspatial/</url>
-  <name>${project.artifactId}</name>
 
   <scm>
     <url>${project.parent.scm.url}</url>
@@ -29,55 +29,34 @@
       <artifactId>io7m-jspatial-core</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>com.io7m.jnull</groupId>
+      <artifactId>io7m-jnull-core</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Produce custom manifest in jar files -->
+      <!-- Copy documentation resources into build directory -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <Specification-Title>${project.name}</Specification-Title>
-              <Specification-Version>${project.version}</Specification-Version>
-              <Specification-Vendor>io7m.com</Specification-Vendor>
-              <Implementation-Title>${project.name}</Implementation-Title>
-              <Implementation-Version>${project.version}</Implementation-Version>
-              <Implementation-Vendor>io7m.com</Implementation-Vendor>
-              <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
-              <Built-By>io7m</Built-By>
-              <Sealed>true</Sealed>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-
-      <!-- Create source jar -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
+        <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
-            <phase>package</phase>
+            <id>copy-documentation-resources</id>
             <goals>
-              <goal>jar-no-fork</goal>
-              <goal>test-jar-no-fork</goal>
+              <goal>copy-resources</goal>
             </goals>
+            <phase>generate-resources</phase>
             <configuration>
-              <archive>
-                <manifestEntries>
-                  <Specification-Title>${project.name}</Specification-Title>
-                  <Specification-Version>${project.version}</Specification-Version>
-                  <Specification-Vendor>io7m.com</Specification-Vendor>
-                  <Implementation-Title>${project.name}</Implementation-Title>
-                  <Implementation-Version>${project.version}</Implementation-Version>
-                  <Implementation-Vendor>io7m.com</Implementation-Vendor>
-                  <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
-                  <Built-By>io7m</Built-By>
-                </manifestEntries>
-              </archive>
+              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/resources/com/io7m/jspatial/documentation/</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
             </configuration>
           </execution>
         </executions>
@@ -117,30 +96,6 @@
                   <includes>**\/*.java</includes>
                 </artifactItem>
               </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Copy documentation resources into build directory -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-documentation-resources</id>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <phase>generate-resources</phase>
-            <configuration>
-              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>src/main/resources/com/io7m/jspatial/documentation/</directory>
-                  <filtering>true</filtering>
-                </resource>
-              </resources>
             </configuration>
           </execution>
         </executions>
@@ -213,7 +168,7 @@
             <id>javadoc-aggregate</id>
             <phase>package</phase>
             <goals>
-              <goal>javadoc</goal>
+              <goal>javadoc-no-fork</goal>
             </goals>
             <configuration>
               <bottom><![CDATA[Copyright &#169; {currentYear} &lt;code@io7m.com&gt; http://io7m.com]]></bottom>

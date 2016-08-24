@@ -60,7 +60,7 @@ OctTreeType<T>
     private @Nullable Octant   x1y1z0;
     private @Nullable Octant   x1y1z1;
 
-    public Octant(
+    Octant(
       final VectorI3I in_lower,
       final VectorI3I in_upper)
     {

@@ -62,11 +62,9 @@ OctTreeSDType<T>
   {
     private boolean            leaf;
     private final VectorI3I    lower;
-
     private final SortedSet<T> octant_objects_dynamic;
     private final SortedSet<T> octant_objects_static;
     private final int          octant_size_x;
-
     private final int          octant_size_y;
     private final int          octant_size_z;
     private final VectorI3I    upper;
@@ -76,11 +74,10 @@ OctTreeSDType<T>
     private @Nullable Octant   x0y1z1;
     private @Nullable Octant   x1y0z0;
     private @Nullable Octant   x1y0z1;
-
     private @Nullable Octant   x1y1z0;
     private @Nullable Octant   x1y1z1;
 
-    public Octant(
+    Octant(
       final VectorI3I in_lower,
       final VectorI3I in_upper)
     {

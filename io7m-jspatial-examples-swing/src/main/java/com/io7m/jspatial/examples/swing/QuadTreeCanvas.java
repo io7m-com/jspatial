@@ -46,7 +46,7 @@ final class QuadTreeCanvas extends Canvas
   private @Nullable BoundingAreaType                            area;
   private @Nullable SortedSet<Rectangle>                        area_items;
 
-  public QuadTreeCanvas(
+  QuadTreeCanvas(
     final AtomicReference<QuadTreeType<Rectangle>> in_quad)
   {
     this.quad = NullCheck.notNull(in_quad);

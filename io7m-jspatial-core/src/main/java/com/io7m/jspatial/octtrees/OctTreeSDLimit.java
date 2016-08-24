@@ -63,11 +63,10 @@ import com.io7m.junreachable.UnreachableCodeException;
     private @Nullable Octant   x0y1z1;
     private @Nullable Octant   x1y0z0;
     private @Nullable Octant   x1y0z1;
-
     private @Nullable Octant   x1y1z0;
     private @Nullable Octant   x1y1z1;
 
-    public Octant(
+    Octant(
       final VectorI3I in_lower,
       final VectorI3I in_upper)
     {
