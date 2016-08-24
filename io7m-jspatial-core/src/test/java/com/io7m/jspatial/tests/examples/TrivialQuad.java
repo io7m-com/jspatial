@@ -1,4 +1,4 @@
-package com.io7m.jspatial.tests.examples;
+package tests.examples;
 
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicLong;

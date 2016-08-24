@@ -1,4 +1,4 @@
-package com.io7m.jspatial.tests.quadtrees;
+package tests.quadtrees;
 
 import org.junit.Assert;
 import org.junit.Test;

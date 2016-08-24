@@ -1,4 +1,4 @@
-package com.io7m.jspatial.tests.octtrees;
+package tests.octtrees;
 
 import org.junit.Assert;
 import org.junit.Test;

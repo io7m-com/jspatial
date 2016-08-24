@@ -1,4 +1,4 @@
-package com.io7m.jspatial.tests.quadtrees;
+package tests.quadtrees;
 
 import java.util.Iterator;
 import java.util.SortedSet;
@@ -16,7 +16,7 @@ import com.io7m.jspatial.quadtrees.QuadTreeRaycastResult;
 import com.io7m.jspatial.quadtrees.QuadTreeTraversalType;
 import com.io7m.jspatial.quadtrees.QuadTreeType;
 import com.io7m.jspatial.tests.Rectangle;
-import com.io7m.jspatial.tests.utilities.TestUtilities;
+import tests.utilities.TestUtilities;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorReadable2IType;

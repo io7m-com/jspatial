@@ -1,4 +1,4 @@
-package com.io7m.jspatial.tests.quadtrees;
+package tests.quadtrees;
 
 import java.util.Iterator;
 import java.util.SortedSet;

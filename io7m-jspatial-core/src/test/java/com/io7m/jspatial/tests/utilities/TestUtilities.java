@@ -1,4 +1,4 @@
-package com.io7m.jspatial.tests.utilities;
+package tests.utilities;
 
 import com.io7m.jnull.NonNull;
 import com.io7m.jspatial.tests.Cuboid;

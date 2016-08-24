@@ -1,4 +1,4 @@
-package com.io7m.jspatial.tests.octtrees;
+package tests.octtrees;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -14,7 +14,7 @@ import com.io7m.jspatial.octtrees.OctTreeRaycastResult;
 import com.io7m.jspatial.octtrees.OctTreeTraversalType;
 import com.io7m.jspatial.octtrees.OctTreeType;
 import com.io7m.jspatial.tests.Cuboid;
-import com.io7m.jspatial.tests.utilities.TestUtilities;
+import tests.utilities.TestUtilities;
 import com.io7m.jtensors.VectorI3D;
 import com.io7m.jtensors.VectorI3I;
 import com.io7m.jtensors.VectorReadable3IType;

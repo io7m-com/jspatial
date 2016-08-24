@@ -241,7 +241,7 @@
 
   <!-- Check license headers of all Java files -->
   <module name="Header">
-    <property name="header" value="/*\n * Copyright © 2014 &lt;code@io7m.com&gt; http://io7m.com\n"/>
+    <property name="header" value="/*\n * Copyright © 2016 &lt;code@io7m.com&gt; http://io7m.com\n"/>
     <property name="charset" value="UTF-8"/>
   </module>
 

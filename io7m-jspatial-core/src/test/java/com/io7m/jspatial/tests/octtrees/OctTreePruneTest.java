@@ -1,4 +1,4 @@
-package com.io7m.jspatial.tests.octtrees;
+package tests.octtrees;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,7 +7,7 @@ import com.io7m.jspatial.octtrees.OctTreeMemberType;
 import com.io7m.jspatial.octtrees.OctTreePrune;
 import com.io7m.jspatial.octtrees.OctTreeType;
 import com.io7m.jspatial.tests.Cuboid;
-import com.io7m.jspatial.tests.utilities.TestUtilities;
+import tests.utilities.TestUtilities;
 import com.io7m.jtensors.VectorI3I;
 import com.io7m.junreachable.UnreachableCodeException;
 
