@@ -21,9 +21,7 @@ import com.io7m.jspatial.api.BoundingAreaLType;
 import com.io7m.jtensors.VectorI2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 /**
  * Contract completion for {@link BoundingAreaL}.

@@ -48,6 +48,16 @@ public abstract class QuadTreeLContract
 {
   @Rule public final ExpectedException expected = ExpectedException.none();
 
+  private static int countQuadrants(final QuadTreeLType<Object> tree)
+  {
+    final AtomicInteger count = new AtomicInteger(0);
+    tree.iterateQuadrants(count, (context, quadrant, depth) -> {
+      count.incrementAndGet();
+      return TreeVisitResult.RESULT_CONTINUE;
+    });
+    return count.get();
+  }
+
   protected abstract <T> QuadTreeLType<T> create(QuadTreeConfigurationL config);
 
   /**
@@ -1156,16 +1166,6 @@ public abstract class QuadTreeLContract
 
     final int count_5 = QuadTreeLContract.countQuadrants(tree);
     Assert.assertEquals(1L, (long) count_5);
-  }
-
-  private static int countQuadrants(final QuadTreeLType<Object> tree)
-  {
-    final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateQuadrants(count, (context, quadrant, depth) -> {
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
-    return count.get();
   }
 
   /**

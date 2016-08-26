@@ -18,29 +18,21 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jfunctional.Unit;
 import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jspatial.api.BoundingAreaL;
 import com.io7m.jspatial.api.RayI2D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeDType;
-import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
-import com.io7m.jspatial.api.quadtrees.QuadTreeQuadrantDType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultD;
 import com.io7m.jtensors.VectorI2D;
-import com.io7m.jtensors.VectorI2D;
-import com.io7m.jtensors.VectorI2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
@@ -54,6 +46,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public abstract class QuadTreeDContract
 {
   @Rule public final ExpectedException expected = ExpectedException.none();
+
+  private static int countQuadrants(final QuadTreeDType<?> tree)
+  {
+    final AtomicInteger count = new AtomicInteger(0);
+    tree.iterateQuadrants(count, (context, quadrant, depth) -> {
+      count.incrementAndGet();
+      return TreeVisitResult.RESULT_CONTINUE;
+    });
+    return count.get();
+  }
 
   protected abstract <T> QuadTreeDType<T> create(QuadTreeConfigurationD config);
 
@@ -917,7 +919,7 @@ public abstract class QuadTreeDContract
       Assert.assertEquals(0L, (long) set.size());
     }
   }
-  
+
   /**
    * Querying contained objects in the X0Y1 quadrant works.
    */
@@ -1192,16 +1194,6 @@ public abstract class QuadTreeDContract
 
     final int count_5 = QuadTreeDContract.countQuadrants(tree);
     Assert.assertEquals(1L, (long) count_5);
-  }
-
-  private static int countQuadrants(final QuadTreeDType<?> tree)
-  {
-    final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateQuadrants(count, (context, quadrant, depth) -> {
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
-    return count.get();
   }
 
   /**

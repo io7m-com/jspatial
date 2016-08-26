@@ -18,12 +18,9 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationDType;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationLType;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.PrimitiveGenerators;
 import net.java.quickcheck.generator.support.DoubleGenerator;
-import net.java.quickcheck.generator.support.LongGenerator;
 
 /**
  * Generator for tree configurations.

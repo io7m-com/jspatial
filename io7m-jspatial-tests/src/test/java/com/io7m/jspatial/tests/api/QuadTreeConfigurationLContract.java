@@ -17,7 +17,6 @@
 package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jspatial.api.BoundingAreaLType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationLType;
 import com.io7m.jtensors.VectorI2L;
 import net.java.quickcheck.Generator;
