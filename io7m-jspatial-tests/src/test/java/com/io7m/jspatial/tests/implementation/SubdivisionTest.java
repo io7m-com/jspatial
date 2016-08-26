@@ -19,6 +19,7 @@ package com.io7m.jspatial.tests.implementation;
 import com.io7m.jspatial.implementation.Subdivision;
 import com.io7m.junreachable.UnreachableCodeException;
 import org.hamcrest.core.Is;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -35,6 +36,7 @@ public final class SubdivisionTest
   {
     this.expected.expect(RuntimeException.class);
     Subdivision.subdivide1L(0L, 0L, new long[4]);
+    Assert.fail();
   }
 
   @Test
@@ -42,6 +44,7 @@ public final class SubdivisionTest
   {
     this.expected.expect(RuntimeException.class);
     Subdivision.subdivide1L(0L, 0L, new long[2]);
+    Assert.fail();
   }
 
   @Test
@@ -49,6 +52,7 @@ public final class SubdivisionTest
   {
     this.expected.expect(RuntimeException.class);
     Subdivision.subdivide1D(0.0, 0.0, new double[2]);
+    Assert.fail();
   }
 
   @Test
@@ -62,5 +66,6 @@ public final class SubdivisionTest
     this.expected.expect(InvocationTargetException.class);
     this.expected.expectCause(Is.isA(UnreachableCodeException.class));
     c.newInstance();
+    Assert.fail();
   }
 }
