@@ -63,15 +63,15 @@ final class QuadTreeCanvas extends JPanel
 
   private final Map<Integer, Item> items;
   private final Observer<LogMessage> log_messages;
+  private final Set<Integer> query_area_results;
+  private final SortedSet<QuadTreeRaycastResultL<Integer>> ray_area_results_l;
+  private final SortedSet<QuadTreeRaycastResultD<Integer>> ray_area_results_d;
   private Function<QuadTreeCommandType, Unit> on_message_cases;
   private QuadTreeLType<Integer> tree_l;
   private QuadTreeDType<Integer> tree_d;
   private QuadTreeKind kind;
   private BoundingAreaL query_area_l;
   private BoundingAreaD query_area_d;
-  private final Set<Integer> query_area_results;
-  private final SortedSet<QuadTreeRaycastResultL<Integer>> ray_area_results_l;
-  private final SortedSet<QuadTreeRaycastResultD<Integer>> ray_area_results_d;
   private RayI2D ray;
 
   QuadTreeCanvas(
@@ -98,7 +98,7 @@ final class QuadTreeCanvas extends JPanel
   }
 
   private Unit onCommandRayQuery(
-    final RayI2D ray)
+    final RayI2D in_ray)
   {
     this.ray_area_results_l.clear();
     this.ray_area_results_d.clear();
@@ -108,8 +108,8 @@ final class QuadTreeCanvas extends JPanel
       case LONG_INTEGER: {
         final QuadTreeLType<Integer> t = this.tree_l;
         if (t != null) {
-          this.ray = ray;
-          t.raycast(ray, this.ray_area_results_l);
+          this.ray = in_ray;
+          t.raycast(in_ray, this.ray_area_results_l);
           this.sendRayQueryCountMessage();
         }
         break;
@@ -117,8 +117,8 @@ final class QuadTreeCanvas extends JPanel
       case DOUBLE: {
         final QuadTreeDType<Integer> t = this.tree_d;
         if (t != null) {
-          this.ray = ray;
-          t.raycast(ray, this.ray_area_results_d);
+          this.ray = in_ray;
+          t.raycast(in_ray, this.ray_area_results_d);
           this.sendRayQueryCountMessage();
         }
         break;

@@ -26,7 +26,12 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jspatial-core</artifactId>
+      <artifactId>io7m-jspatial-api</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>io7m-jspatial-implementation</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -77,18 +82,8 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>${project.groupId}</groupId>
-                  <artifactId>io7m-jspatial-core</artifactId>
+                  <artifactId>io7m-jspatial-api</artifactId>
                   <classifier>sources</classifier>
-                  <version>${project.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
-                  <includes>**\/*.java</includes>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>io7m-jspatial-core</artifactId>
-                  <classifier>test-sources</classifier>
                   <version>${project.version}</version>
                   <type>jar</type>
                   <overWrite>true</overWrite>

@@ -77,7 +77,6 @@ final class QuadTreeWindow extends JFrame
       JSplitPane.HORIZONTAL_SPLIT, this.canvas_scroll, this.controls_scroll);
 
     this.status = new StatusBar(this.messages);
-
     this.log = new LogPane(this.messages);
 
     this.tabs = new JTabbedPane();
@@ -120,12 +119,12 @@ final class QuadTreeWindow extends JFrame
   {
     private final JLabel text;
 
-    StatusBar(final Observable<LogMessage> messages)
+    StatusBar(final Observable<LogMessage> in_messages)
     {
       this.text = new JLabel();
       this.add(this.text);
 
-      messages.subscribe(this::onMessage);
+      in_messages.subscribe(this::onMessage);
     }
 
     private void onMessage(final LogMessageType m)
@@ -146,7 +145,7 @@ final class QuadTreeWindow extends JFrame
     private final JTextArea text;
     private final JScrollPane scroll;
 
-    LogPane(final Observable<LogMessage> messages)
+    LogPane(final Observable<LogMessage> in_messages)
     {
       this.setLayout(new BorderLayout());
 
@@ -156,7 +155,7 @@ final class QuadTreeWindow extends JFrame
       this.scroll = new JScrollPane(this.text);
       this.add(this.scroll, BorderLayout.CENTER);
 
-      messages.subscribe(this::onMessage);
+      in_messages.subscribe(this::onMessage);
     }
 
     private void onMessage(final LogMessageType m)

@@ -25,7 +25,6 @@ import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2L;
-import com.io7m.jtensors.VectorReadable2DType;
 import net.java.dev.designgridlayout.DesignGridLayout;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
@@ -54,8 +53,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 final class QuadTreeControls extends JPanel
 {
-  private static final int MAIN_SLIDER_SPAN = 1;
-
   private final BehaviorSubject<QuadTreeCommandType> events;
   private final JButton object_add;
   private final JButton tree_create;
@@ -319,11 +316,11 @@ final class QuadTreeControls extends JPanel
     final long h_base = this.object_height_model.getNumber().longValue();
 
     final long x_max =
-      this.tree_x_model.getNumber().longValue() +
-        this.tree_width_model.getNumber().longValue();
+      this.tree_x_model.getNumber().longValue()
+        + this.tree_width_model.getNumber().longValue();
     final long y_max =
-      this.tree_y_model.getNumber().longValue() +
-        this.tree_height_model.getNumber().longValue();
+      this.tree_y_model.getNumber().longValue()
+        + this.tree_height_model.getNumber().longValue();
 
     for (int index = 0; index < count; ++index) {
       final long x0 = QuadTreeControls.randomLong(x_base, x_max);
