@@ -146,4 +146,234 @@ public final class RayI3DTest
     Assert.assertTrue(ray_direction_inv.getYD() == Double.POSITIVE_INFINITY);
     Assert.assertTrue(ray_direction_inv.getZD() == Double.POSITIVE_INFINITY);
   }
+
+  @Test
+  public void testRayIntersection()
+  {
+    final VectorI3D lower = new VectorI3D(2.0, 2.0, 2.0);
+    final VectorI3D upper = new VectorI3D(4.0, 4.0, 4.0);
+
+    {
+      // Intersect -X face in +X direction
+      final VectorI3D origin = new VectorI3D(1.0, 3.0, 3.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(1.0, 0.0, 0.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect +X face in -X direction
+      final VectorI3D origin = new VectorI3D(6.0, 3.0, 3.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(-1.0, 0.0, 0.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect +Y face in -Y direction
+      final VectorI3D origin = new VectorI3D(3.0, 6.0, 3.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(0.0, -1.0, 0.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect -Y face in +Y direction
+      final VectorI3D origin = new VectorI3D(3.0, 1.0, 3.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(0.0, 1.0, 0.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect -Z face in +Z direction
+      final VectorI3D origin = new VectorI3D(3.0, 3.0, 1.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(0.0, 0.0, 1.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect +Z face in -Z direction
+      final VectorI3D origin = new VectorI3D(3.0, 3.0, 6.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(0.0, 0.0, -1.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertTrue(i);
+    }
+  }
+
+  @Test
+  public void testRayNoIntersection()
+  {
+    final VectorI3D lower = new VectorI3D(2.0, 2.0, 2.0);
+    final VectorI3D upper = new VectorI3D(4.0, 4.0, 4.0);
+
+    {
+      // Do not intersect -X face in +X direction
+      final VectorI3D origin = new VectorI3D(3.0, 0.0, 0.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(1.0, 0.0, 0.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertFalse(i);
+    }
+
+    {
+      // Do not intersect +X face in -X direction
+      final VectorI3D origin = new VectorI3D(6.0, 0.0, 0.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(-1.0, 0.0, 0.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertFalse(i);
+    }
+
+    {
+      // Do not intersect +Y face in -Y direction
+      final VectorI3D origin = new VectorI3D(3.0, 1.0, 3.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(0.0, -1.0, 0.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertFalse(i);
+    }
+
+    {
+      // Do not intersect -Y face in +Y direction
+      final VectorI3D origin = new VectorI3D(3.0, 6.0, 3.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(0.0, 1.0, 0.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertFalse(i);
+    }
+
+    {
+      // Do not intersect -Z face in +Z direction
+      final VectorI3D origin = new VectorI3D(3.0, 3.0, 6.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(0.0, 0.0, 1.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertFalse(i);
+    }
+
+    {
+      // Do not intersect +Z face in -Z direction
+      final VectorI3D origin = new VectorI3D(3.0, 3.0, 1.0);
+      final VectorI3D direct =
+        VectorI3D.normalize(new VectorI3D(0.0, 0.0, -1.0));
+      final RayI3D ray = new RayI3D(origin, direct);
+
+      final boolean i =
+        ray.intersectsVolume(
+          lower.getXD(),
+          lower.getYD(),
+          lower.getZD(),
+          upper.getXD(),
+          upper.getYD(),
+          upper.getZD());
+      Assert.assertFalse(i);
+    }
+  }
 }

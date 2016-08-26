@@ -161,6 +161,6 @@ public final class RayI2D
     tmin = Math.max(tmin, Math.min(ty0, ty1));
     tmax = Math.min(tmax, Math.max(ty0, ty1));
 
-    return ((tmax >= Math.max(0, tmin)) && (tmin < Double.POSITIVE_INFINITY));
+    return ((tmax >= Math.max(0.0, tmin)) && (tmin < Double.POSITIVE_INFINITY));
   }
 }

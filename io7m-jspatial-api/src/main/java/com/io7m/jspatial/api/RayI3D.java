@@ -124,4 +124,55 @@ public final class RayI3D
     b.append("]");
     return b.toString();
   }
+
+  /**
+   * <p>Branchless optimization of the Kay-Kajiya slab ray/AABB intersection
+   * test by Tavian Barnes.</p>
+   *
+   * <p>See <a href="http://tavianator.com/2011/05/fast-branchless-raybounding-box-intersections/">tavianator.com</a>.</p>
+   *
+   * @param x0 The lower X coordinate.
+   * @param x1 The upper X coordinate.
+   * @param y0 The lower Y coordinate.
+   * @param y1 The upper Y coordinate.
+   * @param z0 The lower Z coordinate.
+   * @param z1 The upper Z coordinate.
+   *
+   * @return {@code true} if the ray is intersecting the box.
+   */
+
+  public boolean intersectsVolume(
+    final double x0,
+    final double y0,
+    final double z0,
+    final double x1,
+    final double y1,
+    final double z1)
+  {
+    final double tx0 =
+      (x0 - this.origin.getXD()) * this.direction_inverse.getXD();
+    final double tx1 =
+      (x1 - this.origin.getXD()) * this.direction_inverse.getXD();
+
+    double tmin = Math.min(tx0, tx1);
+    double tmax = Math.max(tx0, tx1);
+
+    final double ty0 =
+      (y0 - this.origin.getYD()) * this.direction_inverse.getYD();
+    final double ty1 =
+      (y1 - this.origin.getYD()) * this.direction_inverse.getYD();
+
+    tmin = Math.max(tmin, Math.min(ty0, ty1));
+    tmax = Math.min(tmax, Math.max(ty0, ty1));
+
+    final double tz0 =
+      (z0 - this.origin.getZD()) * this.direction_inverse.getZD();
+    final double tz1 =
+      (z1 - this.origin.getZD()) * this.direction_inverse.getZD();
+
+    tmin = Math.max(tmin, Math.min(tz0, tz1));
+    tmax = Math.min(tmax, Math.max(tz0, tz1));
+
+    return ((tmax >= Math.max(0.0, tmin)) && (tmin < Double.POSITIVE_INFINITY));
+  }
 }
