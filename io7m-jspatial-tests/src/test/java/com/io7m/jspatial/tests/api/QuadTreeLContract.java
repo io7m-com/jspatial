@@ -838,6 +838,51 @@ public abstract class QuadTreeLContract
   }
 
   /**
+   * Querying contained objects in the X0Y0 quadrant works.
+   */
+
+  @Test
+  public final void testOverlappingNot()
+  {
+    final BoundingAreaL area = BoundingAreaL.of(
+      new VectorI2L(0L, 0L), new VectorI2L(100L, 100L));
+
+    final QuadTreeConfigurationL.Builder cb = QuadTreeConfigurationL.builder();
+    cb.setArea(area);
+    final QuadTreeConfigurationL c = cb.build();
+
+    final QuadTreeLType<Object> tree = this.create(c);
+
+    final Integer item = Integer.valueOf(0);
+    final BoundingAreaL item_area = BoundingAreaL.of(
+      new VectorI2L(10L, 10L),
+      new VectorI2L(90L, 90L));
+    Assert.assertTrue(tree.insert(item, item_area));
+
+    {
+      final HashSet<Object> set = new HashSet<>(1);
+      tree.overlappedBy(area, set);
+      Assert.assertEquals(1L, (long) set.size());
+      Assert.assertTrue(set.contains(item));
+    }
+
+    {
+      final HashSet<Object> set = new HashSet<>(1);
+      tree.overlappedBy(item_area, set);
+      Assert.assertEquals(1L, (long) set.size());
+      Assert.assertTrue(set.contains(item));
+    }
+
+    {
+      final HashSet<Object> set = new HashSet<>(1);
+      tree.overlappedBy(BoundingAreaL.of(
+        new VectorI2L(1L, 1L),
+        new VectorI2L(9L, 9L)), set);
+      Assert.assertEquals(0L, (long) set.size());
+    }
+  }
+
+  /**
    * Querying contained objects in the X0Y1 quadrant works.
    */
 

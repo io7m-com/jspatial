@@ -18,14 +18,18 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jfunctional.Unit;
 import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jspatial.api.BoundingAreaL;
 import com.io7m.jspatial.api.RayI2D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeDType;
+import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeQuadrantDType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultD;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.VectorI2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -869,6 +873,51 @@ public abstract class QuadTreeDContract
     }
   }
 
+  /**
+   * Querying contained objects in the X0Y0 quadrant works.
+   */
+
+  @Test
+  public final void testOverlappingNot()
+  {
+    final BoundingAreaD area = BoundingAreaD.of(
+      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+
+    final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
+    cb.setArea(area);
+    final QuadTreeConfigurationD c = cb.build();
+
+    final QuadTreeDType<Object> tree = this.create(c);
+
+    final Integer item = Integer.valueOf(0);
+    final BoundingAreaD item_area = BoundingAreaD.of(
+      new VectorI2D(10.0, 10.0),
+      new VectorI2D(90.0, 90.0));
+    Assert.assertTrue(tree.insert(item, item_area));
+
+    {
+      final HashSet<Object> set = new HashSet<>(1);
+      tree.overlappedBy(area, set);
+      Assert.assertEquals(1L, (long) set.size());
+      Assert.assertTrue(set.contains(item));
+    }
+
+    {
+      final HashSet<Object> set = new HashSet<>(1);
+      tree.overlappedBy(item_area, set);
+      Assert.assertEquals(1L, (long) set.size());
+      Assert.assertTrue(set.contains(item));
+    }
+
+    {
+      final HashSet<Object> set = new HashSet<>(1);
+      tree.overlappedBy(BoundingAreaD.of(
+        new VectorI2D(1.0, 1.0),
+        new VectorI2D(9.0, 9.0)), set);
+      Assert.assertEquals(0L, (long) set.size());
+    }
+  }
+  
   /**
    * Querying contained objects in the X0Y1 quadrant works.
    */
