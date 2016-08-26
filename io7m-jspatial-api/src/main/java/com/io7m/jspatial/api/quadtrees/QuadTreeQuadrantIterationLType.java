@@ -25,6 +25,7 @@ import com.io7m.jspatial.api.TreeVisitResult;
  * @param <C> The type of contextual values
  */
 
+@FunctionalInterface
 public interface QuadTreeQuadrantIterationLType<A, C>
 {
   /**
