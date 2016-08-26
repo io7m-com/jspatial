@@ -203,12 +203,12 @@ final class QuadTreeControls extends JPanel
       new SliderFieldUpdater(
         this.tree_qmin_width, this.tree_qmin_width_show));
 
-    this.tree_width.setValue(256);
-    this.tree_height.setValue(256);
-    this.tree_x.setValue(2);
-    this.tree_y.setValue(2);
-    this.tree_qmin_height.setValue(2);
-    this.tree_qmin_width.setValue(2);
+    this.tree_width.setValue(300);
+    this.tree_height.setValue(300);
+    this.tree_x.setValue(16);
+    this.tree_y.setValue(16);
+    this.tree_qmin_height.setValue(8);
+    this.tree_qmin_width.setValue(8);
 
     this.tree_create = new JButton("Create");
     this.tree_trim = new JButton("Trim");
@@ -294,7 +294,7 @@ final class QuadTreeControls extends JPanel
   {
     final JLabel label = new JLabel(text);
     final Font f = label.getFont();
-    label.setFont(f.deriveFont(f.getSize2D() * 1.2f));
+    label.setFont(f.deriveFont(f.getSize2D() * 1.3f));
     return label;
   }
 
