@@ -470,7 +470,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
           final T item = entry.getKey();
           final BoundingAreaL item_area = entry.getValue();
 
-          if (target_area.contains(item_area)) {
+          if (target_area.overlaps(item_area)) {
             items.add(item);
           }
         }
