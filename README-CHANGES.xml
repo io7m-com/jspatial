@@ -3,7 +3,7 @@
   <c:project>io7m-jspatial</c:project>
 
   <c:release c:ticket-system="com.github.io7m.jspatial">
-    <c:date>2015-08-29</c:date>
+    <c:date>2016-08-26</c:date>
     <c:version>3.0.0</c:version>
     <c:item>
       <c:date>2014-11-28</c:date>
@@ -39,6 +39,31 @@
       <c:date>2014-11-28</c:date>
       <c:type-code-fix/>
       <c:summary>Rewrite viewers</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2016-08-26</c:date>
+      <c:type-code-change/>
+      <c:summary>Complete rewrite of all trees and viewers</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2016-08-26</c:date>
+      <c:type-code-change/>
+      <c:summary>Remove the static/dynamic object type interfaces</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2016-08-26</c:date>
+      <c:type-code-new/>
+      <c:summary>Add long integer/double precision tree types</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2016-08-26</c:date>
+      <c:type-code-change/>
+      <c:summary>Use jtensors 7.0.0-beta0011</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2016-08-26</c:date>
+      <c:type-code-new/>
+      <c:summary>The packages are now OSGi bundles</c:summary>
     </c:item>
   </c:release>
 
