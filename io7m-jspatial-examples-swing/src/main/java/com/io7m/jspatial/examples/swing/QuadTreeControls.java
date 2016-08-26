@@ -322,6 +322,7 @@ final class QuadTreeControls extends JPanel
       }
     }
 
+    this.objects_model.clear();
     this.events.onNext(m);
   }
 

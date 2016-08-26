@@ -20,6 +20,7 @@ import com.io7m.jfunctional.Unit;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingAreaD;
 import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jspatial.api.BoundingAreaLType;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
@@ -48,6 +49,12 @@ import java.util.function.Function;
 
 final class QuadTreeCanvas extends JPanel
 {
+  private static final String INSTANCE_FONT;
+
+  static {
+    INSTANCE_FONT = "Monospaced 10";
+  }
+
   private final Subscription subscription;
   private final Map<Integer, Item> items;
   private final Observer<LogMessage> log_messages;
@@ -195,7 +202,7 @@ final class QuadTreeCanvas extends JPanel
   }
 
   private void sendInsertedMessage(
-    final BoundingAreaL area,
+    final BoundingAreaLType area,
     final Integer item,
     final boolean inserted)
   {
@@ -257,7 +264,7 @@ final class QuadTreeCanvas extends JPanel
         return TreeVisitResult.RESULT_CONTINUE;
       });
 
-      g.setFont(Font.decode("Monospaced 8"));
+      g.setFont(Font.decode(QuadTreeCanvas.INSTANCE_FONT));
 
       for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
         final Item item = entry.getValue();
@@ -299,7 +306,7 @@ final class QuadTreeCanvas extends JPanel
         return TreeVisitResult.RESULT_CONTINUE;
       });
 
-      g.setFont(Font.decode("Monospaced 8"));
+      g.setFont(Font.decode(QuadTreeCanvas.INSTANCE_FONT));
 
       for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
         final Item item = entry.getValue();
