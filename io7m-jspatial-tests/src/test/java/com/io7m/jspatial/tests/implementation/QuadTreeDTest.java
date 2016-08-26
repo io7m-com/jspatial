@@ -20,7 +20,6 @@ import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeDType;
 import com.io7m.jspatial.implementation.QuadTreeD;
 import com.io7m.jspatial.implementation.QuadTreeSupplierD;
-import com.io7m.jspatial.implementation.QuadTreeSupplierL;
 import com.io7m.jspatial.tests.api.QuadTreeDContract;
 
 /**

@@ -18,7 +18,6 @@ package com.io7m.jspatial.tests.implementation;
 
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
-import com.io7m.jspatial.api.quadtrees.QuadTreeSupplierLType;
 import com.io7m.jspatial.implementation.QuadTreeL;
 import com.io7m.jspatial.implementation.QuadTreeSupplierL;
 import com.io7m.jspatial.tests.api.QuadTreeLContract;

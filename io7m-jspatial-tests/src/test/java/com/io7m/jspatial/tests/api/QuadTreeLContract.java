@@ -1213,6 +1213,206 @@ public abstract class QuadTreeLContract
   }
 
   /**
+   * Quadrant traversal works.
+   */
+
+  @Test
+  public final void testQuadrantTraversalStop0()
+  {
+    final BoundingAreaL container = BoundingAreaL.of(
+      new VectorI2L(0L, 0L),
+      new VectorI2L(100L, 100L));
+
+    final QuadTreeConfigurationL.Builder cb = QuadTreeConfigurationL.builder();
+    cb.setArea(container);
+    cb.setTrimOnRemove(true);
+    cb.setMinimumQuadrantHeight(40L);
+    cb.setMinimumQuadrantWidth(40L);
+    final QuadTreeConfigurationL c = cb.build();
+
+    final QuadTreeLType<Object> tree = this.create(c);
+
+    Assert.assertTrue(tree.insert(
+      Integer.valueOf(0),
+      BoundingAreaL.of(new VectorI2L(10L, 10L), new VectorI2L(20L, 20L))));
+    tree.trim();
+
+    Assert.assertEquals(5L, (long) QuadTreeLContract.countQuadrants(tree));
+
+    final AtomicInteger count = new AtomicInteger(0);
+    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+      if (count.get() == 1) {
+        return TreeVisitResult.RESULT_TERMINATE;
+      }
+
+      count.incrementAndGet();
+      return TreeVisitResult.RESULT_CONTINUE;
+    });
+
+    Assert.assertEquals(1L, (long) count.get());
+  }
+
+  /**
+   * Quadrant traversal works.
+   */
+
+  @Test
+  public final void testQuadrantTraversalStop1()
+  {
+    final BoundingAreaL container = BoundingAreaL.of(
+      new VectorI2L(0L, 0L),
+      new VectorI2L(100L, 100L));
+
+    final QuadTreeConfigurationL.Builder cb = QuadTreeConfigurationL.builder();
+    cb.setArea(container);
+    cb.setTrimOnRemove(true);
+    cb.setMinimumQuadrantHeight(40L);
+    cb.setMinimumQuadrantWidth(40L);
+    final QuadTreeConfigurationL c = cb.build();
+
+    final QuadTreeLType<Object> tree = this.create(c);
+
+    Assert.assertTrue(tree.insert(
+      Integer.valueOf(0),
+      BoundingAreaL.of(new VectorI2L(10L, 10L), new VectorI2L(20L, 20L))));
+    tree.trim();
+
+    Assert.assertEquals(5L, (long) QuadTreeLContract.countQuadrants(tree));
+
+    final AtomicInteger count = new AtomicInteger(0);
+    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+      if (count.get() == 2) {
+        return TreeVisitResult.RESULT_TERMINATE;
+      }
+
+      count.incrementAndGet();
+      return TreeVisitResult.RESULT_CONTINUE;
+    });
+
+    Assert.assertEquals(2L, (long) count.get());
+  }
+
+  /**
+   * Quadrant traversal works.
+   */
+
+  @Test
+  public final void testQuadrantTraversalStop2()
+  {
+    final BoundingAreaL container = BoundingAreaL.of(
+      new VectorI2L(0L, 0L),
+      new VectorI2L(100L, 100L));
+
+    final QuadTreeConfigurationL.Builder cb = QuadTreeConfigurationL.builder();
+    cb.setArea(container);
+    cb.setTrimOnRemove(true);
+    cb.setMinimumQuadrantHeight(40L);
+    cb.setMinimumQuadrantWidth(40L);
+    final QuadTreeConfigurationL c = cb.build();
+
+    final QuadTreeLType<Object> tree = this.create(c);
+
+    Assert.assertTrue(tree.insert(
+      Integer.valueOf(0),
+      BoundingAreaL.of(new VectorI2L(10L, 10L), new VectorI2L(20L, 20L))));
+    tree.trim();
+
+    Assert.assertEquals(5L, (long) QuadTreeLContract.countQuadrants(tree));
+
+    final AtomicInteger count = new AtomicInteger(0);
+    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+      if (count.get() == 3) {
+        return TreeVisitResult.RESULT_TERMINATE;
+      }
+
+      count.incrementAndGet();
+      return TreeVisitResult.RESULT_CONTINUE;
+    });
+
+    Assert.assertEquals(3L, (long) count.get());
+  }
+
+  /**
+   * Quadrant traversal works.
+   */
+
+  @Test
+  public final void testQuadrantTraversalStop3()
+  {
+    final BoundingAreaL container = BoundingAreaL.of(
+      new VectorI2L(0L, 0L),
+      new VectorI2L(100L, 100L));
+
+    final QuadTreeConfigurationL.Builder cb = QuadTreeConfigurationL.builder();
+    cb.setArea(container);
+    cb.setTrimOnRemove(true);
+    cb.setMinimumQuadrantHeight(40L);
+    cb.setMinimumQuadrantWidth(40L);
+    final QuadTreeConfigurationL c = cb.build();
+
+    final QuadTreeLType<Object> tree = this.create(c);
+
+    Assert.assertTrue(tree.insert(
+      Integer.valueOf(0),
+      BoundingAreaL.of(new VectorI2L(10L, 10L), new VectorI2L(20L, 20L))));
+    tree.trim();
+
+    Assert.assertEquals(5L, (long) QuadTreeLContract.countQuadrants(tree));
+
+    final AtomicInteger count = new AtomicInteger(0);
+    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+      if (count.get() == 4) {
+        return TreeVisitResult.RESULT_TERMINATE;
+      }
+
+      count.incrementAndGet();
+      return TreeVisitResult.RESULT_CONTINUE;
+    });
+
+    Assert.assertEquals(4L, (long) count.get());
+  }
+
+  /**
+   * Quadrant traversal works.
+   */
+
+  @Test
+  public final void testQuadrantTraversalStop4()
+  {
+    final BoundingAreaL container = BoundingAreaL.of(
+      new VectorI2L(0L, 0L),
+      new VectorI2L(100L, 100L));
+
+    final QuadTreeConfigurationL.Builder cb = QuadTreeConfigurationL.builder();
+    cb.setArea(container);
+    cb.setTrimOnRemove(true);
+    cb.setMinimumQuadrantHeight(40L);
+    cb.setMinimumQuadrantWidth(40L);
+    final QuadTreeConfigurationL c = cb.build();
+
+    final QuadTreeLType<Object> tree = this.create(c);
+
+    Assert.assertTrue(tree.insert(
+      Integer.valueOf(0),
+      BoundingAreaL.of(new VectorI2L(10L, 10L), new VectorI2L(20L, 20L))));
+    tree.trim();
+
+    Assert.assertEquals(5L, (long) QuadTreeLContract.countQuadrants(tree));
+
+    final AtomicInteger count = new AtomicInteger(0);
+    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+      if (count.get() == 5) {
+        return TreeVisitResult.RESULT_TERMINATE;
+      }
+
+      count.incrementAndGet();
+      return TreeVisitResult.RESULT_CONTINUE;
+    });
+
+    Assert.assertEquals(5L, (long) count.get());
+  }
+
+  /**
    * Simple raycast test.
    */
 
