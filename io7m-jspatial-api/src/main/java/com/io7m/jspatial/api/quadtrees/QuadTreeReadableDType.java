@@ -28,6 +28,8 @@ import java.util.function.BiFunction;
  * The type of readable quadtrees with {@code double} precision coordinates.
  *
  * @param <A> The precise type of quadtree members
+ *
+ * @since 3.0.0
  */
 
 public interface QuadTreeReadableDType<A> extends QuadTreeReadableType

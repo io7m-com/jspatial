@@ -23,6 +23,8 @@ import com.io7m.jspatial.api.TreeVisitResult;
  *
  * @param <A> The type of tree objects
  * @param <C> The type of contextual values
+ *
+ * @since 3.0.0
  */
 
 @FunctionalInterface

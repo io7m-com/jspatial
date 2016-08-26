@@ -24,6 +24,8 @@ import org.immutables.value.Value;
  * The type of quadtree raycast results.
  *
  * @param <T> The precise type of objects
+ *
+ * @since 3.0.0
  */
 
 @Value.Immutable

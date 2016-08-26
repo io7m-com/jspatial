@@ -20,6 +20,8 @@ import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * The type of constructors for trees.
+ *
+ * @since 3.0.0
  */
 
 @ProviderType

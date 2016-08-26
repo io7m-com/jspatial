@@ -25,6 +25,8 @@ import java.util.Map;
  * QuadTreeReadableDType}.
  *
  * @param <T> The precise type of objects
+ *
+ * @since 3.0.0
  */
 
 public interface QuadTreeQuadrantDType<T>

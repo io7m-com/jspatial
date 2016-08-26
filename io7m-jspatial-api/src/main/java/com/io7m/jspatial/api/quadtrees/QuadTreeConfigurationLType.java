@@ -22,6 +22,8 @@ import org.immutables.value.Value;
 
 /**
  * The type of long integer quadtree configurations.
+ *
+ * @since 3.0.0
  */
 
 @ImmutableStyleType

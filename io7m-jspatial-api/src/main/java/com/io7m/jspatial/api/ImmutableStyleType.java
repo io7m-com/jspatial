@@ -25,6 +25,8 @@ import java.lang.annotation.Target;
 
 /**
  * The immutable style for the package.
+ *
+ * @since 3.0.0
  */
 
 @Target({ElementType.PACKAGE, ElementType.TYPE})

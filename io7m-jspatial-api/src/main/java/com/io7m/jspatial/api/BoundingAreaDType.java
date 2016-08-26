@@ -25,6 +25,8 @@ import org.immutables.value.Value;
  *
  * <p>Bounding areas have an inclusive lower bound and an exclusive upper
  * bound.</p>
+ *
+ * @since 3.0.0
  */
 
 @ImmutableStyleType

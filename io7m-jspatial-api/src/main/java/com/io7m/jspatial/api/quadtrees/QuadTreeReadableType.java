@@ -18,6 +18,8 @@ package com.io7m.jspatial.api.quadtrees;
 
 /**
  * The type of readable quadtrees.
+ *
+ * @since 3.0.0
  */
 
 public interface QuadTreeReadableType

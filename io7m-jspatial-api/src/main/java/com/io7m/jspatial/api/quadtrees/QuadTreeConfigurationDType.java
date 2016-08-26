@@ -22,6 +22,8 @@ import org.immutables.value.Value;
 
 /**
  * The type of double precision quadtree configurations.
+ *
+ * @since 3.0.0
  */
 
 @ImmutableStyleType

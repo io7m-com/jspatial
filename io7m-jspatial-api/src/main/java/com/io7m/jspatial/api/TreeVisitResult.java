@@ -18,6 +18,8 @@ package com.io7m.jspatial.api;
 
 /**
  * The result of traversing a tree.
+ *
+ * @since 3.0.0
  */
 
 public enum TreeVisitResult

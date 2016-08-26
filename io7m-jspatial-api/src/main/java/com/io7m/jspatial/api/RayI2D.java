@@ -24,6 +24,8 @@ import com.io7m.jtensors.VectorReadable2DType;
 /**
  * Immutable two-dimensional ray type, defined as an origin and a direction
  * vector.
+ *
+ * @since 3.0.0
  */
 
 public final class RayI2D
