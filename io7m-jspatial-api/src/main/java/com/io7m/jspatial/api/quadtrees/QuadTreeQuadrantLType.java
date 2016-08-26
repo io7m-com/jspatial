@@ -21,8 +21,7 @@ import com.io7m.jspatial.api.BoundingAreaL;
 import java.util.Map;
 
 /**
- * A quadrant as it appears within the context of a {@link
- * QuadTreeReadableLType}.
+ * A quadrant as it appears within the context of a quadtree.
  *
  * @param <T> The precise type of objects
  *

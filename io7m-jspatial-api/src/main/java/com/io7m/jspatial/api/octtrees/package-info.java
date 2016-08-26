@@ -14,32 +14,10 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.api.quadtrees;
-
-import com.io7m.jspatial.api.BoundingAreaD;
-
-import java.util.Map;
-
 /**
- * A quadrant as it appears within the context of a quadtree.
- *
- * @param <T> The precise type of objects
- *
- * @since 3.0.0
+ * Octtree API specification.
  */
 
-public interface QuadTreeQuadrantDType<T>
-{
-  /**
-   * @return A read-only view of the objects directly contained within this
-   * quadrant
-   */
+@com.io7m.jnull.NonNullByDefault
+package com.io7m.jspatial.api.octtrees;
 
-  Map<T, BoundingAreaD> objects();
-
-  /**
-   * @return The area of the quadrant
-   */
-
-  BoundingAreaD area();
-}

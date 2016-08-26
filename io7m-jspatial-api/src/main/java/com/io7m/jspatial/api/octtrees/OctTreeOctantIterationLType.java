@@ -14,32 +14,34 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.api.quadtrees;
+package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
-
-import java.util.Map;
+import com.io7m.jspatial.api.TreeVisitResult;
 
 /**
- * A quadrant as it appears within the context of a quadtree.
+ * The type of functions used to iterate over the octants of octtrees.
  *
- * @param <T> The precise type of objects
+ * @param <A> The type of tree objects
+ * @param <C> The type of contextual values
  *
  * @since 3.0.0
  */
 
-public interface QuadTreeQuadrantDType<T>
+@FunctionalInterface
+public interface OctTreeOctantIterationLType<A, C>
 {
   /**
-   * @return A read-only view of the objects directly contained within this
-   * quadrant
+   * Apply the function.
+   *
+   * @param context A context value
+   * @param octant  The current octant
+   * @param depth   The current octant depth
+   *
+   * @return A value indicating how or if the traversal should continue
    */
 
-  Map<T, BoundingAreaD> objects();
-
-  /**
-   * @return The area of the quadrant
-   */
-
-  BoundingAreaD area();
+  TreeVisitResult apply(
+    C context,
+    OctTreeOctantLType<A> octant,
+    long depth);
 }

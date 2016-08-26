@@ -14,32 +14,49 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.api.quadtrees;
+package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
-
-import java.util.Map;
+import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jspatial.api.ImmutableStyleType;
+import org.immutables.value.Value;
 
 /**
- * A quadrant as it appears within the context of a quadtree.
+ * The type of octtree raycast results.
  *
  * @param <T> The precise type of objects
  *
  * @since 3.0.0
  */
 
-public interface QuadTreeQuadrantDType<T>
+@Value.Immutable
+@ImmutableStyleType
+public interface OctTreeRaycastResultDType<T>
+  extends Comparable<OctTreeRaycastResultDType<T>>
 {
+  @Override
+  default int compareTo(final OctTreeRaycastResultDType<T> o)
+  {
+    return Double.compare(this.distance(), o.distance());
+  }
+
   /**
-   * @return A read-only view of the objects directly contained within this
-   * quadrant
+   * @return The distance to the object
    */
 
-  Map<T, BoundingAreaD> objects();
+  @Value.Parameter(order = 0)
+  double distance();
 
   /**
-   * @return The area of the quadrant
+   * @return The object volume
    */
 
-  BoundingAreaD area();
+  @Value.Parameter(order = 1)
+  BoundingVolumeD volume();
+
+  /**
+   * @return The object
+   */
+
+  @Value.Parameter(order = 2)
+  T item();
 }
