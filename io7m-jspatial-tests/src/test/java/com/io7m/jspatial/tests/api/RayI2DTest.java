@@ -135,7 +135,8 @@ public final class RayI2DTest
     Assert.assertTrue(ray_direction_inv.getYD() == Double.POSITIVE_INFINITY);
   }
 
-  @Test public void testRayIntersection()
+  @Test
+  public void testRayIntersection()
   {
     final VectorI2I lower = new VectorI2I(2, 2);
     final VectorI2I upper = new VectorI2I(4, 4);
@@ -201,7 +202,8 @@ public final class RayI2DTest
     }
   }
 
-  @Test public void testRayNoIntersection()
+  @Test
+  public void testRayNoIntersection()
   {
     final VectorI2I lower = new VectorI2I(2, 2);
     final VectorI2I upper = new VectorI2I(4, 4);

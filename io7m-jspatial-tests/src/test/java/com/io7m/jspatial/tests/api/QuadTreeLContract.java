@@ -24,7 +24,6 @@ import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL;
 import com.io7m.jtensors.VectorI2D;
-import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorI2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
@@ -1217,7 +1216,8 @@ public abstract class QuadTreeLContract
    * Simple raycast test.
    */
 
-  @Test public final void testRaycastSimple()
+  @Test
+  public final void testRaycastSimple()
   {
     final BoundingAreaL container = BoundingAreaL.of(
       new VectorI2L(0L, 0L),
