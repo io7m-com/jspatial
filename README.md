@@ -7,4 +7,4 @@ jspatial
 
 See https://io7m.github.io/jspatial/ for more information.
 
-![QuadTree Viewer](./develop/src/site/resources/quadview_sm.png?raw=true)
+![QuadTree Viewer](./src/site/resources/quadview_sm.png?raw=true)
