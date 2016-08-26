@@ -489,7 +489,7 @@ public final class QuadTreeD<T> implements QuadTreeDType<T>
       final VectorI2D upper = this.area.upper();
       final double x0 = lower.getXD();
       final double x1 = upper.getXD();
-      final double y0 = lower.getXD();
+      final double y0 = lower.getYD();
       final double y1 = upper.getYD();
 
       /*
@@ -512,7 +512,7 @@ public final class QuadTreeD<T> implements QuadTreeDType<T>
           final VectorI2D item_upper = item_area.upper();
           final double item_x0 = item_lower.getXD();
           final double item_x1 = item_upper.getXD();
-          final double item_y0 = item_lower.getXD();
+          final double item_y0 = item_lower.getYD();
           final double item_y1 = item_upper.getYD();
 
           if (ray.intersectsArea(item_x0, item_y0, item_x1, item_y1)) {

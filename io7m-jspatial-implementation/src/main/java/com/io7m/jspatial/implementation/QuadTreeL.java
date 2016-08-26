@@ -496,7 +496,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
       final VectorI2L upper = this.area.upper();
       final double x0 = (double) lower.getXL();
       final double x1 = (double) upper.getXL();
-      final double y0 = (double) lower.getXL();
+      final double y0 = (double) lower.getYL();
       final double y1 = (double) upper.getYL();
 
       /*
@@ -519,7 +519,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
           final VectorI2L item_upper = item_area.upper();
           final double item_x0 = (double) item_lower.getXL();
           final double item_x1 = (double) item_upper.getXL();
-          final double item_y0 = (double) item_lower.getXL();
+          final double item_y0 = (double) item_lower.getYL();
           final double item_y1 = (double) item_upper.getYL();
 
           if (ray.intersectsArea(item_x0, item_y0, item_x1, item_y1)) {
