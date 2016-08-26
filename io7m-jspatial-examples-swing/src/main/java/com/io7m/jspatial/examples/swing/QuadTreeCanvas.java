@@ -21,11 +21,14 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingAreaD;
 import com.io7m.jspatial.api.BoundingAreaL;
 import com.io7m.jspatial.api.BoundingAreaLType;
+import com.io7m.jspatial.api.RayI2D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeDType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
+import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultD;
+import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL;
 import com.io7m.jspatial.examples.swing.LogMessageType.Severity;
 import com.io7m.jspatial.implementation.QuadTreeD;
 import com.io7m.jspatial.implementation.QuadTreeL;
@@ -42,6 +45,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Function;
 
 /**
@@ -57,7 +62,6 @@ final class QuadTreeCanvas extends JPanel
   }
 
   private final Map<Integer, Item> items;
-  private final Set<Integer> queried;
   private final Observer<LogMessage> log_messages;
   private Function<QuadTreeCommandType, Unit> on_message_cases;
   private QuadTreeLType<Integer> tree_l;
@@ -65,6 +69,10 @@ final class QuadTreeCanvas extends JPanel
   private QuadTreeKind kind;
   private BoundingAreaL query_area_l;
   private BoundingAreaD query_area_d;
+  private final Set<Integer> query_area_results;
+  private final SortedSet<QuadTreeRaycastResultL<Integer>> ray_area_results_l;
+  private final SortedSet<QuadTreeRaycastResultD<Integer>> ray_area_results_d;
+  private RayI2D ray;
 
   QuadTreeCanvas(
     final Observable<QuadTreeCommandType> in_tree_commands,
@@ -72,7 +80,9 @@ final class QuadTreeCanvas extends JPanel
   {
     this.kind = QuadTreeKind.LONG_INTEGER;
     this.items = new HashMap<>(128);
-    this.queried = new HashSet<>(128);
+    this.query_area_results = new HashSet<>(128);
+    this.ray_area_results_l = new TreeSet<>();
+    this.ray_area_results_d = new TreeSet<>();
     this.log_messages = in_log_messages;
 
     this.on_message_cases = QuadTreeCommandTypes.cases()
@@ -81,9 +91,53 @@ final class QuadTreeCanvas extends JPanel
       .trimQuadTree(this::onCommandTrimQuadTree)
       .createQuadTreeL(QuadTreeCanvas.this::onCommandCreateQuadTreeL)
       .createQuadTreeD(QuadTreeCanvas.this::onCommandCreateQuadTreeD)
-      .areaQuery(this::onCommandAreaQuery);
+      .areaQuery(this::onCommandAreaQuery)
+      .rayQuery(this::onCommandRayQuery);
 
     in_tree_commands.subscribe(this::onCommand);
+  }
+
+  private Unit onCommandRayQuery(
+    final RayI2D ray)
+  {
+    this.ray_area_results_l.clear();
+    this.ray_area_results_d.clear();
+    this.ray = null;
+
+    switch (this.kind) {
+      case LONG_INTEGER: {
+        final QuadTreeLType<Integer> t = this.tree_l;
+        if (t != null) {
+          this.ray = ray;
+          t.raycast(ray, this.ray_area_results_l);
+          this.sendRayQueryCountMessage();
+        }
+        break;
+      }
+      case DOUBLE: {
+        final QuadTreeDType<Integer> t = this.tree_d;
+        if (t != null) {
+          this.ray = ray;
+          t.raycast(ray, this.ray_area_results_d);
+          this.sendRayQueryCountMessage();
+        }
+        break;
+      }
+    }
+
+    return Unit.unit();
+  }
+
+  private void sendRayQueryCountMessage()
+  {
+    final int count = Math.max(
+      this.ray_area_results_d.size(),
+      this.ray_area_results_l.size());
+
+    this.log_messages.onNext(
+      LogMessage.of(
+        Severity.INFO,
+        String.format("Ray query selected %d items", Integer.valueOf(count))));
   }
 
   private Unit onCommandAreaQuery(
@@ -91,7 +145,7 @@ final class QuadTreeCanvas extends JPanel
     final BoundingAreaD area_d,
     final boolean overlaps)
   {
-    this.queried.clear();
+    this.query_area_results.clear();
 
     switch (this.kind) {
       case LONG_INTEGER: {
@@ -101,12 +155,12 @@ final class QuadTreeCanvas extends JPanel
           this.query_area_l = area_l;
 
           if (overlaps) {
-            t.overlappedBy(area_l, this.queried);
+            t.overlappedBy(area_l, this.query_area_results);
           } else {
-            t.containedBy(area_l, this.queried);
+            t.containedBy(area_l, this.query_area_results);
           }
 
-          this.sendQueryCountMessage();
+          this.sendAreaQueryCountMessage();
         }
         break;
       }
@@ -117,12 +171,12 @@ final class QuadTreeCanvas extends JPanel
           this.query_area_l = null;
 
           if (overlaps) {
-            t.overlappedBy(area_d, this.queried);
+            t.overlappedBy(area_d, this.query_area_results);
           } else {
-            t.containedBy(area_d, this.queried);
+            t.containedBy(area_d, this.query_area_results);
           }
 
-          this.sendQueryCountMessage();
+          this.sendAreaQueryCountMessage();
         }
         break;
       }
@@ -131,10 +185,14 @@ final class QuadTreeCanvas extends JPanel
     return Unit.unit();
   }
 
-  private void sendQueryCountMessage()
+  private void sendAreaQueryCountMessage()
   {
     this.log_messages.onNext(
-      LogMessage.of(Severity.INFO, "Query selected " + this.queried.size()));
+      LogMessage.of(
+        Severity.INFO,
+        String.format(
+          "Area query selected %d items",
+          Integer.valueOf(this.query_area_results.size()))));
   }
 
   private void onCommand(final QuadTreeCommandType m)
@@ -149,9 +207,12 @@ final class QuadTreeCanvas extends JPanel
     this.kind = QuadTreeKind.LONG_INTEGER;
     this.tree_l = QuadTreeL.create(config);
     this.items.clear();
-    this.queried.clear();
+    this.query_area_results.clear();
     this.query_area_d = null;
     this.query_area_l = null;
+    this.ray = null;
+    this.ray_area_results_d.clear();
+    this.ray_area_results_l.clear();
     return Unit.unit();
   }
 
@@ -161,7 +222,7 @@ final class QuadTreeCanvas extends JPanel
     this.kind = QuadTreeKind.DOUBLE;
     this.tree_d = QuadTreeD.create(config);
     this.items.clear();
-    this.queried.clear();
+    this.query_area_results.clear();
     this.query_area_d = null;
     this.query_area_l = null;
     return Unit.unit();
@@ -211,7 +272,7 @@ final class QuadTreeCanvas extends JPanel
       }
     }
 
-    this.queried.remove(item);
+    this.query_area_results.remove(item);
     this.items.remove(item);
     return Unit.unit();
   }
@@ -343,7 +404,7 @@ final class QuadTreeCanvas extends JPanel
         final VectorI2L lower = item.area.lower();
 
         if (t.contains(item.item)) {
-          if (this.queried.contains(item.item)) {
+          if (this.query_area_results.contains(item.item)) {
             g.setColor(Color.CYAN);
           } else {
             g.setColor(Color.WHITE);
@@ -399,7 +460,7 @@ final class QuadTreeCanvas extends JPanel
         final VectorI2L lower = item.area.lower();
 
         if (t.contains(item.item)) {
-          if (this.queried.contains(item.item)) {
+          if (this.query_area_results.contains(item.item)) {
             g.setColor(Color.CYAN);
           } else {
             g.setColor(Color.WHITE);
@@ -417,6 +478,33 @@ final class QuadTreeCanvas extends JPanel
           item.item.toString(),
           (int) lower.getXL() + 2,
           (int) lower.getYL() + 8);
+      }
+
+      if (this.ray != null) {
+        final double x0 = this.ray.origin().getXD();
+        final double y0 = this.ray.origin().getYD();
+        final double x1 = this.ray.direction().getXD() * 10000.0;
+        final double y1 = this.ray.direction().getYD() * 10000.0;
+
+        g.setColor(Color.GREEN);
+        g.drawLine((int) x0, (int) y0, (int) (x0 + x1), (int) (y0 + y1));
+
+        for (final QuadTreeRaycastResultL<Integer> r : this.ray_area_results_l) {
+          if (this.items.containsKey(r.item())) {
+            final Item item = this.items.get(r.item());
+            final VectorI2L lower = item.area.lower();
+
+            g.drawRect(
+              (int) lower.getXL(),
+              (int) lower.getYL(),
+              (int) item.area.width(),
+              (int) item.area.height());
+            g.drawString(
+              Double.toString(r.distance()),
+              (int) lower.getXL() + 2,
+              (int) lower.getYL() + 16);
+          }
+        }
       }
     }
   }

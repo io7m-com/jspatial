@@ -18,6 +18,7 @@ package com.io7m.jspatial.examples.swing;
 
 import com.io7m.jspatial.api.BoundingAreaD;
 import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jspatial.api.RayI2D;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import org.derive4j.Data;
@@ -48,5 +49,8 @@ interface QuadTreeCommandType
       BoundingAreaL area_l,
       BoundingAreaD area_d,
       boolean overlaps);
+
+    R rayQuery(
+      RayI2D ray);
   }
 }

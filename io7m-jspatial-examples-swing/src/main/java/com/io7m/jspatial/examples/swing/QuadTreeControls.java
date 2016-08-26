@@ -20,10 +20,12 @@ import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingAreaD;
 import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jspatial.api.RayI2D;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.VectorReadable2DType;
 import net.java.dev.designgridlayout.DesignGridLayout;
 import rx.Observable;
 import rx.subjects.BehaviorSubject;
@@ -36,8 +38,10 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.Font;
@@ -50,32 +54,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 final class QuadTreeControls extends JPanel
 {
+  private static final int MAIN_SLIDER_SPAN = 1;
+
   private final BehaviorSubject<QuadTreeCommandType> events;
-  private final JSlider object_x;
-  private final JSlider object_y;
-  private final JSlider object_width;
-  private final JSlider object_height;
   private final JButton object_add;
-  private final JSlider tree_x;
-  private final JSlider tree_y;
-  private final JSlider tree_width;
-  private final JSlider tree_height;
   private final JButton tree_create;
   private final AtomicInteger pool;
-  private final JTextField object_width_show;
-  private final JTextField object_height_show;
-  private final JTextField object_x_show;
-  private final JTextField object_y_show;
-  private final JTextField tree_width_show;
-  private final JTextField tree_height_show;
-  private final JTextField tree_x_show;
-  private final JTextField tree_y_show;
   private final QuadTreeConfigurationL.Builder config_bl;
   private final QuadTreeConfigurationD.Builder config_bd;
-  private final JSlider tree_qmin_width;
-  private final JTextField tree_qmin_width_show;
-  private final JSlider tree_qmin_height;
-  private final JTextField tree_qmin_height_show;
+
   private final JList<Integer> objects;
   private final DefaultListModel<Integer> objects_model;
   private final JScrollPane objects_scroller;
@@ -83,19 +70,53 @@ final class QuadTreeControls extends JPanel
   private final JButton tree_trim;
   private final JCheckBox tree_trim_remove;
   private final QuadTreeComboBox<QuadTreeKind> tree_kind;
-  private final JSlider objects_random_count;
-  private final JTextField objects_random_count_show;
-  private final JButton objects_add;
-  private final JSlider area_query_width;
-  private final JTextField area_query_width_show;
-  private final JSlider area_query_height;
-  private final JTextField area_query_height_show;
-  private final JSlider area_query_x;
-  private final JTextField area_query_x_show;
-  private final JSlider area_query_y;
-  private final JTextField area_query_y_show;
+
+  private final SpinnerNumberModel object_width_model;
+  private final JSpinner object_width;
+  private final SpinnerNumberModel object_height_model;
+  private final JSpinner object_height;
+  private final SpinnerNumberModel object_x_model;
+  private final JSpinner object_x;
+  private final SpinnerNumberModel object_y_model;
+  private final JSpinner object_y;
+
+  private final SpinnerNumberModel tree_width_model;
+  private final JSpinner tree_width;
+  private final SpinnerNumberModel tree_height_model;
+  private final JSpinner tree_height;
+  private final SpinnerNumberModel tree_x_model;
+  private final JSpinner tree_x;
+  private final SpinnerNumberModel tree_y_model;
+  private final JSpinner tree_y;
+  private final SpinnerNumberModel tree_qmin_width_model;
+  private final SpinnerNumberModel tree_qmin_height_model;
+  private final JSpinner tree_qmin_width;
+  private final JSpinner tree_qmin_height;
+
+  private final SpinnerNumberModel area_query_width_model;
+  private final JSpinner area_query_width;
+  private final SpinnerNumberModel area_query_height_model;
+  private final JSpinner area_query_height;
+  private final SpinnerNumberModel area_query_x_model;
+  private final JSpinner area_query_x;
+  private final SpinnerNumberModel area_query_y_model;
+  private final JSpinner area_query_y;
   private final JButton area_query_run;
-  private final JCheckBox area_query_overlap;
+  private final JCheckBox area_query_overlapping;
+
+  private final JSpinner objects_random_count;
+  private final JButton objects_random_add;
+  private final SpinnerNumberModel objects_random_count_model;
+
+  private final SpinnerNumberModel ray_query_x0_model;
+  private final JSpinner ray_query_x0;
+  private final SpinnerNumberModel ray_query_y0_model;
+  private final JSpinner ray_query_y0;
+  private final SpinnerNumberModel ray_query_x1_model;
+  private final JSpinner ray_query_x1;
+  private final SpinnerNumberModel ray_query_y1_model;
+  private final JSpinner ray_query_y1;
+  private final JButton ray_query_run;
 
   QuadTreeControls()
   {
@@ -112,155 +133,75 @@ final class QuadTreeControls extends JPanel
     this.objects_scroller.setHorizontalScrollBarPolicy(
       JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-    this.object_width = new JSlider(1, 1024);
-    this.object_width.setValue(2);
-    this.object_width_show = new JTextField();
-    this.object_width_show.setEditable(false);
-    this.object_height = new JSlider(1, 1024);
-    this.object_height.setValue(2);
-    this.object_height_show = new JTextField();
-    this.object_height_show.setEditable(false);
-    this.object_x = new JSlider(1, 1024);
-    this.object_x.setValue(2);
-    this.object_x_show = new JTextField();
-    this.object_x_show.setEditable(false);
-    this.object_y = new JSlider(1, 1024);
-    this.object_y.setValue(2);
-    this.object_y_show = new JTextField();
-    this.object_y_show.setEditable(false);
-
-    this.object_width.addChangeListener(
-      new SliderFieldUpdater(this.object_width, this.object_width_show));
-    this.object_height.addChangeListener(
-      new SliderFieldUpdater(this.object_height, this.object_height_show));
-    this.object_x.addChangeListener(
-      new SliderFieldUpdater(this.object_x, this.object_x_show));
-    this.object_y.addChangeListener(
-      new SliderFieldUpdater(this.object_y, this.object_y_show));
-
-    this.object_width.setValue(32);
-    this.object_height.setValue(32);
-    this.object_x.setValue(16);
-    this.object_y.setValue(16);
+    this.object_width_model = new SpinnerNumberModel(64, 1, 1024, 1);
+    this.object_width = new JSpinner(this.object_width_model);
+    this.object_height_model = new SpinnerNumberModel(64, 1, 1024, 1);
+    this.object_height = new JSpinner(this.object_height_model);
+    this.object_x_model = new SpinnerNumberModel(16, 1, 1024, 1);
+    this.object_x = new JSpinner(this.object_x_model);
+    this.object_y_model = new SpinnerNumberModel(16, 1, 1024, 1);
+    this.object_y = new JSpinner(this.object_y_model);
 
     this.object_add = new JButton("Add");
     this.object_remove = new JButton("Remove");
     this.object_remove.setEnabled(false);
 
-    this.objects_random_count = new JSlider(1, 50);
-    this.objects_random_count_show = new JTextField();
-    this.objects_random_count_show.setEditable(false);
-    this.objects_random_count.addChangeListener(
-      new SliderFieldUpdater(
-        this.objects_random_count, this.objects_random_count_show));
-
-    this.objects_add = new JButton("Add");
-    this.objects_random_count.setValue(50);
+    this.objects_random_count_model = new SpinnerNumberModel(10, 1, 50, 1);
+    this.objects_random_count = new JSpinner(this.objects_random_count_model);
+    this.objects_random_add = new JButton("Add");
 
     this.tree_kind = new QuadTreeComboBox<>(QuadTreeKind.class);
-    this.tree_width = new JSlider(1, 1024);
-    this.tree_width.setValue(2);
-    this.tree_width_show = new JTextField();
-    this.tree_width_show.setEditable(false);
-    this.tree_height = new JSlider(1, 1024);
-    this.tree_height.setValue(2);
-    this.tree_height_show = new JTextField();
-    this.tree_height_show.setEditable(false);
-    this.tree_x = new JSlider(1, 1024);
-    this.tree_x.setValue(16);
-    this.tree_x_show = new JTextField();
-    this.tree_x_show.setEditable(false);
-    this.tree_y = new JSlider(1, 1024);
-    this.tree_y.setValue(16);
-    this.tree_y_show = new JTextField();
-    this.tree_y_show.setEditable(false);
+    this.tree_width_model = new SpinnerNumberModel(512, 1, 1024, 1);
+    this.tree_width = new JSpinner(this.tree_width_model);
+    this.tree_height_model = new SpinnerNumberModel(512, 1, 1024, 1);
+    this.tree_height = new JSpinner(this.tree_height_model);
+    this.tree_x_model = new SpinnerNumberModel(16, 1, 1024, 1);
+    this.tree_x = new JSpinner(this.tree_x_model);
+    this.tree_y_model = new SpinnerNumberModel(16, 1, 1024, 1);
+    this.tree_y = new JSpinner(this.tree_y_model);
 
-    this.tree_qmin_width = new JSlider(2, 128);
-    this.tree_qmin_width.setValue(2);
-    this.tree_qmin_width_show = new JTextField();
-    this.tree_qmin_width_show.setEditable(false);
-
-    this.tree_qmin_height = new JSlider(2, 128);
-    this.tree_qmin_height.setValue(2);
-    this.tree_qmin_height_show = new JTextField();
-    this.tree_qmin_height_show.setEditable(false);
+    this.tree_qmin_width_model = new SpinnerNumberModel(8, 1, 1024, 1);
+    this.tree_qmin_width = new JSpinner(this.tree_qmin_width_model);
+    this.tree_qmin_height_model = new SpinnerNumberModel(8, 1, 1024, 1);
+    this.tree_qmin_height = new JSpinner(this.tree_qmin_height_model);
 
     this.tree_trim_remove = new JCheckBox();
     this.tree_trim_remove.setSelected(false);
 
-    this.tree_width.addChangeListener(
-      new SliderFieldUpdater(this.tree_width, this.tree_width_show));
-    this.tree_height.addChangeListener(
-      new SliderFieldUpdater(this.tree_height, this.tree_height_show));
-    this.tree_x.addChangeListener(
-      new SliderFieldUpdater(this.tree_x, this.tree_x_show));
-    this.tree_y.addChangeListener(
-      new SliderFieldUpdater(this.tree_y, this.tree_y_show));
-    this.tree_qmin_height.addChangeListener(
-      new SliderFieldUpdater(
-        this.tree_qmin_height, this.tree_qmin_height_show));
-    this.tree_qmin_width.addChangeListener(
-      new SliderFieldUpdater(
-        this.tree_qmin_width, this.tree_qmin_width_show));
-
-    this.tree_width.setValue(300);
-    this.tree_height.setValue(300);
-    this.tree_x.setValue(16);
-    this.tree_y.setValue(16);
-    this.tree_qmin_height.setValue(8);
-    this.tree_qmin_width.setValue(8);
-
     this.tree_create = new JButton("Create");
     this.tree_trim = new JButton("Trim");
 
-    this.area_query_width = new JSlider(1, 1024);
-    this.area_query_width.setValue(2);
-    this.area_query_width_show = new JTextField();
-    this.area_query_width_show.setEditable(false);
-    this.area_query_height = new JSlider(1, 1024);
-    this.area_query_height.setValue(2);
-    this.area_query_height_show = new JTextField();
-    this.area_query_height_show.setEditable(false);
-    this.area_query_x = new JSlider(1, 1024);
-    this.area_query_x.setValue(16);
-    this.area_query_x_show = new JTextField();
-    this.area_query_x_show.setEditable(false);
-    this.area_query_y = new JSlider(1, 1024);
-    this.area_query_y.setValue(16);
-    this.area_query_y_show = new JTextField();
-    this.area_query_y_show.setEditable(false);
+    this.area_query_width_model = new SpinnerNumberModel(400, 1, 1024, 1);
+    this.area_query_width = new JSpinner(this.area_query_width_model);
+    this.area_query_height_model = new SpinnerNumberModel(400, 1, 1024, 1);
+    this.area_query_height = new JSpinner(this.area_query_height_model);
+    this.area_query_x_model = new SpinnerNumberModel(32, 1, 1024, 1);
+    this.area_query_x = new JSpinner(this.area_query_x_model);
+    this.area_query_y_model = new SpinnerNumberModel(32, 1, 1024, 1);
+    this.area_query_y = new JSpinner(this.area_query_y_model);
+    this.area_query_overlapping = new JCheckBox();
     this.area_query_run = new JButton("Query");
-    this.area_query_overlap = new JCheckBox();
-    this.area_query_overlap.setEnabled(true);
 
-    this.area_query_width.addChangeListener(
-      new SliderFieldUpdater(
-        this.area_query_width, this.area_query_width_show));
-    this.area_query_height.addChangeListener(
-      new SliderFieldUpdater(
-        this.area_query_height, this.area_query_height_show));
-    this.area_query_x.addChangeListener(
-      new SliderFieldUpdater(
-        this.area_query_x, this.area_query_x_show));
-    this.area_query_y.addChangeListener(
-      new SliderFieldUpdater(
-        this.area_query_y, this.area_query_y_show));
-
-    this.area_query_height.setValue(32);
-    this.area_query_width.setValue(32);
-    this.area_query_x.setValue(8);
-    this.area_query_y.setValue(8);
+    this.ray_query_x0_model = new SpinnerNumberModel(2, 1, 1024, 1);
+    this.ray_query_x0 = new JSpinner(this.ray_query_x0_model);
+    this.ray_query_y0_model = new SpinnerNumberModel(2, 1, 1024, 1);
+    this.ray_query_y0 = new JSpinner(this.ray_query_y0_model);
+    this.ray_query_x1_model = new SpinnerNumberModel(254, 1, 1024, 1);
+    this.ray_query_x1 = new JSpinner(this.ray_query_x1_model);
+    this.ray_query_y1_model = new SpinnerNumberModel(254, 1, 1024, 1);
+    this.ray_query_y1 = new JSpinner(this.ray_query_y1_model);
+    this.ray_query_run = new JButton("Query");
 
     final DesignGridLayout dg = new DesignGridLayout(this);
     this.layout(dg);
 
     this.config_bl.setArea(BoundingAreaL.of(
       new VectorI2L(
-        (long) this.tree_x.getValue(),
-        (long) this.tree_y.getValue()),
+        this.tree_x_model.getNumber().longValue(),
+        this.tree_y_model.getNumber().longValue()),
       new VectorI2L(
-        (long) this.tree_width.getValue(),
-        (long) this.tree_height.getValue())));
+        this.tree_width_model.getNumber().longValue(),
+        this.tree_height_model.getNumber().longValue())));
 
     this.events = BehaviorSubject.create(
       QuadTreeCommandTypes.createQuadTreeL(this.config_bl.build()));
@@ -269,7 +210,7 @@ final class QuadTreeControls extends JPanel
       e -> this.onObjectAdd());
     this.objects.addListSelectionListener(
       e -> this.onObjectListChanged());
-    this.objects_add.addActionListener(
+    this.objects_random_add.addActionListener(
       e -> this.onObjectsRandomAdd());
     this.object_remove.addActionListener(
       e -> this.onObjectRemove());
@@ -279,6 +220,8 @@ final class QuadTreeControls extends JPanel
       e -> this.events.onNext(QuadTreeCommandTypes.trimQuadTree()));
     this.area_query_run.addActionListener(
       e -> this.onAreaQuery());
+    this.ray_query_run.addActionListener(
+      e -> this.onRayQuery());
   }
 
   private static long randomLong(
@@ -302,33 +245,13 @@ final class QuadTreeControls extends JPanel
   {
     dg.row().left().add(QuadTreeControls.largerLabel("Tree")).fill();
     dg.emptyRow();
-    dg.row()
-      .grid(new JLabel("Kind"))
-      .add(this.tree_kind);
-    dg.row()
-      .grid(new JLabel("X"))
-      .add(this.tree_x, 3)
-      .add(this.tree_x_show);
-    dg.row()
-      .grid(new JLabel("Y"))
-      .add(this.tree_y, 3)
-      .add(this.tree_y_show);
-    dg.row()
-      .grid(new JLabel("Width"))
-      .add(this.tree_width, 3)
-      .add(this.tree_width_show);
-    dg.row()
-      .grid(new JLabel("Height"))
-      .add(this.tree_height, 3)
-      .add(this.tree_height_show);
-    dg.row()
-      .grid(new JLabel("Limit Q Width"))
-      .add(this.tree_qmin_width, 3)
-      .add(this.tree_qmin_width_show);
-    dg.row()
-      .grid(new JLabel("Limit Q Height"))
-      .add(this.tree_qmin_height, 3)
-      .add(this.tree_qmin_height_show);
+    dg.row().grid(new JLabel("Kind")).add(this.tree_kind);
+    dg.row().grid(new JLabel("X")).add(this.tree_x);
+    dg.row().grid(new JLabel("Y")).add(this.tree_y);
+    dg.row().grid(new JLabel("Width")).add(this.tree_width);
+    dg.row().grid(new JLabel("Height")).add(this.tree_height);
+    dg.row().grid(new JLabel("Limit Q Width")).add(this.tree_qmin_width);
+    dg.row().grid(new JLabel("Limit Q Height")).add(this.tree_qmin_height);
     dg.emptyRow();
     dg.row().grid(new JLabel("Trim Removals")).add(this.tree_trim_remove);
     dg.emptyRow();
@@ -338,22 +261,10 @@ final class QuadTreeControls extends JPanel
 
     dg.row().left().add(QuadTreeControls.largerLabel("Objects")).fill();
     dg.emptyRow();
-    dg.row()
-      .grid(new JLabel("X"))
-      .add(this.object_x, 3)
-      .add(this.object_x_show);
-    dg.row()
-      .grid(new JLabel("Y"))
-      .add(this.object_y, 3)
-      .add(this.object_y_show);
-    dg.row()
-      .grid(new JLabel("Width"))
-      .add(this.object_width, 3)
-      .add(this.object_width_show);
-    dg.row()
-      .grid(new JLabel("Height"))
-      .add(this.object_height, 3)
-      .add(this.object_height_show);
+    dg.row().grid(new JLabel("X")).add(this.object_x);
+    dg.row().grid(new JLabel("Y")).add(this.object_y);
+    dg.row().grid(new JLabel("Width")).add(this.object_width);
+    dg.row().grid(new JLabel("Height")).add(this.object_height);
     dg.row().center().add(this.object_add).fill();
     dg.row().center().add(this.objects_scroller).fill();
     dg.row().center().add(this.object_remove).fill();
@@ -361,35 +272,32 @@ final class QuadTreeControls extends JPanel
 
     dg.row().left().add(QuadTreeControls.largerLabel("Random Objects")).fill();
     dg.emptyRow();
-    dg.row()
-      .grid(new JLabel("Count"))
-      .add(this.objects_random_count, 3)
-      .add(this.objects_random_count_show);
-    dg.row().center().add(this.objects_add).fill();
+    dg.row().grid(new JLabel("Count")).add(this.objects_random_count);
+    dg.row().center().add(this.objects_random_add).fill();
     dg.emptyRow();
 
     dg.row().left().add(QuadTreeControls.largerLabel("Area Query")).fill();
     dg.emptyRow();
-    dg.row()
-      .grid(new JLabel("X"))
-      .add(this.area_query_x, 3)
-      .add(this.area_query_x_show);
-    dg.row()
-      .grid(new JLabel("Y"))
-      .add(this.area_query_y, 3)
-      .add(this.area_query_y_show);
-    dg.row()
-      .grid(new JLabel("Width"))
-      .add(this.area_query_width, 3)
-      .add(this.area_query_width_show);
-    dg.row()
-      .grid(new JLabel("Height"))
-      .add(this.area_query_height, 3)
-      .add(this.area_query_height_show);
+    dg.row().grid(new JLabel("X")).add(this.area_query_x);
+    dg.row().grid(new JLabel("Y")).add(this.area_query_y);
+    dg.row().grid(new JLabel("Width")).add(this.area_query_width);
+    dg.row().grid(new JLabel("Height")).add(this.area_query_height);
     dg.emptyRow();
-    dg.row().grid(new JLabel("Overlapping")).add(this.area_query_overlap);
+    dg.row().grid(new JLabel("Overlapping")).add(this.area_query_overlapping);
     dg.emptyRow();
     dg.row().center().add(this.area_query_run).fill();
+    dg.emptyRow();
+
+    dg.row().left().add(QuadTreeControls.largerLabel("Ray Query")).fill();
+    dg.emptyRow();
+    dg.row()
+      .grid(new JLabel("X0")).add(this.ray_query_x0)
+      .grid(new JLabel("Y0")).add(this.ray_query_y0);
+    dg.row()
+      .grid(new JLabel("X1")).add(this.ray_query_x1)
+      .grid(new JLabel("Y1")).add(this.ray_query_y1);
+    dg.emptyRow();
+    dg.row().center().add(this.ray_query_run).fill();
     dg.emptyRow();
   }
 
@@ -401,19 +309,21 @@ final class QuadTreeControls extends JPanel
 
   private void onObjectsRandomAdd()
   {
-    final int count = this.objects_random_count.getValue();
+    final int count = this.objects_random_count_model.getNumber().intValue();
     Preconditions.checkPreconditionI(
       count, count >= 0, x -> "Count must be non-negative");
 
-    final long x_base = (long) this.object_x.getValue();
-    final long y_base = (long) this.object_y.getValue();
-    final long w_base = (long) this.object_width.getValue();
-    final long h_base = (long) this.object_height.getValue();
+    final long x_base = this.object_x_model.getNumber().longValue();
+    final long y_base = this.object_y_model.getNumber().longValue();
+    final long w_base = this.object_width_model.getNumber().longValue();
+    final long h_base = this.object_height_model.getNumber().longValue();
 
     final long x_max =
-      (long) (this.tree_x.getValue() + this.tree_width.getValue());
+      this.tree_x_model.getNumber().longValue() +
+        this.tree_width_model.getNumber().longValue();
     final long y_max =
-      (long) (this.tree_y.getValue() + this.tree_height.getValue());
+      this.tree_y_model.getNumber().longValue() +
+        this.tree_height_model.getNumber().longValue();
 
     for (int index = 0; index < count; ++index) {
       final long x0 = QuadTreeControls.randomLong(x_base, x_max);
@@ -444,14 +354,10 @@ final class QuadTreeControls extends JPanel
 
   private void onAreaQuery()
   {
-    final long x0 =
-      (long) this.area_query_x.getValue();
-    final long y0 =
-      (long) this.area_query_y.getValue();
-    final long x1 =
-      x0 + (long) this.area_query_width.getValue();
-    final long y1 =
-      y0 + (long) this.area_query_height.getValue();
+    final long x0 = this.area_query_x_model.getNumber().longValue();
+    final long y0 = this.area_query_y_model.getNumber().longValue();
+    final long x1 = x0 + this.area_query_width_model.getNumber().longValue();
+    final long y1 = y0 + this.area_query_height_model.getNumber().longValue();
 
     final BoundingAreaL area_l =
       BoundingAreaL.of(
@@ -466,19 +372,31 @@ final class QuadTreeControls extends JPanel
     this.events.onNext(QuadTreeCommandTypes.areaQuery(
       area_l,
       area_d,
-      this.area_query_overlap.isSelected()));
+      this.area_query_overlapping.isSelected()));
+  }
+
+  private void onRayQuery()
+  {
+    final double x0 = (double) this.ray_query_x0_model.getNumber().longValue();
+    final double y0 = (double) this.ray_query_y0_model.getNumber().longValue();
+    final double x1 = (double) this.ray_query_x1_model.getNumber().longValue();
+    final double y1 = (double) this.ray_query_y1_model.getNumber().longValue();
+
+    final VectorI2D origin =
+      new VectorI2D(x0, y0);
+    final VectorI2D direction =
+      VectorI2D.normalize(new VectorI2D(x0 + x1, y0 + y1));
+
+    final RayI2D ray = new RayI2D(origin, direction);
+    this.events.onNext(QuadTreeCommandTypes.rayQuery(ray));
   }
 
   private void onTreeCreate()
   {
-    final long x0 =
-      (long) this.tree_x.getValue();
-    final long y0 =
-      (long) this.tree_y.getValue();
-    final long x1 =
-      x0 + (long) this.tree_width.getValue();
-    final long y1 =
-      y0 + (long) this.tree_height.getValue();
+    final long x0 = this.tree_x_model.getNumber().longValue();
+    final long y0 = this.tree_y_model.getNumber().longValue();
+    final long x1 = x0 + this.tree_width_model.getNumber().longValue();
+    final long y1 = y0 + this.tree_height_model.getNumber().longValue();
 
     final BoundingAreaL area_l =
       BoundingAreaL.of(
@@ -491,16 +409,16 @@ final class QuadTreeControls extends JPanel
         new VectorI2D((double) x1, (double) y1));
 
     this.config_bl.setMinimumQuadrantHeight(
-      (long) this.tree_qmin_height.getValue());
+      this.tree_qmin_height_model.getNumber().longValue());
     this.config_bl.setMinimumQuadrantWidth(
-      (long) this.tree_qmin_width.getValue());
+      this.tree_qmin_width_model.getNumber().longValue());
     this.config_bl.setArea(area_l);
     this.config_bl.setTrimOnRemove(this.tree_trim_remove.isSelected());
 
     this.config_bd.setMinimumQuadrantHeight(
-      (double) this.tree_qmin_height.getValue());
+      this.tree_qmin_height_model.getNumber().doubleValue());
     this.config_bd.setMinimumQuadrantWidth(
-      (double) this.tree_qmin_width.getValue());
+      this.tree_qmin_width_model.getNumber().doubleValue());
     this.config_bd.setArea(area_d);
     this.config_bd.setTrimOnRemove(this.tree_trim_remove.isSelected());
 
@@ -522,14 +440,10 @@ final class QuadTreeControls extends JPanel
 
   private void onObjectAdd()
   {
-    final long x0 =
-      (long) this.object_x.getValue();
-    final long y0 =
-      (long) this.object_y.getValue();
-    final long x1 =
-      x0 + (long) this.object_width.getValue();
-    final long y1 =
-      y0 + (long) this.object_height.getValue();
+    final long x0 = this.object_x_model.getNumber().longValue();
+    final long y0 = this.object_y_model.getNumber().longValue();
+    final long x1 = x0 + this.object_width_model.getNumber().longValue();
+    final long y1 = y0 + this.object_height_model.getNumber().longValue();
 
     final BoundingAreaL area = BoundingAreaL.of(
       new VectorI2L(x0, y0),

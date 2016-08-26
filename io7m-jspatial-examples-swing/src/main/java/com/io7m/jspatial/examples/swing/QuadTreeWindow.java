@@ -100,7 +100,7 @@ final class QuadTreeWindow extends JFrame
       "Quad tree viewer started."));
 
     this.pack();
-    this.split.setDividerLocation(0.5);
+    this.split.setDividerLocation(0.6);
   }
 
   private static JMenuBar makeMenu()
