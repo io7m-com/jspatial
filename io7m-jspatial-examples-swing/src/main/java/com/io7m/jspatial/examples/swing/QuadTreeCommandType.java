@@ -16,6 +16,7 @@
 
 package com.io7m.jspatial.examples.swing;
 
+import com.io7m.jspatial.api.BoundingAreaD;
 import com.io7m.jspatial.api.BoundingAreaL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
@@ -29,7 +30,7 @@ interface QuadTreeCommandType
   interface CasesType<R>
   {
     R addObject(
-      BoundingAreaL area,
+      BoundingAreaL area_l,
       Integer item);
 
     R removeObject(
@@ -42,5 +43,10 @@ interface QuadTreeCommandType
 
     R createQuadTreeD(
       QuadTreeConfigurationD dconfig);
+
+    R areaQuery(
+      BoundingAreaL area_l,
+      BoundingAreaD area_d,
+      boolean overlaps);
   }
 }

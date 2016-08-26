@@ -86,6 +86,16 @@ final class QuadTreeControls extends JPanel
   private final JSlider objects_random_count;
   private final JTextField objects_random_count_show;
   private final JButton objects_add;
+  private final JSlider area_query_width;
+  private final JTextField area_query_width_show;
+  private final JSlider area_query_height;
+  private final JTextField area_query_height_show;
+  private final JSlider area_query_x;
+  private final JTextField area_query_x_show;
+  private final JSlider area_query_y;
+  private final JTextField area_query_y_show;
+  private final JButton area_query_run;
+  private final JCheckBox area_query_overlap;
 
   QuadTreeControls()
   {
@@ -188,13 +198,13 @@ final class QuadTreeControls extends JPanel
       new SliderFieldUpdater(this.tree_y, this.tree_y_show));
     this.tree_qmin_height.addChangeListener(
       new SliderFieldUpdater(
-        this.tree_qmin_height,
-        this.tree_qmin_height_show));
+        this.tree_qmin_height, this.tree_qmin_height_show));
     this.tree_qmin_width.addChangeListener(
-      new SliderFieldUpdater(this.tree_qmin_width, this.tree_qmin_width_show));
+      new SliderFieldUpdater(
+        this.tree_qmin_width, this.tree_qmin_width_show));
 
-    this.tree_width.setValue(512);
-    this.tree_height.setValue(512);
+    this.tree_width.setValue(256);
+    this.tree_height.setValue(256);
     this.tree_x.setValue(2);
     this.tree_y.setValue(2);
     this.tree_qmin_height.setValue(2);
@@ -202,6 +212,44 @@ final class QuadTreeControls extends JPanel
 
     this.tree_create = new JButton("Create");
     this.tree_trim = new JButton("Trim");
+
+    this.area_query_width = new JSlider(1, 1024);
+    this.area_query_width.setValue(2);
+    this.area_query_width_show = new JTextField();
+    this.area_query_width_show.setEditable(false);
+    this.area_query_height = new JSlider(1, 1024);
+    this.area_query_height.setValue(2);
+    this.area_query_height_show = new JTextField();
+    this.area_query_height_show.setEditable(false);
+    this.area_query_x = new JSlider(1, 1024);
+    this.area_query_x.setValue(16);
+    this.area_query_x_show = new JTextField();
+    this.area_query_x_show.setEditable(false);
+    this.area_query_y = new JSlider(1, 1024);
+    this.area_query_y.setValue(16);
+    this.area_query_y_show = new JTextField();
+    this.area_query_y_show.setEditable(false);
+    this.area_query_run = new JButton("Query");
+    this.area_query_overlap = new JCheckBox();
+    this.area_query_overlap.setEnabled(true);
+
+    this.area_query_width.addChangeListener(
+      new SliderFieldUpdater(
+        this.area_query_width, this.area_query_width_show));
+    this.area_query_height.addChangeListener(
+      new SliderFieldUpdater(
+        this.area_query_height, this.area_query_height_show));
+    this.area_query_x.addChangeListener(
+      new SliderFieldUpdater(
+        this.area_query_x, this.area_query_x_show));
+    this.area_query_y.addChangeListener(
+      new SliderFieldUpdater(
+        this.area_query_y, this.area_query_y_show));
+
+    this.area_query_height.setValue(32);
+    this.area_query_width.setValue(32);
+    this.area_query_x.setValue(8);
+    this.area_query_y.setValue(8);
 
     final DesignGridLayout dg = new DesignGridLayout(this);
     this.layout(dg);
@@ -229,6 +277,8 @@ final class QuadTreeControls extends JPanel
       e -> this.onTreeCreate());
     this.tree_trim.addActionListener(
       e -> this.events.onNext(QuadTreeCommandTypes.trimQuadTree()));
+    this.area_query_run.addActionListener(
+      e -> this.onAreaQuery());
   }
 
   private static long randomLong(
@@ -304,7 +354,6 @@ final class QuadTreeControls extends JPanel
       .grid(new JLabel("Height"))
       .add(this.object_height, 3)
       .add(this.object_height_show);
-
     dg.row().center().add(this.object_add).fill();
     dg.row().center().add(this.objects_scroller).fill();
     dg.row().center().add(this.object_remove).fill();
@@ -317,6 +366,31 @@ final class QuadTreeControls extends JPanel
       .add(this.objects_random_count, 3)
       .add(this.objects_random_count_show);
     dg.row().center().add(this.objects_add).fill();
+    dg.emptyRow();
+
+    dg.row().left().add(QuadTreeControls.largerLabel("Area Query")).fill();
+    dg.emptyRow();
+    dg.row()
+      .grid(new JLabel("X"))
+      .add(this.area_query_x, 3)
+      .add(this.area_query_x_show);
+    dg.row()
+      .grid(new JLabel("Y"))
+      .add(this.area_query_y, 3)
+      .add(this.area_query_y_show);
+    dg.row()
+      .grid(new JLabel("Width"))
+      .add(this.area_query_width, 3)
+      .add(this.area_query_width_show);
+    dg.row()
+      .grid(new JLabel("Height"))
+      .add(this.area_query_height, 3)
+      .add(this.area_query_height_show);
+    dg.emptyRow();
+    dg.row().grid(new JLabel("Overlapping")).add(this.area_query_overlap);
+    dg.emptyRow();
+    dg.row().center().add(this.area_query_run).fill();
+    dg.emptyRow();
   }
 
   private void onObjectListChanged()
@@ -366,6 +440,33 @@ final class QuadTreeControls extends JPanel
       this.objects_model.removeElement(o);
       this.events.onNext(QuadTreeCommandTypes.removeObject(o));
     }
+  }
+
+  private void onAreaQuery()
+  {
+    final long x0 =
+      (long) this.area_query_x.getValue();
+    final long y0 =
+      (long) this.area_query_y.getValue();
+    final long x1 =
+      x0 + (long) this.area_query_width.getValue();
+    final long y1 =
+      y0 + (long) this.area_query_height.getValue();
+
+    final BoundingAreaL area_l =
+      BoundingAreaL.of(
+        new VectorI2L(x0, y0),
+        new VectorI2L(x1, y1));
+
+    final BoundingAreaD area_d =
+      BoundingAreaD.of(
+        new VectorI2D((double) x0, (double) y0),
+        new VectorI2D((double) x1, (double) y1));
+
+    this.events.onNext(QuadTreeCommandTypes.areaQuery(
+      area_l,
+      area_d,
+      this.area_query_overlap.isSelected()));
   }
 
   private void onTreeCreate()

@@ -19,7 +19,6 @@ package com.io7m.jspatial.examples.swing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rx.Observable;
-import rx.Subscription;
 import rx.subjects.PublishSubject;
 
 import javax.swing.JFrame;
@@ -30,9 +29,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.time.Instant;
 
 /**
  * Viewer window.
@@ -53,12 +56,14 @@ final class QuadTreeWindow extends JFrame
   private final PublishSubject<LogMessage> messages;
   private final JScrollPane controls_scroll;
   private final JScrollPane canvas_scroll;
+  private final JTabbedPane tabs;
+  private final LogPane log;
 
   QuadTreeWindow()
   {
     super("Quad Tree Viewer");
 
-    this.setPreferredSize(new Dimension(800, 600));
+    this.setPreferredSize(new Dimension(1024, 768));
 
     this.setJMenuBar(QuadTreeWindow.makeMenu());
 
@@ -73,6 +78,12 @@ final class QuadTreeWindow extends JFrame
 
     this.status = new StatusBar(this.messages);
 
+    this.log = new LogPane(this.messages);
+
+    this.tabs = new JTabbedPane();
+    this.tabs.addTab("Quad Tree", this.split);
+    this.tabs.addTab("Log", this.log);
+
     Thread.setDefaultUncaughtExceptionHandler(
       (t, e) -> {
         QuadTreeWindow.LOG.error("uncaught exception: ", e);
@@ -81,7 +92,7 @@ final class QuadTreeWindow extends JFrame
       });
 
     final Container pane = this.getContentPane();
-    pane.add(this.split, BorderLayout.CENTER);
+    pane.add(this.tabs, BorderLayout.CENTER);
     pane.add(this.status, BorderLayout.PAGE_END);
 
     this.messages.onNext(LogMessage.of(
@@ -89,7 +100,7 @@ final class QuadTreeWindow extends JFrame
       "Quad tree viewer started."));
 
     this.pack();
-    this.split.setDividerLocation(0.7);
+    this.split.setDividerLocation(0.5);
   }
 
   private static JMenuBar makeMenu()
@@ -107,14 +118,14 @@ final class QuadTreeWindow extends JFrame
 
   private static final class StatusBar extends JPanel
   {
-    private final Subscription subscription;
     private final JLabel text;
 
     StatusBar(final Observable<LogMessage> messages)
     {
-      this.subscription = messages.subscribe(this::onMessage);
       this.text = new JLabel();
       this.add(this.text);
+
+      messages.subscribe(this::onMessage);
     }
 
     private void onMessage(final LogMessageType m)
@@ -127,6 +138,49 @@ final class QuadTreeWindow extends JFrame
           this.text.setText(m.message());
           break;
       }
+    }
+  }
+
+  private final class LogPane extends JPanel
+  {
+    private final JTextArea text;
+    private final JScrollPane scroll;
+
+    LogPane(final Observable<LogMessage> messages)
+    {
+      this.setLayout(new BorderLayout());
+
+      this.text = new JTextArea();
+      this.text.setFont(Font.decode("Monospaced 10"));
+
+      this.scroll = new JScrollPane(this.text);
+      this.add(this.scroll, BorderLayout.CENTER);
+
+      messages.subscribe(this::onMessage);
+    }
+
+    private void onMessage(final LogMessageType m)
+    {
+      final StringBuilder sb = new StringBuilder(128);
+      sb.append(Instant.now());
+      sb.append(": ");
+      switch (m.severity()) {
+        case DEBUG: {
+          sb.append("debug: ");
+          break;
+        }
+        case INFO: {
+          sb.append("info: ");
+          break;
+        }
+        case ERROR: {
+          sb.append("error: ");
+          break;
+        }
+      }
+      sb.append(m.message());
+      sb.append(System.lineSeparator());
+      this.text.append(sb.toString());
     }
   }
 }

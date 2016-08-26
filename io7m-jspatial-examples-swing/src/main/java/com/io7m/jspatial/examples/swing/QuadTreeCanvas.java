@@ -33,14 +33,15 @@ import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2L;
 import rx.Observable;
 import rx.Observer;
-import rx.Subscription;
 
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -55,13 +56,15 @@ final class QuadTreeCanvas extends JPanel
     INSTANCE_FONT = "Monospaced 10";
   }
 
-  private final Subscription subscription;
   private final Map<Integer, Item> items;
+  private final Set<Integer> queried;
   private final Observer<LogMessage> log_messages;
   private Function<QuadTreeCommandType, Unit> on_message_cases;
   private QuadTreeLType<Integer> tree_l;
   private QuadTreeDType<Integer> tree_d;
   private QuadTreeKind kind;
+  private BoundingAreaL query_area_l;
+  private BoundingAreaD query_area_d;
 
   QuadTreeCanvas(
     final Observable<QuadTreeCommandType> in_tree_commands,
@@ -69,6 +72,7 @@ final class QuadTreeCanvas extends JPanel
   {
     this.kind = QuadTreeKind.LONG_INTEGER;
     this.items = new HashMap<>(128);
+    this.queried = new HashSet<>(128);
     this.log_messages = in_log_messages;
 
     this.on_message_cases = QuadTreeCommandTypes.cases()
@@ -76,9 +80,61 @@ final class QuadTreeCanvas extends JPanel
       .removeObject(this::onCommandRemoveObject)
       .trimQuadTree(this::onCommandTrimQuadTree)
       .createQuadTreeL(QuadTreeCanvas.this::onCommandCreateQuadTreeL)
-      .createQuadTreeD(QuadTreeCanvas.this::onCommandCreateQuadTreeD);
+      .createQuadTreeD(QuadTreeCanvas.this::onCommandCreateQuadTreeD)
+      .areaQuery(this::onCommandAreaQuery);
 
-    this.subscription = in_tree_commands.subscribe(this::onCommand);
+    in_tree_commands.subscribe(this::onCommand);
+  }
+
+  private Unit onCommandAreaQuery(
+    final BoundingAreaL area_l,
+    final BoundingAreaD area_d,
+    final boolean overlaps)
+  {
+    this.queried.clear();
+
+    switch (this.kind) {
+      case LONG_INTEGER: {
+        final QuadTreeLType<Integer> t = this.tree_l;
+        if (t != null) {
+          this.query_area_d = null;
+          this.query_area_l = area_l;
+
+          if (overlaps) {
+            t.overlappedBy(area_l, this.queried);
+          } else {
+            t.containedBy(area_l, this.queried);
+          }
+
+          this.sendQueryCountMessage();
+        }
+        break;
+      }
+      case DOUBLE: {
+        final QuadTreeDType<Integer> t = this.tree_d;
+        if (t != null) {
+          this.query_area_d = area_d;
+          this.query_area_l = null;
+
+          if (overlaps) {
+            t.overlappedBy(area_d, this.queried);
+          } else {
+            t.containedBy(area_d, this.queried);
+          }
+
+          this.sendQueryCountMessage();
+        }
+        break;
+      }
+    }
+
+    return Unit.unit();
+  }
+
+  private void sendQueryCountMessage()
+  {
+    this.log_messages.onNext(
+      LogMessage.of(Severity.INFO, "Query selected " + this.queried.size()));
   }
 
   private void onCommand(final QuadTreeCommandType m)
@@ -93,6 +149,9 @@ final class QuadTreeCanvas extends JPanel
     this.kind = QuadTreeKind.LONG_INTEGER;
     this.tree_l = QuadTreeL.create(config);
     this.items.clear();
+    this.queried.clear();
+    this.query_area_d = null;
+    this.query_area_l = null;
     return Unit.unit();
   }
 
@@ -102,6 +161,9 @@ final class QuadTreeCanvas extends JPanel
     this.kind = QuadTreeKind.DOUBLE;
     this.tree_d = QuadTreeD.create(config);
     this.items.clear();
+    this.queried.clear();
+    this.query_area_d = null;
+    this.query_area_l = null;
     return Unit.unit();
   }
 
@@ -149,6 +211,7 @@ final class QuadTreeCanvas extends JPanel
       }
     }
 
+    this.queried.remove(item);
     this.items.remove(item);
     return Unit.unit();
   }
@@ -263,6 +326,16 @@ final class QuadTreeCanvas extends JPanel
         return TreeVisitResult.RESULT_CONTINUE;
       });
 
+      final BoundingAreaD qa = this.query_area_d;
+      if (qa != null) {
+        g.setColor(Color.CYAN);
+        g.drawRect(
+          (int) qa.lower().getXD(),
+          (int) qa.lower().getYD(),
+          (int) qa.width(),
+          (int) qa.height());
+      }
+
       g.setFont(Font.decode(QuadTreeCanvas.INSTANCE_FONT));
 
       for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
@@ -270,7 +343,11 @@ final class QuadTreeCanvas extends JPanel
         final VectorI2L lower = item.area.lower();
 
         if (t.contains(item.item)) {
-          g.setColor(Color.WHITE);
+          if (this.queried.contains(item.item)) {
+            g.setColor(Color.CYAN);
+          } else {
+            g.setColor(Color.WHITE);
+          }
         } else {
           g.setColor(Color.RED);
         }
@@ -305,6 +382,16 @@ final class QuadTreeCanvas extends JPanel
         return TreeVisitResult.RESULT_CONTINUE;
       });
 
+      final BoundingAreaL qa = this.query_area_l;
+      if (qa != null) {
+        g.setColor(Color.CYAN);
+        g.drawRect(
+          (int) qa.lower().getXL(),
+          (int) qa.lower().getYL(),
+          (int) qa.width(),
+          (int) qa.height());
+      }
+
       g.setFont(Font.decode(QuadTreeCanvas.INSTANCE_FONT));
 
       for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
@@ -312,7 +399,11 @@ final class QuadTreeCanvas extends JPanel
         final VectorI2L lower = item.area.lower();
 
         if (t.contains(item.item)) {
-          g.setColor(Color.WHITE);
+          if (this.queried.contains(item.item)) {
+            g.setColor(Color.CYAN);
+          } else {
+            g.setColor(Color.WHITE);
+          }
         } else {
           g.setColor(Color.RED);
         }
