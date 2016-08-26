@@ -14,12 +14,12 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jspatial.api.octtrees.OctTreeConfigurationLType;
-import com.io7m.jtensors.VectorI2L;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jspatial.api.octtrees.OctTreeConfigurationDType;
+import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.VectorI3D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -27,10 +27,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Contract for long integer tree configurations.
+ * Contract for double precision tree configurations.
  */
 
-public abstract class OctTreeConfigurationLContract
+public abstract class OctTreeConfigurationDContract
 {
   /**
    * Expected exception.
@@ -38,10 +38,10 @@ public abstract class OctTreeConfigurationLContract
 
   @Rule public final ExpectedException expected = ExpectedException.none();
 
-  protected abstract <A extends OctTreeConfigurationLType> Generator<A> generator();
+  protected abstract <A extends OctTreeConfigurationDType> Generator<A> generator();
 
-  protected abstract OctTreeConfigurationLType create(
-    final BoundingVolumeL area);
+  protected abstract OctTreeConfigurationDType create(
+    final BoundingVolumeD volume);
 
   /**
    * Identities.
@@ -50,15 +50,15 @@ public abstract class OctTreeConfigurationLContract
   @Test
   public final void testIdentities()
   {
-    final VectorI3L lower = new VectorI3L(0L, 0L, 0L);
-    final VectorI3L upper = new VectorI3L(100L, 100L, 100L);
-    final BoundingVolumeL area = BoundingVolumeL.of(lower, upper);
-    final OctTreeConfigurationLType c = this.create(area);
+    final VectorI3D lower = new VectorI3D(0.0, 0.0, 0.0);
+    final VectorI3D upper = new VectorI3D(100.0, 100.0, 100.0);
+    final BoundingVolumeD volume = BoundingVolumeD.of(lower, upper);
+    final OctTreeConfigurationDType c = this.create(volume);
 
-    Assert.assertEquals(area, c.volume());
-    Assert.assertEquals(2L, c.minimumOctantHeight());
-    Assert.assertEquals(2L, c.minimumOctantWidth());
-    Assert.assertEquals(2L, c.minimumOctantDepth());
+    Assert.assertEquals(volume, c.volume());
+    Assert.assertEquals(2.0, c.minimumOctantHeight(), 0.0001);
+    Assert.assertEquals(2.0, c.minimumOctantWidth(), 0.0001);
+    Assert.assertEquals(2.0, c.minimumOctantDepth(), 0.0001);
     Assert.assertFalse(c.trimOnRemove());
   }
 }

@@ -14,11 +14,12 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationLType;
+import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jspatial.api.octtrees.OctTreeConfigurationLType;
 import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.VectorI3L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -29,7 +30,7 @@ import org.junit.rules.ExpectedException;
  * Contract for long integer tree configurations.
  */
 
-public abstract class QuadTreeConfigurationLContract
+public abstract class OctTreeConfigurationLContract
 {
   /**
    * Expected exception.
@@ -37,10 +38,10 @@ public abstract class QuadTreeConfigurationLContract
 
   @Rule public final ExpectedException expected = ExpectedException.none();
 
-  protected abstract <A extends QuadTreeConfigurationLType> Generator<A> generator();
+  protected abstract <A extends OctTreeConfigurationLType> Generator<A> generator();
 
-  protected abstract QuadTreeConfigurationLType create(
-    final BoundingAreaL area);
+  protected abstract OctTreeConfigurationLType create(
+    final BoundingVolumeL area);
 
   /**
    * Identities.
@@ -49,14 +50,15 @@ public abstract class QuadTreeConfigurationLContract
   @Test
   public final void testIdentities()
   {
-    final VectorI2L lower = new VectorI2L(0L, 0L);
-    final VectorI2L upper = new VectorI2L(100L, 100L);
-    final BoundingAreaL area = BoundingAreaL.of(lower, upper);
-    final QuadTreeConfigurationLType c = this.create(area);
+    final VectorI3L lower = new VectorI3L(0L, 0L, 0L);
+    final VectorI3L upper = new VectorI3L(100L, 100L, 100L);
+    final BoundingVolumeL area = BoundingVolumeL.of(lower, upper);
+    final OctTreeConfigurationLType c = this.create(area);
 
-    Assert.assertEquals(area, c.area());
-    Assert.assertEquals(2L, c.minimumQuadrantHeight());
-    Assert.assertEquals(2L, c.minimumQuadrantWidth());
+    Assert.assertEquals(area, c.volume());
+    Assert.assertEquals(2L, c.minimumOctantHeight());
+    Assert.assertEquals(2L, c.minimumOctantWidth());
+    Assert.assertEquals(2L, c.minimumOctantDepth());
     Assert.assertFalse(c.trimOnRemove());
   }
 }

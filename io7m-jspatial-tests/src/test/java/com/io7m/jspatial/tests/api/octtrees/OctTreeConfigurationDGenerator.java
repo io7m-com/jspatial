@@ -14,10 +14,12 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationDType;
+
+import com.io7m.jspatial.api.octtrees.OctTreeConfigurationD;
+import com.io7m.jspatial.api.octtrees.OctTreeConfigurationDType;
+import com.io7m.jspatial.tests.api.BoundingVolumeDGenerator;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.PrimitiveGenerators;
 import net.java.quickcheck.generator.support.DoubleGenerator;
@@ -26,26 +28,27 @@ import net.java.quickcheck.generator.support.DoubleGenerator;
  * Generator for tree configurations.
  */
 
-public final class QuadTreeConfigurationDGenerator implements Generator<QuadTreeConfigurationDType>
+public final class OctTreeConfigurationDGenerator implements Generator<OctTreeConfigurationDType>
 {
-  private final BoundingAreaDGenerator area;
+  private final BoundingVolumeDGenerator volume;
   private final DoubleGenerator dgen;
   private final Generator<Boolean> bgen;
 
-  public QuadTreeConfigurationDGenerator()
+  public OctTreeConfigurationDGenerator()
   {
-    this.area = new BoundingAreaDGenerator(new DoubleGenerator());
+    this.volume = new BoundingVolumeDGenerator(new DoubleGenerator());
     this.dgen = new DoubleGenerator(0.0, Double.MAX_VALUE);
     this.bgen = PrimitiveGenerators.booleans();
   }
 
   @Override
-  public QuadTreeConfigurationDType next()
+  public OctTreeConfigurationDType next()
   {
-    final QuadTreeConfigurationD.Builder q = QuadTreeConfigurationD.builder();
-    q.setArea(this.area.next());
-    q.setMinimumQuadrantHeight(this.dgen.next().doubleValue());
-    q.setMinimumQuadrantWidth(this.dgen.next().doubleValue());
+    final OctTreeConfigurationD.Builder q = OctTreeConfigurationD.builder();
+    q.setVolume(this.volume.next());
+    q.setMinimumOctantHeight(this.dgen.next().doubleValue());
+    q.setMinimumOctantWidth(this.dgen.next().doubleValue());
+    q.setMinimumOctantDepth(this.dgen.next().doubleValue());
     q.setTrimOnRemove(this.bgen.next().booleanValue());
     return q.build();
   }

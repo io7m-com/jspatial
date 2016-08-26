@@ -14,40 +14,40 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.quadtrees;
 
-
-import com.io7m.jspatial.api.octtrees.OctTreeConfigurationD;
-import com.io7m.jspatial.api.octtrees.OctTreeConfigurationDType;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationLType;
+import com.io7m.jspatial.tests.api.BoundingAreaLGenerator;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.PrimitiveGenerators;
-import net.java.quickcheck.generator.support.DoubleGenerator;
+import net.java.quickcheck.generator.support.LongGenerator;
 
 /**
  * Generator for tree configurations.
  */
 
-public final class OctTreeConfigurationDGenerator implements Generator<OctTreeConfigurationDType>
+public final class QuadTreeConfigurationLGenerator
+  implements Generator<QuadTreeConfigurationLType>
 {
-  private final BoundingVolumeDGenerator volume;
-  private final DoubleGenerator dgen;
+  private final BoundingAreaLGenerator area;
+  private final LongGenerator lgen;
   private final Generator<Boolean> bgen;
 
-  public OctTreeConfigurationDGenerator()
+  public QuadTreeConfigurationLGenerator()
   {
-    this.volume = new BoundingVolumeDGenerator(new DoubleGenerator());
-    this.dgen = new DoubleGenerator(0.0, Double.MAX_VALUE);
+    this.area = new BoundingAreaLGenerator();
+    this.lgen = new LongGenerator(2L, Long.MAX_VALUE);
     this.bgen = PrimitiveGenerators.booleans();
   }
 
   @Override
-  public OctTreeConfigurationDType next()
+  public QuadTreeConfigurationLType next()
   {
-    final OctTreeConfigurationD.Builder q = OctTreeConfigurationD.builder();
-    q.setVolume(this.volume.next());
-    q.setMinimumOctantHeight(this.dgen.next().doubleValue());
-    q.setMinimumOctantWidth(this.dgen.next().doubleValue());
-    q.setMinimumOctantDepth(this.dgen.next().doubleValue());
+    final QuadTreeConfigurationL.Builder q = QuadTreeConfigurationL.builder();
+    q.setArea(this.area.next());
+    q.setMinimumQuadrantHeight(this.lgen.next().longValue());
+    q.setMinimumQuadrantWidth(this.lgen.next().longValue());
     q.setTrimOnRemove(this.bgen.next().booleanValue());
     return q.build();
   }

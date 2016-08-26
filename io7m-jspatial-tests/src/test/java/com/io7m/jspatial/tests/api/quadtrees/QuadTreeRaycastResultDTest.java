@@ -14,38 +14,38 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL;
-import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultLType;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultD;
+import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultDType;
+import com.io7m.jtensors.VectorI2D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.PrimitiveGenerators;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Contract completion for QuadTreeRaycastResultL.
+ * Contract completion for QuadTreeRaycastResultD.
  */
 
-public final class QuadTreeRaycastResultLTest extends
-  QuadTreeRaycastResultLContract
+public final class QuadTreeRaycastResultDTest extends
+  QuadTreeRaycastResultDContract
 {
   @SuppressWarnings("unchecked")
   @Override
-  protected <T, A extends QuadTreeRaycastResultLType<T>> Generator<A> generator()
+  protected <T, A extends QuadTreeRaycastResultDType<T>> Generator<A> generator()
   {
-    return new QuadTreeRaycastResultLGenerator(PrimitiveGenerators.integers());
+    return new QuadTreeRaycastResultDGenerator(PrimitiveGenerators.integers());
   }
 
   @Override
-  protected <T> QuadTreeRaycastResultLType<T> create(
+  protected <T> QuadTreeRaycastResultDType<T> create(
     final double distance,
-    final BoundingAreaL area,
+    final BoundingAreaD area,
     final T object)
   {
-    return QuadTreeRaycastResultL.of(distance, area, object);
+    return QuadTreeRaycastResultD.of(distance, area, object);
   }
 
   /**
@@ -55,31 +55,31 @@ public final class QuadTreeRaycastResultLTest extends
   @Test
   public void testBuilder()
   {
-    final BoundingAreaL area0 = BoundingAreaL.of(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(100L, 100L));
-    final BoundingAreaL area1 = BoundingAreaL.of(
-      new VectorI2L(1L, 1L),
-      new VectorI2L(99L, 99L));
+    final BoundingAreaD area0 = BoundingAreaD.of(
+      new VectorI2D((double) 0L, (double) 0L),
+      new VectorI2D(100.0, 100.0));
+    final BoundingAreaD area1 = BoundingAreaD.of(
+      new VectorI2D(1.0, 1.0),
+      new VectorI2D(99.0, 99.0));
 
-    final QuadTreeRaycastResultL.Builder<Integer> b =
-      QuadTreeRaycastResultL.builder();
+    final QuadTreeRaycastResultD.Builder<Integer> b =
+      QuadTreeRaycastResultD.builder();
 
     b.setArea(area0);
     b.setDistance(23.0);
     b.setItem(Integer.valueOf(23));
 
-    final QuadTreeRaycastResultL<Integer> r0_eq = b.build();
-    final QuadTreeRaycastResultL<Integer> r0 = b.build();
+    final QuadTreeRaycastResultD<Integer> r0_eq = b.build();
+    final QuadTreeRaycastResultD<Integer> r0 = b.build();
 
     b.setDistance(24.0);
-    final QuadTreeRaycastResultL<Integer> r1 = b.build();
+    final QuadTreeRaycastResultD<Integer> r1 = b.build();
 
     b.setItem(Integer.valueOf(25));
-    final QuadTreeRaycastResultL<Integer> r2 = b.build();
+    final QuadTreeRaycastResultD<Integer> r2 = b.build();
 
     b.setArea(area1);
-    final QuadTreeRaycastResultL<Integer> r3 = b.build();
+    final QuadTreeRaycastResultD<Integer> r3 = b.build();
 
     Assert.assertEquals(r0, r0);
     Assert.assertEquals(r0, r0_eq);
@@ -101,12 +101,12 @@ public final class QuadTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing0()
   {
-    final BoundingAreaL area0 = BoundingAreaL.of(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(100L, 100L));
+    final BoundingAreaD area0 = BoundingAreaD.of(
+      new VectorI2D((double) 0L, (double) 0L),
+      new VectorI2D(100.0, 100.0));
 
-    final QuadTreeRaycastResultL.Builder<Integer> b =
-      QuadTreeRaycastResultL.builder();
+    final QuadTreeRaycastResultD.Builder<Integer> b =
+      QuadTreeRaycastResultD.builder();
 
     b.setArea(area0);
     this.expected.expect(IllegalStateException.class);
@@ -121,12 +121,12 @@ public final class QuadTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing1()
   {
-    final BoundingAreaL area0 = BoundingAreaL.of(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(100L, 100L));
+    final BoundingAreaD area0 = BoundingAreaD.of(
+      new VectorI2D((double) 0L, (double) 0L),
+      new VectorI2D(100.0, 100.0));
 
-    final QuadTreeRaycastResultL.Builder<Integer> b =
-      QuadTreeRaycastResultL.builder();
+    final QuadTreeRaycastResultD.Builder<Integer> b =
+      QuadTreeRaycastResultD.builder();
 
     b.setArea(area0);
     b.setDistance(1.0);
@@ -142,8 +142,8 @@ public final class QuadTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing2()
   {
-    final QuadTreeRaycastResultL.Builder<Integer> b =
-      QuadTreeRaycastResultL.builder();
+    final QuadTreeRaycastResultD.Builder<Integer> b =
+      QuadTreeRaycastResultD.builder();
 
     b.setDistance(1.0);
     b.setItem(Integer.valueOf(23));
@@ -159,8 +159,8 @@ public final class QuadTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing3()
   {
-    final QuadTreeRaycastResultL.Builder<Integer> b =
-      QuadTreeRaycastResultL.builder();
+    final QuadTreeRaycastResultD.Builder<Integer> b =
+      QuadTreeRaycastResultD.builder();
 
     b.setItem(Integer.valueOf(23));
     this.expected.expect(IllegalStateException.class);
@@ -175,19 +175,19 @@ public final class QuadTreeRaycastResultLTest extends
   @Test
   public void testFrom()
   {
-    final BoundingAreaL area0 = BoundingAreaL.of(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(100L, 100L));
+    final BoundingAreaD area0 = BoundingAreaD.of(
+      new VectorI2D((double) 0L, (double) 0L),
+      new VectorI2D(100.0, 100.0));
 
-    final QuadTreeRaycastResultL.Builder<Integer> b =
-      QuadTreeRaycastResultL.builder();
+    final QuadTreeRaycastResultD.Builder<Integer> b =
+      QuadTreeRaycastResultD.builder();
 
     b.setArea(area0);
     b.setDistance(23.0);
     b.setItem(Integer.valueOf(23));
 
-    final QuadTreeRaycastResultL<Integer> r0 = b.build();
-    final QuadTreeRaycastResultL<Integer> r1 = b.from(r0).build();
+    final QuadTreeRaycastResultD<Integer> r0 = b.build();
+    final QuadTreeRaycastResultD<Integer> r1 = b.from(r0).build();
 
     Assert.assertEquals(r0, r1);
   }
@@ -199,22 +199,22 @@ public final class QuadTreeRaycastResultLTest extends
   @Test
   public void testCopyOf()
   {
-    final BoundingAreaL area0 = BoundingAreaL.of(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(100L, 100L));
+    final BoundingAreaD area0 = BoundingAreaD.of(
+      new VectorI2D((double) 0L, (double) 0L),
+      new VectorI2D(100.0, 100.0));
 
-    final QuadTreeRaycastResultL.Builder<Integer> b =
-      QuadTreeRaycastResultL.builder();
+    final QuadTreeRaycastResultD.Builder<Integer> b =
+      QuadTreeRaycastResultD.builder();
 
     b.setArea(area0);
     b.setDistance(23.0);
     b.setItem(Integer.valueOf(23));
 
-    final QuadTreeRaycastResultL<Integer> r0 = b.build();
-    final QuadTreeRaycastResultL<Integer> r1 =
-      QuadTreeRaycastResultL.copyOf(r0);
-    final QuadTreeRaycastResultL<Integer> r2 =
-      QuadTreeRaycastResultL.copyOf(new QuadTreeRaycastResultLType<Integer>()
+    final QuadTreeRaycastResultD<Integer> r0 = b.build();
+    final QuadTreeRaycastResultD<Integer> r1 =
+      QuadTreeRaycastResultD.copyOf(r0);
+    final QuadTreeRaycastResultD<Integer> r2 =
+      QuadTreeRaycastResultD.copyOf(new QuadTreeRaycastResultDType<Integer>()
       {
         @Override
         public double distance()
@@ -223,7 +223,7 @@ public final class QuadTreeRaycastResultLTest extends
         }
 
         @Override
-        public BoundingAreaL area()
+        public BoundingAreaD area()
         {
           return r0.area();
         }
@@ -246,24 +246,24 @@ public final class QuadTreeRaycastResultLTest extends
   @Test
   public void testWith()
   {
-    final BoundingAreaL area0 = BoundingAreaL.of(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(100L, 100L));
-    final BoundingAreaL area1 = BoundingAreaL.of(
-      new VectorI2L(1L, 1L),
-      new VectorI2L(99L, 99L));
+    final BoundingAreaD area0 = BoundingAreaD.of(
+      new VectorI2D(0.0, 0.0),
+      new VectorI2D(100.0, 100.0));
+    final BoundingAreaD area1 = BoundingAreaD.of(
+      new VectorI2D(1.0, 1.0),
+      new VectorI2D(99.0, 99.0));
 
-    final QuadTreeRaycastResultL.Builder<Integer> b =
-      QuadTreeRaycastResultL.builder();
+    final QuadTreeRaycastResultD.Builder<Integer> b =
+      QuadTreeRaycastResultD.builder();
 
     b.setArea(area0);
     b.setDistance(23.0);
     b.setItem(Integer.valueOf(23));
 
-    final QuadTreeRaycastResultL<Integer> r0 = b.build();
-    final QuadTreeRaycastResultL<Integer> r1 = r0.withDistance(24.0);
-    final QuadTreeRaycastResultL<Integer> r2 = r0.withItem(Integer.valueOf(25));
-    final QuadTreeRaycastResultL<Integer> r3 = r0.withArea(area1);
+    final QuadTreeRaycastResultD<Integer> r0 = b.build();
+    final QuadTreeRaycastResultD<Integer> r1 = r0.withDistance(24.0);
+    final QuadTreeRaycastResultD<Integer> r2 = r0.withItem(Integer.valueOf(25));
+    final QuadTreeRaycastResultD<Integer> r3 = r0.withArea(area1);
 
     Assert.assertEquals(r0, r0);
 

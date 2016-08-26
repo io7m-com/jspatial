@@ -14,11 +14,11 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultLType;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultDType;
+import com.io7m.jtensors.VectorI2D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -26,10 +26,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Contract for the {@link OctTreeRaycastResultLType}.
+ * Contract for the {@link QuadTreeRaycastResultDType}.
  */
 
-public abstract class OctTreeRaycastResultLContract
+public abstract class QuadTreeRaycastResultDContract
 {
   /**
    * Expected exception.
@@ -37,48 +37,48 @@ public abstract class OctTreeRaycastResultLContract
 
   @Rule public final ExpectedException expected = ExpectedException.none();
 
-  protected abstract <T, A extends OctTreeRaycastResultLType<T>> Generator<A> generator();
+  protected abstract <T, A extends QuadTreeRaycastResultDType<T>> Generator<A> generator();
 
-  protected abstract <T> OctTreeRaycastResultLType<T> create(
+  protected abstract <T> QuadTreeRaycastResultDType<T> create(
     final double distance,
-    final BoundingVolumeL volume,
+    final BoundingAreaD area,
     final T object);
 
   @Test
   public final void testIdentities()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(100L, 100L, 100L));
-    final BoundingVolumeL volume1 = BoundingVolumeL.of(
-      new VectorI3L(1L, 1L, 1L),
-      new VectorI3L(99L, 99L, 99L));
+    final BoundingAreaD area0 = BoundingAreaD.of(
+      new VectorI2D(0.0, 0.0),
+      new VectorI2D(100.0, 100.0));
+    final BoundingAreaD area1 = BoundingAreaD.of(
+      new VectorI2D(1.0, 1.0),
+      new VectorI2D(99.0, 99.0));
 
-    final OctTreeRaycastResultLType<Integer> k0 =
-      this.create(23.0, volume0, Integer.valueOf(23));
-    final OctTreeRaycastResultLType<Integer> k1 =
-      this.create(24.0, volume0, Integer.valueOf(23));
-    final OctTreeRaycastResultLType<Integer> k2 =
-      this.create(23.0, volume1, Integer.valueOf(23));
-    final OctTreeRaycastResultLType<Integer> k3 =
-      this.create(23.0, volume0, Integer.valueOf(24));
-    final OctTreeRaycastResultLType<Integer> k4 =
-      this.create(23.0, volume0, Integer.valueOf(23));
+    final QuadTreeRaycastResultDType<Integer> k0 =
+      this.create(23.0, area0, Integer.valueOf(23));
+    final QuadTreeRaycastResultDType<Integer> k1 =
+      this.create(24.0, area0, Integer.valueOf(23));
+    final QuadTreeRaycastResultDType<Integer> k2 =
+      this.create(23.0, area1, Integer.valueOf(23));
+    final QuadTreeRaycastResultDType<Integer> k3 =
+      this.create(23.0, area0, Integer.valueOf(24));
+    final QuadTreeRaycastResultDType<Integer> k4 =
+      this.create(23.0, area0, Integer.valueOf(23));
 
     Assert.assertEquals(23.0, k0.distance(), 0.0);
-    Assert.assertEquals(volume0, k0.volume());
+    Assert.assertEquals(area0, k0.area());
     Assert.assertEquals(Integer.valueOf(23), k0.item());
 
     Assert.assertEquals(24.0, k1.distance(), 0.0);
-    Assert.assertEquals(volume0, k1.volume());
+    Assert.assertEquals(area0, k1.area());
     Assert.assertEquals(Integer.valueOf(23), k1.item());
 
     Assert.assertEquals(23.0, k2.distance(), 0.0);
-    Assert.assertEquals(volume1, k2.volume());
+    Assert.assertEquals(area1, k2.area());
     Assert.assertEquals(Integer.valueOf(23), k2.item());
 
     Assert.assertEquals(23.0, k3.distance(), 0.0);
-    Assert.assertEquals(volume0, k3.volume());
+    Assert.assertEquals(area0, k3.area());
     Assert.assertEquals(Integer.valueOf(24), k3.item());
 
     Assert.assertEquals(k0, k0);

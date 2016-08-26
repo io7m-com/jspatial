@@ -14,7 +14,7 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.octtrees;
 
 import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationL;

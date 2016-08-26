@@ -14,32 +14,33 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL;
-import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultLType;
+import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultD;
+import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultDType;
+import com.io7m.jspatial.tests.api.BoundingVolumeDGenerator;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.DoubleGenerator;
 
-public final class QuadTreeRaycastResultLGenerator<A>
-  implements Generator<QuadTreeRaycastResultLType<A>>
+public final class OctTreeRaycastResultDGenerator<A>
+  implements Generator<OctTreeRaycastResultDType<A>>
 {
   private final DoubleGenerator dgen;
-  private final BoundingAreaLGenerator agen;
+  private final BoundingVolumeDGenerator agen;
   private final Generator<A> ogen;
 
-  public QuadTreeRaycastResultLGenerator(
+  public OctTreeRaycastResultDGenerator(
     final Generator<A> in_ogen)
   {
     this.dgen = new DoubleGenerator(0.0, Double.MAX_VALUE);
-    this.agen = new BoundingAreaLGenerator();
+    this.agen = new BoundingVolumeDGenerator(new DoubleGenerator());
     this.ogen = in_ogen;
   }
 
   @Override
-  public QuadTreeRaycastResultLType<A> next()
+  public OctTreeRaycastResultDType<A> next()
   {
-    return QuadTreeRaycastResultL.of(
+    return OctTreeRaycastResultD.of(
       this.dgen.next().doubleValue(),
       this.agen.next(),
       this.ogen.next());

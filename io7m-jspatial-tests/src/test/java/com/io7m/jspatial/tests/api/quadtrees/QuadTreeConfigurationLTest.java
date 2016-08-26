@@ -14,34 +14,34 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationDType;
-import com.io7m.jtensors.VectorI2D;
+import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationLType;
+import com.io7m.jtensors.VectorI2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Contract completion for QuadTreeConfigurationD.
+ * Contract completion for QuadTreeConfigurationL.
  */
 
-public final class QuadTreeConfigurationDTest extends
-  QuadTreeConfigurationDContract
+public final class QuadTreeConfigurationLTest extends
+  QuadTreeConfigurationLContract
 {
   @SuppressWarnings("unchecked")
   @Override
-  protected <A extends QuadTreeConfigurationDType> Generator<A> generator()
+  protected <A extends QuadTreeConfigurationLType> Generator<A> generator()
   {
-    return (Generator<A>) new QuadTreeConfigurationDGenerator();
+    return (Generator<A>) new QuadTreeConfigurationLGenerator();
   }
 
   @Override
-  protected QuadTreeConfigurationDType create(final BoundingAreaD area)
+  protected QuadTreeConfigurationLType create(final BoundingAreaL area)
   {
-    final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
+    final QuadTreeConfigurationL.Builder b = QuadTreeConfigurationL.builder();
     b.setArea(area);
     return b.build();
   }
@@ -53,53 +53,53 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testBuilder()
   {
-    final VectorI2D lower0 = new VectorI2D(0.0, 0.0);
-    final VectorI2D upper0 = new VectorI2D(100.0, 100.0);
-    final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
-    final QuadTreeConfigurationD.Builder b0 = QuadTreeConfigurationD.builder();
+    final VectorI2L lower0 = new VectorI2L(0L, 0L);
+    final VectorI2L upper0 = new VectorI2L(100L, 100L);
+    final BoundingAreaL area0 = BoundingAreaL.of(lower0, upper0);
+    final QuadTreeConfigurationL.Builder b0 = QuadTreeConfigurationL.builder();
     b0.setArea(area0);
 
-    final QuadTreeConfigurationD qc0 = b0.build();
+    final QuadTreeConfigurationL qc0 = b0.build();
     Assert.assertEquals(area0, qc0.area());
-    Assert.assertEquals(2.0, qc0.minimumQuadrantWidth(), 0.0);
-    Assert.assertEquals(2.0, qc0.minimumQuadrantHeight(), 0.0);
+    Assert.assertEquals(2L, qc0.minimumQuadrantWidth());
+    Assert.assertEquals(2L, qc0.minimumQuadrantHeight());
     Assert.assertFalse(qc0.trimOnRemove());
 
-    b0.setMinimumQuadrantHeight(3.0);
-    final QuadTreeConfigurationD qc1 = b0.build();
+    b0.setMinimumQuadrantHeight(3L);
+    final QuadTreeConfigurationL qc1 = b0.build();
     Assert.assertEquals(area0, qc1.area());
-    Assert.assertEquals(2.0, qc1.minimumQuadrantWidth(), 0.0);
-    Assert.assertEquals(3.0, qc1.minimumQuadrantHeight(), 0.0);
+    Assert.assertEquals(2L, qc1.minimumQuadrantWidth());
+    Assert.assertEquals(3L, qc1.minimumQuadrantHeight());
     Assert.assertFalse(qc1.trimOnRemove());
     Assert.assertNotEquals(qc1, qc0);
 
-    b0.setMinimumQuadrantWidth(4.0);
-    final QuadTreeConfigurationD qc2 = b0.build();
+    b0.setMinimumQuadrantWidth(4L);
+    final QuadTreeConfigurationL qc2 = b0.build();
     Assert.assertEquals(area0, qc2.area());
-    Assert.assertEquals(4.0, qc2.minimumQuadrantWidth(), 0.0);
-    Assert.assertEquals(3.0, qc2.minimumQuadrantHeight(), 0.0);
+    Assert.assertEquals(4L, qc2.minimumQuadrantWidth());
+    Assert.assertEquals(3L, qc2.minimumQuadrantHeight());
     Assert.assertFalse(qc2.trimOnRemove());
     Assert.assertNotEquals(qc2, qc0);
     Assert.assertNotEquals(qc2, qc1);
 
-    final VectorI2D lower1 = new VectorI2D(1.0, 1.0);
-    final VectorI2D upper1 = new VectorI2D(99.0, 99.0);
-    final BoundingAreaD area1 = BoundingAreaD.of(lower1, upper1);
+    final VectorI2L lower1 = new VectorI2L(1L, 1L);
+    final VectorI2L upper1 = new VectorI2L(99L, 99L);
+    final BoundingAreaL area1 = BoundingAreaL.of(lower1, upper1);
 
     b0.setArea(area1);
-    final QuadTreeConfigurationD qc3 = b0.build();
+    final QuadTreeConfigurationL qc3 = b0.build();
     Assert.assertEquals(area1, qc3.area());
-    Assert.assertEquals(4.0, qc3.minimumQuadrantWidth(), 0.0);
-    Assert.assertEquals(3.0, qc3.minimumQuadrantHeight(), 0.0);
+    Assert.assertEquals(4L, qc3.minimumQuadrantWidth());
+    Assert.assertEquals(3L, qc3.minimumQuadrantHeight());
     Assert.assertFalse(qc3.trimOnRemove());
     Assert.assertNotEquals(qc3, qc0);
     Assert.assertNotEquals(qc3, qc1);
     Assert.assertNotEquals(qc3, qc2);
 
-    final QuadTreeConfigurationD.Builder b1 = QuadTreeConfigurationD.builder();
+    final QuadTreeConfigurationL.Builder b1 = QuadTreeConfigurationL.builder();
     b1.from(qc3);
 
-    final QuadTreeConfigurationD qc4 = b1.build();
+    final QuadTreeConfigurationL qc4 = b1.build();
     Assert.assertEquals(qc4, qc3);
   }
 
@@ -110,7 +110,7 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testBuilderMissing()
   {
-    final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
+    final QuadTreeConfigurationL.Builder b = QuadTreeConfigurationL.builder();
 
     this.expected.expect(IllegalStateException.class);
     b.build();
@@ -124,23 +124,23 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testWith()
   {
-    final VectorI2D lower0 = new VectorI2D(0.0, 0.0);
-    final VectorI2D upper0 = new VectorI2D(100.0, 100.0);
-    final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
-    final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
+    final VectorI2L lower0 = new VectorI2L(0L, 0L);
+    final VectorI2L upper0 = new VectorI2L(100L, 100L);
+    final BoundingAreaL area0 = BoundingAreaL.of(lower0, upper0);
+    final QuadTreeConfigurationL.Builder b = QuadTreeConfigurationL.builder();
     b.setArea(area0);
 
-    final QuadTreeConfigurationD qc0 = b.build();
-    final QuadTreeConfigurationD qc0_eq = b.build();
+    final QuadTreeConfigurationL qc0 = b.build();
+    final QuadTreeConfigurationL qc0_eq = b.build();
 
-    final VectorI2D lower1 = new VectorI2D(1.0, 1.0);
-    final VectorI2D upper1 = new VectorI2D(99.0, 99.0);
-    final BoundingAreaD area1 = BoundingAreaD.of(lower1, upper1);
+    final VectorI2L lower1 = new VectorI2L(1L, 1L);
+    final VectorI2L upper1 = new VectorI2L(99L, 99L);
+    final BoundingAreaL area1 = BoundingAreaL.of(lower1, upper1);
 
-    final QuadTreeConfigurationD qc1 = qc0.withArea(area1);
-    final QuadTreeConfigurationD qc2 = qc0.withMinimumQuadrantWidth(4.0);
-    final QuadTreeConfigurationD qc3 = qc0.withMinimumQuadrantHeight(3.0);
-    final QuadTreeConfigurationD qc4 = qc0.withTrimOnRemove(true);
+    final QuadTreeConfigurationL qc1 = qc0.withArea(area1);
+    final QuadTreeConfigurationL qc2 = qc0.withMinimumQuadrantWidth(4L);
+    final QuadTreeConfigurationL qc3 = qc0.withMinimumQuadrantHeight(3L);
+    final QuadTreeConfigurationL qc4 = qc0.withTrimOnRemove(true);
 
     Assert.assertEquals(qc0, qc0);
     Assert.assertEquals(qc0_eq, qc0);
@@ -189,26 +189,26 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testOf()
   {
-    final VectorI2D lower0 = new VectorI2D(0.0, 0.0);
-    final VectorI2D upper0 = new VectorI2D(100.0, 100.0);
-    final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
-    final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
+    final VectorI2L lower0 = new VectorI2L(0L, 0L);
+    final VectorI2L upper0 = new VectorI2L(100L, 100L);
+    final BoundingAreaL area0 = BoundingAreaL.of(lower0, upper0);
+    final QuadTreeConfigurationL.Builder b = QuadTreeConfigurationL.builder();
     b.setArea(area0);
 
-    final QuadTreeConfigurationD qc0 = b.build();
+    final QuadTreeConfigurationL qc0 = b.build();
 
-    final VectorI2D lower1 = new VectorI2D(1.0, 1.0);
-    final VectorI2D upper1 = new VectorI2D(99.0, 99.0);
-    final BoundingAreaD area1 = BoundingAreaD.of(lower1, upper1);
+    final VectorI2L lower1 = new VectorI2L(1L, 1L);
+    final VectorI2L upper1 = new VectorI2L(99L, 99L);
+    final BoundingAreaL area1 = BoundingAreaL.of(lower1, upper1);
 
-    final QuadTreeConfigurationD qc1 =
-      QuadTreeConfigurationD.of(area1, 2.0, 2.0, false);
-    final QuadTreeConfigurationD qc2 =
-      QuadTreeConfigurationD.of(area0, 4.0, 2.0, false);
-    final QuadTreeConfigurationD qc3 =
-      QuadTreeConfigurationD.of(area0, 2.0, 3.0, false);
-    final QuadTreeConfigurationD qc4 =
-      QuadTreeConfigurationD.of(area0, 2.0, 2.0, true);
+    final QuadTreeConfigurationL qc1 =
+      QuadTreeConfigurationL.of(area1, 2L, 2L, false);
+    final QuadTreeConfigurationL qc2 =
+      QuadTreeConfigurationL.of(area0, 4L, 2L, false);
+    final QuadTreeConfigurationL qc3 =
+      QuadTreeConfigurationL.of(area0, 2L, 3L, false);
+    final QuadTreeConfigurationL qc4 =
+      QuadTreeConfigurationL.of(area0, 2L, 2L, true);
 
     Assert.assertNotEquals(qc0, qc1);
     Assert.assertNotEquals(qc0, qc2);
@@ -254,32 +254,32 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testCopyOf()
   {
-    final VectorI2D lower0 = new VectorI2D(0.0, 0.0);
-    final VectorI2D upper0 = new VectorI2D(100.0, 100.0);
-    final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
-    final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
+    final VectorI2L lower0 = new VectorI2L(0L, 0L);
+    final VectorI2L upper0 = new VectorI2L(100L, 100L);
+    final BoundingAreaL area0 = BoundingAreaL.of(lower0, upper0);
+    final QuadTreeConfigurationL.Builder b = QuadTreeConfigurationL.builder();
     b.setArea(area0);
 
-    final QuadTreeConfigurationD qc0 = b.build();
-    final QuadTreeConfigurationD qc1 = QuadTreeConfigurationD.copyOf(qc0);
+    final QuadTreeConfigurationL qc0 = b.build();
+    final QuadTreeConfigurationL qc1 = QuadTreeConfigurationL.copyOf(qc0);
 
-    final QuadTreeConfigurationDType qc2 = QuadTreeConfigurationD.copyOf(
-      new QuadTreeConfigurationDType()
+    final QuadTreeConfigurationLType qc2 = QuadTreeConfigurationL.copyOf(
+      new QuadTreeConfigurationLType()
       {
         @Override
-        public BoundingAreaD area()
+        public BoundingAreaL area()
         {
           return qc0.area();
         }
 
         @Override
-        public double minimumQuadrantWidth()
+        public long minimumQuadrantWidth()
         {
           return qc0.minimumQuadrantWidth();
         }
 
         @Override
-        public double minimumQuadrantHeight()
+        public long minimumQuadrantHeight()
         {
           return qc0.minimumQuadrantHeight();
         }

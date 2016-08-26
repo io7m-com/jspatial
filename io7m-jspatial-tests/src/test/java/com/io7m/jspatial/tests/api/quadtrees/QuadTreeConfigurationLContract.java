@@ -14,11 +14,11 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationDType;
-import com.io7m.jtensors.VectorI2D;
+import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationLType;
+import com.io7m.jtensors.VectorI2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -26,10 +26,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 /**
- * Contract for double precision tree configurations.
+ * Contract for long integer tree configurations.
  */
 
-public abstract class QuadTreeConfigurationDContract
+public abstract class QuadTreeConfigurationLContract
 {
   /**
    * Expected exception.
@@ -37,10 +37,10 @@ public abstract class QuadTreeConfigurationDContract
 
   @Rule public final ExpectedException expected = ExpectedException.none();
 
-  protected abstract <A extends QuadTreeConfigurationDType> Generator<A> generator();
+  protected abstract <A extends QuadTreeConfigurationLType> Generator<A> generator();
 
-  protected abstract QuadTreeConfigurationDType create(
-    final BoundingAreaD area);
+  protected abstract QuadTreeConfigurationLType create(
+    final BoundingAreaL area);
 
   /**
    * Identities.
@@ -49,14 +49,14 @@ public abstract class QuadTreeConfigurationDContract
   @Test
   public final void testIdentities()
   {
-    final VectorI2D lower = new VectorI2D(0.0, 0.0);
-    final VectorI2D upper = new VectorI2D(100.0, 100.0);
-    final BoundingAreaD area = BoundingAreaD.of(lower, upper);
-    final QuadTreeConfigurationDType c = this.create(area);
+    final VectorI2L lower = new VectorI2L(0L, 0L);
+    final VectorI2L upper = new VectorI2L(100L, 100L);
+    final BoundingAreaL area = BoundingAreaL.of(lower, upper);
+    final QuadTreeConfigurationLType c = this.create(area);
 
     Assert.assertEquals(area, c.area());
-    Assert.assertEquals(2.0, c.minimumQuadrantHeight(), 0.0001);
-    Assert.assertEquals(2.0, c.minimumQuadrantWidth(), 0.0001);
+    Assert.assertEquals(2L, c.minimumQuadrantHeight());
+    Assert.assertEquals(2L, c.minimumQuadrantWidth());
     Assert.assertFalse(c.trimOnRemove());
   }
 }

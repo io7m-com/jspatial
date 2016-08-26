@@ -14,38 +14,38 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.api;
+package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultL;
-import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultLType;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultD;
+import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultDType;
+import com.io7m.jtensors.VectorI3D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.PrimitiveGenerators;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Contract completion for OctTreeRaycastResultL.
+ * Contract completion for OctTreeRaycastResultD.
  */
 
-public final class OctTreeRaycastResultLTest extends
-  OctTreeRaycastResultLContract
+public final class OctTreeRaycastResultDTest extends
+  OctTreeRaycastResultDContract
 {
   @SuppressWarnings("unchecked")
   @Override
-  protected <T, A extends OctTreeRaycastResultLType<T>> Generator<A> generator()
+  protected <T, A extends OctTreeRaycastResultDType<T>> Generator<A> generator()
   {
-    return new OctTreeRaycastResultLGenerator(PrimitiveGenerators.integers());
+    return new OctTreeRaycastResultDGenerator(PrimitiveGenerators.integers());
   }
 
   @Override
-  protected <T> OctTreeRaycastResultLType<T> create(
+  protected <T> OctTreeRaycastResultDType<T> create(
     final double distance,
-    final BoundingVolumeL volume,
+    final BoundingVolumeD volume,
     final T object)
   {
-    return OctTreeRaycastResultL.of(distance, volume, object);
+    return OctTreeRaycastResultD.of(distance, volume, object);
   }
 
   /**
@@ -55,31 +55,31 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testBuilder()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(100L, 100L, 100L));
-    final BoundingVolumeL volume1 = BoundingVolumeL.of(
-      new VectorI3L(1L, 1L, 1L),
-      new VectorI3L(99L, 99L, 99L));
+    final BoundingVolumeD volume0 = BoundingVolumeD.of(
+      new VectorI3D(0.0, 0.0, 0.0),
+      new VectorI3D(100.0, 100.0, 100.0));
+    final BoundingVolumeD volume1 = BoundingVolumeD.of(
+      new VectorI3D(1.0, 1.0, 1.0),
+      new VectorI3D(99.0, 99.0, 99.0));
 
-    final OctTreeRaycastResultL.Builder<Integer> b =
-      OctTreeRaycastResultL.builder();
+    final OctTreeRaycastResultD.Builder<Integer> b =
+      OctTreeRaycastResultD.builder();
 
     b.setVolume(volume0);
     b.setDistance(23.0);
     b.setItem(Integer.valueOf(23));
 
-    final OctTreeRaycastResultL<Integer> r0_eq = b.build();
-    final OctTreeRaycastResultL<Integer> r0 = b.build();
+    final OctTreeRaycastResultD<Integer> r0_eq = b.build();
+    final OctTreeRaycastResultD<Integer> r0 = b.build();
 
     b.setDistance(24.0);
-    final OctTreeRaycastResultL<Integer> r1 = b.build();
+    final OctTreeRaycastResultD<Integer> r1 = b.build();
 
     b.setItem(Integer.valueOf(25));
-    final OctTreeRaycastResultL<Integer> r2 = b.build();
+    final OctTreeRaycastResultD<Integer> r2 = b.build();
 
     b.setVolume(volume1);
-    final OctTreeRaycastResultL<Integer> r3 = b.build();
+    final OctTreeRaycastResultD<Integer> r3 = b.build();
 
     Assert.assertEquals(r0, r0);
     Assert.assertEquals(r0, r0_eq);
@@ -101,12 +101,12 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing0()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(100L, 100L, 100L));
+    final BoundingVolumeD volume0 = BoundingVolumeD.of(
+      new VectorI3D(0.0, 0.0, 0.0),
+      new VectorI3D(100.0, 100.0, 100.0));
 
-    final OctTreeRaycastResultL.Builder<Integer> b =
-      OctTreeRaycastResultL.builder();
+    final OctTreeRaycastResultD.Builder<Integer> b =
+      OctTreeRaycastResultD.builder();
 
     b.setVolume(volume0);
     this.expected.expect(IllegalStateException.class);
@@ -121,12 +121,12 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing1()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(100L, 100L, 100L));
+    final BoundingVolumeD volume0 = BoundingVolumeD.of(
+      new VectorI3D(0.0, 0.0, 0.0),
+      new VectorI3D(100.0, 100.0, 100.0));
 
-    final OctTreeRaycastResultL.Builder<Integer> b =
-      OctTreeRaycastResultL.builder();
+    final OctTreeRaycastResultD.Builder<Integer> b =
+      OctTreeRaycastResultD.builder();
 
     b.setVolume(volume0);
     b.setDistance(1.0);
@@ -142,8 +142,8 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing2()
   {
-    final OctTreeRaycastResultL.Builder<Integer> b =
-      OctTreeRaycastResultL.builder();
+    final OctTreeRaycastResultD.Builder<Integer> b =
+      OctTreeRaycastResultD.builder();
 
     b.setDistance(1.0);
     b.setItem(Integer.valueOf(23));
@@ -159,8 +159,8 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing3()
   {
-    final OctTreeRaycastResultL.Builder<Integer> b =
-      OctTreeRaycastResultL.builder();
+    final OctTreeRaycastResultD.Builder<Integer> b =
+      OctTreeRaycastResultD.builder();
 
     b.setItem(Integer.valueOf(23));
     this.expected.expect(IllegalStateException.class);
@@ -175,19 +175,19 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testFrom()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(100L, 100L, 100L));
+    final BoundingVolumeD volume0 = BoundingVolumeD.of(
+      new VectorI3D(0.0, 0.0, 0.0),
+      new VectorI3D(100.0, 100.0, 100.0));
 
-    final OctTreeRaycastResultL.Builder<Integer> b =
-      OctTreeRaycastResultL.builder();
+    final OctTreeRaycastResultD.Builder<Integer> b =
+      OctTreeRaycastResultD.builder();
 
     b.setVolume(volume0);
     b.setDistance(23.0);
     b.setItem(Integer.valueOf(23));
 
-    final OctTreeRaycastResultL<Integer> r0 = b.build();
-    final OctTreeRaycastResultL<Integer> r1 = b.from(r0).build();
+    final OctTreeRaycastResultD<Integer> r0 = b.build();
+    final OctTreeRaycastResultD<Integer> r1 = b.from(r0).build();
 
     Assert.assertEquals(r0, r1);
   }
@@ -199,22 +199,22 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testCopyOf()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(100L, 100L, 100L));
+    final BoundingVolumeD volume0 = BoundingVolumeD.of(
+      new VectorI3D(0.0, 0.0, 0.0),
+      new VectorI3D(100.0, 100.0, 100.0));
 
-    final OctTreeRaycastResultL.Builder<Integer> b =
-      OctTreeRaycastResultL.builder();
+    final OctTreeRaycastResultD.Builder<Integer> b =
+      OctTreeRaycastResultD.builder();
 
     b.setVolume(volume0);
     b.setDistance(23.0);
     b.setItem(Integer.valueOf(23));
 
-    final OctTreeRaycastResultL<Integer> r0 = b.build();
-    final OctTreeRaycastResultL<Integer> r1 =
-      OctTreeRaycastResultL.copyOf(r0);
-    final OctTreeRaycastResultL<Integer> r2 =
-      OctTreeRaycastResultL.copyOf(new OctTreeRaycastResultLType<Integer>()
+    final OctTreeRaycastResultD<Integer> r0 = b.build();
+    final OctTreeRaycastResultD<Integer> r1 =
+      OctTreeRaycastResultD.copyOf(r0);
+    final OctTreeRaycastResultD<Integer> r2 =
+      OctTreeRaycastResultD.copyOf(new OctTreeRaycastResultDType<Integer>()
       {
         @Override
         public double distance()
@@ -223,7 +223,7 @@ public final class OctTreeRaycastResultLTest extends
         }
 
         @Override
-        public BoundingVolumeL volume()
+        public BoundingVolumeD volume()
         {
           return r0.volume();
         }
@@ -246,24 +246,24 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testWith()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(100L, 100L, 100L));
-    final BoundingVolumeL volume1 = BoundingVolumeL.of(
-      new VectorI3L(1L, 1L, 1L),
-      new VectorI3L(99L, 99L, 99L));
+    final BoundingVolumeD volume0 = BoundingVolumeD.of(
+      new VectorI3D(0.0, 0.0, 0.0),
+      new VectorI3D(100.0, 100.0, 100.0));
+    final BoundingVolumeD volume1 = BoundingVolumeD.of(
+      new VectorI3D(1.0, 1.0, 1.0),
+      new VectorI3D(99.0, 99.0, 99.0));
 
-    final OctTreeRaycastResultL.Builder<Integer> b =
-      OctTreeRaycastResultL.builder();
+    final OctTreeRaycastResultD.Builder<Integer> b =
+      OctTreeRaycastResultD.builder();
 
     b.setVolume(volume0);
     b.setDistance(23.0);
     b.setItem(Integer.valueOf(23));
 
-    final OctTreeRaycastResultL<Integer> r0 = b.build();
-    final OctTreeRaycastResultL<Integer> r1 = r0.withDistance(24.0);
-    final OctTreeRaycastResultL<Integer> r2 = r0.withItem(Integer.valueOf(25));
-    final OctTreeRaycastResultL<Integer> r3 = r0.withVolume(volume1);
+    final OctTreeRaycastResultD<Integer> r0 = b.build();
+    final OctTreeRaycastResultD<Integer> r1 = r0.withDistance(24.0);
+    final OctTreeRaycastResultD<Integer> r2 = r0.withItem(Integer.valueOf(25));
+    final OctTreeRaycastResultD<Integer> r3 = r0.withVolume(volume1);
 
     Assert.assertEquals(r0, r0);
 
