@@ -400,7 +400,7 @@ public final class QuadTreeD<T> implements QuadTreeDType<T>
        */
 
       if (this.isLeaf() && this.quadrant_objects.isEmpty()) {
-        return ;
+        return;
       }
 
       /*
@@ -460,7 +460,7 @@ public final class QuadTreeD<T> implements QuadTreeDType<T>
        */
 
       if (this.isLeaf() && this.quadrant_objects.isEmpty()) {
-        return ;
+        return;
       }
 
       /*
