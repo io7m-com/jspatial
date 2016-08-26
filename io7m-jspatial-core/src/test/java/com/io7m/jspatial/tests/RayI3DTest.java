@@ -8,8 +8,12 @@ import com.io7m.jequality.AlmostEqualDouble.ContextRelative;
 import com.io7m.jspatial.RayI3D;
 import com.io7m.jtensors.VectorI3D;
 
+import java.nio.file.FileVisitResult;
+
 @SuppressWarnings("static-method") public class RayI3DTest
 {
+  FileVisitResult x;
+
   @Test public void testRayEqualsNotCase0()
   {
     final RayI3D ray0 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);

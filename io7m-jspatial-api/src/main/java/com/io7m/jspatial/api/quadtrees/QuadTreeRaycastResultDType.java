@@ -14,35 +14,47 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.examples.swing;
+package com.io7m.jspatial.api.quadtrees;
 
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
+import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jspatial.api.ImmutableStyleType;
+import org.immutables.value.Value;
 
 /**
- * Main program.
+ * The type of quadtree raycast results.
+ *
+ * @param <T> The precise type of objects
  */
 
-public final class QuadTreeViewerMain
+@Value.Immutable
+@ImmutableStyleType
+public interface QuadTreeRaycastResultDType<T>
+  extends Comparable<QuadTreeRaycastResultDType<T>>
 {
-  private QuadTreeViewerMain()
+  @Override
+  default int compareTo(final QuadTreeRaycastResultDType<T> o)
   {
-
+    return Double.compare(this.distance(), o.distance());
   }
 
   /**
-   * Command line entry point.
-   *
-   * @param args Command line arguments
+   * @return The distance to the object
    */
 
-  public static void main(final String[] args)
-  {
-    SwingUtilities.invokeLater(() -> {
-      final QuadTreeWindow win = new QuadTreeWindow();
-      win.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-      win.pack();
-      win.setVisible(true);
-    });
-  }
+  @Value.Parameter(order = 0)
+  double distance();
+
+  /**
+   * @return The object area
+   */
+
+  @Value.Parameter(order = 1)
+  BoundingAreaD area();
+
+  /**
+   * @return The object
+   */
+
+  @Value.Parameter(order = 2)
+  T item();
 }

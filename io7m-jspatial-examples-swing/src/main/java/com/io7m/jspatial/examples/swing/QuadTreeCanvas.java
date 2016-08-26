@@ -16,174 +16,325 @@
 
 package com.io7m.jspatial.examples.swing;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.SortedSet;
-import java.util.concurrent.atomic.AtomicReference;
-
-import com.io7m.jfunctional.PartialFunctionType;
+import com.io7m.jfunctional.Unit;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jnull.Nullable;
-import com.io7m.jspatial.BoundingAreaType;
-import com.io7m.jspatial.RayI2D;
-import com.io7m.jspatial.quadtrees.QuadTreeRaycastResult;
-import com.io7m.jspatial.quadtrees.QuadTreeTraversalType;
-import com.io7m.jspatial.quadtrees.QuadTreeType;
-import com.io7m.jtensors.VectorReadable2IType;
+import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jspatial.api.TreeVisitResult;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
+import com.io7m.jspatial.api.quadtrees.QuadTreeDType;
+import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
+import com.io7m.jspatial.examples.swing.LogMessageType.Severity;
+import com.io7m.jspatial.implementation.QuadTreeD;
+import com.io7m.jspatial.implementation.QuadTreeL;
+import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.VectorI2L;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
 
-final class QuadTreeCanvas extends Canvas
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+/**
+ * The tree canvas.
+ */
+
+final class QuadTreeCanvas extends JPanel
 {
-  private static final long                                     serialVersionUID;
-
-  static {
-    serialVersionUID = -4348626371362763989L;
-  }
-
-  private final AtomicReference<QuadTreeType<Rectangle>>        quad;
-  private @Nullable RayI2D                                      ray;
-  private @Nullable SortedSet<QuadTreeRaycastResult<Rectangle>> ray_items;
-  private @Nullable BoundingAreaType                            area;
-  private @Nullable SortedSet<Rectangle>                        area_items;
+  private final Subscription subscription;
+  private final Map<Integer, Item> items;
+  private final Observer<LogMessage> log_messages;
+  private Function<QuadTreeCommandType, Unit> on_message_cases;
+  private QuadTreeLType<Integer> tree_l;
+  private QuadTreeDType<Integer> tree_d;
+  private QuadTreeKind kind;
 
   QuadTreeCanvas(
-    final AtomicReference<QuadTreeType<Rectangle>> in_quad)
+    final Observable<QuadTreeCommandType> in_tree_commands,
+    final Observer<LogMessage> in_log_messages)
   {
-    this.quad = NullCheck.notNull(in_quad);
+    this.kind = QuadTreeKind.LONG_INTEGER;
+    this.items = new HashMap<>(128);
+    this.log_messages = in_log_messages;
+
+    this.on_message_cases = QuadTreeCommandTypes.cases()
+      .addObject(this::onCommandAddObject)
+      .removeObject(this::onCommandRemoveObject)
+      .trimQuadTree(this::onCommandTrimQuadTree)
+      .createQuadTreeL(QuadTreeCanvas.this::onCommandCreateQuadTreeL)
+      .createQuadTreeD(QuadTreeCanvas.this::onCommandCreateQuadTreeD);
+
+    this.subscription = in_tree_commands.subscribe(this::onCommand);
   }
 
-  @Override public void paint(
-    final @Nullable Graphics g)
+  private void onCommand(final QuadTreeCommandType m)
   {
-    assert g != null;
+    this.on_message_cases.apply(m);
+    this.repaint();
+  }
 
-    try {
-      g.setColor(Color.BLACK);
-      g.fillRect(0, 0, this.getWidth(), this.getHeight());
-      g.setColor(Color.WHITE);
+  private Unit onCommandCreateQuadTreeL(
+    final QuadTreeConfigurationL config)
+  {
+    this.kind = QuadTreeKind.LONG_INTEGER;
+    this.tree_l = QuadTreeL.create(config);
+    this.items.clear();
+    return Unit.unit();
+  }
 
-      final QuadTreeType<Rectangle> qr = this.quad.get();
-      assert qr != null;
+  private Unit onCommandCreateQuadTreeD(
+    final QuadTreeConfigurationD config)
+  {
+    this.kind = QuadTreeKind.DOUBLE;
+    this.tree_d = QuadTreeD.create(config);
+    this.items.clear();
+    return Unit.unit();
+  }
 
-      qr.quadTreeTraverse(new QuadTreeTraversalType<Exception>() {
-        @Override public void visit(
-          final int depth,
-          final VectorReadable2IType lower,
-          final VectorReadable2IType upper)
-          throws Exception
-        {
-          g.setColor(Color.GRAY);
-          g.drawRect(
-            lower.getXI(),
-            lower.getYI(),
-            (upper.getXI() - lower.getXI()) + 1,
-            (upper.getYI() - lower.getYI()) + 1);
+  private Unit onCommandTrimQuadTree()
+  {
+    switch (this.kind) {
+      case LONG_INTEGER: {
+        final QuadTreeLType<Integer> t = this.tree_l;
+        if (t != null) {
+          t.trim();
         }
-      });
-
-      qr
-        .quadTreeIterateObjects(new PartialFunctionType<Rectangle, Boolean, Exception>() {
-          @Override public Boolean call(
-            final Rectangle x)
-            throws Exception
-          {
-            final VectorReadable2IType lower = x.boundingAreaLower();
-            final VectorReadable2IType upper = x.boundingAreaUpper();
-
-            g.setColor(Color.GREEN);
-            g.drawRect(
-              lower.getXI(),
-              lower.getYI(),
-              (upper.getXI() - lower.getXI()) + 1,
-              (upper.getYI() - lower.getYI()) + 1);
-
-            return NullCheck.notNull(Boolean.TRUE);
-          }
-        });
-
-      final RayI2D ray_current = this.ray;
-      if (ray_current != null) {
-        g.setColor(Color.CYAN);
-
-        final int origin_x = (int) ray_current.getOrigin().getXD();
-        final int origin_y = (int) ray_current.getOrigin().getYD();
-
-        int target_x = origin_x;
-        target_x += (ray_current.getDirection().getXD()) * 1000;
-        int target_y = origin_y;
-        target_y += (ray_current.getDirection().getYD()) * 1000;
-
-        g.drawLine(origin_x, origin_y, target_x, target_y);
-
-        final SortedSet<QuadTreeRaycastResult<Rectangle>> ri = this.ray_items;
-        assert ri != null;
-
-        for (final QuadTreeRaycastResult<Rectangle> rr : ri) {
-          final Rectangle r = rr.getObject();
-          final VectorReadable2IType lower = r.boundingAreaLower();
-          final VectorReadable2IType upper = r.boundingAreaUpper();
-
-          g.drawRect(
-            lower.getXI(),
-            lower.getYI(),
-            (upper.getXI() - lower.getXI()) + 1,
-            (upper.getYI() - lower.getYI()) + 1);
-        }
+        break;
       }
-
-      final BoundingAreaType a = this.area;
-      if (a != null) {
-        g.setColor(Color.RED);
-
-        final VectorReadable2IType lower = a.boundingAreaLower();
-        final VectorReadable2IType upper = a.boundingAreaUpper();
-
-        g.drawRect(
-          lower.getXI(),
-          lower.getYI(),
-          (upper.getXI() - lower.getXI()) + 1,
-          (upper.getYI() - lower.getYI()) + 1);
-
-        final SortedSet<Rectangle> ai = this.area_items;
-        assert ai != null;
-        for (final Rectangle rr : ai) {
-          final VectorReadable2IType rlower = rr.boundingAreaLower();
-          final VectorReadable2IType rupper = rr.boundingAreaUpper();
-
-          g.drawRect(
-            rlower.getXI(),
-            rlower.getYI(),
-            (rupper.getXI() - rlower.getXI()) + 1,
-            (rupper.getYI() - rlower.getYI()) + 1);
+      case DOUBLE: {
+        final QuadTreeDType<Integer> t = this.tree_d;
+        if (t != null) {
+          t.trim();
         }
+        break;
       }
+    }
 
-    } catch (final Exception e) {
-      e.printStackTrace();
+
+    return Unit.unit();
+  }
+
+  private Unit onCommandRemoveObject(
+    final Integer item)
+  {
+    switch (this.kind) {
+      case LONG_INTEGER: {
+        final QuadTreeLType<Integer> t = this.tree_l;
+        if (t != null) {
+          final boolean removed = t.remove(item);
+          this.sendRemovedMessage(item, removed);
+        }
+        break;
+      }
+      case DOUBLE: {
+        final QuadTreeDType<Integer> t = this.tree_d;
+        if (t != null) {
+          final boolean removed = t.remove(item);
+          this.sendRemovedMessage(item, removed);
+        }
+        break;
+      }
+    }
+
+    this.items.remove(item);
+    return Unit.unit();
+  }
+
+  private void sendRemovedMessage(
+    final Integer item,
+    final boolean removed)
+  {
+    if (removed) {
+      this.log_messages.onNext(LogMessage.of(
+        Severity.INFO,
+        String.format("Removed item %d", item)));
+    } else {
+      this.log_messages.onNext(LogMessage.of(
+        Severity.ERROR,
+        String.format("Failed to remove item %d", item)));
     }
   }
 
-  public void reset()
+  private Unit onCommandAddObject(
+    final BoundingAreaL area,
+    final Integer item)
   {
-    this.ray = null;
-    this.ray_items = null;
-    this.area = null;
-    this.area_items = null;
+    switch (this.kind) {
+      case LONG_INTEGER: {
+        final QuadTreeLType<Integer> t = this.tree_l;
+        if (t != null) {
+          final boolean inserted = t.insert(item, area);
+          this.sendInsertedMessage(area, item, inserted);
+        }
+        break;
+      }
+      case DOUBLE: {
+        final QuadTreeDType<Integer> t = this.tree_d;
+        if (t != null) {
+          final BoundingAreaD area_d = BoundingAreaD.of(
+            new VectorI2D(
+              (double) area.lower().getXL(), (double) area.lower().getYL()),
+            new VectorI2D(
+              (double) area.upper().getXL(), (double) area.upper().getYL()));
+          final boolean inserted = t.insert(item, area_d);
+          this.sendInsertedMessage(area, item, inserted);
+        }
+        break;
+      }
+    }
+
+    this.items.put(item, new Item(item, area));
+    return Unit.unit();
   }
 
-  public void setRayItems(
-    final RayI2D in_ray,
-    final SortedSet<QuadTreeRaycastResult<Rectangle>> in_items)
+  private void sendInsertedMessage(
+    final BoundingAreaL area,
+    final Integer item,
+    final boolean inserted)
   {
-    this.ray = in_ray;
-    this.ray_items = in_items;
+    if (inserted) {
+      this.log_messages.onNext(LogMessage.of(
+        Severity.INFO,
+        String.format(
+          "Inserted item %d (%d+%d %dx%d)", item,
+          Long.valueOf(area.lower().getXL()),
+          Long.valueOf(area.lower().getYL()),
+          Long.valueOf(area.width()),
+          Long.valueOf(area.height()))));
+    } else {
+      this.log_messages.onNext(LogMessage.of(
+        Severity.ERROR,
+        String.format(
+          "Failed to insert item %d (%d+%d %dx%d)", item,
+          Long.valueOf(area.lower().getXL()),
+          Long.valueOf(area.lower().getYL()),
+          Long.valueOf(area.width()),
+          Long.valueOf(area.height()))));
+    }
   }
 
-  public void setAreaItems(
-    final BoundingAreaType in_area,
-    final SortedSet<Rectangle> in_items)
+  @Override
+  public void paint(final Graphics g)
   {
-    this.area = in_area;
-    this.area_items = in_items;
+    super.paint(g);
+
+    g.setColor(Color.BLACK);
+    g.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+    switch (this.kind) {
+      case LONG_INTEGER: {
+        this.drawTreeLong(g);
+        break;
+      }
+      case DOUBLE: {
+        this.drawTreeDouble(g);
+        break;
+      }
+    }
+  }
+
+  private void drawTreeDouble(final Graphics g)
+  {
+    final QuadTreeDType<Integer> t = this.tree_d;
+    if (t != null) {
+
+      t.iterateQuadrants(g, (gg, quadrant, depth) -> {
+        final VectorI2D lower = quadrant.area().lower();
+
+        gg.setColor(Color.GRAY);
+        gg.drawRect(
+          (int) lower.getXD(),
+          (int) lower.getYD(),
+          (int) quadrant.area().width(),
+          (int) quadrant.area().height());
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
+
+      g.setFont(Font.decode("Monospaced 8"));
+
+      for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
+        final Item item = entry.getValue();
+        final VectorI2L lower = item.area.lower();
+
+        if (t.contains(item.item)) {
+          g.setColor(Color.WHITE);
+        } else {
+          g.setColor(Color.RED);
+        }
+
+        g.drawRect(
+          (int) lower.getXL(),
+          (int) lower.getYL(),
+          (int) item.area.width(),
+          (int) item.area.height());
+        g.drawString(
+          item.item.toString(),
+          (int) lower.getXL() + 2,
+          (int) lower.getYL() + 8);
+      }
+    }
+  }
+
+  private void drawTreeLong(final Graphics g)
+  {
+    final QuadTreeLType<Integer> t = this.tree_l;
+    if (t != null) {
+
+      t.iterateQuadrants(g, (gg, quadrant, depth) -> {
+        final VectorI2L lower = quadrant.area().lower();
+
+        gg.setColor(Color.GRAY);
+        gg.drawRect(
+          (int) lower.getXL(),
+          (int) lower.getYL(),
+          (int) quadrant.area().width(),
+          (int) quadrant.area().height());
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
+
+      g.setFont(Font.decode("Monospaced 8"));
+
+      for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
+        final Item item = entry.getValue();
+        final VectorI2L lower = item.area.lower();
+
+        if (t.contains(item.item)) {
+          g.setColor(Color.WHITE);
+        } else {
+          g.setColor(Color.RED);
+        }
+
+        g.drawRect(
+          (int) lower.getXL(),
+          (int) lower.getYL(),
+          (int) item.area.width(),
+          (int) item.area.height());
+        g.drawString(
+          item.item.toString(),
+          (int) lower.getXL() + 2,
+          (int) lower.getYL() + 8);
+      }
+    }
+  }
+
+  private static final class Item
+  {
+    private final Integer item;
+    private final BoundingAreaL area;
+
+    Item(
+      final Integer in_item,
+      final BoundingAreaL in_area)
+    {
+      this.item = NullCheck.notNull(in_item, "Item");
+      this.area = NullCheck.notNull(in_area, "Area");
+    }
   }
 }

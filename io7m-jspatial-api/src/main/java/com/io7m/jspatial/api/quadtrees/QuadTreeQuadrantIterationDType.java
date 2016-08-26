@@ -14,10 +14,31 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.io7m.jspatial.api.quadtrees;
+
+import com.io7m.jspatial.api.TreeVisitResult;
+
 /**
- * Swing QuadTree viewer.
+ * The type of functions used to iterate over the quadrants of quadtrees.
+ *
+ * @param <A> The type of tree objects
+ * @param <C> The type of contextual values
  */
 
-@com.io7m.jnull.NonNullByDefault
-package com.io7m.jspatial.examples.swing;
+public interface QuadTreeQuadrantIterationDType<A, C>
+{
+  /**
+   * Apply the function.
+   *
+   * @param context  A context value
+   * @param quadrant The current quadrant
+   * @param depth    The current quadrant depth
+   *
+   * @return A value indicating how or if the traversal should continue
+   */
 
+  TreeVisitResult apply(
+    C context,
+    QuadTreeQuadrantDType<A> quadrant,
+    long depth);
+}

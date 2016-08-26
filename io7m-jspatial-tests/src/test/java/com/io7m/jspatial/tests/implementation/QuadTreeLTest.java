@@ -14,10 +14,23 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.io7m.jspatial.tests.implementation;
+
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
+import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
+import com.io7m.jspatial.implementation.QuadTreeL;
+import com.io7m.jspatial.tests.api.QuadTreeLContract;
+
 /**
- * Swing QuadTree viewer.
+ * Test for {@link QuadTreeL}
  */
 
-@com.io7m.jnull.NonNullByDefault
-package com.io7m.jspatial.examples.swing;
-
+public final class QuadTreeLTest extends QuadTreeLContract
+{
+  @Override
+  protected <T> QuadTreeLType<T> create(
+    final QuadTreeConfigurationL config)
+  {
+    return QuadTreeL.create(config);
+  }
+}

@@ -10,11 +10,11 @@
     <artifactId>io7m-jspatial</artifactId>
     <version>3.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>io7m-jspatial-tests</artifactId>
+  <artifactId>io7m-jspatial-implementation</artifactId>
 
   <packaging>bundle</packaging>
-  <name>io7m-jspatial-tests</name>
-  <description>Spatial data structures (Unit tests)</description>
+  <name>io7m-jspatial-implementation</name>
+  <description>Spatial data structures (Main implementation)</description>
   <url>http://io7m.github.io/jspatial/</url>
 
   <scm>
@@ -29,17 +29,17 @@
       <artifactId>io7m-jspatial-api</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jspatial-implementation</artifactId>
-      <version>${project.version}</version>
+      <groupId>com.io7m.jaffirm</groupId>
+      <artifactId>io7m-jaffirm-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>net.java.quickcheck</groupId>
-      <artifactId>quickcheck</artifactId>
-      <scope>test</scope>
+      <groupId>it.unimi.dsi</groupId>
+      <artifactId>fastutil</artifactId>
     </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -53,6 +53,18 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+
+      <!-- Produce OSGi bundle -->
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package></Export-Package>
+          </instructions>
+        </configuration>
       </plugin>
     </plugins>
   </build>

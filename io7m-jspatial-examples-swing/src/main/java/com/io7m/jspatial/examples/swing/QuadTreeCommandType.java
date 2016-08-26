@@ -14,10 +14,33 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/**
- * Swing QuadTree viewer.
- */
-
-@com.io7m.jnull.NonNullByDefault
 package com.io7m.jspatial.examples.swing;
 
+import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
+import org.derive4j.Data;
+
+@Data
+interface QuadTreeCommandType
+{
+  <R> R match(CasesType<R> cases);
+
+  interface CasesType<R>
+  {
+    R addObject(
+      BoundingAreaL area,
+      Integer item);
+
+    R removeObject(
+      Integer item);
+
+    R trimQuadTree();
+
+    R createQuadTreeL(
+      QuadTreeConfigurationL lconfig);
+
+    R createQuadTreeD(
+      QuadTreeConfigurationD dconfig);
+  }
+}

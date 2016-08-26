@@ -21,6 +21,7 @@
     <module>io7m-jspatial-documentation</module>
     <module>io7m-jspatial-examples-jogl</module>
     <module>io7m-jspatial-examples-swing</module>
+    <module>io7m-jspatial-implementation</module>
     <module>io7m-jspatial-tests</module>
   </modules>
 
@@ -96,7 +97,17 @@
         <artifactId>io7m-jtensors-core</artifactId>
         <version>7.0.0-beta0011</version>
       </dependency>
+      <dependency>
+        <groupId>com.io7m.jaffirm</groupId>
+        <artifactId>io7m-jaffirm-core</artifactId>
+        <version>0.1.0</version>
+      </dependency>
 
+      <dependency>
+        <groupId>it.unimi.dsi</groupId>
+        <artifactId>fastutil</artifactId>
+        <version>7.0.12</version>
+      </dependency>
       <dependency>
         <groupId>net.java.dev.designgridlayout</groupId>
         <artifactId>designgridlayout</artifactId>
@@ -107,7 +118,27 @@
         <artifactId>value</artifactId>
         <version>2.2.10</version>
       </dependency>
+      <dependency>
+        <groupId>io.reactivex</groupId>
+        <artifactId>rxjava</artifactId>
+        <version>1.1.8</version>
+      </dependency>
+      <dependency>
+        <groupId>org.derive4j</groupId>
+        <artifactId>derive4j</artifactId>
+        <version>0.9.1</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.1.7</version>
+      </dependency>
 
+      <dependency>
+        <groupId>net.java.quickcheck</groupId>
+        <artifactId>quickcheck</artifactId>
+        <version>0.6</version>
+      </dependency>
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -217,6 +248,7 @@
                 <encoding>UTF-8</encoding>
                 <consoleOutput>true</consoleOutput>
                 <failsOnError>true</failsOnError>
+                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
               </configuration>
               <goals>
                 <goal>check</goal>
@@ -247,14 +279,14 @@
           <extensions>true</extensions>
         </plugin>
 
-        <!-- Require JDK >= 1.7 -->
+        <!-- Require JDK >= 1.8 -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.5.1</version>
           <configuration>
-            <source>1.7</source>
-            <target>1.7</target>
+            <source>1.8</source>
+            <target>1.8</target>
           </configuration>
         </plugin>
 

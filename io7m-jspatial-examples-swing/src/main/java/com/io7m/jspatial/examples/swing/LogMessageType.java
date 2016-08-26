@@ -14,10 +14,54 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/**
- * Swing QuadTree viewer.
- */
-
-@com.io7m.jnull.NonNullByDefault
 package com.io7m.jspatial.examples.swing;
 
+import org.immutables.value.Value;
+
+/**
+ * Log message type.
+ */
+
+@com.io7m.jspatial.api.ImmutableStyleType
+@Value.Immutable
+interface LogMessageType
+{
+  /**
+   * @return The message severity
+   */
+
+  @Value.Parameter(order = 0)
+  Severity severity();
+
+  /**
+   * @return The message text
+   */
+
+  @Value.Parameter(order = 1)
+  String message();
+
+  /**
+   * Log message severity.
+   */
+
+  enum Severity
+  {
+    /**
+     * Debug level.
+     */
+
+    DEBUG,
+
+    /**
+     * Info level.
+     */
+
+    INFO,
+
+    /**
+     * Error level.
+     */
+
+    ERROR
+  }
+}

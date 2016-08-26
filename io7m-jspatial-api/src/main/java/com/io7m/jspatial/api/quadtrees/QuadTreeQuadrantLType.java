@@ -14,10 +14,31 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.io7m.jspatial.api.quadtrees;
+
+import com.io7m.jspatial.api.BoundingAreaL;
+
+import java.util.Map;
+
 /**
- * Swing QuadTree viewer.
+ * A quadrant as it appears within the context of a {@link
+ * QuadTreeReadableLType}.
+ *
+ * @param <T> The precise type of objects
  */
 
-@com.io7m.jnull.NonNullByDefault
-package com.io7m.jspatial.examples.swing;
+public interface QuadTreeQuadrantLType<T>
+{
+  /**
+   * @return A read-only view of the objects directly contained within this
+   * quadrant
+   */
 
+  Map<T, BoundingAreaL> objects();
+
+  /**
+   * @return The area of the quadrant
+   */
+
+  BoundingAreaL area();
+}

@@ -14,10 +14,35 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/**
- * Swing QuadTree viewer.
- */
-
-@com.io7m.jnull.NonNullByDefault
 package com.io7m.jspatial.examples.swing;
 
+import javax.swing.JComboBox;
+
+/**
+ * A combo box over an enum.
+ *
+ * @param <T> The precise enum type
+ */
+
+final class QuadTreeComboBox<T extends Enum<T>> extends JComboBox<T>
+{
+  private final T[] values;
+
+  QuadTreeComboBox(final Class<T> c)
+  {
+    this.values = c.getEnumConstants();
+    for (final T cons : this.values) {
+      this.addItem(cons);
+    }
+  }
+
+  @Override
+  public T getSelectedItem()
+  {
+    final int index = this.getSelectedIndex();
+    if (index < 0) {
+      return null;
+    }
+    return this.values[index];
+  }
+}

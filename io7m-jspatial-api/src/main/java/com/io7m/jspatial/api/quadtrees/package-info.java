@@ -15,9 +15,9 @@
  */
 
 /**
- * Swing QuadTree viewer.
+ * Quadtree API specification.
  */
 
 @com.io7m.jnull.NonNullByDefault
-package com.io7m.jspatial.examples.swing;
+package com.io7m.jspatial.api.quadtrees;
 

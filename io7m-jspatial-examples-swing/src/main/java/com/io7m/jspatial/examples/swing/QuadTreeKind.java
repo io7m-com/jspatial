@@ -14,10 +14,10 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/**
- * Swing QuadTree viewer.
- */
-
-@com.io7m.jnull.NonNullByDefault
 package com.io7m.jspatial.examples.swing;
 
+enum QuadTreeKind
+{
+  LONG_INTEGER,
+  DOUBLE
+}

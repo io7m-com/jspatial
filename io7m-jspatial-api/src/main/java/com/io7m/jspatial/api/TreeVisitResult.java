@@ -14,10 +14,23 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.io7m.jspatial.api;
+
 /**
- * Swing QuadTree viewer.
+ * The result of traversing a tree.
  */
 
-@com.io7m.jnull.NonNullByDefault
-package com.io7m.jspatial.examples.swing;
+public enum TreeVisitResult
+{
+  /**
+   * Continue the traversal.
+   */
 
+  RESULT_CONTINUE,
+
+  /**
+   * Terminate the traversal.
+   */
+
+  RESULT_TERMINATE
+}

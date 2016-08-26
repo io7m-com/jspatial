@@ -14,10 +14,26 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.io7m.jspatial.api.quadtrees;
+
 /**
- * Swing QuadTree viewer.
+ * The type of readable quadtrees.
  */
 
-@com.io7m.jnull.NonNullByDefault
-package com.io7m.jspatial.examples.swing;
+public interface QuadTreeReadableType
+{
+  /**
+   * @return The number of elements in the tree
+   */
 
+  long size();
+
+  /**
+   * @return {@code true} iff the tree is empty
+   */
+
+  default boolean isEmpty()
+  {
+    return this.size() == 0L;
+  }
+}
