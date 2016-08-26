@@ -31,17 +31,19 @@
       <s:subsection>
         <s:subsection-title>Overview</s:subsection-title>
         <s:paragraph>
-          The <s:term s:type="package">${project.parent.name}</s:term> package implements
-          several spatial data structures, such as octtrees and quadtrees.
+          The <s:term s:type="package">${project.parent.name}</s:term> package
+          implements several spatial data structures, such as octtrees and
+          quadtrees.
         </s:paragraph>
       </s:subsection>
 
       <s:subsection>
         <s:subsection-title>Simplicity</s:subsection-title>
         <s:paragraph>
-          The <s:term s:type="package">${project.parent.name}</s:term> package strives for
-          simplicity in interface and implementation. Most implementations
-          of the data structures included are less than <s:term s:type="constant">700</s:term>
+          The <s:term s:type="package">${project.parent.name}</s:term> package
+          strives for simplicity in interface and implementation. Most
+          implementations of the data structures included are less than
+          <s:term s:type="constant">700</s:term>
           lines of code (including comments and annotations).
         </s:paragraph>
         <s:paragraph>
@@ -54,21 +56,18 @@
       <s:subsection>
         <s:subsection-title>Efficiency</s:subsection-title>
         <s:paragraph>
-          The package includes multiple implementations of the specified data
-          structures, all sharing a common interface. The implementations provided
-          have differing and documented performance characteristics, to allow
-          programmers to select the implementation that best fits the usage patterns
-          of any given program. Implementations can be switched without modifying
-          existing code.
+          The package provides specialized implementations of the specified
+          APIs, with versions for long integer and double precision floating
+          point coordinates.
         </s:paragraph>
       </s:subsection>
 
       <s:subsection>
         <s:subsection-title>Correctness</s:subsection-title>
         <s:paragraph>
-          The package includes a large battery of automated tests that attempt to verify
-          the correctness of the included implementations. As of the time of writing,
-          the tests manage over 96% coverage for all code
+          The package includes a large battery of automated tests that attempt
+          to verify the correctness of the included implementations. As of the
+          time of writing, the tests manage over 96% coverage for all code
           <s:footnote>
             Some of the code is specifically and deliberately unreachable but the
             compiler is unable to verify this without flow analysis.
