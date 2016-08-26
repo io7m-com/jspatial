@@ -16,6 +16,8 @@
 
 package com.io7m.jspatial.examples.swing;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import rx.Observable;
 import rx.Subscription;
 import rx.subjects.PublishSubject;
@@ -38,6 +40,12 @@ import java.awt.Dimension;
 
 final class QuadTreeWindow extends JFrame
 {
+  private static final Logger LOG;
+
+  static {
+    LOG = LoggerFactory.getLogger(QuadTreeWindow.class);
+  }
+
   private final QuadTreeCanvas canvas;
   private final QuadTreeControls controls;
   private final JSplitPane split;
@@ -64,6 +72,13 @@ final class QuadTreeWindow extends JFrame
       JSplitPane.HORIZONTAL_SPLIT, this.canvas_scroll, this.controls_scroll);
 
     this.status = new StatusBar(this.messages);
+
+    Thread.setDefaultUncaughtExceptionHandler(
+      (t, e) -> {
+        QuadTreeWindow.LOG.error("uncaught exception: ", e);
+        this.messages.onNext(
+          LogMessage.of(LogMessageType.Severity.ERROR, e.getMessage()));
+      });
 
     final Container pane = this.getContentPane();
     pane.add(this.split, BorderLayout.CENTER);

@@ -16,6 +16,7 @@
 
 package com.io7m.jspatial.examples.swing;
 
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingAreaD;
 import com.io7m.jspatial.api.BoundingAreaL;
@@ -40,6 +41,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.Font;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -81,6 +83,9 @@ final class QuadTreeControls extends JPanel
   private final JButton tree_trim;
   private final JCheckBox tree_trim_remove;
   private final QuadTreeComboBox<QuadTreeKind> tree_kind;
+  private final JSlider objects_random_count;
+  private final JTextField objects_random_count_show;
+  private final JButton objects_add;
 
   QuadTreeControls()
   {
@@ -90,7 +95,7 @@ final class QuadTreeControls extends JPanel
 
     this.objects_model = new DefaultListModel<>();
     this.objects = new JList<>(this.objects_model);
-    this.objects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    this.objects.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
     this.objects_scroller = new JScrollPane(this.objects);
     this.objects_scroller.setVerticalScrollBarPolicy(
       JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -131,6 +136,16 @@ final class QuadTreeControls extends JPanel
     this.object_add = new JButton("Add");
     this.object_remove = new JButton("Remove");
     this.object_remove.setEnabled(false);
+
+    this.objects_random_count = new JSlider(1, 50);
+    this.objects_random_count_show = new JTextField();
+    this.objects_random_count_show.setEditable(false);
+    this.objects_random_count.addChangeListener(
+      new SliderFieldUpdater(
+        this.objects_random_count, this.objects_random_count_show));
+
+    this.objects_add = new JButton("Add");
+    this.objects_random_count.setValue(50);
 
     this.tree_kind = new QuadTreeComboBox<>(QuadTreeKind.class);
     this.tree_width = new JSlider(1, 1024);
@@ -206,6 +221,8 @@ final class QuadTreeControls extends JPanel
       e -> this.onObjectAdd());
     this.objects.addListSelectionListener(
       e -> this.onObjectListChanged());
+    this.objects_add.addActionListener(
+      e -> this.onObjectsRandomAdd());
     this.object_remove.addActionListener(
       e -> this.onObjectRemove());
     this.tree_create.addActionListener(
@@ -214,25 +231,54 @@ final class QuadTreeControls extends JPanel
       e -> this.events.onNext(QuadTreeCommandTypes.trimQuadTree()));
   }
 
+  private static long randomLong(
+    final long min,
+    final long max)
+  {
+    final long range = max - min;
+    final long r = (long) (Math.random() * (double) range);
+    return r + min;
+  }
+
+  private static JLabel largerLabel(final String text)
+  {
+    final JLabel label = new JLabel(text);
+    final Font f = label.getFont();
+    label.setFont(f.deriveFont(f.getSize2D() * 1.2f));
+    return label;
+  }
+
   private void layout(final DesignGridLayout dg)
   {
     dg.row().left().add(QuadTreeControls.largerLabel("Tree")).fill();
     dg.emptyRow();
-    dg.row().grid(new JLabel("Kind")).add(this.tree_kind);
-    dg.row().grid(new JLabel("X")).add(this.tree_x, 2).add(this.tree_x_show);
-    dg.row().grid(new JLabel("Y")).add(this.tree_y, 2).add(this.tree_y_show);
-    dg.row().grid(new JLabel("Width")).add(
-      this.tree_width,
-      2).add(this.tree_width_show);
-    dg.row().grid(new JLabel("Height")).add(
-      this.tree_height,
-      2).add(this.tree_height_show);
-    dg.row().grid(new JLabel("Limit Q Width")).add(
-      this.tree_qmin_width,
-      2).add(this.tree_qmin_width_show);
-    dg.row().grid(new JLabel("Limit Q Height")).add(
-      this.tree_qmin_height,
-      2).add(this.tree_qmin_height_show);
+    dg.row()
+      .grid(new JLabel("Kind"))
+      .add(this.tree_kind);
+    dg.row()
+      .grid(new JLabel("X"))
+      .add(this.tree_x, 3)
+      .add(this.tree_x_show);
+    dg.row()
+      .grid(new JLabel("Y"))
+      .add(this.tree_y, 3)
+      .add(this.tree_y_show);
+    dg.row()
+      .grid(new JLabel("Width"))
+      .add(this.tree_width, 3)
+      .add(this.tree_width_show);
+    dg.row()
+      .grid(new JLabel("Height"))
+      .add(this.tree_height, 3)
+      .add(this.tree_height_show);
+    dg.row()
+      .grid(new JLabel("Limit Q Width"))
+      .add(this.tree_qmin_width, 3)
+      .add(this.tree_qmin_width_show);
+    dg.row()
+      .grid(new JLabel("Limit Q Height"))
+      .add(this.tree_qmin_height, 3)
+      .add(this.tree_qmin_height_show);
     dg.emptyRow();
     dg.row().grid(new JLabel("Trim Removals")).add(this.tree_trim_remove);
     dg.emptyRow();
@@ -242,22 +288,35 @@ final class QuadTreeControls extends JPanel
 
     dg.row().left().add(QuadTreeControls.largerLabel("Objects")).fill();
     dg.emptyRow();
-    dg.row().grid(new JLabel("X")).add(
-      this.object_x,
-      2).add(this.object_x_show);
-    dg.row().grid(new JLabel("Y")).add(
-      this.object_y,
-      2).add(this.object_y_show);
-    dg.row().grid(new JLabel("Width")).add(
-      this.object_width,
-      2).add(this.object_width_show);
-    dg.row().grid(new JLabel("Height")).add(
-      this.object_height,
-      2).add(this.object_height_show);
+    dg.row()
+      .grid(new JLabel("X"))
+      .add(this.object_x, 3)
+      .add(this.object_x_show);
+    dg.row()
+      .grid(new JLabel("Y"))
+      .add(this.object_y, 3)
+      .add(this.object_y_show);
+    dg.row()
+      .grid(new JLabel("Width"))
+      .add(this.object_width, 3)
+      .add(this.object_width_show);
+    dg.row()
+      .grid(new JLabel("Height"))
+      .add(this.object_height, 3)
+      .add(this.object_height_show);
+
     dg.row().center().add(this.object_add).fill();
     dg.row().center().add(this.objects_scroller).fill();
     dg.row().center().add(this.object_remove).fill();
     dg.emptyRow();
+
+    dg.row().left().add(QuadTreeControls.largerLabel("Random Objects")).fill();
+    dg.emptyRow();
+    dg.row()
+      .grid(new JLabel("Count"))
+      .add(this.objects_random_count, 3)
+      .add(this.objects_random_count_show);
+    dg.row().center().add(this.objects_add).fill();
   }
 
   private void onObjectListChanged()
@@ -266,12 +325,46 @@ final class QuadTreeControls extends JPanel
     this.object_remove.setEnabled(selected != null);
   }
 
+  private void onObjectsRandomAdd()
+  {
+    final int count = this.objects_random_count.getValue();
+    Preconditions.checkPreconditionI(
+      count, count >= 0, x -> "Count must be non-negative");
+
+    final long x_base = (long) this.object_x.getValue();
+    final long y_base = (long) this.object_y.getValue();
+    final long w_base = (long) this.object_width.getValue();
+    final long h_base = (long) this.object_height.getValue();
+
+    final long x_max =
+      (long) (this.tree_x.getValue() + this.tree_width.getValue());
+    final long y_max =
+      (long) (this.tree_y.getValue() + this.tree_height.getValue());
+
+    for (int index = 0; index < count; ++index) {
+      final long x0 = QuadTreeControls.randomLong(x_base, x_max);
+      final long y0 = QuadTreeControls.randomLong(y_base, y_max);
+      final long w = QuadTreeControls.randomLong(1L, w_base);
+      final long h = QuadTreeControls.randomLong(1L, h_base);
+      final long x1 = x0 + w;
+      final long y1 = y0 + h;
+
+      final BoundingAreaL area = BoundingAreaL.of(
+        new VectorI2L(x0, y0),
+        new VectorI2L(x1, y1));
+
+      final Integer item = Integer.valueOf(this.pool.getAndIncrement());
+      this.objects_model.addElement(item);
+      this.events.onNext(QuadTreeCommandTypes.addObject(area, item));
+    }
+  }
+
   private void onObjectRemove()
   {
-    final Integer selected = this.objects.getSelectedValue();
-    if (selected != null) {
-      this.objects_model.removeElement(selected);
-      this.events.onNext(QuadTreeCommandTypes.removeObject(selected));
+    final List<Integer> range = this.objects.getSelectedValuesList();
+    for (final Integer o : range) {
+      this.objects_model.removeElement(o);
+      this.events.onNext(QuadTreeCommandTypes.removeObject(o));
     }
   }
 
@@ -349,14 +442,6 @@ final class QuadTreeControls extends JPanel
   Observable<QuadTreeCommandType> events()
   {
     return this.events;
-  }
-
-  private static JLabel largerLabel(final String text)
-  {
-    final JLabel label = new JLabel(text);
-    final Font f = label.getFont();
-    label.setFont(f.deriveFont(f.getSize2D() * 1.2f));
-    return label;
   }
 
   private static final class SliderFieldUpdater implements ChangeListener

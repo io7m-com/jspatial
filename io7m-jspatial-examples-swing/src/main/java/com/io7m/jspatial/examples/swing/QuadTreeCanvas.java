@@ -124,7 +124,6 @@ final class QuadTreeCanvas extends JPanel
       }
     }
 
-
     return Unit.unit();
   }
 
