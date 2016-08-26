@@ -14,25 +14,32 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.implementation;
+package com.io7m.jspatial.implementation;
 
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
-import com.io7m.jspatial.api.quadtrees.QuadTreeDType;
-import com.io7m.jspatial.implementation.QuadTreeD;
-import com.io7m.jspatial.implementation.QuadTreeSupplierD;
-import com.io7m.jspatial.implementation.QuadTreeSupplierL;
-import com.io7m.jspatial.tests.api.QuadTreeDContract;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
+import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
+import com.io7m.jspatial.api.quadtrees.QuadTreeSupplierLType;
+import org.osgi.service.component.annotations.Component;
 
 /**
- * Test for {@link QuadTreeD}
+ * The default implementation of the {@link QuadTreeSupplierLType} interface.
  */
 
-public final class QuadTreeDTest extends QuadTreeDContract
+@Component
+public final class QuadTreeSupplierL implements QuadTreeSupplierLType
 {
-  @Override
-  protected <T> QuadTreeDType<T> create(
-    final QuadTreeConfigurationD config)
+  /**
+   * Construct a new supplier.
+   */
+
+  public QuadTreeSupplierL()
   {
-    return new QuadTreeSupplierD().create(config);
+
+  }
+
+  @Override
+  public <A> QuadTreeLType<A> create(final QuadTreeConfigurationL config)
+  {
+    return QuadTreeL.create(config);
   }
 }

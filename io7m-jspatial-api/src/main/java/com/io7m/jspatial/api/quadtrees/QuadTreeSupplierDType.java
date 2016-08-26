@@ -14,25 +14,27 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.tests.implementation;
+package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
-import com.io7m.jspatial.api.quadtrees.QuadTreeDType;
-import com.io7m.jspatial.implementation.QuadTreeD;
-import com.io7m.jspatial.implementation.QuadTreeSupplierD;
-import com.io7m.jspatial.implementation.QuadTreeSupplierL;
-import com.io7m.jspatial.tests.api.QuadTreeDContract;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * Test for {@link QuadTreeD}
+ * The type of constructors for trees.
  */
 
-public final class QuadTreeDTest extends QuadTreeDContract
+@ProviderType
+@FunctionalInterface
+public interface QuadTreeSupplierDType
 {
-  @Override
-  protected <T> QuadTreeDType<T> create(
-    final QuadTreeConfigurationD config)
-  {
-    return new QuadTreeSupplierD().create(config);
-  }
+  /**
+   * Create a new tree based on the given configuration.
+   *
+   * @param config The configuration
+   * @param <A>    The type of objects in the tree
+   *
+   * @return A new tree
+   */
+
+  <A> QuadTreeDType<A> create(
+    QuadTreeConfigurationD config);
 }
