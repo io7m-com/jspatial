@@ -20,6 +20,7 @@ import com.io7m.jequality.AlmostEqualDouble;
 import com.io7m.jequality.AlmostEqualDouble.ContextRelative;
 import com.io7m.jspatial.api.RayI2D;
 import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.VectorI2I;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -132,5 +133,137 @@ public final class RayI2DTest
 
     Assert.assertTrue(ray_direction_inv.getXD() == Double.POSITIVE_INFINITY);
     Assert.assertTrue(ray_direction_inv.getYD() == Double.POSITIVE_INFINITY);
+  }
+
+  @Test public void testRayIntersection()
+  {
+    final VectorI2I lower = new VectorI2I(2, 2);
+    final VectorI2I upper = new VectorI2I(4, 4);
+
+    {
+      // Intersect -X edge in +X direction
+      final VectorI2D origin = new VectorI2D(1.0, 3.0);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(1.0, 0.0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        ray.intersectsArea(
+          (double) lower.getXI(),
+          (double) lower.getYI(),
+          (double) upper.getXI(),
+          (double) upper.getYI());
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect +X edge in -X direction
+      final VectorI2D origin = new VectorI2D(6.0, 3.0);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(-1.0, 0.0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        ray.intersectsArea(
+          (double) lower.getXI(),
+          (double) lower.getYI(),
+          (double) upper.getXI(),
+          (double) upper.getYI());
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect +Y edge in -Y direction
+      final VectorI2D origin = new VectorI2D(3.0, 6.0);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(0.0, -1.0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        ray.intersectsArea(
+          (double) lower.getXI(),
+          (double) lower.getYI(),
+          (double) upper.getXI(),
+          (double) upper.getYI());
+      Assert.assertTrue(i);
+    }
+
+    {
+      // Intersect -Y edge in +Y direction
+      final VectorI2D origin = new VectorI2D(3.0, 1.0);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(0.0, 1.0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        ray.intersectsArea(
+          (double) lower.getXI(),
+          (double) lower.getYI(),
+          (double) upper.getXI(),
+          (double) upper.getYI());
+      Assert.assertTrue(i);
+    }
+  }
+
+  @Test public void testRayNoIntersection()
+  {
+    final VectorI2I lower = new VectorI2I(2, 2);
+    final VectorI2I upper = new VectorI2I(4, 4);
+
+    {
+      // Do not intersect -X edge in +X direction
+      final VectorI2D origin = new VectorI2D(1.0, 0.0);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(1.0, 0.0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        ray.intersectsArea(
+          (double) lower.getXI(),
+          (double) lower.getYI(),
+          (double) upper.getXI(),
+          (double) upper.getYI());
+      Assert.assertFalse(i);
+    }
+
+    {
+      // Do not intersect +X edge in -X direction
+      final VectorI2D origin = new VectorI2D(6.0, 0.0);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(-1.0, 0.0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        ray.intersectsArea(
+          (double) lower.getXI(),
+          (double) lower.getYI(),
+          (double) upper.getXI(),
+          (double) upper.getYI());
+      Assert.assertFalse(i);
+    }
+
+    {
+      // Do not intersect +Y edge in -Y direction
+      final VectorI2D origin = new VectorI2D(0.0, 6.0);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(0.0, -1.0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        ray.intersectsArea(
+          (double) lower.getXI(),
+          (double) lower.getYI(),
+          (double) upper.getXI(),
+          (double) upper.getYI());
+      Assert.assertFalse(i);
+    }
+
+    {
+      // Do not intersect -Y edge in +Y direction
+      final VectorI2D origin = new VectorI2D(0.0, 1.0);
+      final VectorI2D direct = VectorI2D.normalize(new VectorI2D(0.0, 1.0));
+      final RayI2D ray = new RayI2D(origin, direct);
+
+      final boolean i =
+        ray.intersectsArea(
+          (double) lower.getXI(),
+          (double) lower.getYI(),
+          (double) upper.getXI(),
+          (double) upper.getYI());
+      Assert.assertFalse(i);
+    }
   }
 }

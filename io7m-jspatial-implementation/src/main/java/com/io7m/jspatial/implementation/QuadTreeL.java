@@ -403,6 +403,14 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
       final Set<T> items)
     {
       /*
+       * Avoid performing pointless containment checks.
+       */
+
+      if (this.isLeaf() && this.quadrant_objects.isEmpty()) {
+        return;
+      }
+
+      /*
        * If {@code target_area} completely contains this quadrant, collect
        * everything in this quadrant and all children of this quadrant.
        */
@@ -455,6 +463,14 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
       final Set<T> items)
     {
       /*
+       * Avoid performing pointless overlap checks.
+       */
+
+      if (this.isLeaf() && this.quadrant_objects.isEmpty()) {
+        return;
+      }
+
+      /*
        * If {@code target_area} overlaps this quadrant, test each object
        * against {@code target_area}.
        */
@@ -488,6 +504,14 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
       final RayI2D ray,
       final SortedSet<QuadTreeRaycastResultL<T>> items)
     {
+      /*
+       * Avoid performing pointless ray checks.
+       */
+
+      if (this.isLeaf() && this.quadrant_objects.isEmpty()) {
+        return;
+      }
+
       /*
        * Check whether or not the ray intersects the quadrant.
        */

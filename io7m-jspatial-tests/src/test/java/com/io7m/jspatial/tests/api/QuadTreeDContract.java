@@ -1239,4 +1239,74 @@ public abstract class QuadTreeDContract
 
     Assert.assertEquals(inserted, found);
   }
+
+  /**
+   * Simple raycast test.
+   */
+
+  @Test
+  public final void testRaycastSimple()
+  {
+    final BoundingAreaD container = BoundingAreaD.of(
+      new VectorI2D(0.0, 0.0),
+      new VectorI2D(512.0, 512.0));
+
+    final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
+    cb.setArea(container);
+    cb.setTrimOnRemove(true);
+    final QuadTreeConfigurationD c = cb.build();
+
+    final QuadTreeDType<Integer> tree = this.create(c);
+
+    final Integer item0 = Integer.valueOf(0);
+    final Integer item1 = Integer.valueOf(1);
+    final Integer item2 = Integer.valueOf(2);
+
+    Assert.assertTrue(tree.insert(item0, BoundingAreaD.of(
+      new VectorI2D(32.0, 32.0),
+      new VectorI2D(80.0, 80.0)
+    )));
+
+    Assert.assertTrue(tree.insert(item1, BoundingAreaD.of(
+      new VectorI2D(400.0, 32.0),
+      new VectorI2D(400.0 + 32.0, 80.0)
+    )));
+
+    Assert.assertTrue(tree.insert(item2, BoundingAreaD.of(
+      new VectorI2D(400.0, 400.0),
+      new VectorI2D(480.0, 480.0)
+    )));
+
+    final RayI2D ray = new RayI2D(
+      VectorI2D.ZERO,
+      VectorI2D.normalize(new VectorI2D(511.0, 511.0)));
+
+    final SortedSet<QuadTreeRaycastResultD<Integer>> items = new TreeSet<>();
+    tree.raycast(ray, items);
+
+    Assert.assertEquals(2L, (long) items.size());
+    final Iterator<QuadTreeRaycastResultD<Integer>> iter = items.iterator();
+
+    {
+      final QuadTreeRaycastResultD<Integer> rr = iter.next();
+      final BoundingAreaD r = rr.area();
+      Assert.assertEquals(item0, rr.item());
+      Assert.assertEquals(32.0, r.lower().getXD(), 0.0);
+      Assert.assertEquals(32.0, r.lower().getYD(), 0.0);
+      Assert.assertEquals(80.0, r.upper().getXD(), 0.0);
+      Assert.assertEquals(80.0, r.upper().getYD(), 0.0);
+    }
+
+    {
+      final QuadTreeRaycastResultD<Integer> rr = iter.next();
+      final BoundingAreaD r = rr.area();
+      Assert.assertEquals(item2, rr.item());
+      Assert.assertEquals(400.0, r.lower().getXD(), 0.0);
+      Assert.assertEquals(400.0, r.lower().getYD(), 0.0);
+      Assert.assertEquals(480.0, r.upper().getXD(), 0.0);
+      Assert.assertEquals(480.0, r.upper().getYD(), 0.0);
+    }
+
+    Assert.assertFalse(iter.hasNext());
+  }
 }

@@ -24,6 +24,7 @@ import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL;
 import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.VectorI2I;
 import com.io7m.jtensors.VectorI2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
@@ -1210,5 +1211,74 @@ public abstract class QuadTreeLContract
     });
 
     Assert.assertEquals(inserted, found);
+  }
+
+  /**
+   * Simple raycast test.
+   */
+
+  @Test public final void testRaycastSimple()
+  {
+    final BoundingAreaL container = BoundingAreaL.of(
+      new VectorI2L(0L, 0L),
+      new VectorI2L(512L, 512L));
+
+    final QuadTreeConfigurationL.Builder cb = QuadTreeConfigurationL.builder();
+    cb.setArea(container);
+    cb.setTrimOnRemove(true);
+    final QuadTreeConfigurationL c = cb.build();
+
+    final QuadTreeLType<Integer> tree = this.create(c);
+
+    final Integer item0 = Integer.valueOf(0);
+    final Integer item1 = Integer.valueOf(1);
+    final Integer item2 = Integer.valueOf(2);
+
+    Assert.assertTrue(tree.insert(item0, BoundingAreaL.of(
+      new VectorI2L(32L, 32L),
+      new VectorI2L(80L, 80L)
+    )));
+
+    Assert.assertTrue(tree.insert(item1, BoundingAreaL.of(
+      new VectorI2L(400L, 32L),
+      new VectorI2L(400L + 32L, 80L)
+    )));
+
+    Assert.assertTrue(tree.insert(item2, BoundingAreaL.of(
+      new VectorI2L(400L, 400L),
+      new VectorI2L(480L, 480L)
+    )));
+
+    final RayI2D ray = new RayI2D(
+      VectorI2D.ZERO,
+      VectorI2D.normalize(new VectorI2D(511.0, 511.0)));
+
+    final SortedSet<QuadTreeRaycastResultL<Integer>> items = new TreeSet<>();
+    tree.raycast(ray, items);
+
+    Assert.assertEquals(2L, (long) items.size());
+    final Iterator<QuadTreeRaycastResultL<Integer>> iter = items.iterator();
+
+    {
+      final QuadTreeRaycastResultL<Integer> rr = iter.next();
+      final BoundingAreaL r = rr.area();
+      Assert.assertEquals(item0, rr.item());
+      Assert.assertEquals(32L, r.lower().getXL());
+      Assert.assertEquals(32L, r.lower().getYL());
+      Assert.assertEquals(80L, r.upper().getXL());
+      Assert.assertEquals(80L, r.upper().getYL());
+    }
+
+    {
+      final QuadTreeRaycastResultL<Integer> rr = iter.next();
+      final BoundingAreaL r = rr.area();
+      Assert.assertEquals(item2, rr.item());
+      Assert.assertEquals(400L, r.lower().getXL());
+      Assert.assertEquals(400L, r.lower().getYL());
+      Assert.assertEquals(480L, r.upper().getXL());
+      Assert.assertEquals(480L, r.upper().getYL());
+    }
+
+    Assert.assertFalse(iter.hasNext());
   }
 }
