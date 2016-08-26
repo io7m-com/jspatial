@@ -28,7 +28,8 @@
         <li>Fully documented (Javadoc).</li>
         <li>97% automated unit test coverage.</li>
         <li>ISC license.</li>
-        <li>Platform independent: Written in pure Java 6.</li>
+        <li><a href="https://www.osgi.org/">OSGi</a>-ready.</li>
+        <li>Platform independent: Written in pure Java 8.</li>
         <li>Rendering system independent (the example viewers use Swing and <a href="http://www.jogamp.org/jogl">JOGL</a>, but neither are required to use the library).</li>
       </ul>
     </subsection>
