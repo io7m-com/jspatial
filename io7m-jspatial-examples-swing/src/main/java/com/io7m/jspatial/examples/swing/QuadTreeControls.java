@@ -25,9 +25,9 @@ import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2L;
+import io.reactivex.Observable;
+import io.reactivex.subjects.BehaviorSubject;
 import net.java.dev.designgridlayout.DesignGridLayout;
-import rx.Observable;
-import rx.subjects.BehaviorSubject;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -200,7 +200,7 @@ final class QuadTreeControls extends JPanel
         this.tree_width_model.getNumber().longValue(),
         this.tree_height_model.getNumber().longValue())));
 
-    this.events = BehaviorSubject.create(
+    this.events = BehaviorSubject.createDefault(
       QuadTreeCommandTypes.createQuadTreeL(this.config_bl.build()));
 
     this.object_add.addActionListener(

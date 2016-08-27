@@ -40,7 +40,7 @@
       <artifactId>designgridlayout</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.reactivex</groupId>
+      <groupId>io.reactivex.rxjava2</groupId>
       <artifactId>rxjava</artifactId>
     </dependency>
     <dependency>

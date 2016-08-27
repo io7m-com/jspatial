@@ -34,8 +34,8 @@ import com.io7m.jspatial.implementation.QuadTreeD;
 import com.io7m.jspatial.implementation.QuadTreeL;
 import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI2L;
-import rx.Observable;
-import rx.Observer;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 
 import javax.swing.JPanel;
 import java.awt.Color;

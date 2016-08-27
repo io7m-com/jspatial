@@ -16,10 +16,10 @@
 
 package com.io7m.jspatial.examples.swing;
 
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import rx.Observable;
-import rx.subjects.PublishSubject;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
