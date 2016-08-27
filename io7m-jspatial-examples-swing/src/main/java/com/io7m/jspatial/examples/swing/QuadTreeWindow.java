@@ -49,8 +49,6 @@ final class QuadTreeWindow extends JFrame
     LOG = LoggerFactory.getLogger(QuadTreeWindow.class);
   }
 
-  private final PublishSubject<LogMessage> messages;
-
   QuadTreeWindow()
   {
     super("Quad Tree Viewer");
@@ -59,12 +57,13 @@ final class QuadTreeWindow extends JFrame
 
     this.setJMenuBar(QuadTreeWindow.makeMenu());
 
-    this.messages = PublishSubject.create();
+    final PublishSubject<LogMessage> messages =
+      PublishSubject.create();
 
     final QuadTreeControls controls =
       new QuadTreeControls();
     final QuadTreeCanvas canvas =
-      new QuadTreeCanvas(controls.events(), this.messages);
+      new QuadTreeCanvas(controls.events(), messages);
 
     final JScrollPane controls_scroll =
       new JScrollPane(controls);
@@ -75,9 +74,9 @@ final class QuadTreeWindow extends JFrame
       JSplitPane.HORIZONTAL_SPLIT, canvas_scroll, controls_scroll);
 
     final StatusBar status =
-      new StatusBar(this.messages);
+      new StatusBar(messages);
     final LogPane log =
-      new LogPane(this.messages);
+      new LogPane(messages);
 
     final JTabbedPane tabs = new JTabbedPane();
     tabs.addTab("Quad Tree", split);
@@ -86,7 +85,7 @@ final class QuadTreeWindow extends JFrame
     Thread.setDefaultUncaughtExceptionHandler(
       (t, e) -> {
         QuadTreeWindow.LOG.error("uncaught exception: ", e);
-        this.messages.onNext(
+        messages.onNext(
           LogMessage.of(LogMessageType.Severity.ERROR, e.getMessage()));
       });
 
@@ -94,7 +93,7 @@ final class QuadTreeWindow extends JFrame
     pane.add(tabs, BorderLayout.CENTER);
     pane.add(status, BorderLayout.PAGE_END);
 
-    this.messages.onNext(LogMessage.of(
+    messages.onNext(LogMessage.of(
       LogMessageType.Severity.INFO,
       "Quad tree viewer started."));
 
