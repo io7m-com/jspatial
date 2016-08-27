@@ -1482,4 +1482,52 @@ public abstract class QuadTreeLContract
 
     Assert.assertFalse(iter.hasNext());
   }
+
+  /**
+   * The quadrant cannot be split due to small width.
+   */
+
+  @Test
+  public final void testInsertCannotSplitWidth()
+  {
+    final BoundingAreaL area =
+      BoundingAreaL.of(new VectorI2L(0L, 0L), new VectorI2L(1L, 100L));
+
+    final QuadTreeConfigurationL.Builder cb = QuadTreeConfigurationL.builder();
+    cb.setArea(area);
+    final QuadTreeConfigurationL c = cb.build();
+
+    final QuadTreeLType<Object> tree = this.create(c);
+
+    final Integer item = Integer.valueOf(0);
+    final BoundingAreaL item_area = BoundingAreaL.of(
+      new VectorI2L(0L, 0L),
+      new VectorI2L(1L, 1L));
+    Assert.assertTrue(tree.insert(item, item_area));
+    Assert.assertEquals(1L, (long) QuadTreeLContract.countQuadrants(tree));
+  }
+
+  /**
+   * The quadrant cannot be split due to small height.
+   */
+
+  @Test
+  public final void testInsertCannotSplitHeight()
+  {
+    final BoundingAreaL area =
+      BoundingAreaL.of(new VectorI2L(0L, 0L), new VectorI2L(100L, 1L));
+
+    final QuadTreeConfigurationL.Builder cb = QuadTreeConfigurationL.builder();
+    cb.setArea(area);
+    final QuadTreeConfigurationL c = cb.build();
+
+    final QuadTreeLType<Object> tree = this.create(c);
+
+    final Integer item = Integer.valueOf(0);
+    final BoundingAreaL item_area = BoundingAreaL.of(
+      new VectorI2L(0L, 0L),
+      new VectorI2L(1L, 1L));
+    Assert.assertTrue(tree.insert(item, item_area));
+    Assert.assertEquals(1L, (long) QuadTreeLContract.countQuadrants(tree));
+  }
 }
