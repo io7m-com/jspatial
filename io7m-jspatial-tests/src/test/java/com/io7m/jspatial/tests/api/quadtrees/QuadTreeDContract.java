@@ -18,13 +18,17 @@ package com.io7m.jspatial.tests.api.quadtrees;
 
 import com.io7m.jfunctional.Unit;
 import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jspatial.api.BoundingAreaL;
 import com.io7m.jspatial.api.RayI2D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeDType;
+import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultD;
 import com.io7m.jspatial.tests.api.BoundingAreaDContainedGenerator;
 import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.VectorI2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -1509,5 +1513,61 @@ public abstract class QuadTreeDContract
     }
 
     Assert.assertFalse(iter.hasNext());
+  }
+
+  /**
+   * The quadrant cannot be split due to small width.
+   */
+
+  @Test
+  public final void testInsertCannotSplitWidth()
+  {
+    final BoundingAreaD area =
+      BoundingAreaD.of(
+        new VectorI2D(0.0, 0.0),
+        new VectorI2D(1.0, 100.0));
+
+    final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
+    cb.setArea(area);
+    cb.setMinimumQuadrantWidth(2.0);
+    cb.setMinimumQuadrantHeight(2.0);
+    final QuadTreeConfigurationD c = cb.build();
+
+    final QuadTreeDType<Object> tree = this.create(c);
+
+    final Integer item = Integer.valueOf(0);
+    final BoundingAreaD item_area = BoundingAreaD.of(
+      new VectorI2D(0.0, 0.0),
+      new VectorI2D(1.0, 1.0));
+    Assert.assertTrue(tree.insert(item, item_area));
+    Assert.assertEquals(1L, (long) QuadTreeDContract.countQuadrants(tree));
+  }
+
+  /**
+   * The quadrant cannot be split due to small height.
+   */
+
+  @Test
+  public final void testInsertCannotSplitHeight()
+  {
+    final BoundingAreaD area =
+      BoundingAreaD.of(
+        new VectorI2D(0.0, 0.0),
+        new VectorI2D(100.0, 1.0));
+
+    final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
+    cb.setArea(area);
+    cb.setMinimumQuadrantWidth(2.0);
+    cb.setMinimumQuadrantHeight(2.0);
+    final QuadTreeConfigurationD c = cb.build();
+
+    final QuadTreeDType<Object> tree = this.create(c);
+
+    final Integer item = Integer.valueOf(0);
+    final BoundingAreaD item_area = BoundingAreaD.of(
+      new VectorI2D(0.0, 0.0),
+      new VectorI2D(1.0, 1.0));
+    Assert.assertTrue(tree.insert(item, item_area));
+    Assert.assertEquals(1L, (long) QuadTreeDContract.countQuadrants(tree));
   }
 }

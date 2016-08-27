@@ -18,13 +18,17 @@ package com.io7m.jspatial.tests.api.octtrees;
 
 import com.io7m.jfunctional.Unit;
 import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jspatial.api.RayI3D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationD;
+import com.io7m.jspatial.api.octtrees.OctTreeConfigurationL;
 import com.io7m.jspatial.api.octtrees.OctTreeDType;
+import com.io7m.jspatial.api.octtrees.OctTreeLType;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultD;
 import com.io7m.jspatial.tests.api.BoundingVolumeDContainedGenerator;
 import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.VectorI3L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -2262,5 +2266,83 @@ public abstract class OctTreeDContract
     }
 
     Assert.assertFalse(iter.hasNext());
+  }
+
+  /**
+   * The octant cannot be split due to small width.
+   */
+
+  @Test
+  public final void testInsertCannotSplitWidth()
+  {
+    final BoundingVolumeD volume =
+      BoundingVolumeD.of(
+        new VectorI3D(0.0, 0.0, 0.0),
+        new VectorI3D(1.0, 100.0, 100.0));
+
+    final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
+    cb.setVolume(volume);
+    final OctTreeConfigurationD c = cb.build();
+
+    final OctTreeDType<Object> tree = this.create(c);
+
+    final Integer item = Integer.valueOf(0);
+    final BoundingVolumeD item_volume = BoundingVolumeD.of(
+      new VectorI3D(0.0, 0.0, 0.0),
+      new VectorI3D(1.0, 1.0, 1.0));
+    Assert.assertTrue(tree.insert(item, item_volume));
+    Assert.assertEquals(1L, (long) OctTreeDContract.countOctants(tree));
+  }
+
+  /**
+   * The octant cannot be split due to small height.
+   */
+
+  @Test
+  public final void testInsertCannotSplitHeight()
+  {
+    final BoundingVolumeD volume =
+      BoundingVolumeD.of(
+        new VectorI3D(0.0, 0.0, 0.0),
+        new VectorI3D(100.0, 1.0, 100.0));
+
+    final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
+    cb.setVolume(volume);
+    final OctTreeConfigurationD c = cb.build();
+
+    final OctTreeDType<Object> tree = this.create(c);
+
+    final Integer item = Integer.valueOf(0);
+    final BoundingVolumeD item_volume = BoundingVolumeD.of(
+      new VectorI3D(0.0, 0.0, 0.0),
+      new VectorI3D(1.0, 1.0, 1.0));
+    Assert.assertTrue(tree.insert(item, item_volume));
+    Assert.assertEquals(1L, (long) OctTreeDContract.countOctants(tree));
+  }
+
+  /**
+   * The octant cannot be split due to small depth.
+   */
+
+  @Test
+  public final void testInsertCannotSplitDepth()
+  {
+    final BoundingVolumeD volume =
+      BoundingVolumeD.of(
+        new VectorI3D(0.0, 0.0, 0.0),
+        new VectorI3D(100.0, 100.0, 1.0));
+
+    final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
+    cb.setVolume(volume);
+    final OctTreeConfigurationD c = cb.build();
+
+    final OctTreeDType<Object> tree = this.create(c);
+
+    final Integer item = Integer.valueOf(0);
+    final BoundingVolumeD item_volume = BoundingVolumeD.of(
+      new VectorI3D(0.0, 0.0, 0.0),
+      new VectorI3D(1.0, 1.0, 1.0));
+    Assert.assertTrue(tree.insert(item, item_volume));
+    Assert.assertEquals(1L, (long) OctTreeDContract.countOctants(tree));
   }
 }
