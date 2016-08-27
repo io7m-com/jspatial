@@ -21,15 +21,16 @@ import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jintegers.CheckedMath;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
-import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jspatial.api.RayI3D;
 import com.io7m.jspatial.api.TreeVisitResult;
-import com.io7m.jspatial.api.octtrees.OctTreeConfigurationD;
-import com.io7m.jspatial.api.octtrees.OctTreeDType;
-import com.io7m.jspatial.api.octtrees.OctTreeOctantDType;
-import com.io7m.jspatial.api.octtrees.OctTreeOctantIterationDType;
-import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultD;
+import com.io7m.jspatial.api.octtrees.OctTreeConfigurationL;
+import com.io7m.jspatial.api.octtrees.OctTreeLType;
+import com.io7m.jspatial.api.octtrees.OctTreeOctantIterationLType;
+import com.io7m.jspatial.api.octtrees.OctTreeOctantLType;
+import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultL;
 import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.VectorI3L;
 import com.io7m.junreachable.UnreachableCodeException;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
@@ -38,23 +39,24 @@ import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.function.BiFunction;
 
 /**
- * Default implementation of the {@link OctTreeDType} interface.
+ * Default implementation of the {@link OctTreeLType} interface.
  *
  * @param <T> The precise type of tree objects
  */
 
-public final class OctTreeD<T> implements OctTreeDType<T>
+public final class OctTreeL<T> implements OctTreeLType<T>
 {
-  private final Reference2ReferenceOpenHashMap<T, BoundingVolumeD> objects;
-  private final OctTreeConfigurationD config;
+  private final Reference2ReferenceOpenHashMap<T, BoundingVolumeL> objects;
+  private final OctTreeConfigurationL config;
   private Octant root;
 
-  private OctTreeD(final OctTreeConfigurationD in_config)
+  private OctTreeL(final OctTreeConfigurationL in_config)
   {
     this.config = NullCheck.notNull(in_config, "Configuration");
     this.root = new Octant(null, in_config.volume());
@@ -70,10 +72,10 @@ public final class OctTreeD<T> implements OctTreeDType<T>
    * @return A new tree
    */
 
-  public static <T> OctTreeDType<T> create(
-    final OctTreeConfigurationD config)
+  public static <T> OctTreeLType<T> create(
+    final OctTreeConfigurationL config)
   {
-    return new OctTreeD<>(config);
+    return new OctTreeL<>(config);
   }
 
   @Override
@@ -98,7 +100,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
       return false;
     }
 
-    final OctTreeD<?> that = (OctTreeD<?>) o;
+    final OctTreeL<?> that = (OctTreeL<?>) o;
     return this.objects.equals(that.objects);
   }
 
@@ -109,7 +111,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
   }
 
   @Override
-  public BoundingVolumeD bounds()
+  public BoundingVolumeL bounds()
   {
     return this.root.volume;
   }
@@ -117,7 +119,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
   @Override
   public boolean insert(
     final T item,
-    final BoundingVolumeD item_bounds)
+    final BoundingVolumeL item_bounds)
   {
     NullCheck.notNull(item, "Item");
     NullCheck.notNull(item_bounds, "Bounds");
@@ -154,14 +156,14 @@ public final class OctTreeD<T> implements OctTreeDType<T>
   }
 
   @Override
-  public <U> OctTreeDType<U> map(final BiFunction<T, BoundingVolumeD, U> f)
+  public <U> OctTreeLType<U> map(final BiFunction<T, BoundingVolumeL, U> f)
   {
     NullCheck.notNull(f, "Function");
 
-    final OctTreeDType<U> qt = new OctTreeD<>(this.config);
-    for (final Map.Entry<T, BoundingVolumeD> es : this.objects.entrySet()) {
+    final OctTreeLType<U> qt = new OctTreeL<>(this.config);
+    for (final Map.Entry<T, BoundingVolumeL> es : this.objects.entrySet()) {
       final T item = es.getKey();
-      final BoundingVolumeD item_volume = es.getValue();
+      final BoundingVolumeL item_volume = es.getValue();
       qt.insert(f.apply(item, item_volume), es.getValue());
     }
     return qt;
@@ -170,7 +172,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
   @Override
   public <C> void iterateOctants(
     final C context,
-    final OctTreeOctantIterationDType<T, C> f)
+    final OctTreeOctantIterationLType<T, C> f)
   {
     NullCheck.notNull(context, "Context");
     NullCheck.notNull(f, "Function");
@@ -178,7 +180,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
   }
 
   @Override
-  public BoundingVolumeD volumeFor(final T item)
+  public BoundingVolumeL volumeFor(final T item)
   {
     NullCheck.notNull(item, "Item");
 
@@ -189,7 +191,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
   @Override
   public void containedBy(
-    final BoundingVolumeD volume,
+    final BoundingVolumeL volume,
     final Set<T> items)
   {
     NullCheck.notNull(volume, "Volume");
@@ -199,7 +201,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
   @Override
   public void overlappedBy(
-    final BoundingVolumeD volume,
+    final BoundingVolumeL volume,
     final Set<T> items)
   {
     NullCheck.notNull(volume, "Volume");
@@ -210,17 +212,17 @@ public final class OctTreeD<T> implements OctTreeDType<T>
   @Override
   public void raycast(
     final RayI3D ray,
-    final SortedSet<OctTreeRaycastResultD<T>> items)
+    final SortedSet<OctTreeRaycastResultL<T>> items)
   {
     NullCheck.notNull(ray, "Ray");
     NullCheck.notNull(items, "Items");
     this.root.raycast(ray, items);
   }
 
-  protected final class Octant implements OctTreeOctantDType<T>
+  protected final class Octant implements OctTreeOctantLType<T>
   {
-    private final BoundingVolumeD volume;
-    private final Reference2ReferenceOpenHashMap<T, BoundingVolumeD> octant_objects;
+    private final BoundingVolumeL volume;
+    private final Reference2ReferenceOpenHashMap<T, BoundingVolumeL> octant_objects;
     private final @Nullable Octant parent;
     private @Nullable Octant x0y0z0;
     private @Nullable Octant x0y1z0;
@@ -230,11 +232,11 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     private @Nullable Octant x0y1z1;
     private @Nullable Octant x1y0z1;
     private @Nullable Octant x1y1z1;
-    private Map<T, BoundingVolumeD> octant_objects_view;
+    private Map<T, BoundingVolumeL> octant_objects_view;
 
     private Octant(
       final @Nullable Octant in_parent,
-      final BoundingVolumeD in_volume)
+      final BoundingVolumeL in_volume)
     {
       this.parent = in_parent;
       this.volume = NullCheck.notNull(in_volume, "Volume");
@@ -245,11 +247,11 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private boolean insert(
       final T item,
-      final BoundingVolumeD item_bounds)
+      final BoundingVolumeL item_bounds)
     {
       Preconditions.checkPrecondition(
         item,
-        !OctTreeD.this.objects.containsKey(item),
+        !OctTreeL.this.objects.containsKey(item),
         x -> "Object must not be in tree");
 
       return this.volume.contains(item_bounds)
@@ -258,7 +260,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private boolean insertStep(
       final T item,
-      final BoundingVolumeD item_bounds)
+      final BoundingVolumeL item_bounds)
     {
       /*
        * The object can fit in this node, but perhaps it is possible to fit it
@@ -305,7 +307,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private boolean insertStepTryZ0(
       final T item,
-      final BoundingVolumeD item_bounds)
+      final BoundingVolumeL item_bounds)
     {
       if (this.x0y0z0.volume.contains(item_bounds)) {
         return this.x0y0z0.insertStep(item, item_bounds);
@@ -324,7 +326,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private boolean insertStepTryZ1(
       final T item,
-      final BoundingVolumeD item_bounds)
+      final BoundingVolumeL item_bounds)
     {
       if (this.x0y0z1.volume.contains(item_bounds)) {
         return this.x0y0z1.insertStep(item, item_bounds);
@@ -343,9 +345,9 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private boolean insertObject(
       final T item,
-      final BoundingVolumeD item_bounds)
+      final BoundingVolumeL item_bounds)
     {
-      OctTreeD.this.objects.put(item, item_bounds);
+      OctTreeL.this.objects.put(item, item_bounds);
       this.octant_objects.put(item, item_bounds);
       return true;
     }
@@ -354,34 +356,38 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     {
       Preconditions.checkPrecondition(this.canSplit(), "Octant can split");
 
-      final OctantsD q = OctantsD.subdivide(this.volume);
-      this.x0y0z0 = new Octant(this, q.x0y0z0());
-      this.x0y1z0 = new Octant(this, q.x0y1z0());
-      this.x1y0z0 = new Octant(this, q.x1y0z0());
-      this.x1y1z0 = new Octant(this, q.x1y1z0());
+      final Optional<OctantsL> q_opt = OctantsL.subdivide(this.volume);
+      Invariants.checkInvariant(q_opt.isPresent(), "Octant must be splittable");
 
-      this.x0y0z1 = new Octant(this, q.x0y0z1());
-      this.x0y1z1 = new Octant(this, q.x0y1z1());
-      this.x1y0z1 = new Octant(this, q.x1y0z1());
-      this.x1y1z1 = new Octant(this, q.x1y1z1());
+      q_opt.ifPresent(q -> {
+        this.x0y0z0 = new Octant(this, q.x0y0z0());
+        this.x0y1z0 = new Octant(this, q.x0y1z0());
+        this.x1y0z0 = new Octant(this, q.x1y0z0());
+        this.x1y1z0 = new Octant(this, q.x1y1z0());
+
+        this.x0y0z1 = new Octant(this, q.x0y0z1());
+        this.x0y1z1 = new Octant(this, q.x0y1z1());
+        this.x1y0z1 = new Octant(this, q.x1y0z1());
+        this.x1y1z1 = new Octant(this, q.x1y1z1());
+      });
     }
 
     private boolean canSplit()
     {
-      final double width = this.volume.width();
-      final double height = this.volume.height();
-      final double depth = this.volume.depth();
+      final long width = this.volume.width();
+      final long height = this.volume.height();
+      final long depth = this.volume.depth();
 
-      final double min_width =
-        Math.max(0.0001, OctTreeD.this.config.minimumOctantWidth());
-      final double min_height =
-        Math.max(0.0001, OctTreeD.this.config.minimumOctantHeight());
-      final double min_depth =
-        Math.max(0.0001, OctTreeD.this.config.minimumOctantDepth());
+      final long min_width =
+        Math.max(2L, OctTreeL.this.config.minimumOctantWidth());
+      final long min_height =
+        Math.max(2L, OctTreeL.this.config.minimumOctantHeight());
+      final long min_depth =
+        Math.max(2L, OctTreeL.this.config.minimumOctantDepth());
 
-      final double half_width = width / 2.0;
-      final double half_height = height / 2.0;
-      final double half_depth = depth / 2.0;
+      final long half_width = CheckedMath.divide(width, 2L);
+      final long half_height = CheckedMath.divide(height, 2L);
+      final long half_depth = CheckedMath.divide(depth, 2L);
 
       return half_width >= min_width
         && half_height >= min_height
@@ -395,22 +401,22 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private boolean remove(final T item)
     {
-      if (!OctTreeD.this.objects.containsKey(item)) {
+      if (!OctTreeL.this.objects.containsKey(item)) {
         return false;
       }
 
-      final BoundingVolumeD bounds = OctTreeD.this.objects.get(item);
+      final BoundingVolumeL bounds = OctTreeL.this.objects.get(item);
       return this.removeStep(item, bounds);
     }
 
     private boolean removeStep(
       final T item,
-      final BoundingVolumeD item_bounds)
+      final BoundingVolumeL item_bounds)
     {
       if (this.octant_objects.containsKey(item)) {
         this.octant_objects.remove(item);
-        OctTreeD.this.objects.remove(item);
-        if (OctTreeD.this.config.trimOnRemove()) {
+        OctTreeL.this.objects.remove(item);
+        if (OctTreeL.this.config.trimOnRemove()) {
           this.unsplitAttemptRecursive();
         }
         return true;
@@ -440,7 +446,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private boolean removeStepTryZ0(
       final T item,
-      final BoundingVolumeD item_bounds)
+      final BoundingVolumeL item_bounds)
     {
       if (this.x0y0z0.volume.contains(item_bounds)) {
         return this.x0y0z0.removeStep(item, item_bounds);
@@ -459,7 +465,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private boolean removeStepTryZ1(
       final T item,
-      final BoundingVolumeD item_bounds)
+      final BoundingVolumeL item_bounds)
     {
       if (this.x0y0z1.volume.contains(item_bounds)) {
         return this.x0y0z1.removeStep(item, item_bounds);
@@ -477,7 +483,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     }
 
     private void volumeContaining(
-      final BoundingVolumeD target_volume,
+      final BoundingVolumeL target_volume,
       final Set<T> items)
     {
       /*
@@ -502,15 +508,15 @@ public final class OctTreeD<T> implements OctTreeDType<T>
        * therefore some items may still be contained within {@code target_volume}.
        */
 
-      final ObjectSet<Map.Entry<T, BoundingVolumeD>> entries =
+      final ObjectSet<Map.Entry<T, BoundingVolumeL>> entries =
         this.octant_objects.entrySet();
-      final ObjectIterator<Map.Entry<T, BoundingVolumeD>> iter =
+      final ObjectIterator<Map.Entry<T, BoundingVolumeL>> iter =
         entries.iterator();
 
       while (iter.hasNext()) {
-        final Map.Entry<T, BoundingVolumeD> entry = iter.next();
+        final Map.Entry<T, BoundingVolumeL> entry = iter.next();
         final T item = entry.getKey();
-        final BoundingVolumeD item_volume = entry.getValue();
+        final BoundingVolumeL item_volume = entry.getValue();
 
         if (target_volume.contains(item_volume)) {
           items.add(item);
@@ -547,7 +553,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     }
 
     private void volumeOverlapping(
-      final BoundingVolumeD target_volume,
+      final BoundingVolumeL target_volume,
       final Set<T> items)
     {
       /*
@@ -564,15 +570,15 @@ public final class OctTreeD<T> implements OctTreeDType<T>
        */
 
       if (target_volume.overlaps(this.volume)) {
-        final ObjectSet<Map.Entry<T, BoundingVolumeD>> entries =
+        final ObjectSet<Map.Entry<T, BoundingVolumeL>> entries =
           this.octant_objects.entrySet();
-        final ObjectIterator<Map.Entry<T, BoundingVolumeD>> iter =
+        final ObjectIterator<Map.Entry<T, BoundingVolumeL>> iter =
           entries.iterator();
 
         while (iter.hasNext()) {
-          final Map.Entry<T, BoundingVolumeD> entry = iter.next();
+          final Map.Entry<T, BoundingVolumeL> entry = iter.next();
           final T item = entry.getKey();
-          final BoundingVolumeD item_volume = entry.getValue();
+          final BoundingVolumeL item_volume = entry.getValue();
 
           if (target_volume.overlaps(item_volume)) {
             items.add(item);
@@ -595,7 +601,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private void raycast(
       final RayI3D ray,
-      final SortedSet<OctTreeRaycastResultD<T>> items)
+      final SortedSet<OctTreeRaycastResultL<T>> items)
     {
       /*
        * Avoid performing pointless ray checks.
@@ -609,14 +615,14 @@ public final class OctTreeD<T> implements OctTreeDType<T>
        * Check whether or not the ray intersects the octant.
        */
 
-      final VectorI3D lower = this.volume.lower();
-      final VectorI3D upper = this.volume.upper();
-      final double x0 = lower.getXD();
-      final double x1 = upper.getXD();
-      final double y0 = lower.getYD();
-      final double y1 = upper.getYD();
-      final double z0 = lower.getZD();
-      final double z1 = upper.getZD();
+      final VectorI3L lower = this.volume.lower();
+      final VectorI3L upper = this.volume.upper();
+      final double x0 = (double) lower.getXL();
+      final double x1 = (double) upper.getXL();
+      final double y0 = (double) lower.getYL();
+      final double y1 = (double) upper.getYL();
+      final double z0 = (double) lower.getZL();
+      final double z1 = (double) upper.getZL();
 
       /*
        * If the ray intersects the octant, check each item in the octant
@@ -624,24 +630,24 @@ public final class OctTreeD<T> implements OctTreeDType<T>
        */
 
       if (ray.intersectsVolume(x0, y0, z0, x1, y1, z1)) {
-        final ObjectSet<Map.Entry<T, BoundingVolumeD>> entries =
+        final ObjectSet<Map.Entry<T, BoundingVolumeL>> entries =
           this.octant_objects.entrySet();
-        final ObjectIterator<Map.Entry<T, BoundingVolumeD>> iter =
+        final ObjectIterator<Map.Entry<T, BoundingVolumeL>> iter =
           entries.iterator();
 
         while (iter.hasNext()) {
-          final Map.Entry<T, BoundingVolumeD> entry = iter.next();
+          final Map.Entry<T, BoundingVolumeL> entry = iter.next();
           final T item = entry.getKey();
-          final BoundingVolumeD item_volume = entry.getValue();
+          final BoundingVolumeL item_volume = entry.getValue();
 
-          final VectorI3D item_lower = item_volume.lower();
-          final VectorI3D item_upper = item_volume.upper();
-          final double item_x0 = item_lower.getXD();
-          final double item_x1 = item_upper.getXD();
-          final double item_y0 = item_lower.getYD();
-          final double item_y1 = item_upper.getYD();
-          final double item_z0 = item_lower.getZD();
-          final double item_z1 = item_upper.getZD();
+          final VectorI3L item_lower = item_volume.lower();
+          final VectorI3L item_upper = item_volume.upper();
+          final double item_x0 = (double) item_lower.getXL();
+          final double item_x1 = (double) item_upper.getXL();
+          final double item_y0 = (double) item_lower.getYL();
+          final double item_y1 = (double) item_upper.getYL();
+          final double item_z0 = (double) item_lower.getZL();
+          final double item_z1 = (double) item_upper.getZL();
 
           if (ray.intersectsVolume(
             item_x0,
@@ -653,8 +659,8 @@ public final class OctTreeD<T> implements OctTreeDType<T>
             final double distance = VectorI3D.distance(
               new VectorI3D(item_x0, item_y0, item_z0),
               ray.origin());
-            final OctTreeRaycastResultD<T> result =
-              OctTreeRaycastResultD.of(distance, item_volume, item);
+            final OctTreeRaycastResultL<T> result =
+              OctTreeRaycastResultL.of(distance, item_volume, item);
             items.add(result);
           }
         }
@@ -675,7 +681,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private <C> TreeVisitResult iterateOctants(
       final C context,
-      final OctTreeOctantIterationDType<T, C> f,
+      final OctTreeOctantIterationLType<T, C> f,
       final long depth)
     {
       switch (f.apply(context, this, depth)) {
@@ -705,7 +711,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private <C> TreeVisitResult iterateOctantsZ0(
       final C c,
-      final OctTreeOctantIterationDType<T, C> f,
+      final OctTreeOctantIterationLType<T, C> f,
       final long depth)
     {
       switch (this.x0y0z0.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
@@ -737,7 +743,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
     private <C> TreeVisitResult iterateOctantsZ1(
       final C c,
-      final OctTreeOctantIterationDType<T, C> f,
+      final OctTreeOctantIterationLType<T, C> f,
       final long depth)
     {
       switch (this.x0y0z1.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
@@ -768,13 +774,13 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     }
 
     @Override
-    public Map<T, BoundingVolumeD> objects()
+    public Map<T, BoundingVolumeL> objects()
     {
       return this.octant_objects_view;
     }
 
     @Override
-    public BoundingVolumeD volume()
+    public BoundingVolumeL volume()
     {
       return this.volume;
     }

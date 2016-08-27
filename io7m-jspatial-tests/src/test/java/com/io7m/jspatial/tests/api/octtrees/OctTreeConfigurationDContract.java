@@ -18,7 +18,6 @@ package com.io7m.jspatial.tests.api.octtrees;
 
 import com.io7m.jspatial.api.BoundingVolumeD;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationDType;
-import com.io7m.jtensors.VectorI2D;
 import com.io7m.jtensors.VectorI3D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;

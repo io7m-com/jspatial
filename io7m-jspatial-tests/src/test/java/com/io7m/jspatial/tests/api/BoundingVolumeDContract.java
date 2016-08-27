@@ -18,9 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.BoundingVolumeD;
 import com.io7m.jspatial.api.BoundingVolumeDType;
-import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jtensors.VectorI3D;
-import com.io7m.jtensors.VectorI3L;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;

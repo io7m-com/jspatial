@@ -18,7 +18,6 @@ package com.io7m.jspatial.tests.implementation;
 
 import com.io7m.jfunctional.Unit;
 import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jspatial.implementation.OctantsL;
 import com.io7m.jspatial.tests.api.BoundingVolumeLGenerator;
 import com.io7m.jtensors.VectorI3L;

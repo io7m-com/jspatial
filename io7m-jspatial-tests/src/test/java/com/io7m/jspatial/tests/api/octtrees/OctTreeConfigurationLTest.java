@@ -214,11 +214,11 @@ public final class OctTreeConfigurationLTest extends
     final OctTreeConfigurationL qc1 =
       OctTreeConfigurationL.of(volume1, 2L, 2L, 2L, false);
     final OctTreeConfigurationL qc2 =
-      OctTreeConfigurationL.of(volume0, 4L, 2L, 2L,false);
+      OctTreeConfigurationL.of(volume0, 4L, 2L, 2L, false);
     final OctTreeConfigurationL qc3 =
-      OctTreeConfigurationL.of(volume0, 2L, 3L, 2L,false);
+      OctTreeConfigurationL.of(volume0, 2L, 3L, 2L, false);
     final OctTreeConfigurationL qc4 =
-      OctTreeConfigurationL.of(volume0, 2L, 2L, 3L,false);
+      OctTreeConfigurationL.of(volume0, 2L, 2L, 3L, false);
     final OctTreeConfigurationL qc5 =
       OctTreeConfigurationL.of(volume0, 2L, 2L, 2L, true);
 
