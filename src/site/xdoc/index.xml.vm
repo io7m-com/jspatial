@@ -11,6 +11,17 @@
   <body>
     <subsection name="jspatial">
       <p>
+        <a href="https://travis-ci.org/io7m/jspatial">
+          <img src="https://travis-ci.org/io7m/jspatial.svg" alt="Travis CI"/>
+        </a>
+        <a href="https://maven-badges.herokuapp.com/maven-central/com.io7m.jspatial/io7m-jspatial">
+          <img src="https://maven-badges.herokuapp.com/maven-central/com.io7m.jspatial/io7m-jspatial/badge.png" alt="Maven Central"/>
+        </a>
+        <a href="https://www.codacy.com/app/github_79/jspatial">
+          <img src="https://api.codacy.com/project/badge/Grade/e929da3002124ae1844ebb0d1dd3697c" alt="Codacy"/>
+        </a>
+      </p>
+      <p>
         The <var>jspatial</var> package implements a set of spatial
         data structures.
       </p>
