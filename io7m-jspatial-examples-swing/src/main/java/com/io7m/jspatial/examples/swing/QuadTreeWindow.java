@@ -49,15 +49,7 @@ final class QuadTreeWindow extends JFrame
     LOG = LoggerFactory.getLogger(QuadTreeWindow.class);
   }
 
-  private final QuadTreeCanvas canvas;
-  private final QuadTreeControls controls;
-  private final JSplitPane split;
-  private final StatusBar status;
   private final PublishSubject<LogMessage> messages;
-  private final JScrollPane controls_scroll;
-  private final JScrollPane canvas_scroll;
-  private final JTabbedPane tabs;
-  private final LogPane log;
 
   QuadTreeWindow()
   {
@@ -68,20 +60,28 @@ final class QuadTreeWindow extends JFrame
     this.setJMenuBar(QuadTreeWindow.makeMenu());
 
     this.messages = PublishSubject.create();
-    this.controls = new QuadTreeControls();
-    this.controls_scroll = new JScrollPane(this.controls);
-    this.canvas = new QuadTreeCanvas(this.controls.events(), this.messages);
-    this.canvas_scroll = new JScrollPane(this.canvas);
 
-    this.split = new JSplitPane(
-      JSplitPane.HORIZONTAL_SPLIT, this.canvas_scroll, this.controls_scroll);
+    final QuadTreeControls controls =
+      new QuadTreeControls();
+    final QuadTreeCanvas canvas =
+      new QuadTreeCanvas(controls.events(), this.messages);
 
-    this.status = new StatusBar(this.messages);
-    this.log = new LogPane(this.messages);
+    final JScrollPane controls_scroll =
+      new JScrollPane(controls);
+    final JScrollPane canvas_scroll =
+      new JScrollPane(canvas);
 
-    this.tabs = new JTabbedPane();
-    this.tabs.addTab("Quad Tree", this.split);
-    this.tabs.addTab("Log", this.log);
+    final JSplitPane split = new JSplitPane(
+      JSplitPane.HORIZONTAL_SPLIT, canvas_scroll, controls_scroll);
+
+    final StatusBar status =
+      new StatusBar(this.messages);
+    final LogPane log =
+      new LogPane(this.messages);
+
+    final JTabbedPane tabs = new JTabbedPane();
+    tabs.addTab("Quad Tree", split);
+    tabs.addTab("Log", log);
 
     Thread.setDefaultUncaughtExceptionHandler(
       (t, e) -> {
@@ -91,15 +91,15 @@ final class QuadTreeWindow extends JFrame
       });
 
     final Container pane = this.getContentPane();
-    pane.add(this.tabs, BorderLayout.CENTER);
-    pane.add(this.status, BorderLayout.PAGE_END);
+    pane.add(tabs, BorderLayout.CENTER);
+    pane.add(status, BorderLayout.PAGE_END);
 
     this.messages.onNext(LogMessage.of(
       LogMessageType.Severity.INFO,
       "Quad tree viewer started."));
 
     this.pack();
-    this.split.setDividerLocation(0.6);
+    split.setDividerLocation(0.6);
   }
 
   private static JMenuBar makeMenu()
@@ -140,7 +140,7 @@ final class QuadTreeWindow extends JFrame
     }
   }
 
-  private final class LogPane extends JPanel
+  private static final class LogPane extends JPanel
   {
     private final JTextArea text;
     private final JScrollPane scroll;
