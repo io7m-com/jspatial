@@ -23,7 +23,7 @@
         <li><a href="documentation/index.xhtml">XHTML - single page</a></li>
       </ul>
       <p>
-        Older documentation is archived in the
+        Documentation for current and older releases is archived in the
         <a href="https://repo1.maven.org/maven2/${siteDocumentationDirectory}">repository</a>.
       </p>
     </section>
