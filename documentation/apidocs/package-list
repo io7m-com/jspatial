@@ -1,4 +1,5 @@
-com.io7m.jspatial
+com.io7m.jspatial.api
+com.io7m.jspatial.api.octtrees
+com.io7m.jspatial.api.quadtrees
 com.io7m.jspatial.documentation
-com.io7m.jspatial.octtrees
-com.io7m.jspatial.quadtrees
+com.io7m.jspatial.implementation

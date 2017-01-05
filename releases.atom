@@ -4,13 +4,13 @@
     <a:name>io7m release robot</a:name>
     <a:email>contact@io7m.com</a:email>
   </a:author>
-  <a:id>http://io7m.github.io/jspatial//releases.atom</a:id>
+  <a:id>http://github.com/io7m/jspatial/releases.atom</a:id>
   <a:title>io7m-jspatial Releases</a:title>
-  <a:updated>2015-08-29T00:00:00Z</a:updated>
+  <a:updated>2016-08-26T00:00:00Z</a:updated>
   <a:entry>
     <a:id>0</a:id>
-    <a:updated>2015-08-29T00:00:00Z</a:updated>
-    <a:published>2015-08-29T00:00:00Z</a:published>
+    <a:updated>2016-08-26T00:00:00Z</a:updated>
+    <a:published>2016-08-26T00:00:00Z</a:published>
     <a:title>io7m-jspatial 3.0.0 released</a:title>
     <a:content type="text"> io7m-jspatial 3.0.0 released </a:content>
   </a:entry>
