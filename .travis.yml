@@ -1,5 +1,5 @@
 env:
-  _JAVA_OPTIONS="-Xms512m -Xmx512m"
+  _JAVA_OPTIONS="-Xms1G -Xmx4G"
 
 language: java
 
@@ -11,8 +11,11 @@ addons:
     packages:
       - oracle-java8-installer
 
-install:
+install: true
 
 script:
-  - mvn clean package
+  - mvn clean verify
+
+notifications:
+  irc: "chat.freenode.net#io7m"
 
