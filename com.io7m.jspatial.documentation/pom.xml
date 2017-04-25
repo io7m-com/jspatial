@@ -7,15 +7,19 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jspatial</groupId>
-    <artifactId>io7m-jspatial</artifactId>
+    <artifactId>com.io7m.jspatial</artifactId>
     <version>3.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>io7m-jspatial-documentation</artifactId>
+  <artifactId>com.io7m.jspatial.documentation</artifactId>
 
   <packaging>jar</packaging>
-  <name>io7m-jspatial-documentation</name>
+  <name>com.io7m.jspatial.documentation</name>
   <description>Spatial data structures (Documentation)</description>
   <url>http://io7m.github.io/jspatial/</url>
+
+  <properties>
+    <mdep.analyze.skip>true</mdep.analyze.skip>
+  </properties>
 
   <scm>
     <url>${project.parent.scm.url}</url>
@@ -26,18 +30,18 @@
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jspatial-api</artifactId>
+      <artifactId>com.io7m.jspatial.api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jspatial-implementation</artifactId>
+      <artifactId>com.io7m.jspatial.implementation</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.io7m.jnull</groupId>
-      <artifactId>io7m-jnull-core</artifactId>
+      <artifactId>com.io7m.jnull.core</artifactId>
     </dependency>
   </dependencies>
 
@@ -82,7 +86,7 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>${project.groupId}</groupId>
-                  <artifactId>io7m-jspatial-api</artifactId>
+                  <artifactId>com.io7m.jspatial.api</artifactId>
                   <classifier>sources</classifier>
                   <version>${project.version}</version>
                   <type>jar</type>

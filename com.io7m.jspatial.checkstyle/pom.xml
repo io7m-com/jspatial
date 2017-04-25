@@ -7,13 +7,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jspatial</groupId>
-    <artifactId>io7m-jspatial</artifactId>
+    <artifactId>com.io7m.jspatial</artifactId>
     <version>3.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>io7m-jspatial-checkstyle</artifactId>
+  <artifactId>com.io7m.jspatial.checkstyle</artifactId>
 
   <packaging>jar</packaging>
-  <name>io7m-jspatial-checkstyle</name>
+  <name>com.io7m.jspatial.checkstyle</name>
   <description>Spatial data structures (Checkstyle policy)</description>
   <url>http://io7m.github.io/jspatial/</url>
 
@@ -22,12 +22,5 @@
     <connection>${project.parent.scm.connection}</connection>
     <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
   </scm>
-
-  <dependencies>
-    <dependency>
-      <groupId>com.io7m.jnull</groupId>
-      <artifactId>io7m-jnull-core</artifactId>
-    </dependency>
-  </dependencies>
 
 </project>

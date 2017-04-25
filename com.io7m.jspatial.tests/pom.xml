@@ -7,13 +7,17 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jspatial</groupId>
-    <artifactId>io7m-jspatial</artifactId>
+    <artifactId>com.io7m.jspatial</artifactId>
     <version>3.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>io7m-jspatial-tests</artifactId>
+  <artifactId>com.io7m.jspatial.tests</artifactId>
+
+  <properties>
+    <mdep.analyze.skip>true</mdep.analyze.skip>
+  </properties>
 
   <packaging>bundle</packaging>
-  <name>io7m-jspatial-tests</name>
+  <name>com.io7m.jspatial.tests</name>
   <description>Spatial data structures (Unit tests)</description>
   <url>http://io7m.github.io/jspatial/</url>
 
@@ -25,13 +29,42 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.io7m.jnull</groupId>
+      <artifactId>com.io7m.jnull.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jintegers</groupId>
+      <artifactId>com.io7m.jintegers.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.junreachable</groupId>
+      <artifactId>com.io7m.junreachable.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jequality</groupId>
+      <artifactId>com.io7m.jequality.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jfunctional</groupId>
+      <artifactId>com.io7m.jfunctional.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jaffirm</groupId>
+      <artifactId>com.io7m.jaffirm.core</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jspatial-api</artifactId>
+      <artifactId>com.io7m.jspatial.api</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jspatial-implementation</artifactId>
+      <artifactId>com.io7m.jspatial.implementation</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -43,6 +76,11 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

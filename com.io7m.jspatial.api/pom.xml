@@ -7,14 +7,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.jspatial</groupId>
-    <artifactId>io7m-jspatial</artifactId>
+    <artifactId>com.io7m.jspatial</artifactId>
     <version>3.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>io7m-jspatial-implementation</artifactId>
+  <artifactId>com.io7m.jspatial.api</artifactId>
 
   <packaging>bundle</packaging>
-  <name>io7m-jspatial-implementation</name>
-  <description>Spatial data structures (Main implementation)</description>
+  <name>com.io7m.jspatial.api</name>
+  <description>Spatial data structures (API)</description>
   <url>http://io7m.github.io/jspatial/</url>
 
   <scm>
@@ -25,35 +25,27 @@
 
   <dependencies>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>io7m-jspatial-api</artifactId>
-      <version>${project.version}</version>
+      <groupId>com.io7m.jnull</groupId>
+      <artifactId>com.io7m.jnull.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jintegers</groupId>
+      <artifactId>com.io7m.jintegers.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>io7m-jtensors-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>com.io7m.jaffirm</groupId>
-      <artifactId>io7m-jaffirm-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>it.unimi.dsi</groupId>
-      <artifactId>fastutil</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.service.component.annotations</artifactId>
+      <groupId>org.immutables</groupId>
+      <artifactId>value</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.annotation</artifactId>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -72,7 +64,11 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package></Export-Package>
+            <Export-Package>
+              com.io7m.jspatial.api,
+              com.io7m.jspatial.api.quadtrees,
+              com.io7m.jspatial.api.octtrees
+            </Export-Package>
           </instructions>
         </configuration>
       </plugin>
