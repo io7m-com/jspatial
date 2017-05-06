@@ -65,6 +65,16 @@
       <c:type-code-new/>
       <c:summary>The packages are now OSGi bundles</c:summary>
     </c:item>
+    <c:item>
+      <c:date>2017-04-25</c:date>
+      <c:type-code-fix/>
+      <c:summary>Rename project. Use the new primogenitor POM and 2017 project conventions.</c:summary>
+    </c:item>
+    <c:item>
+      <c:date>2017-05-06</c:date>
+      <c:type-code-change/>
+      <c:summary>Use jtensors [8.1.0, 9.0.0)</c:summary>
+    </c:item>
   </c:release>
 
   <c:release c:ticket-system="com.io7m.fossil.jspatial">
