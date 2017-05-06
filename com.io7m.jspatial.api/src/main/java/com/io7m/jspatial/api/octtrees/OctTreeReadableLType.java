@@ -17,7 +17,7 @@
 package com.io7m.jspatial.api.octtrees;
 
 import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jspatial.api.RayI3D;
+import com.io7m.jspatial.api.Ray3D;
 
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -119,6 +119,6 @@ public interface OctTreeReadableLType<A> extends OctTreeReadableType
    */
 
   void raycast(
-    RayI3D ray,
+    Ray3D ray,
     SortedSet<OctTreeRaycastResultL<A>> items);
 }

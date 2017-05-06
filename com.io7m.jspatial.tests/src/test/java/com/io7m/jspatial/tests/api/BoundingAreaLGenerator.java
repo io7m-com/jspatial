@@ -17,7 +17,7 @@
 package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.LongGenerator;
 
@@ -43,10 +43,10 @@ public final class BoundingAreaLGenerator implements Generator<BoundingAreaL>
     vs.add(this.lg.next());
     vs.sort((x, y) -> Long.compare(x.longValue(), y.longValue()));
 
-    final VectorI2L lo =
-      new VectorI2L(vs.remove(0).longValue(), vs.remove(0).longValue());
-    final VectorI2L hi =
-      new VectorI2L(vs.remove(0).longValue(), vs.remove(0).longValue());
+    final Vector2L lo =
+      Vector2L.of(vs.remove(0).longValue(), vs.remove(0).longValue());
+    final Vector2L hi =
+      Vector2L.of(vs.remove(0).longValue(), vs.remove(0).longValue());
     return BoundingAreaL.of(lo, hi);
   }
 }

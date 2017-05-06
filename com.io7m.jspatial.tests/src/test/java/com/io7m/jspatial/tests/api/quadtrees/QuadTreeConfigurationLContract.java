@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api.quadtrees;
 
 import com.io7m.jspatial.api.BoundingAreaL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationLType;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -49,8 +49,8 @@ public abstract class QuadTreeConfigurationLContract
   @Test
   public final void testIdentities()
   {
-    final VectorI2L lower = new VectorI2L(0L, 0L);
-    final VectorI2L upper = new VectorI2L(100L, 100L);
+    final Vector2L lower = Vector2L.of(0L, 0L);
+    final Vector2L upper = Vector2L.of(100L, 100L);
     final BoundingAreaL area = BoundingAreaL.of(lower, upper);
     final QuadTreeConfigurationLType c = this.create(area);
 

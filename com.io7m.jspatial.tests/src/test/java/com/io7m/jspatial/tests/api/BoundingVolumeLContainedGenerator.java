@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jaffirm.core.Postconditions;
 import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.LongGenerator;
 
@@ -37,16 +37,16 @@ public final class BoundingVolumeLContainedGenerator implements Generator<Boundi
   {
     this.lgx =
       new LongGenerator(
-        container.lower().getXL() + 1L,
-        container.upper().getXL() - 1L);
+        container.lower().x() + 1L,
+        container.upper().x() - 1L);
     this.lgy =
       new LongGenerator(
-        container.lower().getYL() + 1L,
-        container.upper().getYL() - 1L);
+        container.lower().y() + 1L,
+        container.upper().y() - 1L);
     this.lgz =
       new LongGenerator(
-        container.lower().getZL() + 1L,
-        container.upper().getZL() - 1L);
+        container.lower().z() + 1L,
+        container.upper().z() - 1L);
     this.container = container;
   }
 
@@ -69,12 +69,12 @@ public final class BoundingVolumeLContainedGenerator implements Generator<Boundi
       vz.add(this.lgz.next());
       vz.sort((x, y) -> Long.compare(x.longValue(), y.longValue()));
 
-      final VectorI3L lo = new VectorI3L(
+      final Vector3L lo = Vector3L.of(
         vx.get(0).longValue(),
         vy.get(0).longValue(),
         vz.get(0).longValue());
 
-      final VectorI3L hi = new VectorI3L(
+      final Vector3L hi = Vector3L.of(
         vx.get(1).longValue(),
         vy.get(1).longValue(),
         vz.get(1).longValue());

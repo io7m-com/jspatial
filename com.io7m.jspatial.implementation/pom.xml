@@ -48,7 +48,7 @@
     </dependency>
     <dependency>
       <groupId>com.io7m.jtensors</groupId>
-      <artifactId>io7m-jtensors-core</artifactId>
+      <artifactId>com.io7m.jtensors.core</artifactId>
     </dependency>
     <dependency>
       <groupId>com.io7m.jcip</groupId>
@@ -81,7 +81,9 @@
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Export-Package></Export-Package>
+            <Export-Package>
+              com.io7m.jspatial.implementation
+            </Export-Package>
           </instructions>
         </configuration>
       </plugin>

@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.DoubleGenerator;
 
@@ -44,10 +44,10 @@ public final class BoundingAreaDGenerator implements Generator<BoundingAreaD>
     vs.add(this.g.next());
     vs.sort((x, y) -> Double.compare(x.doubleValue(), y.doubleValue()));
 
-    final VectorI2D lo =
-      new VectorI2D(vs.remove(0).doubleValue(), vs.remove(0).doubleValue());
-    final VectorI2D hi =
-      new VectorI2D(vs.remove(0).doubleValue(), vs.remove(0).doubleValue());
+    final Vector2D lo =
+      Vector2D.of(vs.remove(0).doubleValue(), vs.remove(0).doubleValue());
+    final Vector2D hi =
+      Vector2D.of(vs.remove(0).doubleValue(), vs.remove(0).doubleValue());
     return BoundingAreaD.of(lo, hi);
   }
 }

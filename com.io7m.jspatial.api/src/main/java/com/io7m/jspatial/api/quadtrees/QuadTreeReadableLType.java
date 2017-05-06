@@ -17,7 +17,7 @@
 package com.io7m.jspatial.api.quadtrees;
 
 import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jspatial.api.RayI2D;
+import com.io7m.jspatial.api.Ray2D;
 
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -119,6 +119,6 @@ public interface QuadTreeReadableLType<A> extends QuadTreeReadableType
    */
 
   void raycast(
-    RayI2D ray,
+    Ray2D ray,
     SortedSet<QuadTreeRaycastResultL<A>> items);
 }

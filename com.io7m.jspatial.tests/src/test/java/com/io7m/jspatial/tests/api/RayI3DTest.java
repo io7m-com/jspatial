@@ -18,13 +18,14 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jequality.AlmostEqualDouble;
 import com.io7m.jequality.AlmostEqualDouble.ContextRelative;
-import com.io7m.jspatial.api.RayI3D;
-import com.io7m.jtensors.VectorI3D;
+import com.io7m.jspatial.api.Ray3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vectors3D;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Tests for the RayI3D type.
+ * Tests for the Ray3D type.
  */
 
 public final class RayI3DTest
@@ -32,49 +33,49 @@ public final class RayI3DTest
   @Test
   public void testRayEqualsNotCase0()
   {
-    final RayI3D ray0 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
+    final Ray3D ray0 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
     Assert.assertNotEquals(ray0, null);
   }
 
   @Test
   public void testRayEqualsNotCase1()
   {
-    final RayI3D ray0 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
+    final Ray3D ray0 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
     Assert.assertNotEquals(ray0, Integer.valueOf(23));
   }
 
   @Test
   public void testRayEqualsNotCase2()
   {
-    final RayI3D ray0 =
-      new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
-    final RayI3D ray1 =
-      new RayI3D(new VectorI3D(1.0, 2.0, 3.0), VectorI3D.ZERO);
+    final Ray3D ray0 =
+      Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
+    final Ray3D ray1 =
+      Ray3D.of(Vector3D.of(1.0, 2.0, 3.0), Vectors3D.zero());
     Assert.assertNotEquals(ray0, ray1);
   }
 
   @Test
   public void testRayEqualsNotCase3()
   {
-    final RayI3D ray0 =
-      new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
-    final RayI3D ray1 =
-      new RayI3D(VectorI3D.ZERO, new VectorI3D(1.0, 2.0, 3.0));
+    final Ray3D ray0 =
+      Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
+    final Ray3D ray1 =
+      Ray3D.of(Vectors3D.zero(), Vector3D.of(1.0, 2.0, 3.0));
     Assert.assertNotEquals(ray0, ray1);
   }
 
   @Test
   public void testRayEqualsReflexive()
   {
-    final RayI3D ray0 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
+    final Ray3D ray0 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
     Assert.assertEquals(ray0, ray0);
   }
 
   @Test
   public void testRayEqualsSymmetric()
   {
-    final RayI3D ray0 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
-    final RayI3D ray1 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
+    final Ray3D ray0 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
+    final Ray3D ray1 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
     Assert.assertEquals(ray0, ray1);
     Assert.assertEquals(ray1, ray0);
   }
@@ -82,9 +83,9 @@ public final class RayI3DTest
   @Test
   public void testRayEqualsTransitive()
   {
-    final RayI3D ray0 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
-    final RayI3D ray1 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
-    final RayI3D ray2 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
+    final Ray3D ray0 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
+    final Ray3D ray1 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
+    final Ray3D ray2 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
     Assert.assertEquals(ray0, ray1);
     Assert.assertEquals(ray1, ray2);
     Assert.assertEquals(ray0, ray2);
@@ -93,171 +94,171 @@ public final class RayI3DTest
   @Test
   public void testRayHashCodeEquals()
   {
-    final RayI3D ray0 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
-    final RayI3D ray1 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
+    final Ray3D ray0 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
+    final Ray3D ray1 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
     Assert.assertTrue(ray0.hashCode() == ray1.hashCode());
   }
 
   @Test
   public void testRayToStringEquals()
   {
-    final RayI3D ray0 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
-    final RayI3D ray1 = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
+    final Ray3D ray0 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
+    final Ray3D ray1 = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
     Assert.assertTrue(ray0.toString().equals(ray1.toString()));
   }
 
   @Test
   public void testRayToStringNotEquals()
   {
-    final RayI3D ray0 =
-      new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
-    final RayI3D ray1 =
-      new RayI3D(VectorI3D.ZERO, new VectorI3D(1.0, 2.0, 3.0));
+    final Ray3D ray0 =
+      Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
+    final Ray3D ray1 =
+      Ray3D.of(Vectors3D.zero(), Vector3D.of(1.0, 2.0, 3.0));
     Assert.assertFalse(ray0.toString().equals(ray1.toString()));
   }
 
   @Test
   public void testRayZero()
   {
-    final RayI3D ray = new RayI3D(VectorI3D.ZERO, VectorI3D.ZERO);
+    final Ray3D ray = Ray3D.of(Vectors3D.zero(), Vectors3D.zero());
     final ContextRelative context = new ContextRelative();
 
-    final VectorI3D ray_origin = ray.origin();
-    final VectorI3D ray_direction = ray.direction();
-    final VectorI3D ray_direction_inv = ray.directionInverse();
+    final Vector3D ray_origin = ray.origin();
+    final Vector3D ray_direction = ray.direction();
+    final Vector3D ray_direction_inv = ray.directionInverse();
 
     Assert.assertTrue(AlmostEqualDouble.almostEqual(
       context,
-      ray_origin.getXD(),
-      ray_origin.getYD()));
+      ray_origin.x(),
+      ray_origin.y()));
     Assert.assertTrue(AlmostEqualDouble.almostEqual(
       context,
-      ray_direction.getXD(),
-      ray_direction.getYD()));
+      ray_direction.x(),
+      ray_direction.y()));
     Assert.assertTrue(AlmostEqualDouble.almostEqual(
       context,
-      ray_origin.getXD(),
-      ray_origin.getZD()));
+      ray_origin.x(),
+      ray_origin.z()));
     Assert.assertTrue(AlmostEqualDouble.almostEqual(
       context,
-      ray_direction.getXD(),
-      ray_direction.getZD()));
-    Assert.assertTrue(ray_direction_inv.getXD() == Double.POSITIVE_INFINITY);
-    Assert.assertTrue(ray_direction_inv.getYD() == Double.POSITIVE_INFINITY);
-    Assert.assertTrue(ray_direction_inv.getZD() == Double.POSITIVE_INFINITY);
+      ray_direction.x(),
+      ray_direction.z()));
+    Assert.assertTrue(ray_direction_inv.x() == Double.POSITIVE_INFINITY);
+    Assert.assertTrue(ray_direction_inv.y() == Double.POSITIVE_INFINITY);
+    Assert.assertTrue(ray_direction_inv.z() == Double.POSITIVE_INFINITY);
   }
 
   @Test
   public void testRayIntersection()
   {
-    final VectorI3D lower = new VectorI3D(2.0, 2.0, 2.0);
-    final VectorI3D upper = new VectorI3D(4.0, 4.0, 4.0);
+    final Vector3D lower = Vector3D.of(2.0, 2.0, 2.0);
+    final Vector3D upper = Vector3D.of(4.0, 4.0, 4.0);
 
     {
       // Intersect -X face in +X direction
-      final VectorI3D origin = new VectorI3D(1.0, 3.0, 3.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(1.0, 0.0, 0.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(1.0, 3.0, 3.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(1.0, 0.0, 0.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertTrue(i);
     }
 
     {
       // Intersect +X face in -X direction
-      final VectorI3D origin = new VectorI3D(6.0, 3.0, 3.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(-1.0, 0.0, 0.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(6.0, 3.0, 3.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(-1.0, 0.0, 0.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertTrue(i);
     }
 
     {
       // Intersect +Y face in -Y direction
-      final VectorI3D origin = new VectorI3D(3.0, 6.0, 3.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(0.0, -1.0, 0.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(3.0, 6.0, 3.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(0.0, -1.0, 0.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertTrue(i);
     }
 
     {
       // Intersect -Y face in +Y direction
-      final VectorI3D origin = new VectorI3D(3.0, 1.0, 3.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(0.0, 1.0, 0.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(3.0, 1.0, 3.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(0.0, 1.0, 0.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertTrue(i);
     }
 
     {
       // Intersect -Z face in +Z direction
-      final VectorI3D origin = new VectorI3D(3.0, 3.0, 1.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(0.0, 0.0, 1.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(3.0, 3.0, 1.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(0.0, 0.0, 1.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertTrue(i);
     }
 
     {
       // Intersect +Z face in -Z direction
-      final VectorI3D origin = new VectorI3D(3.0, 3.0, 6.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(0.0, 0.0, -1.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(3.0, 3.0, 6.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(0.0, 0.0, -1.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertTrue(i);
     }
   }
@@ -265,114 +266,114 @@ public final class RayI3DTest
   @Test
   public void testRayNoIntersection()
   {
-    final VectorI3D lower = new VectorI3D(2.0, 2.0, 2.0);
-    final VectorI3D upper = new VectorI3D(4.0, 4.0, 4.0);
+    final Vector3D lower = Vector3D.of(2.0, 2.0, 2.0);
+    final Vector3D upper = Vector3D.of(4.0, 4.0, 4.0);
 
     {
       // Do not intersect -X face in +X direction
-      final VectorI3D origin = new VectorI3D(3.0, 0.0, 0.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(1.0, 0.0, 0.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(3.0, 0.0, 0.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(1.0, 0.0, 0.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertFalse(i);
     }
 
     {
       // Do not intersect +X face in -X direction
-      final VectorI3D origin = new VectorI3D(6.0, 0.0, 0.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(-1.0, 0.0, 0.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(6.0, 0.0, 0.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(-1.0, 0.0, 0.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertFalse(i);
     }
 
     {
       // Do not intersect +Y face in -Y direction
-      final VectorI3D origin = new VectorI3D(3.0, 1.0, 3.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(0.0, -1.0, 0.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(3.0, 1.0, 3.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(0.0, -1.0, 0.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertFalse(i);
     }
 
     {
       // Do not intersect -Y face in +Y direction
-      final VectorI3D origin = new VectorI3D(3.0, 6.0, 3.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(0.0, 1.0, 0.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(3.0, 6.0, 3.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(0.0, 1.0, 0.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertFalse(i);
     }
 
     {
       // Do not intersect -Z face in +Z direction
-      final VectorI3D origin = new VectorI3D(3.0, 3.0, 6.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(0.0, 0.0, 1.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(3.0, 3.0, 6.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(0.0, 0.0, 1.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertFalse(i);
     }
 
     {
       // Do not intersect +Z face in -Z direction
-      final VectorI3D origin = new VectorI3D(3.0, 3.0, 1.0);
-      final VectorI3D direct =
-        VectorI3D.normalize(new VectorI3D(0.0, 0.0, -1.0));
-      final RayI3D ray = new RayI3D(origin, direct);
+      final Vector3D origin = Vector3D.of(3.0, 3.0, 1.0);
+      final Vector3D direct =
+        Vectors3D.normalize(Vector3D.of(0.0, 0.0, -1.0));
+      final Ray3D ray = Ray3D.of(origin, direct);
 
       final boolean i =
         ray.intersectsVolume(
-          lower.getXD(),
-          lower.getYD(),
-          lower.getZD(),
-          upper.getXD(),
-          upper.getYD(),
-          upper.getZD());
+          lower.x(),
+          lower.y(),
+          lower.z(),
+          upper.x(),
+          upper.y(),
+          upper.z());
       Assert.assertFalse(i);
     }
   }

@@ -18,7 +18,7 @@ package com.io7m.jspatial.implementation;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingVolumeD;
-import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -70,55 +70,55 @@ public final class OctantsD
   {
     NullCheck.notNull(volume, "Volume");
 
-    final VectorI3D lower = volume.lower();
-    final VectorI3D upper = volume.upper();
+    final Vector3D lower = volume.lower();
+    final Vector3D upper = volume.upper();
 
     final double[] x_spans = new double[4];
-    Subdivision.subdivide1D(lower.getXD(), upper.getXD(), x_spans);
+    Subdivision.subdivide1D(lower.x(), upper.x(), x_spans);
     final double[] y_spans = new double[4];
-    Subdivision.subdivide1D(lower.getYD(), upper.getYD(), y_spans);
+    Subdivision.subdivide1D(lower.y(), upper.y(), y_spans);
     final double[] z_spans = new double[4];
-    Subdivision.subdivide1D(lower.getZD(), upper.getZD(), z_spans);
+    Subdivision.subdivide1D(lower.z(), upper.z(), z_spans);
 
-    final VectorI3D x0y0z0_lower =
-      new VectorI3D(x_spans[0], y_spans[0], z_spans[0]);
-    final VectorI3D x0y0z0_upper =
-      new VectorI3D(x_spans[1], y_spans[1], z_spans[1]);
+    final Vector3D x0y0z0_lower =
+      Vector3D.of(x_spans[0], y_spans[0], z_spans[0]);
+    final Vector3D x0y0z0_upper =
+      Vector3D.of(x_spans[1], y_spans[1], z_spans[1]);
 
-    final VectorI3D x1y0z0_lower =
-      new VectorI3D(x_spans[2], y_spans[0], z_spans[0]);
-    final VectorI3D x1y0z0_upper =
-      new VectorI3D(x_spans[3], y_spans[1], z_spans[1]);
+    final Vector3D x1y0z0_lower =
+      Vector3D.of(x_spans[2], y_spans[0], z_spans[0]);
+    final Vector3D x1y0z0_upper =
+      Vector3D.of(x_spans[3], y_spans[1], z_spans[1]);
 
-    final VectorI3D x0y1z0_lower =
-      new VectorI3D(x_spans[0], y_spans[2], z_spans[0]);
-    final VectorI3D x0y1z0_upper =
-      new VectorI3D(x_spans[1], y_spans[3], z_spans[1]);
+    final Vector3D x0y1z0_lower =
+      Vector3D.of(x_spans[0], y_spans[2], z_spans[0]);
+    final Vector3D x0y1z0_upper =
+      Vector3D.of(x_spans[1], y_spans[3], z_spans[1]);
 
-    final VectorI3D x1y1z0_lower =
-      new VectorI3D(x_spans[2], y_spans[2], z_spans[0]);
-    final VectorI3D x1y1z0_upper =
-      new VectorI3D(x_spans[3], y_spans[3], z_spans[1]);
+    final Vector3D x1y1z0_lower =
+      Vector3D.of(x_spans[2], y_spans[2], z_spans[0]);
+    final Vector3D x1y1z0_upper =
+      Vector3D.of(x_spans[3], y_spans[3], z_spans[1]);
 
-    final VectorI3D x0y0z1_lower =
-      new VectorI3D(x_spans[0], y_spans[0], z_spans[2]);
-    final VectorI3D x0y0z1_upper =
-      new VectorI3D(x_spans[1], y_spans[1], z_spans[3]);
+    final Vector3D x0y0z1_lower =
+      Vector3D.of(x_spans[0], y_spans[0], z_spans[2]);
+    final Vector3D x0y0z1_upper =
+      Vector3D.of(x_spans[1], y_spans[1], z_spans[3]);
 
-    final VectorI3D x1y0z1_lower =
-      new VectorI3D(x_spans[2], y_spans[0], z_spans[2]);
-    final VectorI3D x1y0z1_upper =
-      new VectorI3D(x_spans[3], y_spans[1], z_spans[3]);
+    final Vector3D x1y0z1_lower =
+      Vector3D.of(x_spans[2], y_spans[0], z_spans[2]);
+    final Vector3D x1y0z1_upper =
+      Vector3D.of(x_spans[3], y_spans[1], z_spans[3]);
 
-    final VectorI3D x0y1z1_lower =
-      new VectorI3D(x_spans[0], y_spans[2], z_spans[2]);
-    final VectorI3D x0y1z1_upper =
-      new VectorI3D(x_spans[1], y_spans[3], z_spans[3]);
+    final Vector3D x0y1z1_lower =
+      Vector3D.of(x_spans[0], y_spans[2], z_spans[2]);
+    final Vector3D x0y1z1_upper =
+      Vector3D.of(x_spans[1], y_spans[3], z_spans[3]);
 
-    final VectorI3D x1y1z1_lower =
-      new VectorI3D(x_spans[2], y_spans[2], z_spans[2]);
-    final VectorI3D x1y1z1_upper =
-      new VectorI3D(x_spans[3], y_spans[3], z_spans[3]);
+    final Vector3D x1y1z1_lower =
+      Vector3D.of(x_spans[2], y_spans[2], z_spans[2]);
+    final Vector3D x1y1z1_upper =
+      Vector3D.of(x_spans[3], y_spans[3], z_spans[3]);
 
     final BoundingVolumeD x0y0z0 =
       BoundingVolumeD.of(x0y0z0_lower, x0y0z0_upper);

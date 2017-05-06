@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api.octtrees;
 
 import com.io7m.jspatial.api.BoundingVolumeD;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationDType;
-import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -49,8 +49,8 @@ public abstract class OctTreeConfigurationDContract
   @Test
   public final void testIdentities()
   {
-    final VectorI3D lower = new VectorI3D(0.0, 0.0, 0.0);
-    final VectorI3D upper = new VectorI3D(100.0, 100.0, 100.0);
+    final Vector3D lower = Vector3D.of(0.0, 0.0, 0.0);
+    final Vector3D upper = Vector3D.of(100.0, 100.0, 100.0);
     final BoundingVolumeD volume = BoundingVolumeD.of(lower, upper);
     final OctTreeConfigurationDType c = this.create(volume);
 

@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.BoundingVolumeD;
 import com.io7m.jspatial.api.BoundingVolumeDType;
-import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
@@ -42,8 +42,8 @@ public abstract class BoundingVolumeDContract
   protected abstract <A extends BoundingVolumeDType> Generator<A> generator();
 
   protected abstract BoundingVolumeDType create(
-    final VectorI3D lower,
-    final VectorI3D upper);
+    final Vector3D lower,
+    final Vector3D upper);
 
   /**
    * Invariant violated with X value.
@@ -54,8 +54,8 @@ public abstract class BoundingVolumeDContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI3D(2.0, 0.0, 0.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(2.0, 0.0, 0.0),
+      Vector3D.of(2.0, 2.0, 2.0));
     Assert.fail();
   }
 
@@ -68,8 +68,8 @@ public abstract class BoundingVolumeDContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI3D(0.0, 2.0, 0.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(0.0, 2.0, 0.0),
+      Vector3D.of(2.0, 2.0, 2.0));
     Assert.fail();
   }
 
@@ -82,8 +82,8 @@ public abstract class BoundingVolumeDContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI3D(0.0, 0.0, 2.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(0.0, 0.0, 2.0),
+      Vector3D.of(2.0, 2.0, 2.0));
     Assert.fail();
   }
 
@@ -95,20 +95,20 @@ public abstract class BoundingVolumeDContract
   public final void testEqualsHashcodeToString()
   {
     final BoundingVolumeDType a0 = this.create(
-      new VectorI3D(0.0, 0.0, 0.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(0.0, 0.0, 0.0),
+      Vector3D.of(2.0, 2.0, 2.0));
     final BoundingVolumeDType a1 = this.create(
-      new VectorI3D(0.0, 0.0, 0.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(0.0, 0.0, 0.0),
+      Vector3D.of(2.0, 2.0, 2.0));
     final BoundingVolumeDType a2 = this.create(
-      new VectorI3D(0.0, 0.0, 0.0),
-      new VectorI3D(1.0, 2.0, 2.0));
+      Vector3D.of(0.0, 0.0, 0.0),
+      Vector3D.of(1.0, 2.0, 2.0));
     final BoundingVolumeDType a3 = this.create(
-      new VectorI3D(0.0, 0.0, 0.0),
-      new VectorI3D(2.0, 1.0, 2.0));
+      Vector3D.of(0.0, 0.0, 0.0),
+      Vector3D.of(2.0, 1.0, 2.0));
     final BoundingVolumeDType a4 = this.create(
-      new VectorI3D(0.0, 0.0, 0.0),
-      new VectorI3D(2.0, 2.0, 1.0));
+      Vector3D.of(0.0, 0.0, 0.0),
+      Vector3D.of(2.0, 2.0, 1.0));
 
     Assert.assertEquals(a0, a0);
     Assert.assertEquals(a1, a0);
@@ -143,16 +143,16 @@ public abstract class BoundingVolumeDContract
           }
 
           final BoundingVolumeD center = BoundingVolumeD.of(
-            new VectorI3D(10.0, 10.0, 10.0),
-            new VectorI3D(20.0, 20.0, 20.0));
+            Vector3D.of(10.0, 10.0, 10.0),
+            Vector3D.of(20.0, 20.0, 20.0));
 
           final double low_x = x * 10.0;
           final double low_y = y * 10.0;
           final double low_z = z * 10.0;
 
           final BoundingVolumeD overlap = BoundingVolumeD.of(
-            new VectorI3D(low_x, low_y, low_z),
-            new VectorI3D(
+            Vector3D.of(low_x, low_y, low_z),
+            Vector3D.of(
               low_x + 10.0,
               low_y + 10.0,
               low_z + 10.0));
@@ -246,16 +246,16 @@ public abstract class BoundingVolumeDContract
           }
 
           final BoundingVolumeD center = BoundingVolumeD.of(
-            new VectorI3D(10.0, 10.0, 10.0),
-            new VectorI3D(20.0, 20.0, 20.0));
+            Vector3D.of(10.0, 10.0, 10.0),
+            Vector3D.of(20.0, 20.0, 20.0));
 
           final double low_x = x * 10.0;
           final double low_y = y * 10.0;
           final double low_z = z * 10.0;
 
           final BoundingVolumeD overlap = BoundingVolumeD.of(
-            new VectorI3D(low_x, low_y, low_z),
-            new VectorI3D(
+            Vector3D.of(low_x, low_y, low_z),
+            Vector3D.of(
               low_x + 10.0,
               low_y + 10.0,
               low_z + 10.0));
@@ -284,30 +284,30 @@ public abstract class BoundingVolumeDContract
           throws Throwable
         {
           if (volume0.width() >= 4.0 && volume0.height() >= 4.0 && volume0.depth() >= 4.0) {
-            final VectorI3D lower0 = volume0.lower();
-            final VectorI3D upper0 = volume0.upper();
+            final Vector3D lower0 = volume0.lower();
+            final Vector3D upper0 = volume0.upper();
 
             final BoundingVolumeDType volume1 =
               BoundingVolumeDContract.this.create(
-                new VectorI3D(
-                  lower0.getXD() + 1.0,
-                  lower0.getYD() + 1.0,
-                  lower0.getZD() + 1.0),
-                new VectorI3D(
-                  upper0.getXD() - 1.0,
-                  upper0.getYD() - 1.0,
-                  upper0.getZD() - 1.0));
+                Vector3D.of(
+                  lower0.x() + 1.0,
+                  lower0.y() + 1.0,
+                  lower0.z() + 1.0),
+                Vector3D.of(
+                  upper0.x() - 1.0,
+                  upper0.y() - 1.0,
+                  upper0.z() - 1.0));
 
             final BoundingVolumeDType volume2 =
               BoundingVolumeDContract.this.create(
-                new VectorI3D(
-                  lower0.getXD() + 2.0,
-                  lower0.getYD() + 2.0,
-                  lower0.getZD() + 2.0),
-                new VectorI3D(
-                  upper0.getXD() - 2.0,
-                  upper0.getYD() - 2.0,
-                  upper0.getZD() - 2.0));
+                Vector3D.of(
+                  lower0.x() + 2.0,
+                  lower0.y() + 2.0,
+                  lower0.z() + 2.0),
+                Vector3D.of(
+                  upper0.x() - 2.0,
+                  upper0.y() - 2.0,
+                  upper0.z() - 2.0));
 
             Assert.assertTrue(volume0.contains(volume0));
             Assert.assertTrue(volume0.contains(volume1));
@@ -335,19 +335,19 @@ public abstract class BoundingVolumeDContract
           throws Throwable
         {
           if (volume0.width() >= 4.0 && volume0.height() >= 4.0) {
-            final VectorI3D lower0 = volume0.lower();
-            final VectorI3D upper0 = volume0.upper();
+            final Vector3D lower0 = volume0.lower();
+            final Vector3D upper0 = volume0.upper();
 
             final BoundingVolumeDType volume1 =
               BoundingVolumeDContract.this.create(
-                new VectorI3D(
-                  lower0.getXD() + 1.0,
-                  lower0.getYD() + 1.0,
-                  lower0.getZD() + 1.0),
-                new VectorI3D(
-                  upper0.getXD() - 1.0,
-                  upper0.getYD() - 1.0,
-                  upper0.getZD() - 1.0));
+                Vector3D.of(
+                  lower0.x() + 1.0,
+                  lower0.y() + 1.0,
+                  lower0.z() + 1.0),
+                Vector3D.of(
+                  upper0.x() - 1.0,
+                  upper0.y() - 1.0,
+                  upper0.z() - 1.0));
 
             Assert.assertTrue(volume0.contains(volume0));
             Assert.assertTrue(volume0.contains(volume1));

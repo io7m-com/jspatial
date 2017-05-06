@@ -20,7 +20,7 @@ import com.io7m.jfunctional.Unit;
 import com.io7m.jspatial.api.BoundingAreaL;
 import com.io7m.jspatial.implementation.QuadrantsL;
 import com.io7m.jspatial.tests.api.BoundingAreaLGenerator;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
 import org.junit.Assert;
@@ -68,8 +68,8 @@ public final class QuadrantsLTest
       Optional.empty(),
       QuadrantsL.subdivide(
         BoundingAreaL.of(
-          new VectorI2L(0L, 0L),
-          new VectorI2L(2L, 1L))));
+          Vector2L.of(0L, 0L),
+          Vector2L.of(2L, 1L))));
   }
 
   @Test
@@ -79,7 +79,7 @@ public final class QuadrantsLTest
       Optional.empty(),
       QuadrantsL.subdivide(
         BoundingAreaL.of(
-          new VectorI2L(0L, 0L),
-          new VectorI2L(1L, 2L))));
+          Vector2L.of(0L, 0L),
+          Vector2L.of(1L, 2L))));
   }
 }

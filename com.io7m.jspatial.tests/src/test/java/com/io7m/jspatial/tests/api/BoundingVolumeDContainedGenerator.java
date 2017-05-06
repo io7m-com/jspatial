@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jaffirm.core.Postconditions;
 import com.io7m.jspatial.api.BoundingVolumeD;
-import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.DoubleGenerator;
 
@@ -35,12 +35,12 @@ public final class BoundingVolumeDContainedGenerator implements Generator<Boundi
   public BoundingVolumeDContainedGenerator(
     final BoundingVolumeD container)
   {
-    this.lgx = new DoubleGenerator(
-      container.lower().getXD(), container.upper().getXD());
-    this.lgy = new DoubleGenerator(
-      container.lower().getYD(), container.upper().getYD());
-    this.lgz = new DoubleGenerator(
-      container.lower().getZD(), container.upper().getZD());
+    this.lgx =
+      new DoubleGenerator(container.lower().x(), container.upper().x());
+    this.lgy =
+      new DoubleGenerator(container.lower().y(), container.upper().y());
+    this.lgz =
+      new DoubleGenerator(container.lower().z(), container.upper().z());
 
     this.container = container;
   }
@@ -63,12 +63,12 @@ public final class BoundingVolumeDContainedGenerator implements Generator<Boundi
     vz.add(this.lgz.next());
     vz.sort((x, y) -> Double.compare(x.doubleValue(), y.doubleValue()));
 
-    final VectorI3D lo = new VectorI3D(
+    final Vector3D lo = Vector3D.of(
       vx.get(0).doubleValue(),
       vy.get(0).doubleValue(),
       vz.get(0).doubleValue());
 
-    final VectorI3D hi = new VectorI3D(
+    final Vector3D hi = Vector3D.of(
       vx.get(1).doubleValue(),
       vy.get(1).doubleValue(),
       vz.get(1).doubleValue());

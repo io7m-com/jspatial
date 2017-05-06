@@ -18,7 +18,7 @@ package com.io7m.jspatial.api;
 
 import com.io7m.jintegers.CheckedMath;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import org.immutables.value.Value;
 
 /**
@@ -30,7 +30,7 @@ import org.immutables.value.Value;
  * @since 3.0.0
  */
 
-@ImmutableStyleType
+@JSpatialImmutableStyleType
 @Value.Immutable
 public interface BoundingVolumeLType
 {
@@ -41,10 +41,10 @@ public interface BoundingVolumeLType
   @Value.Check
   default void checkInvariants()
   {
-    final VectorI3L lo = this.lower();
-    final VectorI3L hi = this.upper();
+    final Vector3L lo = this.lower();
+    final Vector3L hi = this.upper();
 
-    if (lo.getXL() >= hi.getXL()) {
+    if (lo.x() >= hi.x()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed volume bounds.");
       sb.append(System.lineSeparator());
@@ -59,7 +59,7 @@ public interface BoundingVolumeLType
       throw new IllegalArgumentException(sb.toString());
     }
 
-    if (lo.getYL() >= hi.getYL()) {
+    if (lo.y() >= hi.y()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed volume bounds.");
       sb.append(System.lineSeparator());
@@ -74,7 +74,7 @@ public interface BoundingVolumeLType
       throw new IllegalArgumentException(sb.toString());
     }
 
-    if (lo.getZL() >= hi.getZL()) {
+    if (lo.z() >= hi.z()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed volume bounds.");
       sb.append(System.lineSeparator());
@@ -95,14 +95,14 @@ public interface BoundingVolumeLType
    */
 
   @Value.Parameter(order = 0)
-  VectorI3L lower();
+  Vector3L lower();
 
   /**
    * @return The exclusive upper corner of the volume
    */
 
   @Value.Parameter(order = 1)
-  VectorI3L upper();
+  Vector3L upper();
 
   /**
    * @return The width of the volume
@@ -110,7 +110,7 @@ public interface BoundingVolumeLType
 
   default long width()
   {
-    return CheckedMath.subtract(this.upper().getXL(), this.lower().getXL());
+    return CheckedMath.subtract(this.upper().x(), this.lower().x());
   }
 
   /**
@@ -119,7 +119,7 @@ public interface BoundingVolumeLType
 
   default long height()
   {
-    return CheckedMath.subtract(this.upper().getYL(), this.lower().getYL());
+    return CheckedMath.subtract(this.upper().y(), this.lower().y());
   }
 
   /**
@@ -128,7 +128,7 @@ public interface BoundingVolumeLType
 
   default long depth()
   {
-    return CheckedMath.subtract(this.upper().getZL(), this.lower().getZL());
+    return CheckedMath.subtract(this.upper().z(), this.lower().z());
   }
 
   /**
@@ -152,24 +152,24 @@ public interface BoundingVolumeLType
   {
     NullCheck.notNull(other, "other");
 
-    final VectorI3L a_lo = this.lower();
-    final VectorI3L a_hi = this.upper();
-    final VectorI3L b_lo = other.lower();
-    final VectorI3L b_hi = other.upper();
+    final Vector3L a_lo = this.lower();
+    final Vector3L a_hi = this.upper();
+    final Vector3L b_lo = other.lower();
+    final Vector3L b_hi = other.upper();
 
-    final long a_x0 = a_lo.getXL();
-    final long a_x1 = a_hi.getXL();
-    final long a_y0 = a_lo.getYL();
-    final long a_y1 = a_hi.getYL();
-    final long a_z0 = a_lo.getZL();
-    final long a_z1 = a_hi.getZL();
+    final long a_x0 = a_lo.x();
+    final long a_x1 = a_hi.x();
+    final long a_y0 = a_lo.y();
+    final long a_y1 = a_hi.y();
+    final long a_z0 = a_lo.z();
+    final long a_z1 = a_hi.z();
 
-    final long b_x0 = b_lo.getXL();
-    final long b_x1 = b_hi.getXL();
-    final long b_y0 = b_lo.getYL();
-    final long b_y1 = b_hi.getYL();
-    final long b_z0 = b_lo.getZL();
-    final long b_z1 = b_hi.getZL();
+    final long b_x0 = b_lo.x();
+    final long b_x1 = b_hi.x();
+    final long b_y0 = b_lo.y();
+    final long b_y1 = b_hi.y();
+    final long b_z0 = b_lo.z();
+    final long b_z1 = b_hi.z();
 
     final boolean c0 = a_x0 < b_x1;
     final boolean c1 = a_x1 > b_x0;
@@ -208,24 +208,24 @@ public interface BoundingVolumeLType
   {
     NullCheck.notNull(other, "other");
 
-    final VectorI3L a_lo = this.lower();
-    final VectorI3L a_hi = this.upper();
-    final VectorI3L b_lo = other.lower();
-    final VectorI3L b_hi = other.upper();
+    final Vector3L a_lo = this.lower();
+    final Vector3L a_hi = this.upper();
+    final Vector3L b_lo = other.lower();
+    final Vector3L b_hi = other.upper();
 
-    final long a_x0 = a_lo.getXL();
-    final long a_x1 = a_hi.getXL();
-    final long a_y0 = a_lo.getYL();
-    final long a_y1 = a_hi.getYL();
-    final long a_z0 = a_lo.getZL();
-    final long a_z1 = a_hi.getZL();
+    final long a_x0 = a_lo.x();
+    final long a_x1 = a_hi.x();
+    final long a_y0 = a_lo.y();
+    final long a_y1 = a_hi.y();
+    final long a_z0 = a_lo.z();
+    final long a_z1 = a_hi.z();
 
-    final long b_x0 = b_lo.getXL();
-    final long b_x1 = b_hi.getXL();
-    final long b_y0 = b_lo.getYL();
-    final long b_y1 = b_hi.getYL();
-    final long b_z0 = b_lo.getZL();
-    final long b_z1 = b_hi.getZL();
+    final long b_x0 = b_lo.x();
+    final long b_x1 = b_hi.x();
+    final long b_y0 = b_lo.y();
+    final long b_y1 = b_hi.y();
+    final long b_z0 = b_lo.z();
+    final long b_z1 = b_hi.z();
 
     final boolean c0 = b_x0 >= a_x0;
     final boolean c1 = b_x1 <= a_x1;

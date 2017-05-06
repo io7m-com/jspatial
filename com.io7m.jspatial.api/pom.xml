@@ -34,7 +34,7 @@
     </dependency>
     <dependency>
       <groupId>com.io7m.jtensors</groupId>
-      <artifactId>io7m-jtensors-core</artifactId>
+      <artifactId>com.io7m.jtensors.core</artifactId>
     </dependency>
 
     <dependency>

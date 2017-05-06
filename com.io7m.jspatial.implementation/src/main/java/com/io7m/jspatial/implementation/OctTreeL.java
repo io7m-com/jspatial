@@ -22,15 +22,16 @@ import com.io7m.jintegers.CheckedMath;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jspatial.api.RayI3D;
+import com.io7m.jspatial.api.Ray3D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationL;
 import com.io7m.jspatial.api.octtrees.OctTreeLType;
 import com.io7m.jspatial.api.octtrees.OctTreeOctantIterationLType;
 import com.io7m.jspatial.api.octtrees.OctTreeOctantLType;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultL;
-import com.io7m.jtensors.VectorI3D;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vectors3D;
 import com.io7m.junreachable.UnreachableCodeException;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
@@ -211,7 +212,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
   @Override
   public void raycast(
-    final RayI3D ray,
+    final Ray3D ray,
     final SortedSet<OctTreeRaycastResultL<T>> items)
   {
     NullCheck.notNull(ray, "Ray");
@@ -600,7 +601,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
     }
 
     private void raycast(
-      final RayI3D ray,
+      final Ray3D ray,
       final SortedSet<OctTreeRaycastResultL<T>> items)
     {
       /*
@@ -615,14 +616,14 @@ public final class OctTreeL<T> implements OctTreeLType<T>
        * Check whether or not the ray intersects the octant.
        */
 
-      final VectorI3L lower = this.volume.lower();
-      final VectorI3L upper = this.volume.upper();
-      final double x0 = (double) lower.getXL();
-      final double x1 = (double) upper.getXL();
-      final double y0 = (double) lower.getYL();
-      final double y1 = (double) upper.getYL();
-      final double z0 = (double) lower.getZL();
-      final double z1 = (double) upper.getZL();
+      final Vector3L lower = this.volume.lower();
+      final Vector3L upper = this.volume.upper();
+      final double x0 = (double) lower.x();
+      final double x1 = (double) upper.x();
+      final double y0 = (double) lower.y();
+      final double y1 = (double) upper.y();
+      final double z0 = (double) lower.z();
+      final double z1 = (double) upper.z();
 
       /*
        * If the ray intersects the octant, check each item in the octant
@@ -640,14 +641,14 @@ public final class OctTreeL<T> implements OctTreeLType<T>
           final T item = entry.getKey();
           final BoundingVolumeL item_volume = entry.getValue();
 
-          final VectorI3L item_lower = item_volume.lower();
-          final VectorI3L item_upper = item_volume.upper();
-          final double item_x0 = (double) item_lower.getXL();
-          final double item_x1 = (double) item_upper.getXL();
-          final double item_y0 = (double) item_lower.getYL();
-          final double item_y1 = (double) item_upper.getYL();
-          final double item_z0 = (double) item_lower.getZL();
-          final double item_z1 = (double) item_upper.getZL();
+          final Vector3L item_lower = item_volume.lower();
+          final Vector3L item_upper = item_volume.upper();
+          final double item_x0 = (double) item_lower.x();
+          final double item_x1 = (double) item_upper.x();
+          final double item_y0 = (double) item_lower.y();
+          final double item_y1 = (double) item_upper.y();
+          final double item_z0 = (double) item_lower.z();
+          final double item_z1 = (double) item_upper.z();
 
           if (ray.intersectsVolume(
             item_x0,
@@ -656,8 +657,8 @@ public final class OctTreeL<T> implements OctTreeLType<T>
             item_x1,
             item_y1,
             item_z1)) {
-            final double distance = VectorI3D.distance(
-              new VectorI3D(item_x0, item_y0, item_z0),
+            final double distance = Vectors3D.distance(
+              Vector3D.of(item_x0, item_y0, item_z0),
               ray.origin());
             final OctTreeRaycastResultL<T> result =
               OctTreeRaycastResultL.of(distance, item_volume, item);

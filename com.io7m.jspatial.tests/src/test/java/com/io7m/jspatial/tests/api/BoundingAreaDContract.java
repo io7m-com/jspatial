@@ -17,7 +17,7 @@
 package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.BoundingAreaDType;
-import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
@@ -41,8 +41,8 @@ public abstract class BoundingAreaDContract
   protected abstract <A extends BoundingAreaDType> Generator<A> generator();
 
   protected abstract BoundingAreaDType create(
-    final VectorI2D lower,
-    final VectorI2D upper);
+    final Vector2D lower,
+    final Vector2D upper);
 
   /**
    * Invariant violated with X value.
@@ -53,8 +53,8 @@ public abstract class BoundingAreaDContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI2D(2.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(2.0, 0.0),
+      Vector2D.of(2.0, 2.0));
     Assert.fail();
   }
 
@@ -67,8 +67,8 @@ public abstract class BoundingAreaDContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI2D(0.0, 2.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 2.0),
+      Vector2D.of(2.0, 2.0));
     Assert.fail();
   }
 
@@ -80,17 +80,17 @@ public abstract class BoundingAreaDContract
   public final void testEqualsHashcodeToString()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 2.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 2.0));
     final BoundingAreaDType a2 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(1.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(1.0, 2.0));
     final BoundingAreaDType a3 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 1.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 1.0));
 
     Assert.assertEquals(a0, a0);
     Assert.assertEquals(a1, a0);
@@ -116,11 +116,11 @@ public abstract class BoundingAreaDContract
   public final void testContainsNot0()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(8.0, 8.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(8.0, 8.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(-1.0, 1.0),
-      new VectorI2D(7.0, 7.0));
+      Vector2D.of(-1.0, 1.0),
+      Vector2D.of(7.0, 7.0));
 
     Assert.assertFalse(a0.contains(a1));
   }
@@ -133,11 +133,11 @@ public abstract class BoundingAreaDContract
   public final void testContainsNot1()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(8.0, 8.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(8.0, 8.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(7.0, 9.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(7.0, 9.0));
 
     Assert.assertFalse(a0.contains(a1));
   }
@@ -150,11 +150,11 @@ public abstract class BoundingAreaDContract
   public final void testContainsNot2()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(8.0, 8.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(8.0, 8.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(9.0, 7.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(9.0, 7.0));
 
     Assert.assertFalse(a0.contains(a1));
   }
@@ -167,11 +167,11 @@ public abstract class BoundingAreaDContract
   public final void testContainsNot3()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(8.0, 8.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(8.0, 8.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(1.0, -1.0),
-      new VectorI2D(7.0, 7.0));
+      Vector2D.of(1.0, -1.0),
+      Vector2D.of(7.0, 7.0));
 
     Assert.assertFalse(a0.contains(a1));
   }
@@ -184,11 +184,11 @@ public abstract class BoundingAreaDContract
   public final void testOverlapsNotNW()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(-2.0, -2.0),
-      new VectorI2D(0.0, 0.0));
+      Vector2D.of(-2.0, -2.0),
+      Vector2D.of(0.0, 0.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 2.0));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -201,11 +201,11 @@ public abstract class BoundingAreaDContract
   public final void testOverlapsNotN()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(0.0, -2.0),
-      new VectorI2D(2.0, 0.0));
+      Vector2D.of(0.0, -2.0),
+      Vector2D.of(2.0, 0.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 2.0));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -218,11 +218,11 @@ public abstract class BoundingAreaDContract
   public final void testOverlapsNotNE()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(2.0, 4.0),
-      new VectorI2D(4.0, 6.0));
+      Vector2D.of(2.0, 4.0),
+      Vector2D.of(4.0, 6.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 2.0));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -235,11 +235,11 @@ public abstract class BoundingAreaDContract
   public final void testOverlapsNotE()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(2.0, 0.0),
-      new VectorI2D(4.0, 2.0));
+      Vector2D.of(2.0, 0.0),
+      Vector2D.of(4.0, 2.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 2.0));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -252,11 +252,11 @@ public abstract class BoundingAreaDContract
   public final void testOverlapsNotSE()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(2.0, 2.0),
-      new VectorI2D(4.0, 4.0));
+      Vector2D.of(2.0, 2.0),
+      Vector2D.of(4.0, 4.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 2.0));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -269,11 +269,11 @@ public abstract class BoundingAreaDContract
   public final void testOverlapsNotS()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(0.0, 2.0),
-      new VectorI2D(2.0, 4.0));
+      Vector2D.of(0.0, 2.0),
+      Vector2D.of(2.0, 4.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 2.0));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -286,11 +286,11 @@ public abstract class BoundingAreaDContract
   public final void testOverlapsNotSW()
   {
     final BoundingAreaDType a0 = this.create(
-      new VectorI2D(-2.0, 2.0),
-      new VectorI2D(0.0, 4.0));
+      Vector2D.of(-2.0, 2.0),
+      Vector2D.of(0.0, 4.0));
     final BoundingAreaDType a1 = this.create(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(2.0, 2.0));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -378,26 +378,26 @@ public abstract class BoundingAreaDContract
           throws Throwable
         {
           if (area0.width() >= 4.0 && area0.height() >= 4.0) {
-            final VectorI2D lower0 = area0.lower();
-            final VectorI2D upper0 = area0.upper();
+            final Vector2D lower0 = area0.lower();
+            final Vector2D upper0 = area0.upper();
 
             final BoundingAreaDType area1 =
               BoundingAreaDContract.this.create(
-                new VectorI2D(
-                  lower0.getXD() + 1.0,
-                  lower0.getYD() + 1.0),
-                new VectorI2D(
-                  upper0.getXD() - 1.0,
-                  upper0.getYD() - 1.0));
+                Vector2D.of(
+                  lower0.x() + 1.0,
+                  lower0.y() + 1.0),
+                Vector2D.of(
+                  upper0.x() - 1.0,
+                  upper0.y() - 1.0));
 
             final BoundingAreaDType area2 =
               BoundingAreaDContract.this.create(
-                new VectorI2D(
-                  lower0.getXD() + 2.0,
-                  lower0.getYD() + 2.0),
-                new VectorI2D(
-                  upper0.getXD() - 2.0,
-                  upper0.getYD() - 2.0));
+                Vector2D.of(
+                  lower0.x() + 2.0,
+                  lower0.y() + 2.0),
+                Vector2D.of(
+                  upper0.x() - 2.0,
+                  upper0.y() - 2.0));
 
             Assert.assertTrue(area0.contains(area0));
             Assert.assertTrue(area0.contains(area1));
@@ -425,17 +425,17 @@ public abstract class BoundingAreaDContract
           throws Throwable
         {
           if (area0.width() >= 4.0 && area0.height() >= 4.0) {
-            final VectorI2D lower0 = area0.lower();
-            final VectorI2D upper0 = area0.upper();
+            final Vector2D lower0 = area0.lower();
+            final Vector2D upper0 = area0.upper();
 
             final BoundingAreaDType area1 =
               BoundingAreaDContract.this.create(
-                new VectorI2D(
-                  lower0.getXD() + 1.0,
-                  lower0.getYD() + 1.0),
-                new VectorI2D(
-                  upper0.getXD() - 1.0,
-                  upper0.getYD() - 1.0));
+                Vector2D.of(
+                  lower0.x() + 1.0,
+                  lower0.y() + 1.0),
+                Vector2D.of(
+                  upper0.x() - 1.0,
+                  upper0.y() - 1.0));
 
             Assert.assertTrue(area0.contains(area0));
             Assert.assertTrue(area0.contains(area1));

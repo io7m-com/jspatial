@@ -18,7 +18,7 @@ package com.io7m.jspatial.implementation;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -58,22 +58,22 @@ public final class QuadrantsD
   {
     NullCheck.notNull(area, "Area");
 
-    final VectorI2D lower = area.lower();
-    final VectorI2D upper = area.upper();
+    final Vector2D lower = area.lower();
+    final Vector2D upper = area.upper();
 
     final double[] x_spans = new double[4];
-    Subdivision.subdivide1D(lower.getXD(), upper.getXD(), x_spans);
+    Subdivision.subdivide1D(lower.x(), upper.x(), x_spans);
     final double[] y_spans = new double[4];
-    Subdivision.subdivide1D(lower.getYD(), upper.getYD(), y_spans);
+    Subdivision.subdivide1D(lower.y(), upper.y(), y_spans);
 
-    final VectorI2D x0y0_lower = new VectorI2D(x_spans[0], y_spans[0]);
-    final VectorI2D x0y1_lower = new VectorI2D(x_spans[0], y_spans[2]);
-    final VectorI2D x1y0_lower = new VectorI2D(x_spans[2], y_spans[0]);
-    final VectorI2D x1y1_lower = new VectorI2D(x_spans[2], y_spans[2]);
-    final VectorI2D x0y0_upper = new VectorI2D(x_spans[1], y_spans[1]);
-    final VectorI2D x0y1_upper = new VectorI2D(x_spans[1], y_spans[3]);
-    final VectorI2D x1y0_upper = new VectorI2D(x_spans[3], y_spans[1]);
-    final VectorI2D x1y1_upper = new VectorI2D(x_spans[3], y_spans[3]);
+    final Vector2D x0y0_lower = Vector2D.of(x_spans[0], y_spans[0]);
+    final Vector2D x0y1_lower = Vector2D.of(x_spans[0], y_spans[2]);
+    final Vector2D x1y0_lower = Vector2D.of(x_spans[2], y_spans[0]);
+    final Vector2D x1y1_lower = Vector2D.of(x_spans[2], y_spans[2]);
+    final Vector2D x0y0_upper = Vector2D.of(x_spans[1], y_spans[1]);
+    final Vector2D x0y1_upper = Vector2D.of(x_spans[1], y_spans[3]);
+    final Vector2D x1y0_upper = Vector2D.of(x_spans[3], y_spans[1]);
+    final Vector2D x1y1_upper = Vector2D.of(x_spans[3], y_spans[3]);
 
     final BoundingAreaD x0y0 = BoundingAreaD.of(x0y0_lower, x0y0_upper);
     final BoundingAreaD x1y0 = BoundingAreaD.of(x1y0_lower, x1y0_upper);

@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jaffirm.core.Postconditions;
 import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.DoubleGenerator;
 
@@ -35,9 +35,9 @@ public final class BoundingAreaDContainedGenerator implements Generator<Bounding
     final BoundingAreaD container)
   {
     this.lgx =
-      new DoubleGenerator(container.lower().getXD(), container.upper().getXD());
+      new DoubleGenerator(container.lower().x(), container.upper().x());
     this.lgy =
-      new DoubleGenerator(container.lower().getYD(), container.upper().getYD());
+      new DoubleGenerator(container.lower().y(), container.upper().y());
     this.container = container;
   }
 
@@ -47,17 +47,17 @@ public final class BoundingAreaDContainedGenerator implements Generator<Bounding
     final List<Double> vx = new ArrayList<>(2);
     vx.add(this.lgx.next());
     vx.add(this.lgx.next());
-    vx.sort((x, y) -> Double.compare(x.doubleValue(), y.doubleValue()));
+    vx.sort(Double::compare);
 
     final List<Double> vy = new ArrayList<>(2);
     vy.add(this.lgy.next());
     vy.add(this.lgy.next());
-    vy.sort((x, y) -> Double.compare(x.doubleValue(), y.doubleValue()));
+    vy.sort(Double::compare);
 
-    final VectorI2D lo =
-      new VectorI2D(vx.get(0).doubleValue(), vy.get(0).doubleValue());
-    final VectorI2D hi =
-      new VectorI2D(vx.get(1).doubleValue(), vy.get(1).doubleValue());
+    final Vector2D lo =
+      Vector2D.of(vx.get(0), vy.get(0));
+    final Vector2D hi =
+      Vector2D.of(vx.get(1), vy.get(1));
 
     final BoundingAreaD area = BoundingAreaD.of(lo, hi);
     Postconditions.checkPostcondition(

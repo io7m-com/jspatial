@@ -18,7 +18,7 @@ package com.io7m.jspatial.api;
 
 import com.io7m.jintegers.CheckedMath;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import org.immutables.value.Value;
 
 /**
@@ -30,7 +30,7 @@ import org.immutables.value.Value;
  * @since 3.0.0
  */
 
-@ImmutableStyleType
+@JSpatialImmutableStyleType
 @Value.Immutable
 public interface BoundingAreaLType
 {
@@ -41,10 +41,10 @@ public interface BoundingAreaLType
   @Value.Check
   default void checkInvariants()
   {
-    final VectorI2L lo = this.lower();
-    final VectorI2L hi = this.upper();
+    final Vector2L lo = this.lower();
+    final Vector2L hi = this.upper();
 
-    if (lo.getXL() >= hi.getXL()) {
+    if (lo.x() >= hi.x()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed area bounds.");
       sb.append(System.lineSeparator());
@@ -59,7 +59,7 @@ public interface BoundingAreaLType
       throw new IllegalArgumentException(sb.toString());
     }
 
-    if (lo.getYL() >= hi.getYL()) {
+    if (lo.y() >= hi.y()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed area bounds.");
       sb.append(System.lineSeparator());
@@ -80,14 +80,14 @@ public interface BoundingAreaLType
    */
 
   @Value.Parameter(order = 0)
-  VectorI2L lower();
+  Vector2L lower();
 
   /**
    * @return The exclusive upper corner of the area
    */
 
   @Value.Parameter(order = 1)
-  VectorI2L upper();
+  Vector2L upper();
 
   /**
    * @return The width of the area
@@ -95,7 +95,7 @@ public interface BoundingAreaLType
 
   default long width()
   {
-    return CheckedMath.subtract(this.upper().getXL(), this.lower().getXL());
+    return CheckedMath.subtract(this.upper().x(), this.lower().x());
   }
 
   /**
@@ -104,7 +104,7 @@ public interface BoundingAreaLType
 
   default long height()
   {
-    return CheckedMath.subtract(this.upper().getYL(), this.lower().getYL());
+    return CheckedMath.subtract(this.upper().y(), this.lower().y());
   }
 
   /**
@@ -128,19 +128,19 @@ public interface BoundingAreaLType
   {
     NullCheck.notNull(other, "other");
 
-    final VectorI2L a_lo = this.lower();
-    final VectorI2L a_hi = this.upper();
-    final VectorI2L b_lo = other.lower();
-    final VectorI2L b_hi = other.upper();
+    final Vector2L a_lo = this.lower();
+    final Vector2L a_hi = this.upper();
+    final Vector2L b_lo = other.lower();
+    final Vector2L b_hi = other.upper();
 
-    final long a_x0 = a_lo.getXL();
-    final long a_x1 = a_hi.getXL();
-    final long a_y0 = a_lo.getYL();
-    final long a_y1 = a_hi.getYL();
-    final long b_x0 = b_lo.getXL();
-    final long b_x1 = b_hi.getXL();
-    final long b_y0 = b_lo.getYL();
-    final long b_y1 = b_hi.getYL();
+    final long a_x0 = a_lo.x();
+    final long a_x1 = a_hi.x();
+    final long a_y0 = a_lo.y();
+    final long a_y1 = a_hi.y();
+    final long b_x0 = b_lo.x();
+    final long b_x1 = b_hi.x();
+    final long b_y0 = b_lo.y();
+    final long b_y1 = b_hi.y();
 
     final boolean c0 = a_x0 < b_x1;
     final boolean c1 = a_x1 > b_x0;
@@ -177,19 +177,19 @@ public interface BoundingAreaLType
   {
     NullCheck.notNull(other, "other");
 
-    final VectorI2L a_lo = this.lower();
-    final VectorI2L a_hi = this.upper();
-    final VectorI2L b_lo = other.lower();
-    final VectorI2L b_hi = other.upper();
+    final Vector2L a_lo = this.lower();
+    final Vector2L a_hi = this.upper();
+    final Vector2L b_lo = other.lower();
+    final Vector2L b_hi = other.upper();
 
-    final long a_x0 = a_lo.getXL();
-    final long a_x1 = a_hi.getXL();
-    final long a_y0 = a_lo.getYL();
-    final long a_y1 = a_hi.getYL();
-    final long b_x0 = b_lo.getXL();
-    final long b_x1 = b_hi.getXL();
-    final long b_y0 = b_lo.getYL();
-    final long b_y1 = b_hi.getYL();
+    final long a_x0 = a_lo.x();
+    final long a_x1 = a_hi.x();
+    final long a_y0 = a_lo.y();
+    final long a_y1 = a_hi.y();
+    final long b_x0 = b_lo.x();
+    final long b_x1 = b_hi.x();
+    final long b_y0 = b_lo.y();
+    final long b_y1 = b_hi.y();
 
     final boolean c0 = b_x0 >= a_x0;
     final boolean c1 = b_x1 <= a_x1;

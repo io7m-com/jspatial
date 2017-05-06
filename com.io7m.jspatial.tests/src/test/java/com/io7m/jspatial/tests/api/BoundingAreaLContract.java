@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jintegers.CheckedMath;
 import com.io7m.jspatial.api.BoundingAreaLType;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
@@ -42,8 +42,8 @@ public abstract class BoundingAreaLContract
   protected abstract <A extends BoundingAreaLType> Generator<A> generator();
 
   protected abstract BoundingAreaLType create(
-    final VectorI2L lower,
-    final VectorI2L upper);
+    final Vector2L lower,
+    final Vector2L upper);
 
   /**
    * A zero width area.
@@ -54,8 +54,8 @@ public abstract class BoundingAreaLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(0L, 1L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(0L, 1L));
     Assert.fail();
   }
 
@@ -68,8 +68,8 @@ public abstract class BoundingAreaLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI2L(0L, 1L),
-      new VectorI2L(0L, 0L));
+      Vector2L.of(0L, 1L),
+      Vector2L.of(0L, 0L));
     Assert.fail();
   }
 
@@ -82,8 +82,8 @@ public abstract class BoundingAreaLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI2L(2L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(2L, 0L),
+      Vector2L.of(2L, 2L));
     Assert.fail();
   }
 
@@ -96,8 +96,8 @@ public abstract class BoundingAreaLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI2L(0L, 2L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 2L),
+      Vector2L.of(2L, 2L));
     Assert.fail();
   }
 
@@ -109,17 +109,17 @@ public abstract class BoundingAreaLContract
   public final void testEqualsHashcodeToString()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 2L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 2L));
     final BoundingAreaLType a2 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(1L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(1L, 2L));
     final BoundingAreaLType a3 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 1L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 1L));
 
     Assert.assertEquals(a0, a0);
     Assert.assertEquals(a1, a0);
@@ -144,11 +144,11 @@ public abstract class BoundingAreaLContract
   public final void testContainsNot0()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(8L, 8L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(8L, 8L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(-1L, 1L),
-      new VectorI2L(7L, 7L));
+      Vector2L.of(-1L, 1L),
+      Vector2L.of(7L, 7L));
 
     Assert.assertFalse(a0.contains(a1));
   }
@@ -161,11 +161,11 @@ public abstract class BoundingAreaLContract
   public final void testContainsNot1()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(8L, 8L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(8L, 8L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(1L, 1L),
-      new VectorI2L(7L, 9L));
+      Vector2L.of(1L, 1L),
+      Vector2L.of(7L, 9L));
 
     Assert.assertFalse(a0.contains(a1));
   }
@@ -178,11 +178,11 @@ public abstract class BoundingAreaLContract
   public final void testContainsNot2()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(8L, 8L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(8L, 8L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(1L, 1L),
-      new VectorI2L(9L, 7L));
+      Vector2L.of(1L, 1L),
+      Vector2L.of(9L, 7L));
 
     Assert.assertFalse(a0.contains(a1));
   }
@@ -195,11 +195,11 @@ public abstract class BoundingAreaLContract
   public final void testContainsNot3()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(8L, 8L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(8L, 8L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(1L, -1L),
-      new VectorI2L(7L, 7L));
+      Vector2L.of(1L, -1L),
+      Vector2L.of(7L, 7L));
 
     Assert.assertFalse(a0.contains(a1));
   }
@@ -212,11 +212,11 @@ public abstract class BoundingAreaLContract
   public final void testOverlapsNotNW()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(-2L, -2L),
-      new VectorI2L(0L, 0L));
+      Vector2L.of(-2L, -2L),
+      Vector2L.of(0L, 0L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 2L));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -229,11 +229,11 @@ public abstract class BoundingAreaLContract
   public final void testOverlapsNotN()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(0L, -2L),
-      new VectorI2L(2L, 0L));
+      Vector2L.of(0L, -2L),
+      Vector2L.of(2L, 0L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 2L));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -246,11 +246,11 @@ public abstract class BoundingAreaLContract
   public final void testOverlapsNotNE()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(2L, 4L),
-      new VectorI2L(4L, 6L));
+      Vector2L.of(2L, 4L),
+      Vector2L.of(4L, 6L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 2L));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -263,11 +263,11 @@ public abstract class BoundingAreaLContract
   public final void testOverlapsNotE()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(2L, 0L),
-      new VectorI2L(4L, 2L));
+      Vector2L.of(2L, 0L),
+      Vector2L.of(4L, 2L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 2L));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -280,11 +280,11 @@ public abstract class BoundingAreaLContract
   public final void testOverlapsNotSE()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(2L, 2L),
-      new VectorI2L(4L, 4L));
+      Vector2L.of(2L, 2L),
+      Vector2L.of(4L, 4L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 2L));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -297,11 +297,11 @@ public abstract class BoundingAreaLContract
   public final void testOverlapsNotS()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(0L, 2L),
-      new VectorI2L(2L, 4L));
+      Vector2L.of(0L, 2L),
+      Vector2L.of(2L, 4L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 2L));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -314,11 +314,11 @@ public abstract class BoundingAreaLContract
   public final void testOverlapsNotSW()
   {
     final BoundingAreaLType a0 = this.create(
-      new VectorI2L(-2L, 2L),
-      new VectorI2L(0L, 4L));
+      Vector2L.of(-2L, 2L),
+      Vector2L.of(0L, 4L));
     final BoundingAreaLType a1 = this.create(
-      new VectorI2L(0L, 0L),
-      new VectorI2L(2L, 2L));
+      Vector2L.of(0L, 0L),
+      Vector2L.of(2L, 2L));
 
     Assert.assertFalse(a0.overlaps(a1));
   }
@@ -406,26 +406,26 @@ public abstract class BoundingAreaLContract
           throws Throwable
         {
           if (area0.width() >= 4L && area0.height() >= 4L) {
-            final VectorI2L lower0 = area0.lower();
-            final VectorI2L upper0 = area0.upper();
+            final Vector2L lower0 = area0.lower();
+            final Vector2L upper0 = area0.upper();
 
             final BoundingAreaLType area1 =
               BoundingAreaLContract.this.create(
-                new VectorI2L(
-                  CheckedMath.add(lower0.getXL(), 1L),
-                  CheckedMath.add(lower0.getYL(), 1L)),
-                new VectorI2L(
-                  CheckedMath.subtract(upper0.getXL(), 1L),
-                  CheckedMath.subtract(upper0.getYL(), 1L)));
+                Vector2L.of(
+                  CheckedMath.add(lower0.x(), 1L),
+                  CheckedMath.add(lower0.y(), 1L)),
+                Vector2L.of(
+                  CheckedMath.subtract(upper0.x(), 1L),
+                  CheckedMath.subtract(upper0.y(), 1L)));
 
             final BoundingAreaLType area2 =
               BoundingAreaLContract.this.create(
-                new VectorI2L(
-                  CheckedMath.add(lower0.getXL(), 2L),
-                  CheckedMath.add(lower0.getYL(), 2L)),
-                new VectorI2L(
-                  CheckedMath.subtract(upper0.getXL(), 2L),
-                  CheckedMath.subtract(upper0.getYL(), 2L)));
+                Vector2L.of(
+                  CheckedMath.add(lower0.x(), 2L),
+                  CheckedMath.add(lower0.y(), 2L)),
+                Vector2L.of(
+                  CheckedMath.subtract(upper0.x(), 2L),
+                  CheckedMath.subtract(upper0.y(), 2L)));
 
             Assert.assertTrue(area0.contains(area0));
             Assert.assertTrue(area0.contains(area1));
@@ -453,17 +453,17 @@ public abstract class BoundingAreaLContract
           throws Throwable
         {
           if (area0.width() >= 4L && area0.height() >= 4L) {
-            final VectorI2L lower0 = area0.lower();
-            final VectorI2L upper0 = area0.upper();
+            final Vector2L lower0 = area0.lower();
+            final Vector2L upper0 = area0.upper();
 
             final BoundingAreaLType area1 =
               BoundingAreaLContract.this.create(
-                new VectorI2L(
-                  CheckedMath.add(lower0.getXL(), 1L),
-                  CheckedMath.add(lower0.getYL(), 1L)),
-                new VectorI2L(
-                  CheckedMath.subtract(upper0.getXL(), 1L),
-                  CheckedMath.subtract(upper0.getYL(), 1L)));
+                Vector2L.of(
+                  CheckedMath.add(lower0.x(), 1L),
+                  CheckedMath.add(lower0.y(), 1L)),
+                Vector2L.of(
+                  CheckedMath.subtract(upper0.x(), 1L),
+                  CheckedMath.subtract(upper0.y(), 1L)));
 
             Assert.assertTrue(area0.contains(area0));
             Assert.assertTrue(area0.contains(area1));

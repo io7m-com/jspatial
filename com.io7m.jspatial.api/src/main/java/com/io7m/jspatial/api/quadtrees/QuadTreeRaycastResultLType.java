@@ -17,7 +17,7 @@
 package com.io7m.jspatial.api.quadtrees;
 
 import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jspatial.api.ImmutableStyleType;
+import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
 /**
@@ -29,7 +29,7 @@ import org.immutables.value.Value;
  */
 
 @Value.Immutable
-@ImmutableStyleType
+@JSpatialImmutableStyleType
 public interface QuadTreeRaycastResultLType<T>
   extends Comparable<QuadTreeRaycastResultLType<T>>
 {

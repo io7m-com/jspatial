@@ -19,7 +19,7 @@ package com.io7m.jspatial.tests.api.octtrees;
 import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationL;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationLType;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -53,8 +53,8 @@ public final class OctTreeConfigurationLTest extends
   @Test
   public void testBuilder()
   {
-    final VectorI3L lower0 = new VectorI3L(0L, 0L, 0L);
-    final VectorI3L upper0 = new VectorI3L(100L, 100L, 100L);
+    final Vector3L lower0 = Vector3L.of(0L, 0L, 0L);
+    final Vector3L upper0 = Vector3L.of(100L, 100L, 100L);
     final BoundingVolumeL volume0 = BoundingVolumeL.of(lower0, upper0);
     final OctTreeConfigurationL.Builder b0 = OctTreeConfigurationL.builder();
     b0.setVolume(volume0);
@@ -82,8 +82,8 @@ public final class OctTreeConfigurationLTest extends
     Assert.assertNotEquals(qc2, qc0);
     Assert.assertNotEquals(qc2, qc1);
 
-    final VectorI3L lower1 = new VectorI3L(1L, 1L, 1L);
-    final VectorI3L upper1 = new VectorI3L(99L, 99L, 99L);
+    final Vector3L lower1 = Vector3L.of(1L, 1L, 1L);
+    final Vector3L upper1 = Vector3L.of(99L, 99L, 99L);
     final BoundingVolumeL volume1 = BoundingVolumeL.of(lower1, upper1);
 
     b0.setVolume(volume1);
@@ -124,8 +124,8 @@ public final class OctTreeConfigurationLTest extends
   @Test
   public void testWith()
   {
-    final VectorI3L lower0 = new VectorI3L(0L, 0L, 0L);
-    final VectorI3L upper0 = new VectorI3L(100L, 100L, 100L);
+    final Vector3L lower0 = Vector3L.of(0L, 0L, 0L);
+    final Vector3L upper0 = Vector3L.of(100L, 100L, 100L);
     final BoundingVolumeL volume0 = BoundingVolumeL.of(lower0, upper0);
     final OctTreeConfigurationL.Builder b = OctTreeConfigurationL.builder();
     b.setVolume(volume0);
@@ -133,8 +133,8 @@ public final class OctTreeConfigurationLTest extends
     final OctTreeConfigurationL qc0 = b.build();
     final OctTreeConfigurationL qc0_eq = b.build();
 
-    final VectorI3L lower1 = new VectorI3L(1L, 1L, 1L);
-    final VectorI3L upper1 = new VectorI3L(99L, 99L, 99L);
+    final Vector3L lower1 = Vector3L.of(1L, 1L, 1L);
+    final Vector3L upper1 = Vector3L.of(99L, 99L, 99L);
     final BoundingVolumeL volume1 = BoundingVolumeL.of(lower1, upper1);
 
     final OctTreeConfigurationL qc1 = qc0.withVolume(volume1);
@@ -199,16 +199,16 @@ public final class OctTreeConfigurationLTest extends
   @Test
   public void testOf()
   {
-    final VectorI3L lower0 = new VectorI3L(0L, 0L, 0L);
-    final VectorI3L upper0 = new VectorI3L(100L, 100L, 100L);
+    final Vector3L lower0 = Vector3L.of(0L, 0L, 0L);
+    final Vector3L upper0 = Vector3L.of(100L, 100L, 100L);
     final BoundingVolumeL volume0 = BoundingVolumeL.of(lower0, upper0);
     final OctTreeConfigurationL.Builder b = OctTreeConfigurationL.builder();
     b.setVolume(volume0);
 
     final OctTreeConfigurationL qc0 = b.build();
 
-    final VectorI3L lower1 = new VectorI3L(1L, 1L, 1L);
-    final VectorI3L upper1 = new VectorI3L(99L, 99L, 99L);
+    final Vector3L lower1 = Vector3L.of(1L, 1L, 1L);
+    final Vector3L upper1 = Vector3L.of(99L, 99L, 99L);
     final BoundingVolumeL volume1 = BoundingVolumeL.of(lower1, upper1);
 
     final OctTreeConfigurationL qc1 =
@@ -275,8 +275,8 @@ public final class OctTreeConfigurationLTest extends
   @Test
   public void testCopyOf()
   {
-    final VectorI3L lower0 = new VectorI3L(0L, 0L, 0L);
-    final VectorI3L upper0 = new VectorI3L(100L, 100L, 100L);
+    final Vector3L lower0 = Vector3L.of(0L, 0L, 0L);
+    final Vector3L upper0 = Vector3L.of(100L, 100L, 100L);
     final BoundingVolumeL volume0 = BoundingVolumeL.of(lower0, upper0);
     final OctTreeConfigurationL.Builder b = OctTreeConfigurationL.builder();
     b.setVolume(volume0);

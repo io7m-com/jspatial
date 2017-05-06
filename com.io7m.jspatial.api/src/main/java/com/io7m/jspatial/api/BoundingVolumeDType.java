@@ -17,7 +17,7 @@
 package com.io7m.jspatial.api;
 
 import com.io7m.jnull.NullCheck;
-import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import org.immutables.value.Value;
 
 /**
@@ -30,7 +30,7 @@ import org.immutables.value.Value;
  * @since 3.0.0
  */
 
-@ImmutableStyleType
+@JSpatialImmutableStyleType
 @Value.Immutable
 public interface BoundingVolumeDType
 {
@@ -41,10 +41,10 @@ public interface BoundingVolumeDType
   @Value.Check
   default void checkInvariants()
   {
-    final VectorI3D lo = this.lower();
-    final VectorI3D hi = this.upper();
+    final Vector3D lo = this.lower();
+    final Vector3D hi = this.upper();
 
-    if (lo.getXD() >= hi.getXD()) {
+    if (lo.x() >= hi.x()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed volume bounds.");
       sb.append(System.lineSeparator());
@@ -59,7 +59,7 @@ public interface BoundingVolumeDType
       throw new IllegalArgumentException(sb.toString());
     }
 
-    if (lo.getYD() >= hi.getYD()) {
+    if (lo.y() >= hi.y()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed volume bounds.");
       sb.append(System.lineSeparator());
@@ -74,7 +74,7 @@ public interface BoundingVolumeDType
       throw new IllegalArgumentException(sb.toString());
     }
 
-    if (lo.getZD() >= hi.getZD()) {
+    if (lo.z() >= hi.z()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed volume bounds.");
       sb.append(System.lineSeparator());
@@ -95,14 +95,14 @@ public interface BoundingVolumeDType
    */
 
   @Value.Parameter(order = 0)
-  VectorI3D lower();
+  Vector3D lower();
 
   /**
    * @return The exclusive upper corner of the volume
    */
 
   @Value.Parameter(order = 1)
-  VectorI3D upper();
+  Vector3D upper();
 
   /**
    * @return The width of the volume
@@ -110,7 +110,7 @@ public interface BoundingVolumeDType
 
   default double width()
   {
-    return this.upper().getXD() - this.lower().getXD();
+    return this.upper().x() - this.lower().x();
   }
 
   /**
@@ -119,7 +119,7 @@ public interface BoundingVolumeDType
 
   default double height()
   {
-    return this.upper().getYD() - this.lower().getYD();
+    return this.upper().y() - this.lower().y();
   }
 
   /**
@@ -128,7 +128,7 @@ public interface BoundingVolumeDType
 
   default double depth()
   {
-    return this.upper().getZD() - this.lower().getZD();
+    return this.upper().z() - this.lower().z();
   }
 
   /**
@@ -152,24 +152,24 @@ public interface BoundingVolumeDType
   {
     NullCheck.notNull(other, "other");
 
-    final VectorI3D a_lo = this.lower();
-    final VectorI3D a_hi = this.upper();
-    final VectorI3D b_lo = other.lower();
-    final VectorI3D b_hi = other.upper();
+    final Vector3D a_lo = this.lower();
+    final Vector3D a_hi = this.upper();
+    final Vector3D b_lo = other.lower();
+    final Vector3D b_hi = other.upper();
 
-    final double a_x0 = a_lo.getXD();
-    final double a_x1 = a_hi.getXD();
-    final double a_y0 = a_lo.getYD();
-    final double a_y1 = a_hi.getYD();
-    final double a_z0 = a_lo.getZD();
-    final double a_z1 = a_hi.getZD();
+    final double a_x0 = a_lo.x();
+    final double a_x1 = a_hi.x();
+    final double a_y0 = a_lo.y();
+    final double a_y1 = a_hi.y();
+    final double a_z0 = a_lo.z();
+    final double a_z1 = a_hi.z();
 
-    final double b_x0 = b_lo.getXD();
-    final double b_x1 = b_hi.getXD();
-    final double b_y0 = b_lo.getYD();
-    final double b_y1 = b_hi.getYD();
-    final double b_z0 = b_lo.getZD();
-    final double b_z1 = b_hi.getZD();
+    final double b_x0 = b_lo.x();
+    final double b_x1 = b_hi.x();
+    final double b_y0 = b_lo.y();
+    final double b_y1 = b_hi.y();
+    final double b_z0 = b_lo.z();
+    final double b_z1 = b_hi.z();
 
     final boolean c0 = a_x0 < b_x1;
     final boolean c1 = a_x1 > b_x0;
@@ -208,24 +208,24 @@ public interface BoundingVolumeDType
   {
     NullCheck.notNull(other, "other");
 
-    final VectorI3D a_lo = this.lower();
-    final VectorI3D a_hi = this.upper();
-    final VectorI3D b_lo = other.lower();
-    final VectorI3D b_hi = other.upper();
+    final Vector3D a_lo = this.lower();
+    final Vector3D a_hi = this.upper();
+    final Vector3D b_lo = other.lower();
+    final Vector3D b_hi = other.upper();
 
-    final double a_x0 = a_lo.getXD();
-    final double a_x1 = a_hi.getXD();
-    final double a_y0 = a_lo.getYD();
-    final double a_y1 = a_hi.getYD();
-    final double a_z0 = a_lo.getZD();
-    final double a_z1 = a_hi.getZD();
+    final double a_x0 = a_lo.x();
+    final double a_x1 = a_hi.x();
+    final double a_y0 = a_lo.y();
+    final double a_y1 = a_hi.y();
+    final double a_z0 = a_lo.z();
+    final double a_z1 = a_hi.z();
 
-    final double b_x0 = b_lo.getXD();
-    final double b_x1 = b_hi.getXD();
-    final double b_y0 = b_lo.getYD();
-    final double b_y1 = b_hi.getYD();
-    final double b_z0 = b_lo.getZD();
-    final double b_z1 = b_hi.getZD();
+    final double b_x0 = b_lo.x();
+    final double b_x1 = b_hi.x();
+    final double b_y0 = b_lo.y();
+    final double b_y1 = b_hi.y();
+    final double b_z0 = b_lo.z();
+    final double b_z1 = b_hi.z();
 
     final boolean c0 = b_x0 >= a_x0;
     final boolean c1 = b_x1 <= a_x1;

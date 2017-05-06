@@ -41,7 +41,7 @@ import java.lang.annotation.Target;
   build = "build",
   visibility = Value.Style.ImplementationVisibility.PUBLIC,
   defaults = @Value.Immutable(copy = true))
-public @interface ImmutableStyleType
+public @interface JSpatialImmutableStyleType
 {
 
 }

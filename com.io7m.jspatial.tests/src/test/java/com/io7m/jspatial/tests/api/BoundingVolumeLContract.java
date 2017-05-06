@@ -19,7 +19,7 @@ package com.io7m.jspatial.tests.api;
 import com.io7m.jintegers.CheckedMath;
 import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jspatial.api.BoundingVolumeLType;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
@@ -43,8 +43,8 @@ public abstract class BoundingVolumeLContract
   protected abstract <A extends BoundingVolumeLType> Generator<A> generator();
 
   protected abstract BoundingVolumeLType create(
-    final VectorI3L lower,
-    final VectorI3L upper);
+    final Vector3L lower,
+    final Vector3L upper);
 
   /**
    * A zero width volume.
@@ -55,8 +55,8 @@ public abstract class BoundingVolumeLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(0L, 1L, 1L));
+      Vector3L.of(0L, 0L, 0L),
+      Vector3L.of(0L, 1L, 1L));
     Assert.fail();
   }
 
@@ -69,8 +69,8 @@ public abstract class BoundingVolumeLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(1L, 0L, 1L));
+      Vector3L.of(0L, 0L, 0L),
+      Vector3L.of(1L, 0L, 1L));
     Assert.fail();
   }
 
@@ -83,8 +83,8 @@ public abstract class BoundingVolumeLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(1L, 1L, 0L));
+      Vector3L.of(0L, 0L, 0L),
+      Vector3L.of(1L, 1L, 0L));
     Assert.fail();
   }
 
@@ -97,8 +97,8 @@ public abstract class BoundingVolumeLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI3L(2L, 0L, 0L),
-      new VectorI3L(2L, 2L, 2L));
+      Vector3L.of(2L, 0L, 0L),
+      Vector3L.of(2L, 2L, 2L));
     Assert.fail();
   }
 
@@ -111,8 +111,8 @@ public abstract class BoundingVolumeLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI3L(0L, 2L, 0L),
-      new VectorI3L(2L, 2L, 2L));
+      Vector3L.of(0L, 2L, 0L),
+      Vector3L.of(2L, 2L, 2L));
     Assert.fail();
   }
 
@@ -125,8 +125,8 @@ public abstract class BoundingVolumeLContract
   {
     this.expected.expect(IllegalArgumentException.class);
     this.create(
-      new VectorI3L(0L, 0L, 2L),
-      new VectorI3L(2L, 2L, 2L));
+      Vector3L.of(0L, 0L, 2L),
+      Vector3L.of(2L, 2L, 2L));
     Assert.fail();
   }
 
@@ -138,17 +138,17 @@ public abstract class BoundingVolumeLContract
   public final void testEqualsHashcodeToString()
   {
     final BoundingVolumeLType a0 = this.create(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(2L, 2L, 2L));
+      Vector3L.of(0L, 0L, 0L),
+      Vector3L.of(2L, 2L, 2L));
     final BoundingVolumeLType a1 = this.create(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(2L, 2L, 2L));
+      Vector3L.of(0L, 0L, 0L),
+      Vector3L.of(2L, 2L, 2L));
     final BoundingVolumeLType a2 = this.create(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(1L, 2L, 2L));
+      Vector3L.of(0L, 0L, 0L),
+      Vector3L.of(1L, 2L, 2L));
     final BoundingVolumeLType a3 = this.create(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(2L, 1L, 2L));
+      Vector3L.of(0L, 0L, 0L),
+      Vector3L.of(2L, 1L, 2L));
 
     Assert.assertEquals(a0, a0);
     Assert.assertEquals(a1, a0);
@@ -201,16 +201,16 @@ public abstract class BoundingVolumeLContract
           }
 
           final BoundingVolumeL center = BoundingVolumeL.of(
-            new VectorI3L(10L, 10L, 10L),
-            new VectorI3L(20L, 20L, 20L));
+            Vector3L.of(10L, 10L, 10L),
+            Vector3L.of(20L, 20L, 20L));
 
           final long low_x = x * 10L;
           final long low_y = y * 10L;
           final long low_z = z * 10L;
 
           final BoundingVolumeL overlap = BoundingVolumeL.of(
-            new VectorI3L(low_x, low_y, low_z),
-            new VectorI3L(low_x + 10L, low_y + 10L, low_z + 10L));
+            Vector3L.of(low_x, low_y, low_z),
+            Vector3L.of(low_x + 10L, low_y + 10L, low_z + 10L));
 
           Assert.assertFalse(center.overlaps(overlap));
           Assert.assertFalse(overlap.overlaps(center));
@@ -235,16 +235,16 @@ public abstract class BoundingVolumeLContract
           }
 
           final BoundingVolumeL center = BoundingVolumeL.of(
-            new VectorI3L(10L, 10L, 10L),
-            new VectorI3L(20L, 20L, 20L));
+            Vector3L.of(10L, 10L, 10L),
+            Vector3L.of(20L, 20L, 20L));
 
           final long low_x = x * 10L;
           final long low_y = y * 10L;
           final long low_z = z * 10L;
 
           final BoundingVolumeL overlap = BoundingVolumeL.of(
-            new VectorI3L(low_x, low_y, low_z),
-            new VectorI3L(low_x + 10L, low_y + 10L, low_z + 10L));
+            Vector3L.of(low_x, low_y, low_z),
+            Vector3L.of(low_x + 10L, low_y + 10L, low_z + 10L));
 
           Assert.assertFalse(center.contains(overlap));
           Assert.assertFalse(overlap.contains(center));
@@ -316,30 +316,30 @@ public abstract class BoundingVolumeLContract
           throws Throwable
         {
           if (volume0.width() >= 4L && volume0.height() >= 4L && volume0.depth() >= 4L) {
-            final VectorI3L lower0 = volume0.lower();
-            final VectorI3L upper0 = volume0.upper();
+            final Vector3L lower0 = volume0.lower();
+            final Vector3L upper0 = volume0.upper();
 
             final BoundingVolumeLType volume1 =
               BoundingVolumeLContract.this.create(
-                new VectorI3L(
-                  CheckedMath.add(lower0.getXL(), 1L),
-                  CheckedMath.add(lower0.getYL(), 1L),
-                  CheckedMath.add(lower0.getZL(), 1L)),
-                new VectorI3L(
-                  CheckedMath.subtract(upper0.getXL(), 1L),
-                  CheckedMath.subtract(upper0.getYL(), 1L),
-                  CheckedMath.subtract(upper0.getZL(), 1L)));
+                Vector3L.of(
+                  CheckedMath.add(lower0.x(), 1L),
+                  CheckedMath.add(lower0.y(), 1L),
+                  CheckedMath.add(lower0.z(), 1L)),
+                Vector3L.of(
+                  CheckedMath.subtract(upper0.x(), 1L),
+                  CheckedMath.subtract(upper0.y(), 1L),
+                  CheckedMath.subtract(upper0.z(), 1L)));
 
             final BoundingVolumeLType volume2 =
               BoundingVolumeLContract.this.create(
-                new VectorI3L(
-                  CheckedMath.add(lower0.getXL(), 2L),
-                  CheckedMath.add(lower0.getYL(), 2L),
-                  CheckedMath.add(lower0.getZL(), 2L)),
-                new VectorI3L(
-                  CheckedMath.subtract(upper0.getXL(), 2L),
-                  CheckedMath.subtract(upper0.getYL(), 2L),
-                  CheckedMath.subtract(upper0.getZL(), 2L)));
+                Vector3L.of(
+                  CheckedMath.add(lower0.x(), 2L),
+                  CheckedMath.add(lower0.y(), 2L),
+                  CheckedMath.add(lower0.z(), 2L)),
+                Vector3L.of(
+                  CheckedMath.subtract(upper0.x(), 2L),
+                  CheckedMath.subtract(upper0.y(), 2L),
+                  CheckedMath.subtract(upper0.z(), 2L)));
 
             Assert.assertTrue(volume0.contains(volume0));
             Assert.assertTrue(volume0.contains(volume1));
@@ -367,19 +367,19 @@ public abstract class BoundingVolumeLContract
           throws Throwable
         {
           if (volume0.width() >= 4L && volume0.height() >= 4L && volume0.depth() >= 4L) {
-            final VectorI3L lower0 = volume0.lower();
-            final VectorI3L upper0 = volume0.upper();
+            final Vector3L lower0 = volume0.lower();
+            final Vector3L upper0 = volume0.upper();
 
             final BoundingVolumeLType volume1 =
               BoundingVolumeLContract.this.create(
-                new VectorI3L(
-                  CheckedMath.add(lower0.getXL(), 1L),
-                  CheckedMath.add(lower0.getYL(), 1L),
-                  CheckedMath.add(lower0.getZL(), 1L)),
-                new VectorI3L(
-                  CheckedMath.subtract(upper0.getXL(), 1L),
-                  CheckedMath.subtract(upper0.getYL(), 1L),
-                  CheckedMath.subtract(upper0.getZL(), 1L)));
+                Vector3L.of(
+                  CheckedMath.add(lower0.x(), 1L),
+                  CheckedMath.add(lower0.y(), 1L),
+                  CheckedMath.add(lower0.z(), 1L)),
+                Vector3L.of(
+                  CheckedMath.subtract(upper0.x(), 1L),
+                  CheckedMath.subtract(upper0.y(), 1L),
+                  CheckedMath.subtract(upper0.z(), 1L)));
 
             Assert.assertTrue(volume0.contains(volume0));
             Assert.assertTrue(volume0.contains(volume1));

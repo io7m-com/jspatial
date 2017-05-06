@@ -17,7 +17,7 @@
 package com.io7m.jspatial.api;
 
 import com.io7m.jnull.NullCheck;
-import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
 import org.immutables.value.Value;
 
 /**
@@ -29,7 +29,7 @@ import org.immutables.value.Value;
  * @since 3.0.0
  */
 
-@ImmutableStyleType
+@JSpatialImmutableStyleType
 @Value.Immutable
 public interface BoundingAreaDType
 {
@@ -40,10 +40,10 @@ public interface BoundingAreaDType
   @Value.Check
   default void checkInvariants()
   {
-    final VectorI2D lo = this.lower();
-    final VectorI2D hi = this.upper();
+    final Vector2D lo = this.lower();
+    final Vector2D hi = this.upper();
 
-    if (lo.getXD() >= hi.getXD()) {
+    if (lo.x() >= hi.x()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed area bounds.");
       sb.append(System.lineSeparator());
@@ -58,7 +58,7 @@ public interface BoundingAreaDType
       throw new IllegalArgumentException(sb.toString());
     }
 
-    if (lo.getYD() >= hi.getYD()) {
+    if (lo.y() >= hi.y()) {
       final StringBuilder sb = new StringBuilder(64);
       sb.append("Malformed area bounds.");
       sb.append(System.lineSeparator());
@@ -79,14 +79,14 @@ public interface BoundingAreaDType
    */
 
   @Value.Parameter(order = 0)
-  VectorI2D lower();
+  Vector2D lower();
 
   /**
    * @return The exclusive upper corner of the area
    */
 
   @Value.Parameter(order = 1)
-  VectorI2D upper();
+  Vector2D upper();
 
   /**
    * @return The width of the area
@@ -94,7 +94,7 @@ public interface BoundingAreaDType
 
   default double width()
   {
-    return this.upper().getXD() - this.lower().getXD();
+    return this.upper().x() - this.lower().x();
   }
 
   /**
@@ -103,7 +103,7 @@ public interface BoundingAreaDType
 
   default double height()
   {
-    return this.upper().getYD() - this.lower().getYD();
+    return this.upper().y() - this.lower().y();
   }
 
   /**
@@ -127,19 +127,19 @@ public interface BoundingAreaDType
   {
     NullCheck.notNull(other, "other");
 
-    final VectorI2D a_lo = this.lower();
-    final VectorI2D a_hi = this.upper();
-    final VectorI2D b_lo = other.lower();
-    final VectorI2D b_hi = other.upper();
+    final Vector2D a_lo = this.lower();
+    final Vector2D a_hi = this.upper();
+    final Vector2D b_lo = other.lower();
+    final Vector2D b_hi = other.upper();
 
-    final double a_x0 = a_lo.getXD();
-    final double a_x1 = a_hi.getXD();
-    final double a_y0 = a_lo.getYD();
-    final double a_y1 = a_hi.getYD();
-    final double b_x0 = b_lo.getXD();
-    final double b_x1 = b_hi.getXD();
-    final double b_y0 = b_lo.getYD();
-    final double b_y1 = b_hi.getYD();
+    final double a_x0 = a_lo.x();
+    final double a_x1 = a_hi.x();
+    final double a_y0 = a_lo.y();
+    final double a_y1 = a_hi.y();
+    final double b_x0 = b_lo.x();
+    final double b_x1 = b_hi.x();
+    final double b_y0 = b_lo.y();
+    final double b_y1 = b_hi.y();
 
     final boolean c0 = a_x0 < b_x1;
     final boolean c1 = a_x1 > b_x0;
@@ -176,19 +176,19 @@ public interface BoundingAreaDType
   {
     NullCheck.notNull(other, "other");
 
-    final VectorI2D a_lo = this.lower();
-    final VectorI2D a_hi = this.upper();
-    final VectorI2D b_lo = other.lower();
-    final VectorI2D b_hi = other.upper();
+    final Vector2D a_lo = this.lower();
+    final Vector2D a_hi = this.upper();
+    final Vector2D b_lo = other.lower();
+    final Vector2D b_hi = other.upper();
 
-    final double a_x0 = a_lo.getXD();
-    final double a_x1 = a_hi.getXD();
-    final double a_y0 = a_lo.getYD();
-    final double a_y1 = a_hi.getYD();
-    final double b_x0 = b_lo.getXD();
-    final double b_x1 = b_hi.getXD();
-    final double b_y0 = b_lo.getYD();
-    final double b_y1 = b_hi.getYD();
+    final double a_x0 = a_lo.x();
+    final double a_x1 = a_hi.x();
+    final double a_y0 = a_lo.y();
+    final double a_y1 = a_hi.y();
+    final double b_x0 = b_lo.x();
+    final double b_x1 = b_hi.x();
+    final double b_y0 = b_lo.y();
+    final double b_y1 = b_hi.y();
 
     final boolean c0 = b_x0 >= a_x0;
     final boolean c1 = b_x1 <= a_x1;

@@ -18,7 +18,7 @@ package com.io7m.jspatial.implementation;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.jcip.annotations.Immutable;
 
 import java.util.Optional;
@@ -77,55 +77,55 @@ public final class OctantsL
     final long depth = volume.depth();
 
     if (width >= 2L && height >= 2L && depth >= 2L) {
-      final VectorI3L lower = volume.lower();
-      final VectorI3L upper = volume.upper();
+      final Vector3L lower = volume.lower();
+      final Vector3L upper = volume.upper();
 
       final long[] x_spans = new long[4];
-      Subdivision.subdivide1L(lower.getXL(), upper.getXL(), x_spans);
+      Subdivision.subdivide1L(lower.x(), upper.x(), x_spans);
       final long[] y_spans = new long[4];
-      Subdivision.subdivide1L(lower.getYL(), upper.getYL(), y_spans);
+      Subdivision.subdivide1L(lower.y(), upper.y(), y_spans);
       final long[] z_spans = new long[4];
-      Subdivision.subdivide1L(lower.getZL(), upper.getZL(), z_spans);
+      Subdivision.subdivide1L(lower.z(), upper.z(), z_spans);
 
-      final VectorI3L x0y0z0_lower =
-        new VectorI3L(x_spans[0], y_spans[0], z_spans[0]);
-      final VectorI3L x0y0z0_upper =
-        new VectorI3L(x_spans[1], y_spans[1], z_spans[1]);
+      final Vector3L x0y0z0_lower =
+        Vector3L.of(x_spans[0], y_spans[0], z_spans[0]);
+      final Vector3L x0y0z0_upper =
+        Vector3L.of(x_spans[1], y_spans[1], z_spans[1]);
 
-      final VectorI3L x1y0z0_lower =
-        new VectorI3L(x_spans[2], y_spans[0], z_spans[0]);
-      final VectorI3L x1y0z0_upper =
-        new VectorI3L(x_spans[3], y_spans[1], z_spans[1]);
+      final Vector3L x1y0z0_lower =
+        Vector3L.of(x_spans[2], y_spans[0], z_spans[0]);
+      final Vector3L x1y0z0_upper =
+        Vector3L.of(x_spans[3], y_spans[1], z_spans[1]);
 
-      final VectorI3L x0y1z0_lower =
-        new VectorI3L(x_spans[0], y_spans[2], z_spans[0]);
-      final VectorI3L x0y1z0_upper =
-        new VectorI3L(x_spans[1], y_spans[3], z_spans[1]);
+      final Vector3L x0y1z0_lower =
+        Vector3L.of(x_spans[0], y_spans[2], z_spans[0]);
+      final Vector3L x0y1z0_upper =
+        Vector3L.of(x_spans[1], y_spans[3], z_spans[1]);
 
-      final VectorI3L x1y1z0_lower =
-        new VectorI3L(x_spans[2], y_spans[2], z_spans[0]);
-      final VectorI3L x1y1z0_upper =
-        new VectorI3L(x_spans[3], y_spans[3], z_spans[1]);
+      final Vector3L x1y1z0_lower =
+        Vector3L.of(x_spans[2], y_spans[2], z_spans[0]);
+      final Vector3L x1y1z0_upper =
+        Vector3L.of(x_spans[3], y_spans[3], z_spans[1]);
 
-      final VectorI3L x0y0z1_lower =
-        new VectorI3L(x_spans[0], y_spans[0], z_spans[2]);
-      final VectorI3L x0y0z1_upper =
-        new VectorI3L(x_spans[1], y_spans[1], z_spans[3]);
+      final Vector3L x0y0z1_lower =
+        Vector3L.of(x_spans[0], y_spans[0], z_spans[2]);
+      final Vector3L x0y0z1_upper =
+        Vector3L.of(x_spans[1], y_spans[1], z_spans[3]);
 
-      final VectorI3L x1y0z1_lower =
-        new VectorI3L(x_spans[2], y_spans[0], z_spans[2]);
-      final VectorI3L x1y0z1_upper =
-        new VectorI3L(x_spans[3], y_spans[1], z_spans[3]);
+      final Vector3L x1y0z1_lower =
+        Vector3L.of(x_spans[2], y_spans[0], z_spans[2]);
+      final Vector3L x1y0z1_upper =
+        Vector3L.of(x_spans[3], y_spans[1], z_spans[3]);
 
-      final VectorI3L x0y1z1_lower =
-        new VectorI3L(x_spans[0], y_spans[2], z_spans[2]);
-      final VectorI3L x0y1z1_upper =
-        new VectorI3L(x_spans[1], y_spans[3], z_spans[3]);
+      final Vector3L x0y1z1_lower =
+        Vector3L.of(x_spans[0], y_spans[2], z_spans[2]);
+      final Vector3L x0y1z1_upper =
+        Vector3L.of(x_spans[1], y_spans[3], z_spans[3]);
 
-      final VectorI3L x1y1z1_lower =
-        new VectorI3L(x_spans[2], y_spans[2], z_spans[2]);
-      final VectorI3L x1y1z1_upper =
-        new VectorI3L(x_spans[3], y_spans[3], z_spans[3]);
+      final Vector3L x1y1z1_lower =
+        Vector3L.of(x_spans[2], y_spans[2], z_spans[2]);
+      final Vector3L x1y1z1_upper =
+        Vector3L.of(x_spans[3], y_spans[3], z_spans[3]);
 
       final BoundingVolumeL x0y0z0 =
         BoundingVolumeL.of(x0y0z0_lower, x0y0z0_upper);

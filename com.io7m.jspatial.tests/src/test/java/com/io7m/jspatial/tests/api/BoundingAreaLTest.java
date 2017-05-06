@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.BoundingAreaL;
 import com.io7m.jspatial.api.BoundingAreaLType;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,8 +38,8 @@ public final class BoundingAreaLTest extends BoundingAreaLContract
 
   @Override
   protected BoundingAreaLType create(
-    final VectorI2L lower,
-    final VectorI2L upper)
+    final Vector2L lower,
+    final Vector2L upper)
   {
     return BoundingAreaL.of(lower, upper);
   }
@@ -53,8 +53,8 @@ public final class BoundingAreaLTest extends BoundingAreaLContract
   {
     final BoundingAreaL.Builder b0 = BoundingAreaL.builder();
 
-    final VectorI2L lower = new VectorI2L(0L, 0L);
-    final VectorI2L upper = new VectorI2L(10L, 10L);
+    final Vector2L lower = Vector2L.of(0L, 0L);
+    final Vector2L upper = Vector2L.of(10L, 10L);
     b0.setLower(lower);
     b0.setUpper(upper);
 
@@ -74,13 +74,13 @@ public final class BoundingAreaLTest extends BoundingAreaLContract
     final BoundingAreaL a3 = BoundingAreaL.copyOf(new BoundingAreaLType()
     {
       @Override
-      public VectorI2L lower()
+      public Vector2L lower()
       {
         return lower;
       }
 
       @Override
-      public VectorI2L upper()
+      public Vector2L upper()
       {
         return upper;
       }
@@ -88,9 +88,9 @@ public final class BoundingAreaLTest extends BoundingAreaLContract
 
     Assert.assertEquals(a1, a3);
 
-    final VectorI2L lower_alt = new VectorI2L(1L, 1L);
+    final Vector2L lower_alt = Vector2L.of(1L, 1L);
     final BoundingAreaL a4 = a3.withLower(lower_alt);
-    final VectorI2L upper_alt = new VectorI2L(9L, 9L);
+    final Vector2L upper_alt = Vector2L.of(9L, 9L);
     final BoundingAreaL a5 = a3.withUpper(upper_alt);
 
     Assert.assertEquals(lower_alt, a4.lower());
@@ -121,7 +121,7 @@ public final class BoundingAreaLTest extends BoundingAreaLContract
   public void testBuilderIncomplete1()
   {
     final BoundingAreaL.Builder b = BoundingAreaL.builder();
-    b.setLower(new VectorI2L(0L, 0L));
+    b.setLower(Vector2L.of(0L, 0L));
 
     this.expected.expect(IllegalStateException.class);
     b.build();
@@ -136,7 +136,7 @@ public final class BoundingAreaLTest extends BoundingAreaLContract
   public void testBuilderIncomplete2()
   {
     final BoundingAreaL.Builder b = BoundingAreaL.builder();
-    b.setUpper(new VectorI2L(0L, 0L));
+    b.setUpper(Vector2L.of(0L, 0L));
 
     this.expected.expect(IllegalStateException.class);
     b.build();

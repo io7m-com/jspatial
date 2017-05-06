@@ -18,11 +18,12 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingVolumeD;
-import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.DoubleGenerator;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public final class BoundingVolumeDGenerator implements Generator<BoundingVolumeD>
@@ -44,14 +45,14 @@ public final class BoundingVolumeDGenerator implements Generator<BoundingVolumeD
     vs.add(this.g.next());
     vs.add(this.g.next());
     vs.add(this.g.next());
-    vs.sort((x, y) -> Double.compare(x.doubleValue(), y.doubleValue()));
+    vs.sort(Comparator.comparingDouble(Double::doubleValue));
 
-    final VectorI3D lo = new VectorI3D(
+    final Vector3D lo = Vector3D.of(
       vs.remove(0).doubleValue(),
       vs.remove(0).doubleValue(),
       vs.remove(0).doubleValue());
 
-    final VectorI3D hi = new VectorI3D(
+    final Vector3D hi = Vector3D.of(
       vs.remove(0).doubleValue(),
       vs.remove(0).doubleValue(),
       vs.remove(0).doubleValue());

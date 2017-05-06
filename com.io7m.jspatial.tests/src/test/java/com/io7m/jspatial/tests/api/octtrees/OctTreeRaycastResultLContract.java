@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api.octtrees;
 
 import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultLType;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -48,11 +48,11 @@ public abstract class OctTreeRaycastResultLContract
   public final void testIdentities()
   {
     final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      new VectorI3L(0L, 0L, 0L),
-      new VectorI3L(100L, 100L, 100L));
+      Vector3L.of(0L, 0L, 0L),
+      Vector3L.of(100L, 100L, 100L));
     final BoundingVolumeL volume1 = BoundingVolumeL.of(
-      new VectorI3L(1L, 1L, 1L),
-      new VectorI3L(99L, 99L, 99L));
+      Vector3L.of(1L, 1L, 1L),
+      Vector3L.of(99L, 99L, 99L));
 
     final OctTreeRaycastResultLType<Integer> k0 =
       this.create(23.0, volume0, Integer.valueOf(23));

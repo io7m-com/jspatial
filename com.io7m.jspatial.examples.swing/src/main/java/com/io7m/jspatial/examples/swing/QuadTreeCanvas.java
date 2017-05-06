@@ -21,7 +21,7 @@ import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingAreaD;
 import com.io7m.jspatial.api.BoundingAreaL;
 import com.io7m.jspatial.api.BoundingAreaLType;
-import com.io7m.jspatial.api.RayI2D;
+import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
@@ -32,8 +32,8 @@ import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL;
 import com.io7m.jspatial.examples.swing.LogMessageType.Severity;
 import com.io7m.jspatial.implementation.QuadTreeD;
 import com.io7m.jspatial.implementation.QuadTreeL;
-import com.io7m.jtensors.VectorI2D;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 
@@ -72,7 +72,7 @@ final class QuadTreeCanvas extends JPanel
   private QuadTreeKind kind;
   private BoundingAreaL query_area_l;
   private BoundingAreaD query_area_d;
-  private RayI2D ray;
+  private Ray2D ray;
 
   QuadTreeCanvas(
     final Observable<QuadTreeCommandType> in_tree_commands,
@@ -98,7 +98,7 @@ final class QuadTreeCanvas extends JPanel
   }
 
   private Unit onCommandRayQuery(
-    final RayI2D in_ray)
+    final Ray2D in_ray)
   {
     this.ray_area_results_l.clear();
     this.ray_area_results_d.clear();
@@ -309,10 +309,10 @@ final class QuadTreeCanvas extends JPanel
         final QuadTreeDType<Integer> t = this.tree_d;
         if (t != null) {
           final BoundingAreaD area_d = BoundingAreaD.of(
-            new VectorI2D(
-              (double) area.lower().getXL(), (double) area.lower().getYL()),
-            new VectorI2D(
-              (double) area.upper().getXL(), (double) area.upper().getYL()));
+            Vector2D.of(
+              (double) area.lower().x(), (double) area.lower().y()),
+            Vector2D.of(
+              (double) area.upper().x(), (double) area.upper().y()));
           final boolean inserted = t.insert(item, area_d);
           this.sendInsertedMessage(area, item, inserted);
         }
@@ -334,8 +334,8 @@ final class QuadTreeCanvas extends JPanel
         Severity.INFO,
         String.format(
           "Inserted item %d (%d+%d %dx%d)", item,
-          Long.valueOf(area.lower().getXL()),
-          Long.valueOf(area.lower().getYL()),
+          Long.valueOf(area.lower().x()),
+          Long.valueOf(area.lower().y()),
           Long.valueOf(area.width()),
           Long.valueOf(area.height()))));
     } else {
@@ -343,8 +343,8 @@ final class QuadTreeCanvas extends JPanel
         Severity.ERROR,
         String.format(
           "Failed to insert item %d (%d+%d %dx%d)", item,
-          Long.valueOf(area.lower().getXL()),
-          Long.valueOf(area.lower().getYL()),
+          Long.valueOf(area.lower().x()),
+          Long.valueOf(area.lower().y()),
           Long.valueOf(area.width()),
           Long.valueOf(area.height()))));
     }
@@ -376,12 +376,12 @@ final class QuadTreeCanvas extends JPanel
     if (t != null) {
 
       t.iterateQuadrants(g, (gg, quadrant, depth) -> {
-        final VectorI2D lower = quadrant.area().lower();
+        final Vector2D lower = quadrant.area().lower();
 
         gg.setColor(Color.GRAY);
         gg.drawRect(
-          (int) lower.getXD(),
-          (int) lower.getYD(),
+          (int) lower.x(),
+          (int) lower.y(),
           (int) quadrant.area().width(),
           (int) quadrant.area().height());
         return TreeVisitResult.RESULT_CONTINUE;
@@ -391,17 +391,17 @@ final class QuadTreeCanvas extends JPanel
       if (qa != null) {
         g.setColor(Color.CYAN);
         g.drawRect(
-          (int) qa.lower().getXD(),
-          (int) qa.lower().getYD(),
+          (int) qa.lower().x(),
+          (int) qa.lower().y(),
           (int) qa.width(),
           (int) qa.height());
       }
 
-      g.setFont(Font.decode(QuadTreeCanvas.INSTANCE_FONT));
+      g.setFont(Font.decode(INSTANCE_FONT));
 
       for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
         final Item item = entry.getValue();
-        final VectorI2L lower = item.area.lower();
+        final Vector2L lower = item.area.lower();
 
         if (t.contains(item.item)) {
           if (this.query_area_results.contains(item.item)) {
@@ -414,14 +414,14 @@ final class QuadTreeCanvas extends JPanel
         }
 
         g.drawRect(
-          (int) lower.getXL(),
-          (int) lower.getYL(),
+          (int) lower.x(),
+          (int) lower.y(),
           (int) item.area.width(),
           (int) item.area.height());
         g.drawString(
           item.item.toString(),
-          (int) lower.getXL() + 2,
-          (int) lower.getYL() + 8);
+          (int) lower.x() + 2,
+          (int) lower.y() + 8);
       }
     }
   }
@@ -432,12 +432,12 @@ final class QuadTreeCanvas extends JPanel
     if (t != null) {
 
       t.iterateQuadrants(g, (gg, quadrant, depth) -> {
-        final VectorI2L lower = quadrant.area().lower();
+        final Vector2L lower = quadrant.area().lower();
 
         gg.setColor(Color.GRAY);
         gg.drawRect(
-          (int) lower.getXL(),
-          (int) lower.getYL(),
+          (int) lower.x(),
+          (int) lower.y(),
           (int) quadrant.area().width(),
           (int) quadrant.area().height());
         return TreeVisitResult.RESULT_CONTINUE;
@@ -447,17 +447,17 @@ final class QuadTreeCanvas extends JPanel
       if (qa != null) {
         g.setColor(Color.CYAN);
         g.drawRect(
-          (int) qa.lower().getXL(),
-          (int) qa.lower().getYL(),
+          (int) qa.lower().x(),
+          (int) qa.lower().y(),
           (int) qa.width(),
           (int) qa.height());
       }
 
-      g.setFont(Font.decode(QuadTreeCanvas.INSTANCE_FONT));
+      g.setFont(Font.decode(INSTANCE_FONT));
 
       for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
         final Item item = entry.getValue();
-        final VectorI2L lower = item.area.lower();
+        final Vector2L lower = item.area.lower();
 
         if (t.contains(item.item)) {
           if (this.query_area_results.contains(item.item)) {
@@ -470,21 +470,21 @@ final class QuadTreeCanvas extends JPanel
         }
 
         g.drawRect(
-          (int) lower.getXL(),
-          (int) lower.getYL(),
+          (int) lower.x(),
+          (int) lower.y(),
           (int) item.area.width(),
           (int) item.area.height());
         g.drawString(
           item.item.toString(),
-          (int) lower.getXL() + 2,
-          (int) lower.getYL() + 8);
+          (int) lower.x() + 2,
+          (int) lower.y() + 8);
       }
 
       if (this.ray != null) {
-        final double x0 = this.ray.origin().getXD();
-        final double y0 = this.ray.origin().getYD();
-        final double x1 = this.ray.direction().getXD() * 10000.0;
-        final double y1 = this.ray.direction().getYD() * 10000.0;
+        final double x0 = this.ray.origin().x();
+        final double y0 = this.ray.origin().y();
+        final double x1 = this.ray.direction().x() * 10000.0;
+        final double y1 = this.ray.direction().y() * 10000.0;
 
         g.setColor(Color.GREEN);
         g.drawLine((int) x0, (int) y0, (int) (x0 + x1), (int) (y0 + y1));
@@ -492,17 +492,17 @@ final class QuadTreeCanvas extends JPanel
         for (final QuadTreeRaycastResultL<Integer> r : this.ray_area_results_l) {
           if (this.items.containsKey(r.item())) {
             final Item item = this.items.get(r.item());
-            final VectorI2L lower = item.area.lower();
+            final Vector2L lower = item.area.lower();
 
             g.drawRect(
-              (int) lower.getXL(),
-              (int) lower.getYL(),
+              (int) lower.x(),
+              (int) lower.y(),
               (int) item.area.width(),
               (int) item.area.height());
             g.drawString(
               Double.toString(r.distance()),
-              (int) lower.getXL() + 2,
-              (int) lower.getYL() + 16);
+              (int) lower.x() + 2,
+              (int) lower.y() + 16);
           }
         }
       }

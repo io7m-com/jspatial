@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.BoundingVolumeD;
 import com.io7m.jspatial.api.BoundingVolumeDType;
-import com.io7m.jtensors.VectorI3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.DoubleGenerator;
 import org.junit.Assert;
@@ -35,8 +35,8 @@ public final class BoundingVolumeDTest extends BoundingVolumeDContract
 
   @Override
   protected BoundingVolumeDType create(
-    final VectorI3D lower,
-    final VectorI3D upper)
+    final Vector3D lower,
+    final Vector3D upper)
   {
     return BoundingVolumeD.of(lower, upper);
   }
@@ -50,8 +50,8 @@ public final class BoundingVolumeDTest extends BoundingVolumeDContract
   {
     final BoundingVolumeD.Builder b0 = BoundingVolumeD.builder();
 
-    final VectorI3D lower = new VectorI3D(0.0, 0.0, 0.0);
-    final VectorI3D upper = new VectorI3D(10.0, 10.0, 10.0);
+    final Vector3D lower = Vector3D.of(0.0, 0.0, 0.0);
+    final Vector3D upper = Vector3D.of(10.0, 10.0, 10.0);
     b0.setLower(lower);
     b0.setUpper(upper);
 
@@ -71,13 +71,13 @@ public final class BoundingVolumeDTest extends BoundingVolumeDContract
     final BoundingVolumeD a3 = BoundingVolumeD.copyOf(new BoundingVolumeDType()
     {
       @Override
-      public VectorI3D lower()
+      public Vector3D lower()
       {
         return lower;
       }
 
       @Override
-      public VectorI3D upper()
+      public Vector3D upper()
       {
         return upper;
       }
@@ -85,9 +85,9 @@ public final class BoundingVolumeDTest extends BoundingVolumeDContract
 
     Assert.assertEquals(a1, a3);
 
-    final VectorI3D lower_alt = new VectorI3D(1.0, 1.0, 1.0);
+    final Vector3D lower_alt = Vector3D.of(1.0, 1.0, 1.0);
     final BoundingVolumeD a4 = a3.withLower(lower_alt);
-    final VectorI3D upper_alt = new VectorI3D(9.0, 9.0, 9.0);
+    final Vector3D upper_alt = Vector3D.of(9.0, 9.0, 9.0);
     final BoundingVolumeD a5 = a3.withUpper(upper_alt);
 
     Assert.assertEquals(lower_alt, a4.lower());
@@ -118,7 +118,7 @@ public final class BoundingVolumeDTest extends BoundingVolumeDContract
   public void testBuilderIncomplete1()
   {
     final BoundingVolumeD.Builder b = BoundingVolumeD.builder();
-    b.setLower(new VectorI3D(0.0, 0.0, 0.0));
+    b.setLower(Vector3D.of(0.0, 0.0, 0.0));
 
     this.expected.expect(IllegalStateException.class);
     b.build();
@@ -133,7 +133,7 @@ public final class BoundingVolumeDTest extends BoundingVolumeDContract
   public void testBuilderIncomplete2()
   {
     final BoundingVolumeD.Builder b = BoundingVolumeD.builder();
-    b.setUpper(new VectorI3D(0.0, 0.0, 0.0));
+    b.setUpper(Vector3D.of(0.0, 0.0, 0.0));
 
     this.expected.expect(IllegalStateException.class);
     b.build();

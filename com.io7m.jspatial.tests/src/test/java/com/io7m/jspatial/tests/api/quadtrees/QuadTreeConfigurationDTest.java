@@ -19,7 +19,7 @@ package com.io7m.jspatial.tests.api.quadtrees;
 import com.io7m.jspatial.api.BoundingAreaD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationDType;
-import com.io7m.jtensors.VectorI2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -53,8 +53,8 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testBuilder()
   {
-    final VectorI2D lower0 = new VectorI2D(0.0, 0.0);
-    final VectorI2D upper0 = new VectorI2D(100.0, 100.0);
+    final Vector2D lower0 = Vector2D.of(0.0, 0.0);
+    final Vector2D upper0 = Vector2D.of(100.0, 100.0);
     final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
     final QuadTreeConfigurationD.Builder b0 = QuadTreeConfigurationD.builder();
     b0.setArea(area0);
@@ -82,8 +82,8 @@ public final class QuadTreeConfigurationDTest extends
     Assert.assertNotEquals(qc2, qc0);
     Assert.assertNotEquals(qc2, qc1);
 
-    final VectorI2D lower1 = new VectorI2D(1.0, 1.0);
-    final VectorI2D upper1 = new VectorI2D(99.0, 99.0);
+    final Vector2D lower1 = Vector2D.of(1.0, 1.0);
+    final Vector2D upper1 = Vector2D.of(99.0, 99.0);
     final BoundingAreaD area1 = BoundingAreaD.of(lower1, upper1);
 
     b0.setArea(area1);
@@ -124,8 +124,8 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testWith()
   {
-    final VectorI2D lower0 = new VectorI2D(0.0, 0.0);
-    final VectorI2D upper0 = new VectorI2D(100.0, 100.0);
+    final Vector2D lower0 = Vector2D.of(0.0, 0.0);
+    final Vector2D upper0 = Vector2D.of(100.0, 100.0);
     final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
     final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
     b.setArea(area0);
@@ -133,8 +133,8 @@ public final class QuadTreeConfigurationDTest extends
     final QuadTreeConfigurationD qc0 = b.build();
     final QuadTreeConfigurationD qc0_eq = b.build();
 
-    final VectorI2D lower1 = new VectorI2D(1.0, 1.0);
-    final VectorI2D upper1 = new VectorI2D(99.0, 99.0);
+    final Vector2D lower1 = Vector2D.of(1.0, 1.0);
+    final Vector2D upper1 = Vector2D.of(99.0, 99.0);
     final BoundingAreaD area1 = BoundingAreaD.of(lower1, upper1);
 
     final QuadTreeConfigurationD qc1 = qc0.withArea(area1);
@@ -189,16 +189,16 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testOf()
   {
-    final VectorI2D lower0 = new VectorI2D(0.0, 0.0);
-    final VectorI2D upper0 = new VectorI2D(100.0, 100.0);
+    final Vector2D lower0 = Vector2D.of(0.0, 0.0);
+    final Vector2D upper0 = Vector2D.of(100.0, 100.0);
     final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
     final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
     b.setArea(area0);
 
     final QuadTreeConfigurationD qc0 = b.build();
 
-    final VectorI2D lower1 = new VectorI2D(1.0, 1.0);
-    final VectorI2D upper1 = new VectorI2D(99.0, 99.0);
+    final Vector2D lower1 = Vector2D.of(1.0, 1.0);
+    final Vector2D upper1 = Vector2D.of(99.0, 99.0);
     final BoundingAreaD area1 = BoundingAreaD.of(lower1, upper1);
 
     final QuadTreeConfigurationD qc1 =
@@ -254,8 +254,8 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testCopyOf()
   {
-    final VectorI2D lower0 = new VectorI2D(0.0, 0.0);
-    final VectorI2D upper0 = new VectorI2D(100.0, 100.0);
+    final Vector2D lower0 = Vector2D.of(0.0, 0.0);
+    final Vector2D upper0 = Vector2D.of(100.0, 100.0);
     final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
     final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
     b.setArea(area0);

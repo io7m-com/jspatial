@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jspatial.api.BoundingVolumeLType;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,8 +38,8 @@ public final class BoundingVolumeLTest extends BoundingVolumeLContract
 
   @Override
   protected BoundingVolumeLType create(
-    final VectorI3L lower,
-    final VectorI3L upper)
+    final Vector3L lower,
+    final Vector3L upper)
   {
     return BoundingVolumeL.of(lower, upper);
   }
@@ -53,8 +53,8 @@ public final class BoundingVolumeLTest extends BoundingVolumeLContract
   {
     final BoundingVolumeL.Builder b0 = BoundingVolumeL.builder();
 
-    final VectorI3L lower = new VectorI3L(0L, 0L, 0L);
-    final VectorI3L upper = new VectorI3L(10L, 10L, 10L);
+    final Vector3L lower = Vector3L.of(0L, 0L, 0L);
+    final Vector3L upper = Vector3L.of(10L, 10L, 10L);
     b0.setLower(lower);
     b0.setUpper(upper);
 
@@ -74,13 +74,13 @@ public final class BoundingVolumeLTest extends BoundingVolumeLContract
     final BoundingVolumeL a3 = BoundingVolumeL.copyOf(new BoundingVolumeLType()
     {
       @Override
-      public VectorI3L lower()
+      public Vector3L lower()
       {
         return lower;
       }
 
       @Override
-      public VectorI3L upper()
+      public Vector3L upper()
       {
         return upper;
       }
@@ -88,9 +88,9 @@ public final class BoundingVolumeLTest extends BoundingVolumeLContract
 
     Assert.assertEquals(a1, a3);
 
-    final VectorI3L lower_alt = new VectorI3L(1L, 1L, 1L);
+    final Vector3L lower_alt = Vector3L.of(1L, 1L, 1L);
     final BoundingVolumeL a4 = a3.withLower(lower_alt);
-    final VectorI3L upper_alt = new VectorI3L(9L, 9L, 9L);
+    final Vector3L upper_alt = Vector3L.of(9L, 9L, 9L);
     final BoundingVolumeL a5 = a3.withUpper(upper_alt);
 
     Assert.assertEquals(lower_alt, a4.lower());
@@ -121,7 +121,7 @@ public final class BoundingVolumeLTest extends BoundingVolumeLContract
   public void testBuilderIncomplete1()
   {
     final BoundingVolumeL.Builder b = BoundingVolumeL.builder();
-    b.setLower(new VectorI3L(0L, 0L, 0L));
+    b.setLower(Vector3L.of(0L, 0L, 0L));
 
     this.expected.expect(IllegalStateException.class);
     b.build();
@@ -136,7 +136,7 @@ public final class BoundingVolumeLTest extends BoundingVolumeLContract
   public void testBuilderIncomplete2()
   {
     final BoundingVolumeL.Builder b = BoundingVolumeL.builder();
-    b.setUpper(new VectorI3L(0L, 0L, 0L));
+    b.setUpper(Vector3L.of(0L, 0L, 0L));
 
     this.expected.expect(IllegalStateException.class);
     b.build();

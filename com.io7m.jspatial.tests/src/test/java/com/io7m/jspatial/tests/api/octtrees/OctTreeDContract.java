@@ -18,17 +18,14 @@ package com.io7m.jspatial.tests.api.octtrees;
 
 import com.io7m.jfunctional.Unit;
 import com.io7m.jspatial.api.BoundingVolumeD;
-import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jspatial.api.RayI3D;
+import com.io7m.jspatial.api.Ray3D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationD;
-import com.io7m.jspatial.api.octtrees.OctTreeConfigurationL;
 import com.io7m.jspatial.api.octtrees.OctTreeDType;
-import com.io7m.jspatial.api.octtrees.OctTreeLType;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultD;
 import com.io7m.jspatial.tests.api.BoundingVolumeDContainedGenerator;
-import com.io7m.jtensors.VectorI3D;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vectors3D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -75,8 +72,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -102,8 +99,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -113,8 +110,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(-100.0, -100.0, -100.0),
-      new VectorI3D(200.0, 200.0, 200.0));
+      Vector3D.of(-100.0, -100.0, -100.0),
+      Vector3D.of(200.0, 200.0, 200.0));
     Assert.assertFalse(tree.insert(item, item_volume));
   }
 
@@ -127,8 +124,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -140,8 +137,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(1.1, 1.1, 1.1));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(1.1, 1.1, 1.1));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -158,8 +155,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -169,8 +166,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(2.0, 2.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -192,8 +189,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -203,8 +200,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 1.0),
-      new VectorI3D(99.0, 2.0, 2.0));
+      Vector3D.of(98.0, 1.0, 1.0),
+      Vector3D.of(99.0, 2.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -226,8 +223,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -237,8 +234,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 1.0),
-      new VectorI3D(2.0, 99.0, 2.0));
+      Vector3D.of(1.0, 98.0, 1.0),
+      Vector3D.of(2.0, 99.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -260,8 +257,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -271,8 +268,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 1.0),
-      new VectorI3D(99.0, 99.0, 2.0));
+      Vector3D.of(98.0, 98.0, 1.0),
+      Vector3D.of(99.0, 99.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -295,8 +292,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -306,8 +303,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 98.0),
-      new VectorI3D(2.0, 2.0, 99.0));
+      Vector3D.of(1.0, 1.0, 98.0),
+      Vector3D.of(2.0, 2.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -329,8 +326,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -340,8 +337,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 98.0),
-      new VectorI3D(99.0, 2.0, 99.0));
+      Vector3D.of(98.0, 1.0, 98.0),
+      Vector3D.of(99.0, 2.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -363,8 +360,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -374,8 +371,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 98.0),
-      new VectorI3D(2.0, 99.0, 99.0));
+      Vector3D.of(1.0, 98.0, 98.0),
+      Vector3D.of(2.0, 99.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -397,8 +394,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -408,8 +405,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 98.0),
-      new VectorI3D(99.0, 99.0, 99.0));
+      Vector3D.of(98.0, 98.0, 98.0),
+      Vector3D.of(99.0, 99.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -432,8 +429,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -443,8 +440,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(2.0, 2.0, 2.0),
-      new VectorI3D(98.0, 98.0, 98.0));
+      Vector3D.of(2.0, 2.0, 2.0),
+      Vector3D.of(98.0, 98.0, 98.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -466,8 +463,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -482,24 +479,24 @@ public abstract class OctTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingVolumeD item_volume0 = BoundingVolumeD.of(
-      new VectorI3D(2.0, 2.0, 2.0),
-      new VectorI3D(98.0, 98.0, 98.0));
+      Vector3D.of(2.0, 2.0, 2.0),
+      Vector3D.of(98.0, 98.0, 98.0));
 
     final BoundingVolumeD item_volume1 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(2.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume2 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 1.0),
-      new VectorI3D(99.0, 2.0, 2.0));
+      Vector3D.of(98.0, 1.0, 1.0),
+      Vector3D.of(99.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume3 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 1.0),
-      new VectorI3D(2.0, 99.0, 2.0));
+      Vector3D.of(1.0, 98.0, 1.0),
+      Vector3D.of(2.0, 99.0, 2.0));
 
     final BoundingVolumeD item_volume4 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 1.0),
-      new VectorI3D(99.0, 99.0, 2.0));
+      Vector3D.of(98.0, 98.0, 1.0),
+      Vector3D.of(99.0, 99.0, 2.0));
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -545,8 +542,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -561,24 +558,24 @@ public abstract class OctTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingVolumeD item_volume0 = BoundingVolumeD.of(
-      new VectorI3D(2.0, 2.0, 2.0),
-      new VectorI3D(98.0, 98.0, 98.0));
+      Vector3D.of(2.0, 2.0, 2.0),
+      Vector3D.of(98.0, 98.0, 98.0));
 
     final BoundingVolumeD item_volume1 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(2.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume2 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 1.0),
-      new VectorI3D(99.0, 2.0, 2.0));
+      Vector3D.of(98.0, 1.0, 1.0),
+      Vector3D.of(99.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume3 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 1.0),
-      new VectorI3D(2.0, 99.0, 2.0));
+      Vector3D.of(1.0, 98.0, 1.0),
+      Vector3D.of(2.0, 99.0, 2.0));
 
     final BoundingVolumeD item_volume4 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 1.0),
-      new VectorI3D(99.0, 99.0, 2.0));
+      Vector3D.of(98.0, 98.0, 1.0),
+      Vector3D.of(99.0, 99.0, 2.0));
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -605,8 +602,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -621,24 +618,24 @@ public abstract class OctTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingVolumeD item_volume0 = BoundingVolumeD.of(
-      new VectorI3D(2.0, 2.0, 2.0),
-      new VectorI3D(98.0, 98.0, 98.0));
+      Vector3D.of(2.0, 2.0, 2.0),
+      Vector3D.of(98.0, 98.0, 98.0));
 
     final BoundingVolumeD item_volume1 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(2.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume2 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 1.0),
-      new VectorI3D(99.0, 2.0, 2.0));
+      Vector3D.of(98.0, 1.0, 1.0),
+      Vector3D.of(99.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume3 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 1.0),
-      new VectorI3D(2.0, 99.0, 2.0));
+      Vector3D.of(1.0, 98.0, 1.0),
+      Vector3D.of(2.0, 99.0, 2.0));
 
     final BoundingVolumeD item_volume4 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 1.0),
-      new VectorI3D(99.0, 99.0, 2.0));
+      Vector3D.of(98.0, 98.0, 1.0),
+      Vector3D.of(99.0, 99.0, 2.0));
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -659,8 +656,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -675,24 +672,24 @@ public abstract class OctTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingVolumeD item_volume0 = BoundingVolumeD.of(
-      new VectorI3D(2.0, 2.0, 2.0),
-      new VectorI3D(98.0, 98.0, 98.0));
+      Vector3D.of(2.0, 2.0, 2.0),
+      Vector3D.of(98.0, 98.0, 98.0));
 
     final BoundingVolumeD item_volume1 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(2.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume2 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 1.0),
-      new VectorI3D(99.0, 2.0, 2.0));
+      Vector3D.of(98.0, 1.0, 1.0),
+      Vector3D.of(99.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume3 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 1.0),
-      new VectorI3D(2.0, 99.0, 2.0));
+      Vector3D.of(1.0, 98.0, 1.0),
+      Vector3D.of(2.0, 99.0, 2.0));
 
     final BoundingVolumeD item_volume4 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 1.0),
-      new VectorI3D(99.0, 99.0, 2.0));
+      Vector3D.of(98.0, 98.0, 1.0),
+      Vector3D.of(99.0, 99.0, 2.0));
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -716,8 +713,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -740,8 +737,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -751,8 +748,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(2.0, 2.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -772,8 +769,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingVolumeD.of(
-        new VectorI3D(97.0, 97.0, 97.0),
-        new VectorI3D(98.0, 98.0, 98.0)), set);
+        Vector3D.of(97.0, 97.0, 97.0),
+        Vector3D.of(98.0, 98.0, 98.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -787,8 +784,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -798,8 +795,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 1.0),
-      new VectorI3D(99.0, 2.0, 2.0));
+      Vector3D.of(98.0, 1.0, 1.0),
+      Vector3D.of(99.0, 2.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -819,8 +816,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -834,8 +831,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -845,8 +842,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 1.0),
-      new VectorI3D(2.0, 99.0, 2.0));
+      Vector3D.of(1.0, 98.0, 1.0),
+      Vector3D.of(2.0, 99.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -866,8 +863,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -881,8 +878,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -892,8 +889,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 1.0),
-      new VectorI3D(99.0, 99.0, 2.0));
+      Vector3D.of(98.0, 98.0, 1.0),
+      Vector3D.of(99.0, 99.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -913,8 +910,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -929,8 +926,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -940,8 +937,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 98.0),
-      new VectorI3D(2.0, 2.0, 99.0));
+      Vector3D.of(1.0, 1.0, 98.0),
+      Vector3D.of(2.0, 2.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -961,8 +958,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingVolumeD.of(
-        new VectorI3D(97.0, 97.0, 97.0),
-        new VectorI3D(98.0, 98.0, 98.0)), set);
+        Vector3D.of(97.0, 97.0, 97.0),
+        Vector3D.of(98.0, 98.0, 98.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -976,8 +973,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -987,8 +984,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 98.0),
-      new VectorI3D(99.0, 2.0, 99.0));
+      Vector3D.of(98.0, 1.0, 98.0),
+      Vector3D.of(99.0, 2.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1008,8 +1005,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1023,8 +1020,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1034,8 +1031,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 98.0),
-      new VectorI3D(2.0, 99.0, 99.0));
+      Vector3D.of(1.0, 98.0, 98.0),
+      Vector3D.of(2.0, 99.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1055,8 +1052,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1070,8 +1067,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1081,8 +1078,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 98.0),
-      new VectorI3D(99.0, 99.0, 99.0));
+      Vector3D.of(98.0, 98.0, 98.0),
+      Vector3D.of(99.0, 99.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1102,8 +1099,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1118,8 +1115,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1129,8 +1126,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(2.0, 2.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1150,8 +1147,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingVolumeD.of(
-        new VectorI3D(97.0, 97.0, 1.0),
-        new VectorI3D(98.0, 98.0, 2.0)), set);
+        Vector3D.of(97.0, 97.0, 1.0),
+        Vector3D.of(98.0, 98.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1165,8 +1162,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1176,8 +1173,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 1.0),
-      new VectorI3D(99.0, 2.0, 2.0));
+      Vector3D.of(98.0, 1.0, 1.0),
+      Vector3D.of(99.0, 2.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1197,8 +1194,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1212,8 +1209,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1223,8 +1220,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 1.0),
-      new VectorI3D(99.0, 99.0, 2.0));
+      Vector3D.of(98.0, 98.0, 1.0),
+      Vector3D.of(99.0, 99.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1244,8 +1241,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1259,8 +1256,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1270,8 +1267,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 1.0),
-      new VectorI3D(2.0, 99.0, 2.0));
+      Vector3D.of(1.0, 98.0, 1.0),
+      Vector3D.of(2.0, 99.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1291,8 +1288,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1307,8 +1304,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1318,8 +1315,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 98.0),
-      new VectorI3D(2.0, 2.0, 99.0));
+      Vector3D.of(1.0, 1.0, 98.0),
+      Vector3D.of(2.0, 2.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1339,8 +1336,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingVolumeD.of(
-        new VectorI3D(97.0, 97.0, 1.0),
-        new VectorI3D(98.0, 98.0, 2.0)), set);
+        Vector3D.of(97.0, 97.0, 1.0),
+        Vector3D.of(98.0, 98.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1354,8 +1351,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1365,8 +1362,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 98.0),
-      new VectorI3D(99.0, 2.0, 99.0));
+      Vector3D.of(98.0, 1.0, 98.0),
+      Vector3D.of(99.0, 2.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1386,8 +1383,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1401,8 +1398,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1412,8 +1409,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 98.0),
-      new VectorI3D(99.0, 99.0, 99.0));
+      Vector3D.of(98.0, 98.0, 98.0),
+      Vector3D.of(99.0, 99.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1433,8 +1430,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1448,8 +1445,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1459,8 +1456,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 98.0),
-      new VectorI3D(2.0, 99.0, 99.0));
+      Vector3D.of(1.0, 98.0, 98.0),
+      Vector3D.of(2.0, 99.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1480,8 +1477,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(2.0, 2.0, 2.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(2.0, 2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1496,8 +1493,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1507,8 +1504,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(10.0, 10.0, 1.0),
-      new VectorI3D(90.0, 90.0, 90.0));
+      Vector3D.of(10.0, 10.0, 1.0),
+      Vector3D.of(90.0, 90.0, 90.0));
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1528,8 +1525,8 @@ public abstract class OctTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingVolumeD.of(
-        new VectorI3D(1.0, 1.0, 1.0),
-        new VectorI3D(9.0, 9.0, 9.0)), set);
+        Vector3D.of(1.0, 1.0, 1.0),
+        Vector3D.of(9.0, 9.0, 9.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1544,8 +1541,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1555,26 +1552,26 @@ public abstract class OctTreeDContract
 
     final Integer item0 = Integer.valueOf(0);
     final BoundingVolumeD item_volume0 = BoundingVolumeD.of(
-      new VectorI3D(10.0, 11.0, 0.0),
-      new VectorI3D(20.0, 21.0, 99.0));
+      Vector3D.of(10.0, 11.0, 0.0),
+      Vector3D.of(20.0, 21.0, 99.0));
     Assert.assertTrue(tree.insert(item0, item_volume0));
 
     final Integer item1 = Integer.valueOf(1);
     final BoundingVolumeD item_volume1 = BoundingVolumeD.of(
-      new VectorI3D(15.0, 16.0, 0.0),
-      new VectorI3D(25.0, 26.0, 99.0));
+      Vector3D.of(15.0, 16.0, 0.0),
+      Vector3D.of(25.0, 26.0, 99.0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
 
     final Integer item2 = Integer.valueOf(2);
     final BoundingVolumeD item_volume2 = BoundingVolumeD.of(
-      new VectorI3D(25.0, 26.0, 0.0),
-      new VectorI3D(35.0, 36.0, 99.0));
+      Vector3D.of(25.0, 26.0, 0.0),
+      Vector3D.of(35.0, 36.0, 99.0));
     Assert.assertTrue(tree.insert(item2, item_volume2));
 
     {
-      final VectorI3D origin = new VectorI3D(0.0, 0.0, 1.0);
-      final VectorI3D direction = new VectorI3D(1.0, 1.0, 0.0);
-      final RayI3D ray = new RayI3D(origin, direction);
+      final Vector3D origin = Vector3D.of(0.0, 0.0, 1.0);
+      final Vector3D direction = Vector3D.of(1.0, 1.0, 0.0);
+      final Ray3D ray = Ray3D.of(origin, direction);
       final SortedSet<OctTreeRaycastResultD<Object>> items = new TreeSet<>();
       tree.raycast(ray, items);
 
@@ -1595,9 +1592,9 @@ public abstract class OctTreeDContract
     }
 
     {
-      final VectorI3D origin = new VectorI3D(0.0, 0.0, 0.0);
-      final VectorI3D direction = new VectorI3D(1.0, 0.0, 1.0);
-      final RayI3D ray = new RayI3D(origin, direction);
+      final Vector3D origin = Vector3D.of(0.0, 0.0, 0.0);
+      final Vector3D direction = Vector3D.of(1.0, 0.0, 1.0);
+      final Ray3D ray = Ray3D.of(origin, direction);
       final SortedSet<OctTreeRaycastResultD<Object>> items = new TreeSet<>();
       tree.raycast(ray, items);
 
@@ -1614,8 +1611,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1632,34 +1629,34 @@ public abstract class OctTreeDContract
     final List<BoundingVolumeD> volumes = new ArrayList<>(9);
 
     volumes.add(BoundingVolumeD.of(
-      new VectorI3D(2.0, 2.0, 2.0),
-      new VectorI3D(98.0, 98.0, 98.0)));
+      Vector3D.of(2.0, 2.0, 2.0),
+      Vector3D.of(98.0, 98.0, 98.0)));
 
     volumes.add(BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(2.0, 2.0, 2.0)));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(2.0, 2.0, 2.0)));
     volumes.add(BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 1.0),
-      new VectorI3D(99.0, 2.0, 2.0)));
+      Vector3D.of(98.0, 1.0, 1.0),
+      Vector3D.of(99.0, 2.0, 2.0)));
     volumes.add(BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 1.0),
-      new VectorI3D(2.0, 99.0, 2.0)));
+      Vector3D.of(1.0, 98.0, 1.0),
+      Vector3D.of(2.0, 99.0, 2.0)));
     volumes.add(BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 1.0),
-      new VectorI3D(99.0, 99.0, 2.0)));
+      Vector3D.of(98.0, 98.0, 1.0),
+      Vector3D.of(99.0, 99.0, 2.0)));
 
     volumes.add(BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 98.0),
-      new VectorI3D(2.0, 2.0, 99.0)));
+      Vector3D.of(1.0, 1.0, 98.0),
+      Vector3D.of(2.0, 2.0, 99.0)));
     volumes.add(BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 98.0),
-      new VectorI3D(99.0, 2.0, 99.0)));
+      Vector3D.of(98.0, 1.0, 98.0),
+      Vector3D.of(99.0, 2.0, 99.0)));
     volumes.add(BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 98.0),
-      new VectorI3D(2.0, 99.0, 99.0)));
+      Vector3D.of(1.0, 98.0, 98.0),
+      Vector3D.of(2.0, 99.0, 99.0)));
     volumes.add(BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 98.0),
-      new VectorI3D(99.0, 99.0, 99.0)));
+      Vector3D.of(98.0, 98.0, 98.0),
+      Vector3D.of(99.0, 99.0, 99.0)));
 
     for (int index = 0; index < 9; ++index) {
       Assert.assertTrue(tree.insert(items.get(index), volumes.get(index)));
@@ -1696,8 +1693,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -1713,24 +1710,24 @@ public abstract class OctTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingVolumeD item_volume0 = BoundingVolumeD.of(
-      new VectorI3D(2.0, 2.0, 2.0),
-      new VectorI3D(98.0, 98.0, 98.0));
+      Vector3D.of(2.0, 2.0, 2.0),
+      Vector3D.of(98.0, 98.0, 98.0));
 
     final BoundingVolumeD item_volume1 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 1.0, 1.0),
-      new VectorI3D(2.0, 2.0, 2.0));
+      Vector3D.of(1.0, 1.0, 1.0),
+      Vector3D.of(2.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume2 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 1.0, 1.0),
-      new VectorI3D(99.0, 2.0, 2.0));
+      Vector3D.of(98.0, 1.0, 1.0),
+      Vector3D.of(99.0, 2.0, 2.0));
 
     final BoundingVolumeD item_volume3 = BoundingVolumeD.of(
-      new VectorI3D(1.0, 98.0, 1.0),
-      new VectorI3D(2.0, 99.0, 2.0));
+      Vector3D.of(1.0, 98.0, 1.0),
+      Vector3D.of(2.0, 99.0, 2.0));
 
     final BoundingVolumeD item_volume4 = BoundingVolumeD.of(
-      new VectorI3D(98.0, 98.0, 1.0),
-      new VectorI3D(99.0, 99.0, 2.0));
+      Vector3D.of(98.0, 98.0, 1.0),
+      Vector3D.of(99.0, 99.0, 2.0));
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -1775,8 +1772,8 @@ public abstract class OctTreeDContract
   public final void testOctantTraversal()
   {
     final BoundingVolumeD container = BoundingVolumeD.of(
-      new VectorI3D(-1000.0, -1000.0, -1000.0),
-      new VectorI3D(1000.0, 1000.0, 1000.0));
+      Vector3D.of(-1000.0, -1000.0, -1000.0),
+      Vector3D.of(1000.0, 1000.0, 1000.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -1820,8 +1817,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD container =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -1835,8 +1832,8 @@ public abstract class OctTreeDContract
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
       BoundingVolumeD.of(
-        new VectorI3D(10.0, 10.0, 10.0),
-        new VectorI3D(20.0, 20.0, 20.0))));
+        Vector3D.of(10.0, 10.0, 10.0),
+        Vector3D.of(20.0, 20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
@@ -1863,8 +1860,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD container =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -1878,8 +1875,8 @@ public abstract class OctTreeDContract
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
       BoundingVolumeD.of(
-        new VectorI3D(10.0, 10.0, 10.0),
-        new VectorI3D(20.0, 20.0, 20.0))));
+        Vector3D.of(10.0, 10.0, 10.0),
+        Vector3D.of(20.0, 20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
@@ -1906,8 +1903,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD container =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -1921,8 +1918,8 @@ public abstract class OctTreeDContract
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
       BoundingVolumeD.of(
-        new VectorI3D(10.0, 10.0, 10.0),
-        new VectorI3D(20.0, 20.0, 20.0))));
+        Vector3D.of(10.0, 10.0, 10.0),
+        Vector3D.of(20.0, 20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
@@ -1949,8 +1946,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD container =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -1964,8 +1961,8 @@ public abstract class OctTreeDContract
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
       BoundingVolumeD.of(
-        new VectorI3D(10.0, 10.0, 10.0),
-        new VectorI3D(20.0, 20.0, 20.0))));
+        Vector3D.of(10.0, 10.0, 10.0),
+        Vector3D.of(20.0, 20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
@@ -1992,8 +1989,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD container =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -2007,8 +2004,8 @@ public abstract class OctTreeDContract
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
       BoundingVolumeD.of(
-        new VectorI3D(10.0, 10.0, 10.0),
-        new VectorI3D(20.0, 20.0, 20.0))));
+        Vector3D.of(10.0, 10.0, 10.0),
+        Vector3D.of(20.0, 20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
@@ -2035,8 +2032,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD container =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -2050,8 +2047,8 @@ public abstract class OctTreeDContract
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
       BoundingVolumeD.of(
-        new VectorI3D(10.0, 10.0, 10.0),
-        new VectorI3D(20.0, 20.0, 20.0))));
+        Vector3D.of(10.0, 10.0, 10.0),
+        Vector3D.of(20.0, 20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
@@ -2078,8 +2075,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD container =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -2093,8 +2090,8 @@ public abstract class OctTreeDContract
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
       BoundingVolumeD.of(
-        new VectorI3D(10.0, 10.0, 10.0),
-        new VectorI3D(20.0, 20.0, 20.0))));
+        Vector3D.of(10.0, 10.0, 10.0),
+        Vector3D.of(20.0, 20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
@@ -2121,8 +2118,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD container =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -2136,8 +2133,8 @@ public abstract class OctTreeDContract
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
       BoundingVolumeD.of(
-        new VectorI3D(10.0, 10.0, 10.0),
-        new VectorI3D(20.0, 20.0, 20.0))));
+        Vector3D.of(10.0, 10.0, 10.0),
+        Vector3D.of(20.0, 20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
@@ -2164,8 +2161,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD container =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -2179,8 +2176,8 @@ public abstract class OctTreeDContract
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
       BoundingVolumeD.of(
-        new VectorI3D(10.0, 10.0, 10.0),
-        new VectorI3D(20.0, 20.0, 20.0))));
+        Vector3D.of(10.0, 10.0, 10.0),
+        Vector3D.of(20.0, 20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
@@ -2206,8 +2203,8 @@ public abstract class OctTreeDContract
   public final void testRaycastSimple()
   {
     final BoundingVolumeD container = BoundingVolumeD.of(
-      new VectorI3D(0.0, 0.0, 0.0),
-      new VectorI3D(512.0, 512.0, 512.0));
+      Vector3D.of(0.0, 0.0, 0.0),
+      Vector3D.of(512.0, 512.0, 512.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(container);
@@ -2221,23 +2218,23 @@ public abstract class OctTreeDContract
     final Integer item2 = Integer.valueOf(2);
 
     Assert.assertTrue(tree.insert(item0, BoundingVolumeD.of(
-      new VectorI3D(32.0, 32.0, 0.0),
-      new VectorI3D(80.0, 80.0, 511.0)
+      Vector3D.of(32.0, 32.0, 0.0),
+      Vector3D.of(80.0, 80.0, 511.0)
     )));
 
     Assert.assertTrue(tree.insert(item1, BoundingVolumeD.of(
-      new VectorI3D(400.0, 32.0, 0.0),
-      new VectorI3D(400.0 + 32.0, 80.0, 511.0)
+      Vector3D.of(400.0, 32.0, 0.0),
+      Vector3D.of(400.0 + 32.0, 80.0, 511.0)
     )));
 
     Assert.assertTrue(tree.insert(item2, BoundingVolumeD.of(
-      new VectorI3D(400.0, 400.0, 0.0),
-      new VectorI3D(480.0, 480.0, 511.0)
+      Vector3D.of(400.0, 400.0, 0.0),
+      Vector3D.of(480.0, 480.0, 511.0)
     )));
 
-    final RayI3D ray = new RayI3D(
-      new VectorI3D(0.0, 0.0, 1.0),
-      VectorI3D.normalize(new VectorI3D(511.0, 511.0, 0.0)));
+    final Ray3D ray = Ray3D.of(
+      Vector3D.of(0.0, 0.0, 1.0),
+      Vectors3D.normalize(Vector3D.of(511.0, 511.0, 0.0)));
 
     final SortedSet<OctTreeRaycastResultD<Integer>> items = new TreeSet<>();
     tree.raycast(ray, items);
@@ -2249,20 +2246,20 @@ public abstract class OctTreeDContract
       final OctTreeRaycastResultD<Integer> rr = iter.next();
       final BoundingVolumeD r = rr.volume();
       Assert.assertEquals(item0, rr.item());
-      Assert.assertEquals(32.0, r.lower().getXD(), 0.0);
-      Assert.assertEquals(32.0, r.lower().getYD(), 0.0);
-      Assert.assertEquals(80.0, r.upper().getXD(), 0.0);
-      Assert.assertEquals(80.0, r.upper().getYD(), 0.0);
+      Assert.assertEquals(32.0, r.lower().x(), 0.0);
+      Assert.assertEquals(32.0, r.lower().y(), 0.0);
+      Assert.assertEquals(80.0, r.upper().x(), 0.0);
+      Assert.assertEquals(80.0, r.upper().y(), 0.0);
     }
 
     {
       final OctTreeRaycastResultD<Integer> rr = iter.next();
       final BoundingVolumeD r = rr.volume();
       Assert.assertEquals(item2, rr.item());
-      Assert.assertEquals(400.0, r.lower().getXD(), 0.0);
-      Assert.assertEquals(400.0, r.lower().getYD(), 0.0);
-      Assert.assertEquals(480.0, r.upper().getXD(), 0.0);
-      Assert.assertEquals(480.0, r.upper().getYD(), 0.0);
+      Assert.assertEquals(400.0, r.lower().x(), 0.0);
+      Assert.assertEquals(400.0, r.lower().y(), 0.0);
+      Assert.assertEquals(480.0, r.upper().x(), 0.0);
+      Assert.assertEquals(480.0, r.upper().y(), 0.0);
     }
 
     Assert.assertFalse(iter.hasNext());
@@ -2277,8 +2274,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(1.0, 100.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(1.0, 100.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -2288,8 +2285,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(0.0, 0.0, 0.0),
-      new VectorI3D(1.0, 1.0, 1.0));
+      Vector3D.of(0.0, 0.0, 0.0),
+      Vector3D.of(1.0, 1.0, 1.0));
     Assert.assertTrue(tree.insert(item, item_volume));
     Assert.assertEquals(1L, (long) OctTreeDContract.countOctants(tree));
   }
@@ -2303,8 +2300,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 1.0, 100.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 1.0, 100.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -2314,8 +2311,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(0.0, 0.0, 0.0),
-      new VectorI3D(1.0, 1.0, 1.0));
+      Vector3D.of(0.0, 0.0, 0.0),
+      Vector3D.of(1.0, 1.0, 1.0));
     Assert.assertTrue(tree.insert(item, item_volume));
     Assert.assertEquals(1L, (long) OctTreeDContract.countOctants(tree));
   }
@@ -2329,8 +2326,8 @@ public abstract class OctTreeDContract
   {
     final BoundingVolumeD volume =
       BoundingVolumeD.of(
-        new VectorI3D(0.0, 0.0, 0.0),
-        new VectorI3D(100.0, 100.0, 1.0));
+        Vector3D.of(0.0, 0.0, 0.0),
+        Vector3D.of(100.0, 100.0, 1.0));
 
     final OctTreeConfigurationD.Builder cb = OctTreeConfigurationD.builder();
     cb.setVolume(volume);
@@ -2340,8 +2337,8 @@ public abstract class OctTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingVolumeD item_volume = BoundingVolumeD.of(
-      new VectorI3D(0.0, 0.0, 0.0),
-      new VectorI3D(1.0, 1.0, 1.0));
+      Vector3D.of(0.0, 0.0, 0.0),
+      Vector3D.of(1.0, 1.0, 1.0));
     Assert.assertTrue(tree.insert(item, item_volume));
     Assert.assertEquals(1L, (long) OctTreeDContract.countOctants(tree));
   }

@@ -17,7 +17,7 @@
 package com.io7m.jspatial.tests.api;
 
 import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.LongGenerator;
 
@@ -45,11 +45,11 @@ public final class BoundingVolumeLGenerator implements Generator<BoundingVolumeL
     vs.add(this.lg.next());
     vs.sort((x, y) -> Long.compare(x.longValue(), y.longValue()));
 
-    final VectorI3L lo = new VectorI3L(
+    final Vector3L lo = Vector3L.of(
       vs.remove(0).longValue(),
       vs.remove(0).longValue(),
       vs.remove(0).longValue());
-    final VectorI3L hi = new VectorI3L(
+    final Vector3L hi = Vector3L.of(
       vs.remove(0).longValue(),
       vs.remove(0).longValue(),
       vs.remove(0).longValue());

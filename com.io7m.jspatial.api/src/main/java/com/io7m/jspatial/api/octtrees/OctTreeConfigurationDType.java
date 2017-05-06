@@ -17,7 +17,7 @@
 package com.io7m.jspatial.api.octtrees;
 
 import com.io7m.jspatial.api.BoundingVolumeD;
-import com.io7m.jspatial.api.ImmutableStyleType;
+import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
 /**
@@ -26,7 +26,7 @@ import org.immutables.value.Value;
  * @since 3.0.0
  */
 
-@ImmutableStyleType
+@JSpatialImmutableStyleType
 @Value.Immutable
 public interface OctTreeConfigurationDType
 {

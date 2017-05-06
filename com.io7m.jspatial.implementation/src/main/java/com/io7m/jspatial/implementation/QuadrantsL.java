@@ -18,7 +18,7 @@ package com.io7m.jspatial.implementation;
 
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import net.jcip.annotations.Immutable;
 
 import java.util.Optional;
@@ -64,22 +64,22 @@ public final class QuadrantsL
     final long height = area.height();
 
     if (width >= 2L && height >= 2L) {
-      final VectorI2L lower = area.lower();
-      final VectorI2L upper = area.upper();
+      final Vector2L lower = area.lower();
+      final Vector2L upper = area.upper();
 
       final long[] x_spans = new long[4];
-      Subdivision.subdivide1L(lower.getXL(), upper.getXL(), x_spans);
+      Subdivision.subdivide1L(lower.x(), upper.x(), x_spans);
       final long[] y_spans = new long[4];
-      Subdivision.subdivide1L(lower.getYL(), upper.getYL(), y_spans);
+      Subdivision.subdivide1L(lower.y(), upper.y(), y_spans);
 
-      final VectorI2L x0y0_lower = new VectorI2L(x_spans[0], y_spans[0]);
-      final VectorI2L x0y1_lower = new VectorI2L(x_spans[0], y_spans[2]);
-      final VectorI2L x1y0_lower = new VectorI2L(x_spans[2], y_spans[0]);
-      final VectorI2L x1y1_lower = new VectorI2L(x_spans[2], y_spans[2]);
-      final VectorI2L x0y0_upper = new VectorI2L(x_spans[1], y_spans[1]);
-      final VectorI2L x0y1_upper = new VectorI2L(x_spans[1], y_spans[3]);
-      final VectorI2L x1y0_upper = new VectorI2L(x_spans[3], y_spans[1]);
-      final VectorI2L x1y1_upper = new VectorI2L(x_spans[3], y_spans[3]);
+      final Vector2L x0y0_lower = Vector2L.of(x_spans[0], y_spans[0]);
+      final Vector2L x0y1_lower = Vector2L.of(x_spans[0], y_spans[2]);
+      final Vector2L x1y0_lower = Vector2L.of(x_spans[2], y_spans[0]);
+      final Vector2L x1y1_lower = Vector2L.of(x_spans[2], y_spans[2]);
+      final Vector2L x0y0_upper = Vector2L.of(x_spans[1], y_spans[1]);
+      final Vector2L x0y1_upper = Vector2L.of(x_spans[1], y_spans[3]);
+      final Vector2L x1y0_upper = Vector2L.of(x_spans[3], y_spans[1]);
+      final Vector2L x1y1_upper = Vector2L.of(x_spans[3], y_spans[3]);
 
       final BoundingAreaL x0y0 = BoundingAreaL.of(x0y0_lower, x0y0_upper);
       final BoundingAreaL x1y0 = BoundingAreaL.of(x1y0_lower, x1y0_upper);

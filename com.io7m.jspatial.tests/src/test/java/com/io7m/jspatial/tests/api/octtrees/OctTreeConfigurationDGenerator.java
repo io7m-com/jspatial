@@ -16,7 +16,6 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
-
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationD;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationDType;
 import com.io7m.jspatial.tests.api.BoundingVolumeDGenerator;

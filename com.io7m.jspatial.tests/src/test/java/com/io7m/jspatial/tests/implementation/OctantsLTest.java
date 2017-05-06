@@ -20,7 +20,7 @@ import com.io7m.jfunctional.Unit;
 import com.io7m.jspatial.api.BoundingVolumeL;
 import com.io7m.jspatial.implementation.OctantsL;
 import com.io7m.jspatial.tests.api.BoundingVolumeLGenerator;
-import com.io7m.jtensors.VectorI3L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
 import org.junit.Assert;
@@ -88,8 +88,8 @@ public final class OctantsLTest
       Optional.empty(),
       OctantsL.subdivide(
         BoundingVolumeL.of(
-          new VectorI3L(0L, 0L, 0L),
-          new VectorI3L(2L, 1L, 2L))));
+          Vector3L.of(0L, 0L, 0L),
+          Vector3L.of(2L, 1L, 2L))));
   }
 
   @Test
@@ -99,8 +99,8 @@ public final class OctantsLTest
       Optional.empty(),
       OctantsL.subdivide(
         BoundingVolumeL.of(
-          new VectorI3L(0L, 0L, 0L),
-          new VectorI3L(1L, 2L, 2L))));
+          Vector3L.of(0L, 0L, 0L),
+          Vector3L.of(1L, 2L, 2L))));
   }
 
   @Test
@@ -110,7 +110,7 @@ public final class OctantsLTest
       Optional.empty(),
       OctantsL.subdivide(
         BoundingVolumeL.of(
-          new VectorI3L(0L, 0L, 0L),
-          new VectorI3L(2L, 2L, 1L))));
+          Vector3L.of(0L, 0L, 0L),
+          Vector3L.of(2L, 2L, 1L))));
   }
 }

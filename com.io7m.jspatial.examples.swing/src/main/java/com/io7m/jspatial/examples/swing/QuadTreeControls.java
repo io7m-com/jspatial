@@ -20,11 +20,12 @@ import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jspatial.api.BoundingAreaD;
 import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jspatial.api.RayI2D;
+import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
-import com.io7m.jtensors.VectorI2D;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vectors2D;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
 import net.java.dev.designgridlayout.DesignGridLayout;
@@ -193,10 +194,10 @@ final class QuadTreeControls extends JPanel
     this.layout(dg);
 
     this.config_bl.setArea(BoundingAreaL.of(
-      new VectorI2L(
+      Vector2L.of(
         this.tree_x_model.getNumber().longValue(),
         this.tree_y_model.getNumber().longValue()),
-      new VectorI2L(
+      Vector2L.of(
         this.tree_width_model.getNumber().longValue(),
         this.tree_height_model.getNumber().longValue())));
 
@@ -240,7 +241,7 @@ final class QuadTreeControls extends JPanel
 
   private void layout(final DesignGridLayout dg)
   {
-    dg.row().left().add(QuadTreeControls.largerLabel("Tree")).fill();
+    dg.row().left().add(largerLabel("Tree")).fill();
     dg.emptyRow();
     dg.row().grid(new JLabel("Kind")).add(this.tree_kind);
     dg.row().grid(new JLabel("X")).add(this.tree_x);
@@ -256,7 +257,7 @@ final class QuadTreeControls extends JPanel
     dg.row().center().add(this.tree_trim).fill();
     dg.emptyRow();
 
-    dg.row().left().add(QuadTreeControls.largerLabel("Objects")).fill();
+    dg.row().left().add(largerLabel("Objects")).fill();
     dg.emptyRow();
     dg.row().grid(new JLabel("X")).add(this.object_x);
     dg.row().grid(new JLabel("Y")).add(this.object_y);
@@ -267,13 +268,13 @@ final class QuadTreeControls extends JPanel
     dg.row().center().add(this.object_remove).fill();
     dg.emptyRow();
 
-    dg.row().left().add(QuadTreeControls.largerLabel("Random Objects")).fill();
+    dg.row().left().add(largerLabel("Random Objects")).fill();
     dg.emptyRow();
     dg.row().grid(new JLabel("Count")).add(this.objects_random_count);
     dg.row().center().add(this.objects_random_add).fill();
     dg.emptyRow();
 
-    dg.row().left().add(QuadTreeControls.largerLabel("Area Query")).fill();
+    dg.row().left().add(largerLabel("Area Query")).fill();
     dg.emptyRow();
     dg.row().grid(new JLabel("X")).add(this.area_query_x);
     dg.row().grid(new JLabel("Y")).add(this.area_query_y);
@@ -285,7 +286,7 @@ final class QuadTreeControls extends JPanel
     dg.row().center().add(this.area_query_run).fill();
     dg.emptyRow();
 
-    dg.row().left().add(QuadTreeControls.largerLabel("Ray Query")).fill();
+    dg.row().left().add(largerLabel("Ray Query")).fill();
     dg.emptyRow();
     dg.row()
       .grid(new JLabel("X0")).add(this.ray_query_x0)
@@ -323,16 +324,16 @@ final class QuadTreeControls extends JPanel
         + this.tree_height_model.getNumber().longValue();
 
     for (int index = 0; index < count; ++index) {
-      final long x0 = QuadTreeControls.randomLong(x_base, x_max);
-      final long y0 = QuadTreeControls.randomLong(y_base, y_max);
-      final long w = QuadTreeControls.randomLong(1L, w_base);
-      final long h = QuadTreeControls.randomLong(1L, h_base);
+      final long x0 = randomLong(x_base, x_max);
+      final long y0 = randomLong(y_base, y_max);
+      final long w = randomLong(1L, w_base);
+      final long h = randomLong(1L, h_base);
       final long x1 = x0 + w;
       final long y1 = y0 + h;
 
       final BoundingAreaL area = BoundingAreaL.of(
-        new VectorI2L(x0, y0),
-        new VectorI2L(x1, y1));
+        Vector2L.of(x0, y0),
+        Vector2L.of(x1, y1));
 
       final Integer item = Integer.valueOf(this.pool.getAndIncrement());
       this.objects_model.addElement(item);
@@ -358,13 +359,13 @@ final class QuadTreeControls extends JPanel
 
     final BoundingAreaL area_l =
       BoundingAreaL.of(
-        new VectorI2L(x0, y0),
-        new VectorI2L(x1, y1));
+        Vector2L.of(x0, y0),
+        Vector2L.of(x1, y1));
 
     final BoundingAreaD area_d =
       BoundingAreaD.of(
-        new VectorI2D((double) x0, (double) y0),
-        new VectorI2D((double) x1, (double) y1));
+        Vector2D.of((double) x0, (double) y0),
+        Vector2D.of((double) x1, (double) y1));
 
     this.events.onNext(QuadTreeCommandTypes.areaQuery(
       area_l,
@@ -379,12 +380,12 @@ final class QuadTreeControls extends JPanel
     final double x1 = (double) this.ray_query_x1_model.getNumber().longValue();
     final double y1 = (double) this.ray_query_y1_model.getNumber().longValue();
 
-    final VectorI2D origin =
-      new VectorI2D(x0, y0);
-    final VectorI2D direction =
-      VectorI2D.normalize(new VectorI2D(x0 + x1, y0 + y1));
+    final Vector2D origin =
+      Vector2D.of(x0, y0);
+    final Vector2D direction =
+      Vectors2D.normalize(Vector2D.of(x0 + x1, y0 + y1));
 
-    final RayI2D ray = new RayI2D(origin, direction);
+    final Ray2D ray = Ray2D.of(origin, direction);
     this.events.onNext(QuadTreeCommandTypes.rayQuery(ray));
   }
 
@@ -397,13 +398,13 @@ final class QuadTreeControls extends JPanel
 
     final BoundingAreaL area_l =
       BoundingAreaL.of(
-        new VectorI2L(x0, y0),
-        new VectorI2L(x1, y1));
+        Vector2L.of(x0, y0),
+        Vector2L.of(x1, y1));
 
     final BoundingAreaD area_d =
       BoundingAreaD.of(
-        new VectorI2D((double) x0, (double) y0),
-        new VectorI2D((double) x1, (double) y1));
+        Vector2D.of((double) x0, (double) y0),
+        Vector2D.of((double) x1, (double) y1));
 
     this.config_bl.setMinimumQuadrantHeight(
       this.tree_qmin_height_model.getNumber().longValue());
@@ -443,8 +444,8 @@ final class QuadTreeControls extends JPanel
     final long y1 = y0 + this.object_height_model.getNumber().longValue();
 
     final BoundingAreaL area = BoundingAreaL.of(
-      new VectorI2L(x0, y0),
-      new VectorI2L(x1, y1));
+      Vector2L.of(x0, y0),
+      Vector2L.of(x1, y1));
 
     final Integer item = Integer.valueOf(this.pool.getAndIncrement());
     this.objects_model.addElement(item);

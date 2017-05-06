@@ -22,15 +22,16 @@ import com.io7m.jintegers.CheckedMath;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jspatial.api.RayI2D;
+import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeQuadrantIterationLType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeQuadrantLType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL;
-import com.io7m.jtensors.VectorI2D;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vectors2D;
 import com.io7m.junreachable.UnreachableCodeException;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
@@ -211,7 +212,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
   @Override
   public void raycast(
-    final RayI2D ray,
+    final Ray2D ray,
     final SortedSet<QuadTreeRaycastResultL<T>> items)
   {
     NullCheck.notNull(ray, "Ray");
@@ -501,7 +502,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     }
 
     private void raycast(
-      final RayI2D ray,
+      final Ray2D ray,
       final SortedSet<QuadTreeRaycastResultL<T>> items)
     {
       /*
@@ -516,12 +517,12 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
        * Check whether or not the ray intersects the quadrant.
        */
 
-      final VectorI2L lower = this.area.lower();
-      final VectorI2L upper = this.area.upper();
-      final double x0 = (double) lower.getXL();
-      final double x1 = (double) upper.getXL();
-      final double y0 = (double) lower.getYL();
-      final double y1 = (double) upper.getYL();
+      final Vector2L lower = this.area.lower();
+      final Vector2L upper = this.area.upper();
+      final double x0 = (double) lower.x();
+      final double x1 = (double) upper.x();
+      final double y0 = (double) lower.y();
+      final double y1 = (double) upper.y();
 
       /*
        * If the ray intersects the quadrant, check each item in the quadrant
@@ -539,16 +540,16 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
           final T item = entry.getKey();
           final BoundingAreaL item_area = entry.getValue();
 
-          final VectorI2L item_lower = item_area.lower();
-          final VectorI2L item_upper = item_area.upper();
-          final double item_x0 = (double) item_lower.getXL();
-          final double item_x1 = (double) item_upper.getXL();
-          final double item_y0 = (double) item_lower.getYL();
-          final double item_y1 = (double) item_upper.getYL();
+          final Vector2L item_lower = item_area.lower();
+          final Vector2L item_upper = item_area.upper();
+          final double item_x0 = (double) item_lower.x();
+          final double item_x1 = (double) item_upper.x();
+          final double item_y0 = (double) item_lower.y();
+          final double item_y1 = (double) item_upper.y();
 
           if (ray.intersectsArea(item_x0, item_y0, item_x1, item_y1)) {
-            final double distance = VectorI2D.distance(
-              new VectorI2D(item_x0, item_y0),
+            final double distance = Vectors2D.distance(
+              Vector2D.of(item_x0, item_y0),
               ray.origin());
             final QuadTreeRaycastResultL<T> result =
               QuadTreeRaycastResultL.of(distance, item_area, item);

@@ -18,17 +18,14 @@ package com.io7m.jspatial.tests.api.quadtrees;
 
 import com.io7m.jfunctional.Unit;
 import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jspatial.api.RayI2D;
+import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeDType;
-import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultD;
 import com.io7m.jspatial.tests.api.BoundingAreaDContainedGenerator;
-import com.io7m.jtensors.VectorI2D;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
+import com.io7m.jtensors.core.unparameterized.vectors.Vectors2D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -72,7 +69,7 @@ public abstract class QuadTreeDContract
   public final void testIdentities()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -97,7 +94,7 @@ public abstract class QuadTreeDContract
   public final void testInsertTooLarge()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -107,8 +104,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(-100.0, -100.0),
-      new VectorI2D(200.0, 200.0));
+      Vector2D.of(-100.0, -100.0),
+      Vector2D.of(200.0, 200.0));
     Assert.assertFalse(tree.insert(item, item_area));
   }
 
@@ -120,7 +117,7 @@ public abstract class QuadTreeDContract
   public final void testInsertTiny()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -132,8 +129,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(1.1, 1.1));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(1.1, 1.1));
     Assert.assertTrue(tree.insert(item, item_area));
 
     Assert.assertTrue(tree.contains(item));
@@ -149,7 +146,7 @@ public abstract class QuadTreeDContract
   public final void testInsertX0Y0()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -159,8 +156,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(2.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     Assert.assertTrue(tree.contains(item));
@@ -181,7 +178,7 @@ public abstract class QuadTreeDContract
   public final void testInsertX1Y0()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -191,8 +188,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(98.0, 1.0),
-      new VectorI2D(99.0, 2.0));
+      Vector2D.of(98.0, 1.0),
+      Vector2D.of(99.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     Assert.assertTrue(tree.contains(item));
@@ -213,7 +210,7 @@ public abstract class QuadTreeDContract
   public final void testInsertX0Y1()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -223,8 +220,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(1.0, 98.0),
-      new VectorI2D(2.0, 99.0));
+      Vector2D.of(1.0, 98.0),
+      Vector2D.of(2.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     Assert.assertTrue(tree.contains(item));
@@ -245,7 +242,7 @@ public abstract class QuadTreeDContract
   public final void testInsertX1Y1()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -255,8 +252,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(98.0, 98.0),
-      new VectorI2D(99.0, 99.0));
+      Vector2D.of(98.0, 98.0),
+      Vector2D.of(99.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     Assert.assertTrue(tree.contains(item));
@@ -277,7 +274,7 @@ public abstract class QuadTreeDContract
   public final void testInsertCentral()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -287,8 +284,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(2.0, 2.0),
-      new VectorI2D(98.0, 98.0));
+      Vector2D.of(2.0, 2.0),
+      Vector2D.of(98.0, 98.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     Assert.assertTrue(tree.contains(item));
@@ -309,7 +306,7 @@ public abstract class QuadTreeDContract
   public final void testInsertRemove()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -324,24 +321,24 @@ public abstract class QuadTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingAreaD item_area0 = BoundingAreaD.of(
-      new VectorI2D(2.0, 2.0),
-      new VectorI2D(98.0, 98.0));
+      Vector2D.of(2.0, 2.0),
+      Vector2D.of(98.0, 98.0));
 
     final BoundingAreaD item_area1 = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(2.0, 2.0));
 
     final BoundingAreaD item_area2 = BoundingAreaD.of(
-      new VectorI2D(98.0, 1.0),
-      new VectorI2D(99.0, 2.0));
+      Vector2D.of(98.0, 1.0),
+      Vector2D.of(99.0, 2.0));
 
     final BoundingAreaD item_area3 = BoundingAreaD.of(
-      new VectorI2D(1.0, 98.0),
-      new VectorI2D(2.0, 99.0));
+      Vector2D.of(1.0, 98.0),
+      Vector2D.of(2.0, 99.0));
 
     final BoundingAreaD item_area4 = BoundingAreaD.of(
-      new VectorI2D(98.0, 98.0),
-      new VectorI2D(99.0, 99.0));
+      Vector2D.of(98.0, 98.0),
+      Vector2D.of(99.0, 99.0));
 
     Assert.assertTrue(tree.insert(item0, item_area0));
     Assert.assertTrue(tree.insert(item1, item_area1));
@@ -386,7 +383,7 @@ public abstract class QuadTreeDContract
   public final void testInsertClear()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -401,24 +398,24 @@ public abstract class QuadTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingAreaD item_area0 = BoundingAreaD.of(
-      new VectorI2D(2.0, 2.0),
-      new VectorI2D(98.0, 98.0));
+      Vector2D.of(2.0, 2.0),
+      Vector2D.of(98.0, 98.0));
 
     final BoundingAreaD item_area1 = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(2.0, 2.0));
 
     final BoundingAreaD item_area2 = BoundingAreaD.of(
-      new VectorI2D(98.0, 1.0),
-      new VectorI2D(99.0, 2.0));
+      Vector2D.of(98.0, 1.0),
+      Vector2D.of(99.0, 2.0));
 
     final BoundingAreaD item_area3 = BoundingAreaD.of(
-      new VectorI2D(1.0, 98.0),
-      new VectorI2D(2.0, 99.0));
+      Vector2D.of(1.0, 98.0),
+      Vector2D.of(2.0, 99.0));
 
     final BoundingAreaD item_area4 = BoundingAreaD.of(
-      new VectorI2D(98.0, 98.0),
-      new VectorI2D(99.0, 99.0));
+      Vector2D.of(98.0, 98.0),
+      Vector2D.of(99.0, 99.0));
 
     Assert.assertTrue(tree.insert(item0, item_area0));
     Assert.assertTrue(tree.insert(item1, item_area1));
@@ -444,7 +441,7 @@ public abstract class QuadTreeDContract
   public final void testMapIdentity()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -459,24 +456,24 @@ public abstract class QuadTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingAreaD item_area0 = BoundingAreaD.of(
-      new VectorI2D(2.0, 2.0),
-      new VectorI2D(98.0, 98.0));
+      Vector2D.of(2.0, 2.0),
+      Vector2D.of(98.0, 98.0));
 
     final BoundingAreaD item_area1 = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(2.0, 2.0));
 
     final BoundingAreaD item_area2 = BoundingAreaD.of(
-      new VectorI2D(98.0, 1.0),
-      new VectorI2D(99.0, 2.0));
+      Vector2D.of(98.0, 1.0),
+      Vector2D.of(99.0, 2.0));
 
     final BoundingAreaD item_area3 = BoundingAreaD.of(
-      new VectorI2D(1.0, 98.0),
-      new VectorI2D(2.0, 99.0));
+      Vector2D.of(1.0, 98.0),
+      Vector2D.of(2.0, 99.0));
 
     final BoundingAreaD item_area4 = BoundingAreaD.of(
-      new VectorI2D(98.0, 98.0),
-      new VectorI2D(99.0, 99.0));
+      Vector2D.of(98.0, 98.0),
+      Vector2D.of(99.0, 99.0));
 
     Assert.assertTrue(tree.insert(item0, item_area0));
     Assert.assertTrue(tree.insert(item1, item_area1));
@@ -496,7 +493,7 @@ public abstract class QuadTreeDContract
   public final void testAreaFor()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -511,24 +508,24 @@ public abstract class QuadTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingAreaD item_area0 = BoundingAreaD.of(
-      new VectorI2D(2.0, 2.0),
-      new VectorI2D(98.0, 98.0));
+      Vector2D.of(2.0, 2.0),
+      Vector2D.of(98.0, 98.0));
 
     final BoundingAreaD item_area1 = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(2.0, 2.0));
 
     final BoundingAreaD item_area2 = BoundingAreaD.of(
-      new VectorI2D(98.0, 1.0),
-      new VectorI2D(99.0, 2.0));
+      Vector2D.of(98.0, 1.0),
+      Vector2D.of(99.0, 2.0));
 
     final BoundingAreaD item_area3 = BoundingAreaD.of(
-      new VectorI2D(1.0, 98.0),
-      new VectorI2D(2.0, 99.0));
+      Vector2D.of(1.0, 98.0),
+      Vector2D.of(2.0, 99.0));
 
     final BoundingAreaD item_area4 = BoundingAreaD.of(
-      new VectorI2D(98.0, 98.0),
-      new VectorI2D(99.0, 99.0));
+      Vector2D.of(98.0, 98.0),
+      Vector2D.of(99.0, 99.0));
 
     Assert.assertTrue(tree.insert(item0, item_area0));
     Assert.assertTrue(tree.insert(item1, item_area1));
@@ -551,7 +548,7 @@ public abstract class QuadTreeDContract
   public final void testAreaForNonexistent()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -573,7 +570,7 @@ public abstract class QuadTreeDContract
   public final void testContainedObjectsX0Y0()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -583,8 +580,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(2.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     {
@@ -604,8 +601,8 @@ public abstract class QuadTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingAreaD.of(
-        new VectorI2D(97.0, 97.0),
-        new VectorI2D(98.0, 98.0)), set);
+        Vector2D.of(97.0, 97.0),
+        Vector2D.of(98.0, 98.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -618,7 +615,7 @@ public abstract class QuadTreeDContract
   public final void testContainedObjectsX1Y0()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -628,8 +625,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(98.0, 1.0),
-      new VectorI2D(99.0, 2.0));
+      Vector2D.of(98.0, 1.0),
+      Vector2D.of(99.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     {
@@ -649,8 +646,8 @@ public abstract class QuadTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingAreaD.of(
-        new VectorI2D(1.0, 1.0),
-        new VectorI2D(2.0, 2.0)), set);
+        Vector2D.of(1.0, 1.0),
+        Vector2D.of(2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -663,7 +660,7 @@ public abstract class QuadTreeDContract
   public final void testContainedObjectsX0Y1()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -673,8 +670,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(1.0, 98.0),
-      new VectorI2D(2.0, 99.0));
+      Vector2D.of(1.0, 98.0),
+      Vector2D.of(2.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     {
@@ -694,8 +691,8 @@ public abstract class QuadTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingAreaD.of(
-        new VectorI2D(1.0, 1.0),
-        new VectorI2D(2.0, 2.0)), set);
+        Vector2D.of(1.0, 1.0),
+        Vector2D.of(2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -708,7 +705,7 @@ public abstract class QuadTreeDContract
   public final void testContainedObjectsX1Y1()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -718,8 +715,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(98.0, 98.0),
-      new VectorI2D(99.0, 99.0));
+      Vector2D.of(98.0, 98.0),
+      Vector2D.of(99.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     {
@@ -739,8 +736,8 @@ public abstract class QuadTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.containedBy(BoundingAreaD.of(
-        new VectorI2D(1.0, 1.0),
-        new VectorI2D(2.0, 2.0)), set);
+        Vector2D.of(1.0, 1.0),
+        Vector2D.of(2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -753,7 +750,7 @@ public abstract class QuadTreeDContract
   public final void testOverlappingObjectsX0Y0()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -763,8 +760,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(2.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     {
@@ -784,8 +781,8 @@ public abstract class QuadTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingAreaD.of(
-        new VectorI2D(97.0, 97.0),
-        new VectorI2D(98.0, 98.0)), set);
+        Vector2D.of(97.0, 97.0),
+        Vector2D.of(98.0, 98.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -798,7 +795,7 @@ public abstract class QuadTreeDContract
   public final void testOverlappingObjectsX1Y0()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -808,8 +805,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(98.0, 1.0),
-      new VectorI2D(99.0, 2.0));
+      Vector2D.of(98.0, 1.0),
+      Vector2D.of(99.0, 2.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     {
@@ -829,8 +826,8 @@ public abstract class QuadTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingAreaD.of(
-        new VectorI2D(1.0, 1.0),
-        new VectorI2D(2.0, 2.0)), set);
+        Vector2D.of(1.0, 1.0),
+        Vector2D.of(2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -843,7 +840,7 @@ public abstract class QuadTreeDContract
   public final void testOverlappingObjectsX1Y1()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -853,8 +850,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(98.0, 98.0),
-      new VectorI2D(99.0, 99.0));
+      Vector2D.of(98.0, 98.0),
+      Vector2D.of(99.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     {
@@ -874,8 +871,8 @@ public abstract class QuadTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingAreaD.of(
-        new VectorI2D(1.0, 1.0),
-        new VectorI2D(2.0, 2.0)), set);
+        Vector2D.of(1.0, 1.0),
+        Vector2D.of(2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -888,7 +885,7 @@ public abstract class QuadTreeDContract
   public final void testOverlappingNot()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -898,8 +895,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(10.0, 10.0),
-      new VectorI2D(90.0, 90.0));
+      Vector2D.of(10.0, 10.0),
+      Vector2D.of(90.0, 90.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     {
@@ -919,8 +916,8 @@ public abstract class QuadTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingAreaD.of(
-        new VectorI2D(1.0, 1.0),
-        new VectorI2D(9.0, 9.0)), set);
+        Vector2D.of(1.0, 1.0),
+        Vector2D.of(9.0, 9.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -933,7 +930,7 @@ public abstract class QuadTreeDContract
   public final void testOverlappingObjectsX0Y1()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -943,8 +940,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(1.0, 98.0),
-      new VectorI2D(2.0, 99.0));
+      Vector2D.of(1.0, 98.0),
+      Vector2D.of(2.0, 99.0));
     Assert.assertTrue(tree.insert(item, item_area));
 
     {
@@ -964,8 +961,8 @@ public abstract class QuadTreeDContract
     {
       final HashSet<Object> set = new HashSet<>(1);
       tree.overlappedBy(BoundingAreaD.of(
-        new VectorI2D(1.0, 1.0),
-        new VectorI2D(2.0, 2.0)), set);
+        Vector2D.of(1.0, 1.0),
+        Vector2D.of(2.0, 2.0)), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -978,7 +975,7 @@ public abstract class QuadTreeDContract
   public final void testRaycastX0Y0()
   {
     final BoundingAreaD area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -988,26 +985,26 @@ public abstract class QuadTreeDContract
 
     final Integer item0 = Integer.valueOf(0);
     final BoundingAreaD item_area0 = BoundingAreaD.of(
-      new VectorI2D(10.0, 11.0),
-      new VectorI2D(20.0, 21.0));
+      Vector2D.of(10.0, 11.0),
+      Vector2D.of(20.0, 21.0));
     Assert.assertTrue(tree.insert(item0, item_area0));
 
     final Integer item1 = Integer.valueOf(1);
     final BoundingAreaD item_area1 = BoundingAreaD.of(
-      new VectorI2D(15.0, 16.0),
-      new VectorI2D(25.0, 26.0));
+      Vector2D.of(15.0, 16.0),
+      Vector2D.of(25.0, 26.0));
     Assert.assertTrue(tree.insert(item1, item_area1));
 
     final Integer item2 = Integer.valueOf(2);
     final BoundingAreaD item_area2 = BoundingAreaD.of(
-      new VectorI2D(25.0, 26.0),
-      new VectorI2D(35.0, 36.0));
+      Vector2D.of(25.0, 26.0),
+      Vector2D.of(35.0, 36.0));
     Assert.assertTrue(tree.insert(item2, item_area2));
 
     {
-      final VectorI2D origin = new VectorI2D(0.0, 0.0);
-      final VectorI2D direction = new VectorI2D(1.0, 1.0);
-      final RayI2D ray = new RayI2D(origin, direction);
+      final Vector2D origin = Vector2D.of(0.0, 0.0);
+      final Vector2D direction = Vector2D.of(1.0, 1.0);
+      final Ray2D ray = Ray2D.of(origin, direction);
       final SortedSet<QuadTreeRaycastResultD<Object>> items = new TreeSet<>();
       tree.raycast(ray, items);
 
@@ -1028,9 +1025,9 @@ public abstract class QuadTreeDContract
     }
 
     {
-      final VectorI2D origin = new VectorI2D(0.0, 0.0);
-      final VectorI2D direction = new VectorI2D(1.0, 0.0);
-      final RayI2D ray = new RayI2D(origin, direction);
+      final Vector2D origin = Vector2D.of(0.0, 0.0);
+      final Vector2D direction = Vector2D.of(1.0, 0.0);
+      final Ray2D ray = Ray2D.of(origin, direction);
       final SortedSet<QuadTreeRaycastResultD<Object>> items = new TreeSet<>();
       tree.raycast(ray, items);
 
@@ -1046,7 +1043,7 @@ public abstract class QuadTreeDContract
   public final void testTrim()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -1062,24 +1059,24 @@ public abstract class QuadTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingAreaD item_area0 = BoundingAreaD.of(
-      new VectorI2D(2.0, 2.0),
-      new VectorI2D(98.0, 98.0));
+      Vector2D.of(2.0, 2.0),
+      Vector2D.of(98.0, 98.0));
 
     final BoundingAreaD item_area1 = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(2.0, 2.0));
 
     final BoundingAreaD item_area2 = BoundingAreaD.of(
-      new VectorI2D(98.0, 1.0),
-      new VectorI2D(99.0, 2.0));
+      Vector2D.of(98.0, 1.0),
+      Vector2D.of(99.0, 2.0));
 
     final BoundingAreaD item_area3 = BoundingAreaD.of(
-      new VectorI2D(1.0, 98.0),
-      new VectorI2D(2.0, 99.0));
+      Vector2D.of(1.0, 98.0),
+      Vector2D.of(2.0, 99.0));
 
     final BoundingAreaD item_area4 = BoundingAreaD.of(
-      new VectorI2D(98.0, 98.0),
-      new VectorI2D(99.0, 99.0));
+      Vector2D.of(98.0, 98.0),
+      Vector2D.of(99.0, 99.0));
 
     Assert.assertTrue(tree.insert(item0, item_area0));
     Assert.assertTrue(tree.insert(item1, item_area1));
@@ -1131,7 +1128,7 @@ public abstract class QuadTreeDContract
   public final void testTrimOnRemoval()
   {
     final BoundingAreaD area =
-      BoundingAreaD.of(new VectorI2D(0.0, 0.0), new VectorI2D(100.0, 100.0));
+      BoundingAreaD.of(Vector2D.of(0.0, 0.0), Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -1147,24 +1144,24 @@ public abstract class QuadTreeDContract
     final Integer item4 = Integer.valueOf(4);
 
     final BoundingAreaD item_area0 = BoundingAreaD.of(
-      new VectorI2D(2.0, 2.0),
-      new VectorI2D(98.0, 98.0));
+      Vector2D.of(2.0, 2.0),
+      Vector2D.of(98.0, 98.0));
 
     final BoundingAreaD item_area1 = BoundingAreaD.of(
-      new VectorI2D(1.0, 1.0),
-      new VectorI2D(2.0, 2.0));
+      Vector2D.of(1.0, 1.0),
+      Vector2D.of(2.0, 2.0));
 
     final BoundingAreaD item_area2 = BoundingAreaD.of(
-      new VectorI2D(98.0, 1.0),
-      new VectorI2D(99.0, 2.0));
+      Vector2D.of(98.0, 1.0),
+      Vector2D.of(99.0, 2.0));
 
     final BoundingAreaD item_area3 = BoundingAreaD.of(
-      new VectorI2D(1.0, 98.0),
-      new VectorI2D(2.0, 99.0));
+      Vector2D.of(1.0, 98.0),
+      Vector2D.of(2.0, 99.0));
 
     final BoundingAreaD item_area4 = BoundingAreaD.of(
-      new VectorI2D(98.0, 98.0),
-      new VectorI2D(99.0, 99.0));
+      Vector2D.of(98.0, 98.0),
+      Vector2D.of(99.0, 99.0));
 
     Assert.assertTrue(tree.insert(item0, item_area0));
     Assert.assertTrue(tree.insert(item1, item_area1));
@@ -1209,8 +1206,8 @@ public abstract class QuadTreeDContract
   public final void testQuadrantTraversal()
   {
     final BoundingAreaD container = BoundingAreaD.of(
-      new VectorI2D(-1000.0, -1000.0),
-      new VectorI2D(1000.0, 1000.0));
+      Vector2D.of(-1000.0, -1000.0),
+      Vector2D.of(1000.0, 1000.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(container);
@@ -1253,8 +1250,8 @@ public abstract class QuadTreeDContract
   public final void testQuadrantTraversalStop0()
   {
     final BoundingAreaD container = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(container);
@@ -1267,7 +1264,7 @@ public abstract class QuadTreeDContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingAreaD.of(new VectorI2D(10.0, 10.0), new VectorI2D(20.0, 20.0))));
+      BoundingAreaD.of(Vector2D.of(10.0, 10.0), Vector2D.of(20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
@@ -1293,8 +1290,8 @@ public abstract class QuadTreeDContract
   public final void testQuadrantTraversalStop1()
   {
     final BoundingAreaD container = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(container);
@@ -1307,7 +1304,7 @@ public abstract class QuadTreeDContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingAreaD.of(new VectorI2D(10.0, 10.0), new VectorI2D(20.0, 20.0))));
+      BoundingAreaD.of(Vector2D.of(10.0, 10.0), Vector2D.of(20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
@@ -1333,8 +1330,8 @@ public abstract class QuadTreeDContract
   public final void testQuadrantTraversalStop2()
   {
     final BoundingAreaD container = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(container);
@@ -1347,7 +1344,7 @@ public abstract class QuadTreeDContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingAreaD.of(new VectorI2D(10.0, 10.0), new VectorI2D(20.0, 20.0))));
+      BoundingAreaD.of(Vector2D.of(10.0, 10.0), Vector2D.of(20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
@@ -1373,8 +1370,8 @@ public abstract class QuadTreeDContract
   public final void testQuadrantTraversalStop3()
   {
     final BoundingAreaD container = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(container);
@@ -1387,7 +1384,7 @@ public abstract class QuadTreeDContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingAreaD.of(new VectorI2D(10.0, 10.0), new VectorI2D(20.0, 20.0))));
+      BoundingAreaD.of(Vector2D.of(10.0, 10.0), Vector2D.of(20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
@@ -1413,8 +1410,8 @@ public abstract class QuadTreeDContract
   public final void testQuadrantTraversalStop4()
   {
     final BoundingAreaD container = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(100.0, 100.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(100.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(container);
@@ -1427,7 +1424,7 @@ public abstract class QuadTreeDContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingAreaD.of(new VectorI2D(10.0, 10.0), new VectorI2D(20.0, 20.0))));
+      BoundingAreaD.of(Vector2D.of(10.0, 10.0), Vector2D.of(20.0, 20.0))));
     tree.trim();
 
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
@@ -1453,8 +1450,8 @@ public abstract class QuadTreeDContract
   public final void testRaycastSimple()
   {
     final BoundingAreaD container = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(512.0, 512.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(512.0, 512.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(container);
@@ -1468,23 +1465,23 @@ public abstract class QuadTreeDContract
     final Integer item2 = Integer.valueOf(2);
 
     Assert.assertTrue(tree.insert(item0, BoundingAreaD.of(
-      new VectorI2D(32.0, 32.0),
-      new VectorI2D(80.0, 80.0)
+      Vector2D.of(32.0, 32.0),
+      Vector2D.of(80.0, 80.0)
     )));
 
     Assert.assertTrue(tree.insert(item1, BoundingAreaD.of(
-      new VectorI2D(400.0, 32.0),
-      new VectorI2D(400.0 + 32.0, 80.0)
+      Vector2D.of(400.0, 32.0),
+      Vector2D.of(400.0 + 32.0, 80.0)
     )));
 
     Assert.assertTrue(tree.insert(item2, BoundingAreaD.of(
-      new VectorI2D(400.0, 400.0),
-      new VectorI2D(480.0, 480.0)
+      Vector2D.of(400.0, 400.0),
+      Vector2D.of(480.0, 480.0)
     )));
 
-    final RayI2D ray = new RayI2D(
-      VectorI2D.ZERO,
-      VectorI2D.normalize(new VectorI2D(511.0, 511.0)));
+    final Ray2D ray = Ray2D.of(
+      Vectors2D.zero(),
+      Vectors2D.normalize(Vector2D.of(511.0, 511.0)));
 
     final SortedSet<QuadTreeRaycastResultD<Integer>> items = new TreeSet<>();
     tree.raycast(ray, items);
@@ -1496,20 +1493,20 @@ public abstract class QuadTreeDContract
       final QuadTreeRaycastResultD<Integer> rr = iter.next();
       final BoundingAreaD r = rr.area();
       Assert.assertEquals(item0, rr.item());
-      Assert.assertEquals(32.0, r.lower().getXD(), 0.0);
-      Assert.assertEquals(32.0, r.lower().getYD(), 0.0);
-      Assert.assertEquals(80.0, r.upper().getXD(), 0.0);
-      Assert.assertEquals(80.0, r.upper().getYD(), 0.0);
+      Assert.assertEquals(32.0, r.lower().x(), 0.0);
+      Assert.assertEquals(32.0, r.lower().y(), 0.0);
+      Assert.assertEquals(80.0, r.upper().x(), 0.0);
+      Assert.assertEquals(80.0, r.upper().y(), 0.0);
     }
 
     {
       final QuadTreeRaycastResultD<Integer> rr = iter.next();
       final BoundingAreaD r = rr.area();
       Assert.assertEquals(item2, rr.item());
-      Assert.assertEquals(400.0, r.lower().getXD(), 0.0);
-      Assert.assertEquals(400.0, r.lower().getYD(), 0.0);
-      Assert.assertEquals(480.0, r.upper().getXD(), 0.0);
-      Assert.assertEquals(480.0, r.upper().getYD(), 0.0);
+      Assert.assertEquals(400.0, r.lower().x(), 0.0);
+      Assert.assertEquals(400.0, r.lower().y(), 0.0);
+      Assert.assertEquals(480.0, r.upper().x(), 0.0);
+      Assert.assertEquals(480.0, r.upper().y(), 0.0);
     }
 
     Assert.assertFalse(iter.hasNext());
@@ -1524,8 +1521,8 @@ public abstract class QuadTreeDContract
   {
     final BoundingAreaD area =
       BoundingAreaD.of(
-        new VectorI2D(0.0, 0.0),
-        new VectorI2D(1.0, 100.0));
+        Vector2D.of(0.0, 0.0),
+        Vector2D.of(1.0, 100.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -1537,8 +1534,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(1.0, 1.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(1.0, 1.0));
     Assert.assertTrue(tree.insert(item, item_area));
     Assert.assertEquals(1L, (long) QuadTreeDContract.countQuadrants(tree));
   }
@@ -1552,8 +1549,8 @@ public abstract class QuadTreeDContract
   {
     final BoundingAreaD area =
       BoundingAreaD.of(
-        new VectorI2D(0.0, 0.0),
-        new VectorI2D(100.0, 1.0));
+        Vector2D.of(0.0, 0.0),
+        Vector2D.of(100.0, 1.0));
 
     final QuadTreeConfigurationD.Builder cb = QuadTreeConfigurationD.builder();
     cb.setArea(area);
@@ -1565,8 +1562,8 @@ public abstract class QuadTreeDContract
 
     final Integer item = Integer.valueOf(0);
     final BoundingAreaD item_area = BoundingAreaD.of(
-      new VectorI2D(0.0, 0.0),
-      new VectorI2D(1.0, 1.0));
+      Vector2D.of(0.0, 0.0),
+      Vector2D.of(1.0, 1.0));
     Assert.assertTrue(tree.insert(item, item_area));
     Assert.assertEquals(1L, (long) QuadTreeDContract.countQuadrants(tree));
   }

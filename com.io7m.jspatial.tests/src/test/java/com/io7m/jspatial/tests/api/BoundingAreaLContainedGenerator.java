@@ -18,7 +18,7 @@ package com.io7m.jspatial.tests.api;
 
 import com.io7m.jaffirm.core.Postconditions;
 import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jtensors.VectorI2L;
+import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.LongGenerator;
 
@@ -36,10 +36,10 @@ public final class BoundingAreaLContainedGenerator implements Generator<Bounding
   {
     this.lgx =
       new LongGenerator(
-        container.lower().getXL() + 1L, container.upper().getXL() - 1L);
+        container.lower().x() + 1L, container.upper().x() - 1L);
     this.lgy =
       new LongGenerator(
-        container.lower().getYL() + 1L, container.upper().getYL() - 1L);
+        container.lower().y() + 1L, container.upper().y() - 1L);
     this.container = container;
   }
 
@@ -57,10 +57,10 @@ public final class BoundingAreaLContainedGenerator implements Generator<Bounding
       vy.add(this.lgy.next());
       vy.sort((x, y) -> Long.compare(x.longValue(), y.longValue()));
 
-      final VectorI2L lo =
-        new VectorI2L(vx.get(0).longValue(), vy.get(0).longValue());
-      final VectorI2L hi =
-        new VectorI2L(vx.get(1).longValue(), vy.get(1).longValue());
+      final Vector2L lo =
+        Vector2L.of(vx.get(0).longValue(), vy.get(0).longValue());
+      final Vector2L hi =
+        Vector2L.of(vx.get(1).longValue(), vy.get(1).longValue());
 
       final BoundingAreaL area = BoundingAreaL.of(lo, hi);
       Postconditions.checkPostcondition(
