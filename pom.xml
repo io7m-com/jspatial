@@ -109,7 +109,7 @@
       <dependency>
         <groupId>com.io7m.jtensors</groupId>
         <artifactId>com.io7m.jtensors.core</artifactId>
-        <version>[8.1.0-SNAPSHOT, 9.0.0)</version>
+        <version>[8.1.0, 9.0.0)</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jaffirm</groupId>
