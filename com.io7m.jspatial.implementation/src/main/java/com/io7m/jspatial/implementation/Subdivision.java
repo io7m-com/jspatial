@@ -17,7 +17,6 @@
 package com.io7m.jspatial.implementation;
 
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jintegers.CheckedMath;
 import com.io7m.junreachable.UnreachableCodeException;
 
 /**
@@ -56,14 +55,14 @@ public final class Subdivision
     Preconditions.checkPreconditionL(
       (long) out.length, out.length == 4, x -> "Output length must be 4");
 
-    final long size = CheckedMath.subtract(high, low);
+    final long size = Math.subtractExact(high, low);
 
     Preconditions.checkPreconditionL(
       size, size >= 2L, x -> "Size must be >= 2");
 
     out[0] = low;
-    out[1] = CheckedMath.add(low, size >> 1);
-    out[2] = CheckedMath.add(low, size >> 1);
+    out[1] = Math.addExact(low, size >> 1);
+    out[2] = Math.addExact(low, size >> 1);
     out[3] = high;
   }
 

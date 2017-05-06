@@ -18,7 +18,6 @@ package com.io7m.jspatial.implementation;
 
 import com.io7m.jaffirm.core.Invariants;
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jintegers.CheckedMath;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jspatial.api.BoundingAreaL;
@@ -342,8 +341,8 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
       final long min_height =
         Math.max(2L, QuadTreeL.this.config.minimumQuadrantHeight());
 
-      final long half_width = CheckedMath.divide(width, 2L);
-      final long half_height = CheckedMath.divide(height, 2L);
+      final long half_width = width / 2L;
+      final long half_height = height / 2L;
 
       return half_width >= min_width && half_height >= min_height;
     }
@@ -575,28 +574,28 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
         case RESULT_CONTINUE: {
           if (!this.isLeaf()) {
             switch (this.x0y0.iterateQuadrants(
-              context, f, CheckedMath.add(depth, 1L))) {
+              context, f, Math.addExact(depth, 1L))) {
               case RESULT_CONTINUE:
                 break;
               case RESULT_TERMINATE:
                 return TreeVisitResult.RESULT_TERMINATE;
             }
             switch (this.x1y0.iterateQuadrants(
-              context, f, CheckedMath.add(depth, 1L))) {
+              context, f, Math.addExact(depth, 1L))) {
               case RESULT_CONTINUE:
                 break;
               case RESULT_TERMINATE:
                 return TreeVisitResult.RESULT_TERMINATE;
             }
             switch (this.x0y1.iterateQuadrants(
-              context, f, CheckedMath.add(depth, 1L))) {
+              context, f, Math.addExact(depth, 1L))) {
               case RESULT_CONTINUE:
                 break;
               case RESULT_TERMINATE:
                 return TreeVisitResult.RESULT_TERMINATE;
             }
             switch (this.x1y1.iterateQuadrants(
-              context, f, CheckedMath.add(depth, 1L))) {
+              context, f, Math.addExact(depth, 1L))) {
               case RESULT_CONTINUE:
                 break;
               case RESULT_TERMINATE:

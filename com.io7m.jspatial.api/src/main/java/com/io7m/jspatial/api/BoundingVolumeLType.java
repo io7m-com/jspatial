@@ -16,7 +16,6 @@
 
 package com.io7m.jspatial.api;
 
-import com.io7m.jintegers.CheckedMath;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import org.immutables.value.Value;
@@ -110,7 +109,7 @@ public interface BoundingVolumeLType
 
   default long width()
   {
-    return CheckedMath.subtract(this.upper().x(), this.lower().x());
+    return Math.subtractExact(this.upper().x(), this.lower().x());
   }
 
   /**
@@ -119,7 +118,7 @@ public interface BoundingVolumeLType
 
   default long height()
   {
-    return CheckedMath.subtract(this.upper().y(), this.lower().y());
+    return Math.subtractExact(this.upper().y(), this.lower().y());
   }
 
   /**
@@ -128,7 +127,7 @@ public interface BoundingVolumeLType
 
   default long depth()
   {
-    return CheckedMath.subtract(this.upper().z(), this.lower().z());
+    return Math.subtractExact(this.upper().z(), this.lower().z());
   }
 
   /**

@@ -18,7 +18,6 @@ package com.io7m.jspatial.implementation;
 
 import com.io7m.jaffirm.core.Invariants;
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jintegers.CheckedMath;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
 import com.io7m.jspatial.api.BoundingVolumeL;
@@ -386,9 +385,9 @@ public final class OctTreeL<T> implements OctTreeLType<T>
       final long min_depth =
         Math.max(2L, OctTreeL.this.config.minimumOctantDepth());
 
-      final long half_width = CheckedMath.divide(width, 2L);
-      final long half_height = CheckedMath.divide(height, 2L);
-      final long half_depth = CheckedMath.divide(depth, 2L);
+      final long half_width = width / 2L;
+      final long half_height = height / 2L;
+      final long half_depth = depth / 2L;
 
       return half_width >= min_width
         && half_height >= min_height
@@ -715,25 +714,25 @@ public final class OctTreeL<T> implements OctTreeLType<T>
       final OctTreeOctantIterationLType<T, C> f,
       final long depth)
     {
-      switch (this.x0y0z0.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
+      switch (this.x0y0z0.iterateOctants(c, f, Math.addExact(depth, 1L))) {
         case RESULT_CONTINUE:
           break;
         case RESULT_TERMINATE:
           return TreeVisitResult.RESULT_TERMINATE;
       }
-      switch (this.x1y0z0.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
+      switch (this.x1y0z0.iterateOctants(c, f, Math.addExact(depth, 1L))) {
         case RESULT_CONTINUE:
           break;
         case RESULT_TERMINATE:
           return TreeVisitResult.RESULT_TERMINATE;
       }
-      switch (this.x0y1z0.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
+      switch (this.x0y1z0.iterateOctants(c, f, Math.addExact(depth, 1L))) {
         case RESULT_CONTINUE:
           break;
         case RESULT_TERMINATE:
           return TreeVisitResult.RESULT_TERMINATE;
       }
-      switch (this.x1y1z0.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
+      switch (this.x1y1z0.iterateOctants(c, f, Math.addExact(depth, 1L))) {
         case RESULT_CONTINUE:
           break;
         case RESULT_TERMINATE:
@@ -747,25 +746,25 @@ public final class OctTreeL<T> implements OctTreeLType<T>
       final OctTreeOctantIterationLType<T, C> f,
       final long depth)
     {
-      switch (this.x0y0z1.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
+      switch (this.x0y0z1.iterateOctants(c, f, Math.addExact(depth, 1L))) {
         case RESULT_CONTINUE:
           break;
         case RESULT_TERMINATE:
           return TreeVisitResult.RESULT_TERMINATE;
       }
-      switch (this.x1y0z1.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
+      switch (this.x1y0z1.iterateOctants(c, f, Math.addExact(depth, 1L))) {
         case RESULT_CONTINUE:
           break;
         case RESULT_TERMINATE:
           return TreeVisitResult.RESULT_TERMINATE;
       }
-      switch (this.x0y1z1.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
+      switch (this.x0y1z1.iterateOctants(c, f, Math.addExact(depth, 1L))) {
         case RESULT_CONTINUE:
           break;
         case RESULT_TERMINATE:
           return TreeVisitResult.RESULT_TERMINATE;
       }
-      switch (this.x1y1z1.iterateOctants(c, f, CheckedMath.add(depth, 1L))) {
+      switch (this.x1y1z1.iterateOctants(c, f, Math.addExact(depth, 1L))) {
         case RESULT_CONTINUE:
           break;
         case RESULT_TERMINATE:

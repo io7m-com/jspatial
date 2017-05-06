@@ -16,7 +16,6 @@
 
 package com.io7m.jspatial.api;
 
-import com.io7m.jintegers.CheckedMath;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import org.immutables.value.Value;
@@ -95,7 +94,7 @@ public interface BoundingAreaLType
 
   default long width()
   {
-    return CheckedMath.subtract(this.upper().x(), this.lower().x());
+    return Math.subtractExact(this.upper().x(), this.lower().x());
   }
 
   /**
@@ -104,7 +103,7 @@ public interface BoundingAreaLType
 
   default long height()
   {
-    return CheckedMath.subtract(this.upper().y(), this.lower().y());
+    return Math.subtractExact(this.upper().y(), this.lower().y());
   }
 
   /**
