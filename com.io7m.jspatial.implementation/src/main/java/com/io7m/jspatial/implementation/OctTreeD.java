@@ -230,7 +230,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     private @Nullable Octant x0y1z1;
     private @Nullable Octant x1y0z1;
     private @Nullable Octant x1y1z1;
-    private Map<T, BoundingVolumeD> octant_objects_view;
+    private final Map<T, BoundingVolumeD> octant_objects_view;
 
     private Octant(
       final @Nullable Octant in_parent,

@@ -66,7 +66,7 @@ final class QuadTreeCanvas extends JPanel
   private final Set<Integer> query_area_results;
   private final SortedSet<QuadTreeRaycastResultL<Integer>> ray_area_results_l;
   private final SortedSet<QuadTreeRaycastResultD<Integer>> ray_area_results_d;
-  private Function<QuadTreeCommandType, Unit> on_message_cases;
+  private final Function<QuadTreeCommandType, Unit> on_message_cases;
   private QuadTreeLType<Integer> tree_l;
   private QuadTreeDType<Integer> tree_d;
   private QuadTreeKind kind;

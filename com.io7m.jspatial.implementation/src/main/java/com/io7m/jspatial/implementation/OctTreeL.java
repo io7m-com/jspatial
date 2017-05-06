@@ -232,7 +232,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
     private @Nullable Octant x0y1z1;
     private @Nullable Octant x1y0z1;
     private @Nullable Octant x1y1z1;
-    private Map<T, BoundingVolumeL> octant_objects_view;
+    private final Map<T, BoundingVolumeL> octant_objects_view;
 
     private Octant(
       final @Nullable Octant in_parent,

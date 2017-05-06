@@ -228,7 +228,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     private @Nullable Quadrant x0y1;
     private @Nullable Quadrant x1y0;
     private @Nullable Quadrant x1y1;
-    private Map<T, BoundingAreaL> quadrant_objects_view;
+    private final Map<T, BoundingAreaL> quadrant_objects_view;
 
     protected Quadrant(
       final @Nullable Quadrant in_parent,
