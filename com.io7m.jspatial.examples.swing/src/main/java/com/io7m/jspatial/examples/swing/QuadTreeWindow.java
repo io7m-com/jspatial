@@ -55,7 +55,7 @@ final class QuadTreeWindow extends JFrame
 
     this.setPreferredSize(new Dimension(1024, 768));
 
-    this.setJMenuBar(QuadTreeWindow.makeMenu());
+    this.setJMenuBar(makeMenu());
 
     final PublishSubject<LogMessage> messages =
       PublishSubject.create();
@@ -84,7 +84,7 @@ final class QuadTreeWindow extends JFrame
 
     Thread.setDefaultUncaughtExceptionHandler(
       (t, e) -> {
-        QuadTreeWindow.LOG.error("uncaught exception: ", e);
+        LOG.error("uncaught exception: ", e);
         messages.onNext(
           LogMessage.of(LogMessageType.Severity.ERROR, e.getMessage()));
       });
