@@ -20,7 +20,9 @@ import com.io7m.jaffirm.core.Invariants;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumesL;
 import com.io7m.jspatial.api.Ray3D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationL;
@@ -29,7 +31,6 @@ import com.io7m.jspatial.api.octtrees.OctTreeOctantIterationLType;
 import com.io7m.jspatial.api.octtrees.OctTreeOctantLType;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultL;
 import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import com.io7m.jtensors.core.unparameterized.vectors.Vectors3D;
 import com.io7m.junreachable.UnreachableCodeException;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
@@ -52,7 +53,7 @@ import java.util.function.BiFunction;
 
 public final class OctTreeL<T> implements OctTreeLType<T>
 {
-  private final Reference2ReferenceOpenHashMap<T, BoundingVolumeL> objects;
+  private final Reference2ReferenceOpenHashMap<T, VolumeL> objects;
   private final OctTreeConfigurationL config;
   private Octant root;
 
@@ -111,7 +112,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
   }
 
   @Override
-  public BoundingVolumeL bounds()
+  public VolumeL bounds()
   {
     return this.root.volume;
   }
@@ -119,7 +120,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
   @Override
   public boolean insert(
     final T item,
-    final BoundingVolumeL item_bounds)
+    final VolumeL item_bounds)
   {
     NullCheck.notNull(item, "Item");
     NullCheck.notNull(item_bounds, "Bounds");
@@ -156,14 +157,14 @@ public final class OctTreeL<T> implements OctTreeLType<T>
   }
 
   @Override
-  public <U> OctTreeLType<U> map(final BiFunction<T, BoundingVolumeL, U> f)
+  public <U> OctTreeLType<U> map(final BiFunction<T, VolumeL, U> f)
   {
     NullCheck.notNull(f, "Function");
 
     final OctTreeLType<U> qt = new OctTreeL<>(this.config);
-    for (final Map.Entry<T, BoundingVolumeL> es : this.objects.entrySet()) {
+    for (final Map.Entry<T, VolumeL> es : this.objects.entrySet()) {
       final T item = es.getKey();
-      final BoundingVolumeL item_volume = es.getValue();
+      final VolumeL item_volume = es.getValue();
       qt.insert(f.apply(item, item_volume), es.getValue());
     }
     return qt;
@@ -180,7 +181,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
   }
 
   @Override
-  public BoundingVolumeL volumeFor(final T item)
+  public VolumeL volumeFor(final T item)
   {
     NullCheck.notNull(item, "Item");
 
@@ -191,7 +192,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
   @Override
   public void containedBy(
-    final BoundingVolumeL volume,
+    final VolumeL volume,
     final Set<T> items)
   {
     NullCheck.notNull(volume, "Volume");
@@ -201,7 +202,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
   @Override
   public void overlappedBy(
-    final BoundingVolumeL volume,
+    final VolumeL volume,
     final Set<T> items)
   {
     NullCheck.notNull(volume, "Volume");
@@ -221,9 +222,10 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
   protected final class Octant implements OctTreeOctantLType<T>
   {
-    private final BoundingVolumeL volume;
-    private final Reference2ReferenceOpenHashMap<T, BoundingVolumeL> octant_objects;
+    private final VolumeL volume;
+    private final Reference2ReferenceOpenHashMap<T, VolumeL> octant_objects;
     private final @Nullable Octant parent;
+    private final Map<T, VolumeL> octant_objects_view;
     private @Nullable Octant x0y0z0;
     private @Nullable Octant x0y1z0;
     private @Nullable Octant x1y0z0;
@@ -232,11 +234,10 @@ public final class OctTreeL<T> implements OctTreeLType<T>
     private @Nullable Octant x0y1z1;
     private @Nullable Octant x1y0z1;
     private @Nullable Octant x1y1z1;
-    private final Map<T, BoundingVolumeL> octant_objects_view;
 
     private Octant(
       final @Nullable Octant in_parent,
-      final BoundingVolumeL in_volume)
+      final VolumeL in_volume)
     {
       this.parent = in_parent;
       this.volume = NullCheck.notNull(in_volume, "Volume");
@@ -247,20 +248,20 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
     private boolean insert(
       final T item,
-      final BoundingVolumeL item_bounds)
+      final VolumeL item_bounds)
     {
       Preconditions.checkPrecondition(
         item,
         !OctTreeL.this.objects.containsKey(item),
         x -> "Object must not be in tree");
 
-      return this.volume.contains(item_bounds)
+      return VolumesL.contains(this.volume, item_bounds)
         && this.insertStep(item, item_bounds);
     }
 
     private boolean insertStep(
       final T item,
-      final BoundingVolumeL item_bounds)
+      final VolumeL item_bounds)
     {
       /*
        * The object can fit in this node, but perhaps it is possible to fit it
@@ -307,18 +308,18 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
     private boolean insertStepTryZ0(
       final T item,
-      final BoundingVolumeL item_bounds)
+      final VolumeL item_bounds)
     {
-      if (this.x0y0z0.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x0y0z0.volume, item_bounds)) {
         return this.x0y0z0.insertStep(item, item_bounds);
       }
-      if (this.x1y0z0.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x1y0z0.volume, item_bounds)) {
         return this.x1y0z0.insertStep(item, item_bounds);
       }
-      if (this.x0y1z0.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x0y1z0.volume, item_bounds)) {
         return this.x0y1z0.insertStep(item, item_bounds);
       }
-      if (this.x1y1z0.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x1y1z0.volume, item_bounds)) {
         return this.x1y1z0.insertStep(item, item_bounds);
       }
       return false;
@@ -326,18 +327,18 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
     private boolean insertStepTryZ1(
       final T item,
-      final BoundingVolumeL item_bounds)
+      final VolumeL item_bounds)
     {
-      if (this.x0y0z1.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x0y0z1.volume, item_bounds)) {
         return this.x0y0z1.insertStep(item, item_bounds);
       }
-      if (this.x1y0z1.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x1y0z1.volume, item_bounds)) {
         return this.x1y0z1.insertStep(item, item_bounds);
       }
-      if (this.x0y1z1.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x0y1z1.volume, item_bounds)) {
         return this.x0y1z1.insertStep(item, item_bounds);
       }
-      if (this.x1y1z1.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x1y1z1.volume, item_bounds)) {
         return this.x1y1z1.insertStep(item, item_bounds);
       }
       return false;
@@ -345,7 +346,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
     private boolean insertObject(
       final T item,
-      final BoundingVolumeL item_bounds)
+      final VolumeL item_bounds)
     {
       OctTreeL.this.objects.put(item, item_bounds);
       this.octant_objects.put(item, item_bounds);
@@ -356,7 +357,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
     {
       Preconditions.checkPrecondition(this.canSplit(), "Octant can split");
 
-      final Optional<OctantsL> q_opt = OctantsL.subdivide(this.volume);
+      final Optional<VolumeXYZSplitL<VolumeL>> q_opt = OctantsL.subdivide(this.volume);
       Invariants.checkInvariant(q_opt.isPresent(), "Octant must be splittable");
 
       q_opt.ifPresent(q -> {
@@ -374,9 +375,9 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
     private boolean canSplit()
     {
-      final long width = this.volume.width();
-      final long height = this.volume.height();
-      final long depth = this.volume.depth();
+      final long width = this.volume.sizeX();
+      final long height = this.volume.sizeY();
+      final long depth = this.volume.sizeZ();
 
       final long min_width =
         Math.max(2L, OctTreeL.this.config.minimumOctantWidth());
@@ -405,13 +406,13 @@ public final class OctTreeL<T> implements OctTreeLType<T>
         return false;
       }
 
-      final BoundingVolumeL bounds = OctTreeL.this.objects.get(item);
+      final VolumeL bounds = OctTreeL.this.objects.get(item);
       return this.removeStep(item, bounds);
     }
 
     private boolean removeStep(
       final T item,
-      final BoundingVolumeL item_bounds)
+      final VolumeL item_bounds)
     {
       if (this.octant_objects.containsKey(item)) {
         this.octant_objects.remove(item);
@@ -446,18 +447,18 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
     private boolean removeStepTryZ0(
       final T item,
-      final BoundingVolumeL item_bounds)
+      final VolumeL item_bounds)
     {
-      if (this.x0y0z0.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x0y0z0.volume, item_bounds)) {
         return this.x0y0z0.removeStep(item, item_bounds);
       }
-      if (this.x1y0z0.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x1y0z0.volume, item_bounds)) {
         return this.x1y0z0.removeStep(item, item_bounds);
       }
-      if (this.x0y1z0.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x0y1z0.volume, item_bounds)) {
         return this.x0y1z0.removeStep(item, item_bounds);
       }
-      if (this.x1y1z0.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x1y1z0.volume, item_bounds)) {
         return this.x1y1z0.removeStep(item, item_bounds);
       }
       return false;
@@ -465,25 +466,25 @@ public final class OctTreeL<T> implements OctTreeLType<T>
 
     private boolean removeStepTryZ1(
       final T item,
-      final BoundingVolumeL item_bounds)
+      final VolumeL item_bounds)
     {
-      if (this.x0y0z1.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x0y0z1.volume, item_bounds)) {
         return this.x0y0z1.removeStep(item, item_bounds);
       }
-      if (this.x1y0z1.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x1y0z1.volume, item_bounds)) {
         return this.x1y0z1.removeStep(item, item_bounds);
       }
-      if (this.x0y1z1.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x0y1z1.volume, item_bounds)) {
         return this.x0y1z1.removeStep(item, item_bounds);
       }
-      if (this.x1y1z1.volume.contains(item_bounds)) {
+      if (VolumesL.contains(this.x1y1z1.volume, item_bounds)) {
         return this.x1y1z1.removeStep(item, item_bounds);
       }
       return false;
     }
 
     private void volumeContaining(
-      final BoundingVolumeL target_volume,
+      final VolumeL target_volume,
       final Set<T> items)
     {
       /*
@@ -499,7 +500,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
        * everything in this octant and all children of this octant.
        */
 
-      if (target_volume.contains(this.volume)) {
+      if (VolumesL.contains(target_volume, this.volume)) {
         this.collectRecursive(items);
       }
 
@@ -508,17 +509,17 @@ public final class OctTreeL<T> implements OctTreeLType<T>
        * therefore some items may still be contained within {@code target_volume}.
        */
 
-      final ObjectSet<Map.Entry<T, BoundingVolumeL>> entries =
+      final ObjectSet<Map.Entry<T, VolumeL>> entries =
         this.octant_objects.entrySet();
-      final ObjectIterator<Map.Entry<T, BoundingVolumeL>> iter =
+      final ObjectIterator<Map.Entry<T, VolumeL>> iter =
         entries.iterator();
 
       while (iter.hasNext()) {
-        final Map.Entry<T, BoundingVolumeL> entry = iter.next();
+        final Map.Entry<T, VolumeL> entry = iter.next();
         final T item = entry.getKey();
-        final BoundingVolumeL item_volume = entry.getValue();
+        final VolumeL item_volume = entry.getValue();
 
-        if (target_volume.contains(item_volume)) {
+        if (VolumesL.contains(target_volume, item_volume)) {
           items.add(item);
         }
       }
@@ -553,7 +554,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
     }
 
     private void volumeOverlapping(
-      final BoundingVolumeL target_volume,
+      final VolumeL target_volume,
       final Set<T> items)
     {
       /*
@@ -569,18 +570,18 @@ public final class OctTreeL<T> implements OctTreeLType<T>
        * against {@code target_volume}.
        */
 
-      if (target_volume.overlaps(this.volume)) {
-        final ObjectSet<Map.Entry<T, BoundingVolumeL>> entries =
+      if (VolumesL.overlaps(target_volume, this.volume)) {
+        final ObjectSet<Map.Entry<T, VolumeL>> entries =
           this.octant_objects.entrySet();
-        final ObjectIterator<Map.Entry<T, BoundingVolumeL>> iter =
+        final ObjectIterator<Map.Entry<T, VolumeL>> iter =
           entries.iterator();
 
         while (iter.hasNext()) {
-          final Map.Entry<T, BoundingVolumeL> entry = iter.next();
+          final Map.Entry<T, VolumeL> entry = iter.next();
           final T item = entry.getKey();
-          final BoundingVolumeL item_volume = entry.getValue();
+          final VolumeL item_volume = entry.getValue();
 
-          if (target_volume.overlaps(item_volume)) {
+          if (VolumesL.overlaps(target_volume, item_volume)) {
             items.add(item);
           }
         }
@@ -615,14 +616,12 @@ public final class OctTreeL<T> implements OctTreeLType<T>
        * Check whether or not the ray intersects the octant.
        */
 
-      final Vector3L lower = this.volume.lower();
-      final Vector3L upper = this.volume.upper();
-      final double x0 = (double) lower.x();
-      final double x1 = (double) upper.x();
-      final double y0 = (double) lower.y();
-      final double y1 = (double) upper.y();
-      final double z0 = (double) lower.z();
-      final double z1 = (double) upper.z();
+      final double x0 = (double) this.volume.minimumX();
+      final double x1 = (double) this.volume.maximumX();
+      final double y0 = (double) this.volume.minimumY();
+      final double y1 = (double) this.volume.maximumY();
+      final double z0 = (double) this.volume.minimumZ();
+      final double z1 = (double) this.volume.maximumZ();
 
       /*
        * If the ray intersects the octant, check each item in the octant
@@ -630,24 +629,22 @@ public final class OctTreeL<T> implements OctTreeLType<T>
        */
 
       if (ray.intersectsVolume(x0, y0, z0, x1, y1, z1)) {
-        final ObjectSet<Map.Entry<T, BoundingVolumeL>> entries =
+        final ObjectSet<Map.Entry<T, VolumeL>> entries =
           this.octant_objects.entrySet();
-        final ObjectIterator<Map.Entry<T, BoundingVolumeL>> iter =
+        final ObjectIterator<Map.Entry<T, VolumeL>> iter =
           entries.iterator();
 
         while (iter.hasNext()) {
-          final Map.Entry<T, BoundingVolumeL> entry = iter.next();
+          final Map.Entry<T, VolumeL> entry = iter.next();
           final T item = entry.getKey();
-          final BoundingVolumeL item_volume = entry.getValue();
+          final VolumeL item_volume = entry.getValue();
 
-          final Vector3L item_lower = item_volume.lower();
-          final Vector3L item_upper = item_volume.upper();
-          final double item_x0 = (double) item_lower.x();
-          final double item_x1 = (double) item_upper.x();
-          final double item_y0 = (double) item_lower.y();
-          final double item_y1 = (double) item_upper.y();
-          final double item_z0 = (double) item_lower.z();
-          final double item_z1 = (double) item_upper.z();
+          final double item_x0 = (double) item_volume.minimumX();
+          final double item_x1 = (double) item_volume.maximumX();
+          final double item_y0 = (double) item_volume.minimumY();
+          final double item_y1 = (double) item_volume.maximumY();
+          final double item_z0 = (double) item_volume.minimumZ();
+          final double item_z1 = (double) item_volume.maximumZ();
 
           if (ray.intersectsVolume(
             item_x0,
@@ -774,13 +771,13 @@ public final class OctTreeL<T> implements OctTreeLType<T>
     }
 
     @Override
-    public Map<T, BoundingVolumeL> objects()
+    public Map<T, VolumeL> objects()
     {
       return this.octant_objects_view;
     }
 
     @Override
-    public BoundingVolumeL volume()
+    public VolumeL volume()
     {
       return this.volume;
     }

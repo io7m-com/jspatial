@@ -35,6 +35,8 @@
     <io7m.checkstyle.artifact>com.io7m.jspatial.checkstyle</io7m.checkstyle.artifact>
     <io7m.checkstyle.path>/com/io7m/jspatial/checkstyle/checkstyle.xml</io7m.checkstyle.path>
     <io7m.api.previousVersion>3.0.0-SNAPSHOT</io7m.api.previousVersion>
+
+    <com.io7m.jspatial.jregions.version>[1.1.0-SNAPSHOT, 2.0.0)</com.io7m.jspatial.jregions.version>
   </properties>
 
   <licenses>
@@ -130,6 +132,16 @@
         <groupId>com.io7m.jequality</groupId>
         <artifactId>com.io7m.jequality.core</artifactId>
         <version>[1.0.0, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jregions</groupId>
+        <artifactId>com.io7m.jregions.core</artifactId>
+        <version>${com.io7m.jspatial.jregions.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jregions</groupId>
+        <artifactId>com.io7m.jregions.generators</artifactId>
+        <version>${com.io7m.jspatial.jregions.version}</version>
       </dependency>
 
       <dependency>

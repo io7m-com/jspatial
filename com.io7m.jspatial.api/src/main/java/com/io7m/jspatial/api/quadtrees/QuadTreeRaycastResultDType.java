@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
@@ -51,7 +51,7 @@ public interface QuadTreeRaycastResultDType<T>
    */
 
   @Value.Parameter(order = 1)
-  BoundingAreaD area();
+  AreaD area();
 
   /**
    * @return The object

@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.tests.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationLType;
 import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
@@ -39,7 +39,7 @@ public final class QuadTreeConfigurationLTest extends
   }
 
   @Override
-  protected QuadTreeConfigurationLType create(final BoundingAreaL area)
+  protected QuadTreeConfigurationLType create(final AreaL area)
   {
     final QuadTreeConfigurationL.Builder b = QuadTreeConfigurationL.builder();
     b.setArea(area);
@@ -53,9 +53,7 @@ public final class QuadTreeConfigurationLTest extends
   @Test
   public void testBuilder()
   {
-    final Vector2L lower0 = Vector2L.of(0L, 0L);
-    final Vector2L upper0 = Vector2L.of(100L, 100L);
-    final BoundingAreaL area0 = BoundingAreaL.of(lower0, upper0);
+    final AreaL area0 = AreaL.of(0L, 100L, 0L, 100L);
     final QuadTreeConfigurationL.Builder b0 = QuadTreeConfigurationL.builder();
     b0.setArea(area0);
 
@@ -84,7 +82,7 @@ public final class QuadTreeConfigurationLTest extends
 
     final Vector2L lower1 = Vector2L.of(1L, 1L);
     final Vector2L upper1 = Vector2L.of(99L, 99L);
-    final BoundingAreaL area1 = BoundingAreaL.of(lower1, upper1);
+    final AreaL area1 = AreaL.of(1L, 99L, 1L, 99L);
 
     b0.setArea(area1);
     final QuadTreeConfigurationL qc3 = b0.build();
@@ -124,18 +122,14 @@ public final class QuadTreeConfigurationLTest extends
   @Test
   public void testWith()
   {
-    final Vector2L lower0 = Vector2L.of(0L, 0L);
-    final Vector2L upper0 = Vector2L.of(100L, 100L);
-    final BoundingAreaL area0 = BoundingAreaL.of(lower0, upper0);
+    final AreaL area0 = AreaL.of(0L, 100L, 0L, 100L);
     final QuadTreeConfigurationL.Builder b = QuadTreeConfigurationL.builder();
     b.setArea(area0);
 
     final QuadTreeConfigurationL qc0 = b.build();
     final QuadTreeConfigurationL qc0_eq = b.build();
 
-    final Vector2L lower1 = Vector2L.of(1L, 1L);
-    final Vector2L upper1 = Vector2L.of(99L, 99L);
-    final BoundingAreaL area1 = BoundingAreaL.of(lower1, upper1);
+    final AreaL area1 = AreaL.of(1L, 99L, 1L, 99L);
 
     final QuadTreeConfigurationL qc1 = qc0.withArea(area1);
     final QuadTreeConfigurationL qc2 = qc0.withMinimumQuadrantWidth(4L);
@@ -189,17 +183,12 @@ public final class QuadTreeConfigurationLTest extends
   @Test
   public void testOf()
   {
-    final Vector2L lower0 = Vector2L.of(0L, 0L);
-    final Vector2L upper0 = Vector2L.of(100L, 100L);
-    final BoundingAreaL area0 = BoundingAreaL.of(lower0, upper0);
+    final AreaL area0 = AreaL.of(0L, 100L, 0L, 100L);
     final QuadTreeConfigurationL.Builder b = QuadTreeConfigurationL.builder();
     b.setArea(area0);
 
     final QuadTreeConfigurationL qc0 = b.build();
-
-    final Vector2L lower1 = Vector2L.of(1L, 1L);
-    final Vector2L upper1 = Vector2L.of(99L, 99L);
-    final BoundingAreaL area1 = BoundingAreaL.of(lower1, upper1);
+    final AreaL area1 = AreaL.of(1L, 99L, 1L, 99L);
 
     final QuadTreeConfigurationL qc1 =
       QuadTreeConfigurationL.of(area1, 2L, 2L, false);
@@ -254,9 +243,7 @@ public final class QuadTreeConfigurationLTest extends
   @Test
   public void testCopyOf()
   {
-    final Vector2L lower0 = Vector2L.of(0L, 0L);
-    final Vector2L upper0 = Vector2L.of(100L, 100L);
-    final BoundingAreaL area0 = BoundingAreaL.of(lower0, upper0);
+    final AreaL area0 = AreaL.of(0L, 100L, 0L, 100L);
     final QuadTreeConfigurationL.Builder b = QuadTreeConfigurationL.builder();
     b.setArea(area0);
 
@@ -267,7 +254,7 @@ public final class QuadTreeConfigurationLTest extends
       new QuadTreeConfigurationLType()
       {
         @Override
-        public BoundingAreaL area()
+        public AreaL area()
         {
           return qc0.area();
         }

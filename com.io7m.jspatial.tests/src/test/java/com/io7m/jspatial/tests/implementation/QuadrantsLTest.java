@@ -17,12 +17,14 @@
 package com.io7m.jspatial.tests.implementation;
 
 import com.io7m.jfunctional.Unit;
-import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jregions.core.unparameterized.areas.AreaL;
+import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitL;
+import com.io7m.jregions.core.unparameterized.areas.AreasL;
+import com.io7m.jregions.generators.AreaLGenerator;
 import com.io7m.jspatial.implementation.QuadrantsL;
-import com.io7m.jspatial.tests.api.BoundingAreaLGenerator;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
+import net.java.quickcheck.generator.support.LongGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,27 +35,31 @@ public final class QuadrantsLTest
   @Test
   public void testExhaustive()
   {
-    final BoundingAreaLGenerator generator = new BoundingAreaLGenerator();
+    final AreaLGenerator generator =
+      new AreaLGenerator(new LongGenerator(-10000L, 10000L));
 
     QuickCheck.forAllVerbose(
-      generator, new AbstractCharacteristic<BoundingAreaL>()
+      generator, new AbstractCharacteristic<AreaL>()
       {
         @Override
-        protected void doSpecify(final BoundingAreaL area)
+        protected void doSpecify(final AreaL area)
           throws Throwable
         {
-          final Optional<QuadrantsL> q_opt = QuadrantsL.subdivide(area);
+          final Optional<AreaXYSplitL<AreaL>> q_opt = QuadrantsL.subdivide(area);
           Assert.assertTrue(q_opt.isPresent());
 
           q_opt.map(quads -> {
-            Assert.assertTrue(area.contains(quads.x0y0()));
-            Assert.assertTrue(area.contains(quads.x1y0()));
-            Assert.assertTrue(area.contains(quads.x0y1()));
-            Assert.assertTrue(area.contains(quads.x1y1()));
+            Assert.assertTrue(AreasL.contains(area, quads.x0y0()));
+            Assert.assertTrue(AreasL.contains(area, quads.x1y0()));
+            Assert.assertTrue(AreasL.contains(area, quads.x0y1()));
+            Assert.assertTrue(AreasL.contains(area, quads.x1y1()));
 
-            Assert.assertFalse(quads.x0y0().overlaps(quads.x1y0()));
-            Assert.assertFalse(quads.x0y0().overlaps(quads.x0y1()));
-            Assert.assertFalse(quads.x0y0().overlaps(quads.x1y1()));
+            System.out.printf("Check no overlap %s and %s\n", quads.x0y0(), quads.x1y0());
+            Assert.assertFalse(AreasL.overlaps(quads.x0y0(), quads.x1y0()));
+            System.out.printf("Check no overlap %s and %s\n", quads.x0y0(), quads.x0y1());
+            Assert.assertFalse(AreasL.overlaps(quads.x0y0(), quads.x0y1()));
+            System.out.printf("Check no overlap %s and %s\n", quads.x0y0(), quads.x1y1());
+            Assert.assertFalse(AreasL.overlaps(quads.x0y0(), quads.x1y1()));
 
             return Unit.unit();
           });
@@ -62,14 +68,47 @@ public final class QuadrantsLTest
   }
 
   @Test
+  public void testOverlapSpecific()
+  {
+    final Optional<AreaXYSplitL<AreaL>> q_opt =
+      QuadrantsL.subdivide(AreaL.of(0L, 10L, 0L, 10L));
+    Assert.assertTrue(q_opt.isPresent());
+
+    final AreaXYSplitL<AreaL> quads = q_opt.get();
+
+    System.out.printf("x0y0 %s\n", quads.x0y0());
+    System.out.printf("x1y0 %s\n", quads.x1y0());
+    System.out.printf("x0y1 %s\n", quads.x0y1());
+    System.out.printf("x1y1 %s\n", quads.x1y1());
+
+    Assert.assertTrue(AreasL.overlaps(quads.x0y0(), quads.x0y0()));
+    Assert.assertFalse(AreasL.overlaps(quads.x0y0(), quads.x0y1()));
+    Assert.assertFalse(AreasL.overlaps(quads.x0y0(), quads.x1y0()));
+    Assert.assertFalse(AreasL.overlaps(quads.x0y0(), quads.x1y1()));
+
+    Assert.assertFalse(AreasL.overlaps(quads.x1y0(), quads.x0y0()));
+    Assert.assertFalse(AreasL.overlaps(quads.x1y0(), quads.x0y1()));
+    Assert.assertTrue(AreasL.overlaps(quads.x1y0(), quads.x1y0()));
+    Assert.assertFalse(AreasL.overlaps(quads.x1y0(), quads.x1y1()));
+
+    Assert.assertFalse(AreasL.overlaps(quads.x0y1(), quads.x0y0()));
+    Assert.assertTrue(AreasL.overlaps(quads.x0y1(), quads.x0y1()));
+    Assert.assertFalse(AreasL.overlaps(quads.x0y1(), quads.x1y0()));
+    Assert.assertFalse(AreasL.overlaps(quads.x0y1(), quads.x1y1()));
+
+    Assert.assertFalse(AreasL.overlaps(quads.x1y1(), quads.x0y0()));
+    Assert.assertFalse(AreasL.overlaps(quads.x1y1(), quads.x0y1()));
+    Assert.assertFalse(AreasL.overlaps(quads.x1y1(), quads.x1y0()));
+    Assert.assertTrue(AreasL.overlaps(quads.x1y1(), quads.x1y1()));
+  }
+
+  @Test
   public void testTooSmallHeight()
   {
     Assert.assertEquals(
       Optional.empty(),
       QuadrantsL.subdivide(
-        BoundingAreaL.of(
-          Vector2L.of(0L, 0L),
-          Vector2L.of(2L, 1L))));
+        AreaL.of(0L, 2L, 0L, 1L)));
   }
 
   @Test
@@ -78,8 +117,6 @@ public final class QuadrantsLTest
     Assert.assertEquals(
       Optional.empty(),
       QuadrantsL.subdivide(
-        BoundingAreaL.of(
-          Vector2L.of(0L, 0L),
-          Vector2L.of(1L, 2L))));
+        AreaL.of(0L, 1L, 0L, 2L)));
   }
 }

@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
 
 import java.util.Map;
 
@@ -35,11 +35,11 @@ public interface OctTreeOctantDType<T>
    * octant
    */
 
-  Map<T, BoundingVolumeD> objects();
+  Map<T, VolumeD> objects();
 
   /**
    * @return The volume of the octant
    */
 
-  BoundingVolumeD volume();
+  VolumeD volume();
 }

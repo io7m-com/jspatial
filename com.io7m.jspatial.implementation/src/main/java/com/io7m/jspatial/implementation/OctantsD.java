@@ -17,201 +17,39 @@
 package com.io7m.jspatial.implementation;
 
 import com.io7m.jnull.NullCheck;
-import com.io7m.jspatial.api.BoundingVolumeD;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
-import net.jcip.annotations.Immutable;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumesD;
+import com.io7m.junreachable.UnreachableCodeException;
 
 /**
- * Functions to produce new octants from an existing volume.
+ * Functions to divide volumes into octants.
  */
 
-@Immutable
 public final class OctantsD
 {
-  private final BoundingVolumeD x0y0z0;
-  private final BoundingVolumeD x1y0z0;
-  private final BoundingVolumeD x0y1z0;
-  private final BoundingVolumeD x1y1z0;
-  private final BoundingVolumeD x0y0z1;
-  private final BoundingVolumeD x1y0z1;
-  private final BoundingVolumeD x0y1z1;
-  private final BoundingVolumeD x1y1z1;
-
-  private OctantsD(
-    final BoundingVolumeD in_x0y0z0,
-    final BoundingVolumeD in_x1y0z0,
-    final BoundingVolumeD in_x0y1z0,
-    final BoundingVolumeD in_x1y1z0,
-    final BoundingVolumeD in_x0y0z1,
-    final BoundingVolumeD in_x1y0z1,
-    final BoundingVolumeD in_x0y1z1,
-    final BoundingVolumeD in_x1y1z1)
+  private OctantsD()
   {
-    this.x0y0z0 = NullCheck.notNull(in_x0y0z0, "x0y0z0");
-    this.x1y0z0 = NullCheck.notNull(in_x1y0z0, "x1y0z0");
-    this.x0y1z0 = NullCheck.notNull(in_x0y1z0, "x0y1z0");
-    this.x1y1z0 = NullCheck.notNull(in_x1y1z0, "x1y1z0");
-    this.x0y0z1 = NullCheck.notNull(in_x0y0z1, "x0y0z1");
-    this.x1y0z1 = NullCheck.notNull(in_x1y0z1, "x1y0z1");
-    this.x0y1z1 = NullCheck.notNull(in_x0y1z1, "x0y1z1");
-    this.x1y1z1 = NullCheck.notNull(in_x1y1z1, "x1y1z1");
+    throw new UnreachableCodeException();
   }
 
   /**
-   * <p>Subdivide a given volume into octants.</p>
+   * Subdivide a volume into eight octants.
    *
-   * @param volume The volume
+   * @param area The area
    *
-   * @return A set of newly subdivided octants.
+   * @return The resulting area
    */
 
-  public static OctantsD subdivide(
-    final BoundingVolumeD volume)
+  public static VolumeXYZSplitD<VolumeD> subdivide(
+    final VolumeD area)
   {
-    NullCheck.notNull(volume, "Volume");
+    NullCheck.notNull(area, "Volume");
 
-    final Vector3D lower = volume.lower();
-    final Vector3D upper = volume.upper();
-
-    final double[] x_spans = new double[4];
-    Subdivision.subdivide1D(lower.x(), upper.x(), x_spans);
-    final double[] y_spans = new double[4];
-    Subdivision.subdivide1D(lower.y(), upper.y(), y_spans);
-    final double[] z_spans = new double[4];
-    Subdivision.subdivide1D(lower.z(), upper.z(), z_spans);
-
-    final Vector3D x0y0z0_lower =
-      Vector3D.of(x_spans[0], y_spans[0], z_spans[0]);
-    final Vector3D x0y0z0_upper =
-      Vector3D.of(x_spans[1], y_spans[1], z_spans[1]);
-
-    final Vector3D x1y0z0_lower =
-      Vector3D.of(x_spans[2], y_spans[0], z_spans[0]);
-    final Vector3D x1y0z0_upper =
-      Vector3D.of(x_spans[3], y_spans[1], z_spans[1]);
-
-    final Vector3D x0y1z0_lower =
-      Vector3D.of(x_spans[0], y_spans[2], z_spans[0]);
-    final Vector3D x0y1z0_upper =
-      Vector3D.of(x_spans[1], y_spans[3], z_spans[1]);
-
-    final Vector3D x1y1z0_lower =
-      Vector3D.of(x_spans[2], y_spans[2], z_spans[0]);
-    final Vector3D x1y1z0_upper =
-      Vector3D.of(x_spans[3], y_spans[3], z_spans[1]);
-
-    final Vector3D x0y0z1_lower =
-      Vector3D.of(x_spans[0], y_spans[0], z_spans[2]);
-    final Vector3D x0y0z1_upper =
-      Vector3D.of(x_spans[1], y_spans[1], z_spans[3]);
-
-    final Vector3D x1y0z1_lower =
-      Vector3D.of(x_spans[2], y_spans[0], z_spans[2]);
-    final Vector3D x1y0z1_upper =
-      Vector3D.of(x_spans[3], y_spans[1], z_spans[3]);
-
-    final Vector3D x0y1z1_lower =
-      Vector3D.of(x_spans[0], y_spans[2], z_spans[2]);
-    final Vector3D x0y1z1_upper =
-      Vector3D.of(x_spans[1], y_spans[3], z_spans[3]);
-
-    final Vector3D x1y1z1_lower =
-      Vector3D.of(x_spans[2], y_spans[2], z_spans[2]);
-    final Vector3D x1y1z1_upper =
-      Vector3D.of(x_spans[3], y_spans[3], z_spans[3]);
-
-    final BoundingVolumeD x0y0z0 =
-      BoundingVolumeD.of(x0y0z0_lower, x0y0z0_upper);
-    final BoundingVolumeD x1y0z0 =
-      BoundingVolumeD.of(x1y0z0_lower, x1y0z0_upper);
-    final BoundingVolumeD x0y1z0 =
-      BoundingVolumeD.of(x0y1z0_lower, x0y1z0_upper);
-    final BoundingVolumeD x1y1z0 =
-      BoundingVolumeD.of(x1y1z0_lower, x1y1z0_upper);
-
-    final BoundingVolumeD x0y0z1 =
-      BoundingVolumeD.of(x0y0z1_lower, x0y0z1_upper);
-    final BoundingVolumeD x1y0z1 =
-      BoundingVolumeD.of(x1y0z1_lower, x1y0z1_upper);
-    final BoundingVolumeD x0y1z1 =
-      BoundingVolumeD.of(x0y1z1_lower, x0y1z1_upper);
-    final BoundingVolumeD x1y1z1 =
-      BoundingVolumeD.of(x1y1z1_lower, x1y1z1_upper);
-
-    return new OctantsD(
-      x0y0z0, x1y0z0, x0y1z0, x1y1z0,
-      x0y0z1, x1y0z1, x0y1z1, x1y1z1);
-  }
-
-  /**
-   * @return The least X, least Y, least Z octant
-   */
-
-  public BoundingVolumeD x0y0z0()
-  {
-    return this.x0y0z0;
-  }
-
-  /**
-   * @return The most X, least Y, least Z octant
-   */
-
-  public BoundingVolumeD x1y0z0()
-  {
-    return this.x1y0z0;
-  }
-
-  /**
-   * @return The least X, most Y, least Z octant
-   */
-
-  public BoundingVolumeD x0y1z0()
-  {
-    return this.x0y1z0;
-  }
-
-  /**
-   * @return The most X, most Y, least Z octant
-   */
-
-  public BoundingVolumeD x1y1z0()
-  {
-    return this.x1y1z0;
-  }
-
-  /**
-   * @return The least X, least Y, most Z octant
-   */
-
-  public BoundingVolumeD x0y0z1()
-  {
-    return this.x0y0z1;
-  }
-
-  /**
-   * @return The most X, least Y, most Z octant
-   */
-
-  public BoundingVolumeD x1y0z1()
-  {
-    return this.x1y0z1;
-  }
-
-  /**
-   * @return The least X, most Y, most Z octant
-   */
-
-  public BoundingVolumeD x0y1z1()
-  {
-    return this.x0y1z1;
-  }
-
-  /**
-   * @return The most X, most Y, most Z octant
-   */
-
-  public BoundingVolumeD x1y1z1()
-  {
-    return this.x1y1z1;
+    return VolumesD.splitAtXYZ(
+      area,
+      area.sizeX() / 2.0,
+      area.sizeY() / 2.0,
+      area.sizeZ() / 2.0);
   }
 }

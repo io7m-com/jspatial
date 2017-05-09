@@ -16,10 +16,9 @@
 
 package com.io7m.jspatial.tests.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationDType;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,7 +38,7 @@ public final class QuadTreeConfigurationDTest extends
   }
 
   @Override
-  protected QuadTreeConfigurationDType create(final BoundingAreaD area)
+  protected QuadTreeConfigurationDType create(final AreaD area)
   {
     final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
     b.setArea(area);
@@ -53,9 +52,7 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testBuilder()
   {
-    final Vector2D lower0 = Vector2D.of(0.0, 0.0);
-    final Vector2D upper0 = Vector2D.of(100.0, 100.0);
-    final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
     final QuadTreeConfigurationD.Builder b0 = QuadTreeConfigurationD.builder();
     b0.setArea(area0);
 
@@ -82,9 +79,7 @@ public final class QuadTreeConfigurationDTest extends
     Assert.assertNotEquals(qc2, qc0);
     Assert.assertNotEquals(qc2, qc1);
 
-    final Vector2D lower1 = Vector2D.of(1.0, 1.0);
-    final Vector2D upper1 = Vector2D.of(99.0, 99.0);
-    final BoundingAreaD area1 = BoundingAreaD.of(lower1, upper1);
+    final AreaD area1 = AreaD.of(1.0, 99.0, 1.0, 99.0);
 
     b0.setArea(area1);
     final QuadTreeConfigurationD qc3 = b0.build();
@@ -124,18 +119,14 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testWith()
   {
-    final Vector2D lower0 = Vector2D.of(0.0, 0.0);
-    final Vector2D upper0 = Vector2D.of(100.0, 100.0);
-    final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
     final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
     b.setArea(area0);
 
     final QuadTreeConfigurationD qc0 = b.build();
     final QuadTreeConfigurationD qc0_eq = b.build();
 
-    final Vector2D lower1 = Vector2D.of(1.0, 1.0);
-    final Vector2D upper1 = Vector2D.of(99.0, 99.0);
-    final BoundingAreaD area1 = BoundingAreaD.of(lower1, upper1);
+    final AreaD area1 = AreaD.of(1.0, 99.0, 1.0, 99.0);
 
     final QuadTreeConfigurationD qc1 = qc0.withArea(area1);
     final QuadTreeConfigurationD qc2 = qc0.withMinimumQuadrantWidth(4.0);
@@ -189,17 +180,13 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testOf()
   {
-    final Vector2D lower0 = Vector2D.of(0.0, 0.0);
-    final Vector2D upper0 = Vector2D.of(100.0, 100.0);
-    final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
     final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
     b.setArea(area0);
 
     final QuadTreeConfigurationD qc0 = b.build();
 
-    final Vector2D lower1 = Vector2D.of(1.0, 1.0);
-    final Vector2D upper1 = Vector2D.of(99.0, 99.0);
-    final BoundingAreaD area1 = BoundingAreaD.of(lower1, upper1);
+    final AreaD area1 = AreaD.of(1.0, 99.0, 1.0, 99.0);
 
     final QuadTreeConfigurationD qc1 =
       QuadTreeConfigurationD.of(area1, 2.0, 2.0, false);
@@ -254,9 +241,7 @@ public final class QuadTreeConfigurationDTest extends
   @Test
   public void testCopyOf()
   {
-    final Vector2D lower0 = Vector2D.of(0.0, 0.0);
-    final Vector2D upper0 = Vector2D.of(100.0, 100.0);
-    final BoundingAreaD area0 = BoundingAreaD.of(lower0, upper0);
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
     final QuadTreeConfigurationD.Builder b = QuadTreeConfigurationD.builder();
     b.setArea(area0);
 
@@ -267,7 +252,7 @@ public final class QuadTreeConfigurationDTest extends
       new QuadTreeConfigurationDType()
       {
         @Override
-        public BoundingAreaD area()
+        public AreaD area()
         {
           return qc0.area();
         }

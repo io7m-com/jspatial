@@ -16,8 +16,8 @@
 
 package com.io7m.jspatial.examples.swing;
 
-import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
@@ -31,7 +31,7 @@ interface QuadTreeCommandType
   interface CasesType<R>
   {
     R addObject(
-      BoundingAreaL area_l,
+      AreaL area_l,
       Integer item);
 
     R removeObject(
@@ -46,8 +46,8 @@ interface QuadTreeCommandType
       QuadTreeConfigurationD dconfig);
 
     R areaQuery(
-      BoundingAreaL area_l,
-      BoundingAreaD area_d,
+      AreaL area_l,
+      AreaD area_d,
       boolean overlaps);
 
     R rayQuery(

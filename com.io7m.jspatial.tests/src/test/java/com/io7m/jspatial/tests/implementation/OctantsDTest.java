@@ -16,9 +16,11 @@
 
 package com.io7m.jspatial.tests.implementation;
 
-import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumesD;
+import com.io7m.jregions.generators.VolumeDGenerator;
 import com.io7m.jspatial.implementation.OctantsD;
-import com.io7m.jspatial.tests.api.BoundingVolumeDGenerator;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
 import net.java.quickcheck.generator.support.DoubleGenerator;
@@ -33,19 +35,19 @@ public final class OctantsDTest
   @Test
   public void testExhaustive()
   {
-    final BoundingVolumeDGenerator generator =
-      new BoundingVolumeDGenerator(new DoubleGenerator());
+    final VolumeDGenerator generator =
+      new VolumeDGenerator(new DoubleGenerator());
 
     QuickCheck.forAllVerbose(
-      generator, new AbstractCharacteristic<BoundingVolumeD>()
+      generator, new AbstractCharacteristic<VolumeD>()
       {
         @Override
-        protected void doSpecify(final BoundingVolumeD volume)
+        protected void doSpecify(final VolumeD volume)
           throws Throwable
         {
-          final OctantsD octs = OctantsD.subdivide(volume);
+          final VolumeXYZSplitD<VolumeD> octs = OctantsD.subdivide(volume);
 
-          final List<BoundingVolumeD> all = new ArrayList<>(8);
+          final List<VolumeD> all = new ArrayList<>(8);
           all.add(octs.x0y0z0());
           all.add(octs.x1y0z0());
           all.add(octs.x0y1z0());
@@ -56,18 +58,18 @@ public final class OctantsDTest
           all.add(octs.x1y1z1());
 
           for (int i = 0; i < all.size(); ++i) {
-            volume.contains(all.get(i));
-            all.get(i).overlaps(volume);
+            Assert.assertTrue(VolumesD.contains(volume, all.get(i)));
+            Assert.assertTrue(VolumesD.overlaps(all.get(i), volume));
 
             for (int j = 0; j < all.size(); ++j) {
               if (i == j) {
                 continue;
               }
 
-              final BoundingVolumeD a = all.get(i);
-              final BoundingVolumeD b = all.get(j);
-              Assert.assertFalse(a.overlaps(b));
-              Assert.assertFalse(b.overlaps(a));
+              final VolumeD a = all.get(i);
+              final VolumeD b = all.get(j);
+              Assert.assertFalse(VolumesD.overlaps(a, b));
+              Assert.assertFalse(VolumesD.overlaps(b, a));
             }
           }
         }

@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
 
 import java.util.function.BiFunction;
 
@@ -44,7 +44,7 @@ public interface QuadTreeDType<A> extends QuadTreeReadableDType<A>
 
   boolean insert(
     final A item,
-    final BoundingAreaD bounds);
+    final AreaD bounds);
 
   /**
    * <p>Remove the object {@code item} from the quadtree.</p>
@@ -83,5 +83,5 @@ public interface QuadTreeDType<A> extends QuadTreeReadableDType<A>
    */
 
   @Override
-  <B> QuadTreeDType<B> map(BiFunction<A, BoundingAreaD, B> f);
+  <B> QuadTreeDType<B> map(BiFunction<A, AreaD, B> f);
 }

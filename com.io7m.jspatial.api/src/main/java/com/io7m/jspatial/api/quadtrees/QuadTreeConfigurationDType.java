@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
@@ -35,7 +35,7 @@ public interface QuadTreeConfigurationDType
    */
 
   @Value.Parameter
-  BoundingAreaD area();
+  AreaD area();
 
   /**
    * @return The minimum width of quadrants (must be {@code >= 0.0001})

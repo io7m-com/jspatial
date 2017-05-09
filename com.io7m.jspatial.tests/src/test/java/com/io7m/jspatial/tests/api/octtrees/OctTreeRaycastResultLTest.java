@@ -16,10 +16,9 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultL;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultLType;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.PrimitiveGenerators;
 import org.junit.Assert;
@@ -42,7 +41,7 @@ public final class OctTreeRaycastResultLTest extends
   @Override
   protected <T> OctTreeRaycastResultLType<T> create(
     final double distance,
-    final BoundingVolumeL volume,
+    final VolumeL volume,
     final T object)
   {
     return OctTreeRaycastResultL.of(distance, volume, object);
@@ -55,12 +54,10 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testBuilder()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(100L, 100L, 100L));
-    final BoundingVolumeL volume1 = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(99L, 99L, 99L));
+    final VolumeL volume0 = VolumeL.of(
+      0L, 100L, 0L, 100L, 0L, 100L);
+    final VolumeL volume1 = VolumeL.of(
+      1L, 99L, 1L, 99L, 1L, 99L);
 
     final OctTreeRaycastResultL.Builder<Integer> b =
       OctTreeRaycastResultL.builder();
@@ -101,9 +98,8 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing0()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume0 = VolumeL.of(
+      0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeRaycastResultL.Builder<Integer> b =
       OctTreeRaycastResultL.builder();
@@ -121,9 +117,8 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testBuilderMissing1()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume0 = VolumeL.of(
+      0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeRaycastResultL.Builder<Integer> b =
       OctTreeRaycastResultL.builder();
@@ -175,9 +170,8 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testFrom()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume0 = VolumeL.of(
+      0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeRaycastResultL.Builder<Integer> b =
       OctTreeRaycastResultL.builder();
@@ -199,9 +193,8 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testCopyOf()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume0 = VolumeL.of(
+      0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeRaycastResultL.Builder<Integer> b =
       OctTreeRaycastResultL.builder();
@@ -223,7 +216,7 @@ public final class OctTreeRaycastResultLTest extends
         }
 
         @Override
-        public BoundingVolumeL volume()
+        public VolumeL volume()
         {
           return r0.volume();
         }
@@ -246,12 +239,10 @@ public final class OctTreeRaycastResultLTest extends
   @Test
   public void testWith()
   {
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(100L, 100L, 100L));
-    final BoundingVolumeL volume1 = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(99L, 99L, 99L));
+    final VolumeL volume0 = VolumeL.of(
+      0L, 100L, 0L, 100L, 0L, 100L);
+    final VolumeL volume1 = VolumeL.of(
+      1L, 99L, 1L, 99L, 1L, 99L);
 
     final OctTreeRaycastResultL.Builder<Integer> b =
       OctTreeRaycastResultL.builder();

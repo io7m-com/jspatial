@@ -16,9 +16,11 @@
 
 package com.io7m.jspatial.tests.implementation;
 
-import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitD;
+import com.io7m.jregions.core.unparameterized.areas.AreasD;
+import com.io7m.jregions.generators.AreaDGenerator;
 import com.io7m.jspatial.implementation.QuadrantsD;
-import com.io7m.jspatial.tests.api.BoundingAreaDGenerator;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
 import net.java.quickcheck.generator.support.DoubleGenerator;
@@ -30,26 +32,26 @@ public final class QuadrantsDTest
   @Test
   public void testExhaustive()
   {
-    final BoundingAreaDGenerator generator =
-      new BoundingAreaDGenerator(new DoubleGenerator());
+    final AreaDGenerator generator =
+      new AreaDGenerator(new DoubleGenerator());
 
     QuickCheck.forAllVerbose(
-      generator, new AbstractCharacteristic<BoundingAreaD>()
+      generator, new AbstractCharacteristic<AreaD>()
       {
         @Override
-        protected void doSpecify(final BoundingAreaD area)
+        protected void doSpecify(final AreaD area)
           throws Throwable
         {
-          final QuadrantsD quads = QuadrantsD.subdivide(area);
+          final AreaXYSplitD<AreaD> quads = QuadrantsD.subdivide(area);
 
-          Assert.assertTrue(area.contains(quads.x0y0()));
-          Assert.assertTrue(area.contains(quads.x1y0()));
-          Assert.assertTrue(area.contains(quads.x0y1()));
-          Assert.assertTrue(area.contains(quads.x1y1()));
+          Assert.assertTrue(AreasD.contains(area, quads.x0y0()));
+          Assert.assertTrue(AreasD.contains(area, quads.x1y0()));
+          Assert.assertTrue(AreasD.contains(area, quads.x0y1()));
+          Assert.assertTrue(AreasD.contains(area, quads.x1y1()));
 
-          Assert.assertFalse(quads.x0y0().overlaps(quads.x1y0()));
-          Assert.assertFalse(quads.x0y0().overlaps(quads.x0y1()));
-          Assert.assertFalse(quads.x0y0().overlaps(quads.x1y1()));
+          Assert.assertFalse(AreasD.overlaps(quads.x0y0(), quads.x1y0()));
+          Assert.assertFalse(AreasD.overlaps(quads.x0y0(), quads.x0y1()));
+          Assert.assertFalse(AreasD.overlaps(quads.x0y0(), quads.x1y1()));
         }
       });
   }

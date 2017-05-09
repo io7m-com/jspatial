@@ -16,9 +16,9 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
+import com.io7m.jregions.generators.VolumeDGenerator;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationD;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationDType;
-import com.io7m.jspatial.tests.api.BoundingVolumeDGenerator;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.PrimitiveGenerators;
 import net.java.quickcheck.generator.support.DoubleGenerator;
@@ -29,13 +29,13 @@ import net.java.quickcheck.generator.support.DoubleGenerator;
 
 public final class OctTreeConfigurationDGenerator implements Generator<OctTreeConfigurationDType>
 {
-  private final BoundingVolumeDGenerator volume;
+  private final VolumeDGenerator volume;
   private final DoubleGenerator dgen;
   private final Generator<Boolean> bgen;
 
   public OctTreeConfigurationDGenerator()
   {
-    this.volume = new BoundingVolumeDGenerator(new DoubleGenerator());
+    this.volume = new VolumeDGenerator(new DoubleGenerator());
     this.dgen = new DoubleGenerator(0.0, Double.MAX_VALUE);
     this.bgen = PrimitiveGenerators.booleans();
   }

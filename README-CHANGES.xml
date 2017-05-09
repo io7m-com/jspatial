@@ -75,6 +75,11 @@
       <c:type-code-change/>
       <c:summary>Use jtensors [8.1.0, 9.0.0)</c:summary>
     </c:item>
+    <c:item>
+      <c:date>2017-05-09</c:date>
+      <c:type-code-change/>
+      <c:summary>Replace all quadrant and octant handling with jregions.</c:summary>
+    </c:item>
   </c:release>
 
   <c:release c:ticket-system="com.io7m.fossil.jspatial">

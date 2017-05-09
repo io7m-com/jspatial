@@ -16,10 +16,9 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultD;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultDType;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.PrimitiveGenerators;
 import org.junit.Assert;
@@ -42,7 +41,7 @@ public final class OctTreeRaycastResultDTest extends
   @Override
   protected <T> OctTreeRaycastResultDType<T> create(
     final double distance,
-    final BoundingVolumeD volume,
+    final VolumeD volume,
     final T object)
   {
     return OctTreeRaycastResultD.of(distance, volume, object);
@@ -55,12 +54,10 @@ public final class OctTreeRaycastResultDTest extends
   @Test
   public void testBuilder()
   {
-    final BoundingVolumeD volume0 = BoundingVolumeD.of(
-      Vector3D.of(0.0, 0.0, 0.0),
-      Vector3D.of(100.0, 100.0, 100.0));
-    final BoundingVolumeD volume1 = BoundingVolumeD.of(
-      Vector3D.of(1.0, 1.0, 1.0),
-      Vector3D.of(99.0, 99.0, 99.0));
+    final VolumeD volume0 = VolumeD.of(
+      0.0, 100.0, 0.0, 100.0, 0.0, 100.0);
+    final VolumeD volume1 = VolumeD.of(
+      1.0, 99.0, 1.0, 99.0, 1.0, 99.0);
 
     final OctTreeRaycastResultD.Builder<Integer> b =
       OctTreeRaycastResultD.builder();
@@ -101,9 +98,10 @@ public final class OctTreeRaycastResultDTest extends
   @Test
   public void testBuilderMissing0()
   {
-    final BoundingVolumeD volume0 = BoundingVolumeD.of(
-      Vector3D.of(0.0, 0.0, 0.0),
-      Vector3D.of(100.0, 100.0, 100.0));
+    final VolumeD volume0 = VolumeD.of(
+      0.0, 100.0, 0.0, 100.0, 0.0, 100.0);
+    final VolumeD volume1 = VolumeD.of(
+      1.0, 99.0, 1.0, 99.0, 1.0, 99.0);
 
     final OctTreeRaycastResultD.Builder<Integer> b =
       OctTreeRaycastResultD.builder();
@@ -121,9 +119,10 @@ public final class OctTreeRaycastResultDTest extends
   @Test
   public void testBuilderMissing1()
   {
-    final BoundingVolumeD volume0 = BoundingVolumeD.of(
-      Vector3D.of(0.0, 0.0, 0.0),
-      Vector3D.of(100.0, 100.0, 100.0));
+    final VolumeD volume0 = VolumeD.of(
+      0.0, 100.0, 0.0, 100.0, 0.0, 100.0);
+    final VolumeD volume1 = VolumeD.of(
+      1.0, 99.0, 1.0, 99.0, 1.0, 99.0);
 
     final OctTreeRaycastResultD.Builder<Integer> b =
       OctTreeRaycastResultD.builder();
@@ -175,9 +174,10 @@ public final class OctTreeRaycastResultDTest extends
   @Test
   public void testFrom()
   {
-    final BoundingVolumeD volume0 = BoundingVolumeD.of(
-      Vector3D.of(0.0, 0.0, 0.0),
-      Vector3D.of(100.0, 100.0, 100.0));
+    final VolumeD volume0 = VolumeD.of(
+      0.0, 100.0, 0.0, 100.0, 0.0, 100.0);
+    final VolumeD volume1 = VolumeD.of(
+      1.0, 99.0, 1.0, 99.0, 1.0, 99.0);
 
     final OctTreeRaycastResultD.Builder<Integer> b =
       OctTreeRaycastResultD.builder();
@@ -199,9 +199,10 @@ public final class OctTreeRaycastResultDTest extends
   @Test
   public void testCopyOf()
   {
-    final BoundingVolumeD volume0 = BoundingVolumeD.of(
-      Vector3D.of(0.0, 0.0, 0.0),
-      Vector3D.of(100.0, 100.0, 100.0));
+    final VolumeD volume0 = VolumeD.of(
+      0.0, 100.0, 0.0, 100.0, 0.0, 100.0);
+    final VolumeD volume1 = VolumeD.of(
+      1.0, 99.0, 1.0, 99.0, 1.0, 99.0);
 
     final OctTreeRaycastResultD.Builder<Integer> b =
       OctTreeRaycastResultD.builder();
@@ -223,7 +224,7 @@ public final class OctTreeRaycastResultDTest extends
         }
 
         @Override
-        public BoundingVolumeD volume()
+        public VolumeD volume()
         {
           return r0.volume();
         }
@@ -246,12 +247,10 @@ public final class OctTreeRaycastResultDTest extends
   @Test
   public void testWith()
   {
-    final BoundingVolumeD volume0 = BoundingVolumeD.of(
-      Vector3D.of(0.0, 0.0, 0.0),
-      Vector3D.of(100.0, 100.0, 100.0));
-    final BoundingVolumeD volume1 = BoundingVolumeD.of(
-      Vector3D.of(1.0, 1.0, 1.0),
-      Vector3D.of(99.0, 99.0, 99.0));
+    final VolumeD volume0 = VolumeD.of(
+      0.0, 100.0, 0.0, 100.0, 0.0, 100.0);
+    final VolumeD volume1 = VolumeD.of(
+      1.0, 99.0, 1.0, 99.0, 1.0, 99.0);
 
     final OctTreeRaycastResultD.Builder<Integer> b =
       OctTreeRaycastResultD.builder();

@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jregions.core.unparameterized.areas.AreaL;
 
 import java.util.Map;
 
@@ -35,11 +35,11 @@ public interface QuadTreeQuadrantLType<T>
    * quadrant
    */
 
-  Map<T, BoundingAreaL> objects();
+  Map<T, AreaL> objects();
 
   /**
    * @return The area of the quadrant
    */
 
-  BoundingAreaL area();
+  AreaL area();
 }

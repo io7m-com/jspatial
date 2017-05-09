@@ -18,13 +18,12 @@ package com.io7m.jspatial.examples.swing;
 
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import com.io7m.jtensors.core.unparameterized.vectors.Vectors2D;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
@@ -193,13 +192,11 @@ final class QuadTreeControls extends JPanel
     final DesignGridLayout dg = new DesignGridLayout(this);
     this.layout(dg);
 
-    this.config_bl.setArea(BoundingAreaL.of(
-      Vector2L.of(
-        this.tree_x_model.getNumber().longValue(),
-        this.tree_y_model.getNumber().longValue()),
-      Vector2L.of(
-        this.tree_width_model.getNumber().longValue(),
-        this.tree_height_model.getNumber().longValue())));
+    this.config_bl.setArea(AreaL.of(
+      this.tree_x_model.getNumber().longValue(),
+      this.tree_width_model.getNumber().longValue(),
+      this.tree_y_model.getNumber().longValue(),
+      this.tree_height_model.getNumber().longValue()));
 
     this.events = BehaviorSubject.createDefault(
       QuadTreeCommandTypes.createQuadTreeL(this.config_bl.build()));
@@ -331,9 +328,7 @@ final class QuadTreeControls extends JPanel
       final long x1 = x0 + w;
       final long y1 = y0 + h;
 
-      final BoundingAreaL area = BoundingAreaL.of(
-        Vector2L.of(x0, y0),
-        Vector2L.of(x1, y1));
+      final AreaL area = AreaL.of(x0, x1, y0, y1);
 
       final Integer item = Integer.valueOf(this.pool.getAndIncrement());
       this.objects_model.addElement(item);
@@ -357,15 +352,10 @@ final class QuadTreeControls extends JPanel
     final long x1 = x0 + this.area_query_width_model.getNumber().longValue();
     final long y1 = y0 + this.area_query_height_model.getNumber().longValue();
 
-    final BoundingAreaL area_l =
-      BoundingAreaL.of(
-        Vector2L.of(x0, y0),
-        Vector2L.of(x1, y1));
-
-    final BoundingAreaD area_d =
-      BoundingAreaD.of(
-        Vector2D.of((double) x0, (double) y0),
-        Vector2D.of((double) x1, (double) y1));
+    final AreaL area_l =
+      AreaL.of(x0, x1, y0, y1);
+    final AreaD area_d =
+      AreaD.of((double) x0, (double) x1, (double) y0, (double) y1);
 
     this.events.onNext(QuadTreeCommandTypes.areaQuery(
       area_l,
@@ -396,15 +386,10 @@ final class QuadTreeControls extends JPanel
     final long x1 = x0 + this.tree_width_model.getNumber().longValue();
     final long y1 = y0 + this.tree_height_model.getNumber().longValue();
 
-    final BoundingAreaL area_l =
-      BoundingAreaL.of(
-        Vector2L.of(x0, y0),
-        Vector2L.of(x1, y1));
-
-    final BoundingAreaD area_d =
-      BoundingAreaD.of(
-        Vector2D.of((double) x0, (double) y0),
-        Vector2D.of((double) x1, (double) y1));
+    final AreaL area_l =
+      AreaL.of(x0, x1, y0, y1);
+    final AreaD area_d =
+      AreaD.of((double) x0, (double) x1, (double) y0, (double) y1);
 
     this.config_bl.setMinimumQuadrantHeight(
       this.tree_qmin_height_model.getNumber().longValue());
@@ -443,10 +428,7 @@ final class QuadTreeControls extends JPanel
     final long x1 = x0 + this.object_width_model.getNumber().longValue();
     final long y1 = y0 + this.object_height_model.getNumber().longValue();
 
-    final BoundingAreaL area = BoundingAreaL.of(
-      Vector2L.of(x0, y0),
-      Vector2L.of(x1, y1));
-
+    final AreaL area = AreaL.of(x0, x1, y0, y1);
     final Integer item = Integer.valueOf(this.pool.getAndIncrement());
     this.objects_model.addElement(item);
     this.events.onNext(QuadTreeCommandTypes.addObject(area, item));

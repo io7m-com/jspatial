@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jspatial.api.Ray2D;
 
 import java.util.NoSuchElementException;
@@ -38,7 +38,7 @@ public interface QuadTreeReadableDType<A> extends QuadTreeReadableType
    * @return The tree bounds
    */
 
-  BoundingAreaD bounds();
+  AreaD bounds();
 
   /**
    * Determine whether or not the object has already been inserted into the
@@ -60,7 +60,7 @@ public interface QuadTreeReadableDType<A> extends QuadTreeReadableType
    * @return A new tree
    */
 
-  <B> QuadTreeReadableDType<B> map(BiFunction<A, BoundingAreaD, B> f);
+  <B> QuadTreeReadableDType<B> map(BiFunction<A, AreaD, B> f);
 
   /**
    * Iterate over all quadrants within the tree.
@@ -82,7 +82,7 @@ public interface QuadTreeReadableDType<A> extends QuadTreeReadableType
    * @throws NoSuchElementException Iff the item is not present in the tree
    */
 
-  BoundingAreaD areaFor(A item)
+  AreaD areaFor(A item)
     throws NoSuchElementException;
 
   /**
@@ -94,7 +94,7 @@ public interface QuadTreeReadableDType<A> extends QuadTreeReadableType
    */
 
   void containedBy(
-    BoundingAreaD area,
+    AreaD area,
     Set<A> items);
 
   /**
@@ -106,7 +106,7 @@ public interface QuadTreeReadableDType<A> extends QuadTreeReadableType
    */
 
   void overlappedBy(
-    BoundingAreaD area,
+    AreaD area,
     Set<A> items);
 
   /**

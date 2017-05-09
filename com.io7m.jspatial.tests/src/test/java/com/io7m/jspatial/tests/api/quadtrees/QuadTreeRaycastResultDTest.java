@@ -16,10 +16,9 @@
 
 package com.io7m.jspatial.tests.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultDType;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.PrimitiveGenerators;
 import org.junit.Assert;
@@ -42,7 +41,7 @@ public final class QuadTreeRaycastResultDTest extends
   @Override
   protected <T> QuadTreeRaycastResultDType<T> create(
     final double distance,
-    final BoundingAreaD area,
+    final AreaD area,
     final T object)
   {
     return QuadTreeRaycastResultD.of(distance, area, object);
@@ -55,12 +54,8 @@ public final class QuadTreeRaycastResultDTest extends
   @Test
   public void testBuilder()
   {
-    final BoundingAreaD area0 = BoundingAreaD.of(
-      Vector2D.of((double) 0L, (double) 0L),
-      Vector2D.of(100.0, 100.0));
-    final BoundingAreaD area1 = BoundingAreaD.of(
-      Vector2D.of(1.0, 1.0),
-      Vector2D.of(99.0, 99.0));
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
+    final AreaD area1 = AreaD.of(1.0, 99.0, 1.0, 99.0);
 
     final QuadTreeRaycastResultD.Builder<Integer> b =
       QuadTreeRaycastResultD.builder();
@@ -101,9 +96,8 @@ public final class QuadTreeRaycastResultDTest extends
   @Test
   public void testBuilderMissing0()
   {
-    final BoundingAreaD area0 = BoundingAreaD.of(
-      Vector2D.of((double) 0L, (double) 0L),
-      Vector2D.of(100.0, 100.0));
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
+    final AreaD area1 = AreaD.of(1.0, 99.0, 1.0, 99.0);
 
     final QuadTreeRaycastResultD.Builder<Integer> b =
       QuadTreeRaycastResultD.builder();
@@ -121,9 +115,8 @@ public final class QuadTreeRaycastResultDTest extends
   @Test
   public void testBuilderMissing1()
   {
-    final BoundingAreaD area0 = BoundingAreaD.of(
-      Vector2D.of((double) 0L, (double) 0L),
-      Vector2D.of(100.0, 100.0));
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
+    final AreaD area1 = AreaD.of(1.0, 99.0, 1.0, 99.0);
 
     final QuadTreeRaycastResultD.Builder<Integer> b =
       QuadTreeRaycastResultD.builder();
@@ -175,9 +168,8 @@ public final class QuadTreeRaycastResultDTest extends
   @Test
   public void testFrom()
   {
-    final BoundingAreaD area0 = BoundingAreaD.of(
-      Vector2D.of((double) 0L, (double) 0L),
-      Vector2D.of(100.0, 100.0));
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
+    final AreaD area1 = AreaD.of(1.0, 99.0, 1.0, 99.0);
 
     final QuadTreeRaycastResultD.Builder<Integer> b =
       QuadTreeRaycastResultD.builder();
@@ -199,9 +191,8 @@ public final class QuadTreeRaycastResultDTest extends
   @Test
   public void testCopyOf()
   {
-    final BoundingAreaD area0 = BoundingAreaD.of(
-      Vector2D.of((double) 0L, (double) 0L),
-      Vector2D.of(100.0, 100.0));
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
+    final AreaD area1 = AreaD.of(1.0, 99.0, 1.0, 99.0);
 
     final QuadTreeRaycastResultD.Builder<Integer> b =
       QuadTreeRaycastResultD.builder();
@@ -223,7 +214,7 @@ public final class QuadTreeRaycastResultDTest extends
         }
 
         @Override
-        public BoundingAreaD area()
+        public AreaD area()
         {
           return r0.area();
         }
@@ -246,12 +237,8 @@ public final class QuadTreeRaycastResultDTest extends
   @Test
   public void testWith()
   {
-    final BoundingAreaD area0 = BoundingAreaD.of(
-      Vector2D.of(0.0, 0.0),
-      Vector2D.of(100.0, 100.0));
-    final BoundingAreaD area1 = BoundingAreaD.of(
-      Vector2D.of(1.0, 1.0),
-      Vector2D.of(99.0, 99.0));
+    final AreaD area0 = AreaD.of(0.0, 100.0, 0.0, 100.0);
+    final AreaD area1 = AreaD.of(1.0, 99.0, 1.0, 99.0);
 
     final QuadTreeRaycastResultD.Builder<Integer> b =
       QuadTreeRaycastResultD.builder();

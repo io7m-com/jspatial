@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
 import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
@@ -51,7 +51,7 @@ public interface OctTreeRaycastResultLType<T>
    */
 
   @Value.Parameter(order = 1)
-  BoundingVolumeL volume();
+  VolumeL volume();
 
   /**
    * @return The object

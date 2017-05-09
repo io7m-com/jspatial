@@ -16,9 +16,9 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
+import com.io7m.jregions.generators.VolumeDGenerator;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultD;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultDType;
-import com.io7m.jspatial.tests.api.BoundingVolumeDGenerator;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.DoubleGenerator;
 
@@ -26,14 +26,14 @@ public final class OctTreeRaycastResultDGenerator<A>
   implements Generator<OctTreeRaycastResultDType<A>>
 {
   private final DoubleGenerator dgen;
-  private final BoundingVolumeDGenerator agen;
+  private final VolumeDGenerator agen;
   private final Generator<A> ogen;
 
   public OctTreeRaycastResultDGenerator(
     final Generator<A> in_ogen)
   {
     this.dgen = new DoubleGenerator(0.0, Double.MAX_VALUE);
-    this.agen = new BoundingVolumeDGenerator(new DoubleGenerator());
+    this.agen = new VolumeDGenerator(new DoubleGenerator());
     this.ogen = in_ogen;
   }
 

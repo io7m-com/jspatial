@@ -16,24 +16,25 @@
 
 package com.io7m.jspatial.tests.api.quadtrees;
 
+import com.io7m.jregions.generators.AreaLGenerator;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultLType;
-import com.io7m.jspatial.tests.api.BoundingAreaLGenerator;
 import net.java.quickcheck.Generator;
 import net.java.quickcheck.generator.support.DoubleGenerator;
+import net.java.quickcheck.generator.support.LongGenerator;
 
 public final class QuadTreeRaycastResultLGenerator<A>
   implements Generator<QuadTreeRaycastResultLType<A>>
 {
   private final DoubleGenerator dgen;
-  private final BoundingAreaLGenerator agen;
+  private final AreaLGenerator agen;
   private final Generator<A> ogen;
 
   public QuadTreeRaycastResultLGenerator(
     final Generator<A> in_ogen)
   {
     this.dgen = new DoubleGenerator(0.0, Double.MAX_VALUE);
-    this.agen = new BoundingAreaLGenerator();
+    this.agen = new AreaLGenerator(new LongGenerator());
     this.ogen = in_ogen;
   }
 

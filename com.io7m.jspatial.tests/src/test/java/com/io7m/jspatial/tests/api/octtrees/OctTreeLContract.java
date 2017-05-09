@@ -17,15 +17,15 @@
 package com.io7m.jspatial.tests.api.octtrees;
 
 import com.io7m.jfunctional.Unit;
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumesL;
 import com.io7m.jspatial.api.Ray3D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationL;
 import com.io7m.jspatial.api.octtrees.OctTreeLType;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultL;
-import com.io7m.jspatial.tests.api.BoundingVolumeLContainedGenerator;
+import com.io7m.jspatial.tests.api.VolumeLContainedGenerator;
 import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import com.io7m.jtensors.core.unparameterized.vectors.Vectors3D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
@@ -71,10 +71,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testIdentities()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -98,10 +96,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertTooLarge()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -110,9 +106,13 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(-100L, -100L, -100L),
-      Vector3L.of(200L, 200L, 200L));
+    final VolumeL item_volume = VolumeL.of(
+      -100L,
+      200L,
+      -100L,
+      200L,
+      -100L,
+      200L);
     Assert.assertFalse(tree.insert(item, item_volume));
   }
 
@@ -123,10 +123,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertTiny()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -137,9 +135,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -154,10 +150,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertX0Y0Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -166,9 +160,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -188,10 +180,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertX1Y0Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -200,9 +190,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 1L),
-      Vector3L.of(99L, 2L, 2L));
+    final VolumeL item_volume = VolumeL.of(98L, 99L, 1L, 2L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -222,10 +210,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertX0Y1Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -234,9 +220,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 1L),
-      Vector3L.of(2L, 99L, 2L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 98L, 99L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -256,10 +240,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertX1Y1Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -268,9 +250,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 1L),
-      Vector3L.of(99L, 99L, 2L));
+    final VolumeL item_volume = VolumeL.of(98L, 99L, 98L, 99L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -291,10 +271,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertX0Y0Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -303,9 +281,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 98L),
-      Vector3L.of(2L, 2L, 99L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 1L, 2L, 98L, 99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -325,10 +301,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertX1Y0Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -337,9 +311,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 98L),
-      Vector3L.of(99L, 2L, 99L));
+    final VolumeL item_volume = VolumeL.of(98L, 99L, 1L, 2L, 98L, 99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -359,10 +331,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertX0Y1Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -371,9 +341,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 98L),
-      Vector3L.of(2L, 99L, 99L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 98L, 99L, 98L, 99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -393,10 +361,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertX1Y1Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -405,9 +371,13 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 98L),
-      Vector3L.of(99L, 99L, 99L));
+    final VolumeL item_volume = VolumeL.of(
+      98L,
+      99L,
+      98L,
+      99L,
+      98L,
+      99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -428,10 +398,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertCentral()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -440,9 +408,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(2L, 2L, 2L),
-      Vector3L.of(98L, 98L, 98L));
+    final VolumeL item_volume = VolumeL.of(2L, 98L, 2L, 98L, 2L, 98L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     Assert.assertTrue(tree.contains(item));
@@ -462,10 +428,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertRemove()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -479,25 +443,15 @@ public abstract class OctTreeLContract
     final Integer item3 = Integer.valueOf(3);
     final Integer item4 = Integer.valueOf(4);
 
-    final BoundingVolumeL item_volume0 = BoundingVolumeL.of(
-      Vector3L.of(2L, 2L, 2L),
-      Vector3L.of(98L, 98L, 98L));
+    final VolumeL item_volume0 = VolumeL.of(2L, 98L, 2L, 98L, 2L, 98L);
 
-    final BoundingVolumeL item_volume1 = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L));
+    final VolumeL item_volume1 = VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L);
 
-    final BoundingVolumeL item_volume2 = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 1L),
-      Vector3L.of(99L, 2L, 2L));
+    final VolumeL item_volume2 = VolumeL.of(98L, 99L, 1L, 2L, 1L, 2L);
 
-    final BoundingVolumeL item_volume3 = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 1L),
-      Vector3L.of(2L, 99L, 2L));
+    final VolumeL item_volume3 = VolumeL.of(1L, 2L, 98L, 99L, 1L, 2L);
 
-    final BoundingVolumeL item_volume4 = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 1L),
-      Vector3L.of(99L, 99L, 2L));
+    final VolumeL item_volume4 = VolumeL.of(98L, 99L, 98L, 99L, 1L, 2L);
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -541,10 +495,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertClear()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -558,25 +510,15 @@ public abstract class OctTreeLContract
     final Integer item3 = Integer.valueOf(3);
     final Integer item4 = Integer.valueOf(4);
 
-    final BoundingVolumeL item_volume0 = BoundingVolumeL.of(
-      Vector3L.of(2L, 2L, 2L),
-      Vector3L.of(98L, 98L, 98L));
+    final VolumeL item_volume0 = VolumeL.of(2L, 98L, 2L, 98L, 2L, 98L);
 
-    final BoundingVolumeL item_volume1 = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L));
+    final VolumeL item_volume1 = VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L);
 
-    final BoundingVolumeL item_volume2 = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 1L),
-      Vector3L.of(99L, 2L, 2L));
+    final VolumeL item_volume2 = VolumeL.of(98L, 99L, 1L, 2L, 1L, 2L);
 
-    final BoundingVolumeL item_volume3 = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 1L),
-      Vector3L.of(2L, 99L, 2L));
+    final VolumeL item_volume3 = VolumeL.of(1L, 2L, 98L, 99L, 1L, 2L);
 
-    final BoundingVolumeL item_volume4 = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 1L),
-      Vector3L.of(99L, 99L, 2L));
+    final VolumeL item_volume4 = VolumeL.of(98L, 99L, 98L, 99L, 1L, 2L);
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -601,10 +543,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testMapIdentity()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -618,25 +558,15 @@ public abstract class OctTreeLContract
     final Integer item3 = Integer.valueOf(3);
     final Integer item4 = Integer.valueOf(4);
 
-    final BoundingVolumeL item_volume0 = BoundingVolumeL.of(
-      Vector3L.of(2L, 2L, 2L),
-      Vector3L.of(98L, 98L, 98L));
+    final VolumeL item_volume0 = VolumeL.of(2L, 98L, 2L, 98L, 2L, 98L);
 
-    final BoundingVolumeL item_volume1 = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L));
+    final VolumeL item_volume1 = VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L);
 
-    final BoundingVolumeL item_volume2 = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 1L),
-      Vector3L.of(99L, 2L, 2L));
+    final VolumeL item_volume2 = VolumeL.of(98L, 99L, 1L, 2L, 1L, 2L);
 
-    final BoundingVolumeL item_volume3 = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 1L),
-      Vector3L.of(2L, 99L, 2L));
+    final VolumeL item_volume3 = VolumeL.of(1L, 2L, 98L, 99L, 1L, 2L);
 
-    final BoundingVolumeL item_volume4 = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 1L),
-      Vector3L.of(99L, 99L, 2L));
+    final VolumeL item_volume4 = VolumeL.of(98L, 99L, 98L, 99L, 1L, 2L);
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -655,10 +585,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testVolumeFor()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -672,25 +600,15 @@ public abstract class OctTreeLContract
     final Integer item3 = Integer.valueOf(3);
     final Integer item4 = Integer.valueOf(4);
 
-    final BoundingVolumeL item_volume0 = BoundingVolumeL.of(
-      Vector3L.of(2L, 2L, 2L),
-      Vector3L.of(98L, 98L, 98L));
+    final VolumeL item_volume0 = VolumeL.of(2L, 98L, 2L, 98L, 2L, 98L);
 
-    final BoundingVolumeL item_volume1 = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L));
+    final VolumeL item_volume1 = VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L);
 
-    final BoundingVolumeL item_volume2 = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 1L),
-      Vector3L.of(99L, 2L, 2L));
+    final VolumeL item_volume2 = VolumeL.of(98L, 99L, 1L, 2L, 1L, 2L);
 
-    final BoundingVolumeL item_volume3 = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 1L),
-      Vector3L.of(2L, 99L, 2L));
+    final VolumeL item_volume3 = VolumeL.of(1L, 2L, 98L, 99L, 1L, 2L);
 
-    final BoundingVolumeL item_volume4 = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 1L),
-      Vector3L.of(99L, 99L, 2L));
+    final VolumeL item_volume4 = VolumeL.of(98L, 99L, 98L, 99L, 1L, 2L);
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -712,10 +630,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testVolumeForNonexistent()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -736,10 +652,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testContainedObjectsX0Y0Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -748,9 +662,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -769,9 +681,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.containedBy(BoundingVolumeL.of(
-        Vector3L.of(97L, 97L, 97L),
-        Vector3L.of(98L, 98L, 98L)), set);
+      tree.containedBy(VolumeL.of(97L, 98L, 97L, 98L, 97L, 98L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -783,10 +693,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testContainedObjectsX1Y0Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -795,9 +703,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 1L),
-      Vector3L.of(99L, 2L, 2L));
+    final VolumeL item_volume = VolumeL.of(98L, 99L, 1L, 2L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -816,9 +722,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.containedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.containedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -830,10 +734,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testContainedObjectsX0Y1Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -842,9 +744,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 1L),
-      Vector3L.of(2L, 99L, 2L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 98L, 99L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -863,9 +763,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.containedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.containedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -877,10 +775,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testContainedObjectsX1Y1Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -889,9 +785,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 1L),
-      Vector3L.of(99L, 99L, 2L));
+    final VolumeL item_volume = VolumeL.of(98L, 99L, 98L, 99L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -910,9 +804,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.containedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.containedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -925,10 +817,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testContainedObjectsX0Y0Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -937,9 +827,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 98L),
-      Vector3L.of(2L, 2L, 99L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 1L, 2L, 98L, 99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -958,9 +846,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.containedBy(BoundingVolumeL.of(
-        Vector3L.of(97L, 97L, 97L),
-        Vector3L.of(98L, 98L, 98L)), set);
+      tree.containedBy(VolumeL.of(97L, 98L, 97L, 98L, 97L, 98L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -972,10 +858,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testContainedObjectsX1Y0Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -984,9 +868,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 98L),
-      Vector3L.of(99L, 2L, 99L));
+    final VolumeL item_volume = VolumeL.of(98L, 99L, 1L, 2L, 98L, 99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1005,9 +887,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.containedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.containedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1019,10 +899,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testContainedObjectsX0Y1Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1031,9 +909,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 98L),
-      Vector3L.of(2L, 99L, 99L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 98L, 99L, 98L, 99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1052,9 +928,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.containedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.containedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1066,10 +940,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testContainedObjectsX1Y1Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1078,9 +950,13 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 98L),
-      Vector3L.of(99L, 99L, 99L));
+    final VolumeL item_volume = VolumeL.of(
+      98L,
+      99L,
+      98L,
+      99L,
+      98L,
+      99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1099,9 +975,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.containedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.containedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1114,10 +988,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOverlappingObjectsX0Y0Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1126,9 +998,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1147,9 +1017,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.overlappedBy(BoundingVolumeL.of(
-        Vector3L.of(97L, 97L, 1L),
-        Vector3L.of(98L, 98L, 2L)), set);
+      tree.overlappedBy(VolumeL.of(97L, 98L, 97L, 98L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1161,10 +1029,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOverlappingObjectsX1Y0Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1173,9 +1039,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 1L),
-      Vector3L.of(99L, 2L, 2L));
+    final VolumeL item_volume = VolumeL.of(98L, 99L, 1L, 2L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1194,9 +1058,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.overlappedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.overlappedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1208,10 +1070,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOverlappingObjectsX1Y1Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1220,9 +1080,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 1L),
-      Vector3L.of(99L, 99L, 2L));
+    final VolumeL item_volume = VolumeL.of(98L, 99L, 98L, 99L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1241,9 +1099,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.overlappedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.overlappedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1255,10 +1111,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOverlappingObjectsX0Y1Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1267,9 +1121,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 1L),
-      Vector3L.of(2L, 99L, 2L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 98L, 99L, 1L, 2L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1288,9 +1140,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.overlappedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.overlappedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1303,10 +1153,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOverlappingObjectsX0Y0Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1315,9 +1163,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 98L),
-      Vector3L.of(2L, 2L, 99L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 1L, 2L, 98L, 99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1336,9 +1182,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.overlappedBy(BoundingVolumeL.of(
-        Vector3L.of(97L, 97L, 1L),
-        Vector3L.of(98L, 98L, 2L)), set);
+      tree.overlappedBy(VolumeL.of(97L, 98L, 97L, 98L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1350,10 +1194,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOverlappingObjectsX1Y0Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1362,9 +1204,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 98L),
-      Vector3L.of(99L, 2L, 99L));
+    final VolumeL item_volume = VolumeL.of(98L, 99L, 1L, 2L, 98L, 99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1383,9 +1223,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.overlappedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.overlappedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1397,10 +1235,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOverlappingObjectsX1Y1Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1409,9 +1245,13 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 98L),
-      Vector3L.of(99L, 99L, 99L));
+    final VolumeL item_volume = VolumeL.of(
+      98L,
+      99L,
+      98L,
+      99L,
+      98L,
+      99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1430,9 +1270,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.overlappedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.overlappedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1444,10 +1282,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOverlappingObjectsX0Y1Z1()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1456,9 +1292,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 98L),
-      Vector3L.of(2L, 99L, 99L));
+    final VolumeL item_volume = VolumeL.of(1L, 2L, 98L, 99L, 98L, 99L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1477,9 +1311,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.overlappedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(2L, 2L, 2L)), set);
+      tree.overlappedBy(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1492,10 +1324,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOverlappingNot()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1504,9 +1334,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(10L, 10L, 1L),
-      Vector3L.of(90L, 90L, 90L));
+    final VolumeL item_volume = VolumeL.of(10L, 90L, 10L, 90L, 1L, 90L);
     Assert.assertTrue(tree.insert(item, item_volume));
 
     {
@@ -1525,9 +1353,7 @@ public abstract class OctTreeLContract
 
     {
       final HashSet<Object> set = new HashSet<>(1);
-      tree.overlappedBy(BoundingVolumeL.of(
-        Vector3L.of(1L, 1L, 1L),
-        Vector3L.of(9L, 9L, 9L)), set);
+      tree.overlappedBy(VolumeL.of(1L, 9L, 1L, 9L, 1L, 9L), set);
       Assert.assertEquals(0L, (long) set.size());
     }
   }
@@ -1540,10 +1366,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testRaycastX0Y0Z0()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1552,21 +1376,33 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item0 = Integer.valueOf(0);
-    final BoundingVolumeL item_volume0 = BoundingVolumeL.of(
-      Vector3L.of(10L, 11L, 0L),
-      Vector3L.of(20L, 21L, 99L));
+    final VolumeL item_volume0 = VolumeL.of(
+      10L,
+      20L,
+      11L,
+      21L,
+      0L,
+      99L);
     Assert.assertTrue(tree.insert(item0, item_volume0));
 
     final Integer item1 = Integer.valueOf(1);
-    final BoundingVolumeL item_volume1 = BoundingVolumeL.of(
-      Vector3L.of(15L, 16L, 0L),
-      Vector3L.of(25L, 26L, 99L));
+    final VolumeL item_volume1 = VolumeL.of(
+      15L,
+      25L,
+      16L,
+      26L,
+      0L,
+      99L);
     Assert.assertTrue(tree.insert(item1, item_volume1));
 
     final Integer item2 = Integer.valueOf(2);
-    final BoundingVolumeL item_volume2 = BoundingVolumeL.of(
-      Vector3L.of(25L, 26L, 0L),
-      Vector3L.of(35L, 36L, 99L));
+    final VolumeL item_volume2 = VolumeL.of(
+      25L,
+      35L,
+      26L,
+      36L,
+      0L,
+      99L);
     Assert.assertTrue(tree.insert(item2, item_volume2));
 
     {
@@ -1610,10 +1446,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testTrim()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1627,37 +1461,19 @@ public abstract class OctTreeLContract
       items.add(Integer.valueOf(index));
     }
 
-    final List<BoundingVolumeL> volumes = new ArrayList<>(9);
+    final List<VolumeL> volumes = new ArrayList<>(9);
 
-    volumes.add(BoundingVolumeL.of(
-      Vector3L.of(2L, 2L, 2L),
-      Vector3L.of(98L, 98L, 98L)));
+    volumes.add(VolumeL.of(2L, 98L, 2L, 98L, 2L, 98L));
 
-    volumes.add(BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L)));
-    volumes.add(BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 1L),
-      Vector3L.of(99L, 2L, 2L)));
-    volumes.add(BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 1L),
-      Vector3L.of(2L, 99L, 2L)));
-    volumes.add(BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 1L),
-      Vector3L.of(99L, 99L, 2L)));
+    volumes.add(VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L));
+    volumes.add(VolumeL.of(98L, 99L, 1L, 2L, 1L, 2L));
+    volumes.add(VolumeL.of(1L, 2L, 98L, 99L, 1L, 2L));
+    volumes.add(VolumeL.of(98L, 99L, 98L, 99L, 1L, 2L));
 
-    volumes.add(BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 98L),
-      Vector3L.of(2L, 2L, 99L)));
-    volumes.add(BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 98L),
-      Vector3L.of(99L, 2L, 99L)));
-    volumes.add(BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 98L),
-      Vector3L.of(2L, 99L, 99L)));
-    volumes.add(BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 98L),
-      Vector3L.of(99L, 99L, 99L)));
+    volumes.add(VolumeL.of(1L, 2L, 1L, 2L, 98L, 99L));
+    volumes.add(VolumeL.of(98L, 99L, 1L, 2L, 98L, 99L));
+    volumes.add(VolumeL.of(1L, 2L, 98L, 99L, 98L, 99L));
+    volumes.add(VolumeL.of(98L, 99L, 98L, 99L, 98L, 99L));
 
     for (int index = 0; index < 9; ++index) {
       Assert.assertTrue(tree.insert(items.get(index), volumes.get(index)));
@@ -1692,10 +1508,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testTrimOnRemoval()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -1710,25 +1524,11 @@ public abstract class OctTreeLContract
     final Integer item3 = Integer.valueOf(3);
     final Integer item4 = Integer.valueOf(4);
 
-    final BoundingVolumeL item_volume0 = BoundingVolumeL.of(
-      Vector3L.of(2L, 2L, 2L),
-      Vector3L.of(98L, 98L, 98L));
-
-    final BoundingVolumeL item_volume1 = BoundingVolumeL.of(
-      Vector3L.of(1L, 1L, 1L),
-      Vector3L.of(2L, 2L, 2L));
-
-    final BoundingVolumeL item_volume2 = BoundingVolumeL.of(
-      Vector3L.of(98L, 1L, 1L),
-      Vector3L.of(99L, 2L, 2L));
-
-    final BoundingVolumeL item_volume3 = BoundingVolumeL.of(
-      Vector3L.of(1L, 98L, 1L),
-      Vector3L.of(2L, 99L, 2L));
-
-    final BoundingVolumeL item_volume4 = BoundingVolumeL.of(
-      Vector3L.of(98L, 98L, 1L),
-      Vector3L.of(99L, 99L, 2L));
+    final VolumeL item_volume0 = VolumeL.of(2L, 98L, 2L, 98L, 2L, 98L);
+    final VolumeL item_volume1 = VolumeL.of(1L, 2L, 1L, 2L, 1L, 2L);
+    final VolumeL item_volume2 = VolumeL.of(98L, 99L, 1L, 2L, 1L, 2L);
+    final VolumeL item_volume3 = VolumeL.of(1L, 2L, 98L, 99L, 1L, 2L);
+    final VolumeL item_volume4 = VolumeL.of(98L, 99L, 98L, 99L, 1L, 2L);
 
     Assert.assertTrue(tree.insert(item0, item_volume0));
     Assert.assertTrue(tree.insert(item1, item_volume1));
@@ -1772,9 +1572,13 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversal()
   {
-    final BoundingVolumeL container = BoundingVolumeL.of(
-      Vector3L.of(-1000L, -1000L, -1000L),
-      Vector3L.of(1000L, 1000L, 1000L));
+    final VolumeL container = VolumeL.of(
+      -1000L,
+      1000L,
+      -1000L,
+      1000L,
+      -1000L,
+      1000L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -1783,23 +1587,23 @@ public abstract class OctTreeLContract
 
     final OctTreeLType<Integer> tree = this.create(c);
 
-    final Generator<BoundingVolumeL> gen =
-      new BoundingVolumeLContainedGenerator(container);
+    final Generator<VolumeL> gen =
+      new VolumeLContainedGenerator(container);
 
-    final Map<Integer, BoundingVolumeL> inserted = new HashMap<>(500);
+    final Map<Integer, VolumeL> inserted = new HashMap<>(500);
     for (int index = 0; index < 500; ++index) {
       final Integer b_index = Integer.valueOf(index);
-      final BoundingVolumeL volume = gen.next();
+      final VolumeL volume = gen.next();
       Assert.assertTrue(tree.insert(b_index, volume));
       inserted.put(b_index, volume);
     }
 
-    final Map<Integer, BoundingVolumeL> found = new HashMap<>(500);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      Assert.assertTrue(container.contains(quadrant.volume()));
+    final Map<Integer, VolumeL> found = new HashMap<>(500);
+    tree.iterateOctants(Unit.unit(), (context, octant, depth) -> {
+      Assert.assertTrue(VolumesL.contains(container, octant.volume()));
 
-      final Map<Integer, BoundingVolumeL> objects = quadrant.objects();
-      for (final Map.Entry<Integer, BoundingVolumeL> e : objects.entrySet()) {
+      final Map<Integer, VolumeL> objects = octant.objects();
+      for (final Map.Entry<Integer, VolumeL> e : objects.entrySet()) {
         Assert.assertFalse(found.containsKey(e.getKey()));
         found.put(e.getKey(), e.getValue());
       }
@@ -1816,10 +1620,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversalStop0()
   {
-    final BoundingVolumeL container =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL container =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -1832,9 +1634,7 @@ public abstract class OctTreeLContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingVolumeL.of(
-        Vector3L.of(10L, 10L, 10L),
-        Vector3L.of(20L, 20L, 20L))));
+      VolumeL.of(10L, 20L, 10L, 20L, 10L, 20L)));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeLContract.countOctants(tree));
@@ -1859,10 +1659,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversalStop1()
   {
-    final BoundingVolumeL container =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL container =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -1875,9 +1673,7 @@ public abstract class OctTreeLContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingVolumeL.of(
-        Vector3L.of(10L, 10L, 10L),
-        Vector3L.of(20L, 20L, 20L))));
+      VolumeL.of(10L, 20L, 10L, 20L, 10L, 20L)));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeLContract.countOctants(tree));
@@ -1902,10 +1698,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversalStop2()
   {
-    final BoundingVolumeL container =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL container =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -1918,9 +1712,7 @@ public abstract class OctTreeLContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingVolumeL.of(
-        Vector3L.of(10L, 10L, 10L),
-        Vector3L.of(20L, 20L, 20L))));
+      VolumeL.of(10L, 20L, 10L, 20L, 10L, 20L)));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeLContract.countOctants(tree));
@@ -1945,10 +1737,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversalStop3()
   {
-    final BoundingVolumeL container =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL container =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -1961,9 +1751,7 @@ public abstract class OctTreeLContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingVolumeL.of(
-        Vector3L.of(10L, 10L, 10L),
-        Vector3L.of(20L, 20L, 20L))));
+      VolumeL.of(10L, 20L, 10L, 20L, 10L, 20L)));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeLContract.countOctants(tree));
@@ -1988,10 +1776,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversalStop4()
   {
-    final BoundingVolumeL container =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL container =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -2004,9 +1790,7 @@ public abstract class OctTreeLContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingVolumeL.of(
-        Vector3L.of(10L, 10L, 10L),
-        Vector3L.of(20L, 20L, 20L))));
+      VolumeL.of(10L, 20L, 10L, 20L, 10L, 20L)));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeLContract.countOctants(tree));
@@ -2031,10 +1815,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversalStop5()
   {
-    final BoundingVolumeL container =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL container =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -2047,9 +1829,7 @@ public abstract class OctTreeLContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingVolumeL.of(
-        Vector3L.of(10L, 10L, 10L),
-        Vector3L.of(20L, 20L, 20L))));
+      VolumeL.of(10L, 20L, 10L, 20L, 10L, 20L)));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeLContract.countOctants(tree));
@@ -2074,10 +1854,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversalStop6()
   {
-    final BoundingVolumeL container =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL container =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -2090,9 +1868,7 @@ public abstract class OctTreeLContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingVolumeL.of(
-        Vector3L.of(10L, 10L, 10L),
-        Vector3L.of(20L, 20L, 20L))));
+      VolumeL.of(10L, 20L, 10L, 20L, 10L, 20L)));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeLContract.countOctants(tree));
@@ -2117,10 +1893,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversalStop7()
   {
-    final BoundingVolumeL container =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL container =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -2133,9 +1907,7 @@ public abstract class OctTreeLContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingVolumeL.of(
-        Vector3L.of(10L, 10L, 10L),
-        Vector3L.of(20L, 20L, 20L))));
+      VolumeL.of(10L, 20L, 10L, 20L, 10L, 20L)));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeLContract.countOctants(tree));
@@ -2160,10 +1932,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testOctantTraversalStop8()
   {
-    final BoundingVolumeL container =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 100L));
+    final VolumeL container =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -2176,9 +1946,7 @@ public abstract class OctTreeLContract
 
     Assert.assertTrue(tree.insert(
       Integer.valueOf(0),
-      BoundingVolumeL.of(
-        Vector3L.of(10L, 10L, 10L),
-        Vector3L.of(20L, 20L, 20L))));
+      VolumeL.of(10L, 20L, 10L, 20L, 10L, 20L)));
     tree.trim();
 
     Assert.assertEquals(9L, (long) OctTreeLContract.countOctants(tree));
@@ -2203,9 +1971,7 @@ public abstract class OctTreeLContract
   @Test
   public final void testRaycastSimple()
   {
-    final BoundingVolumeL container = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(512L, 512L, 512L));
+    final VolumeL container = VolumeL.of(0L, 512L, 0L, 512L, 0L, 512L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(container);
@@ -2218,20 +1984,23 @@ public abstract class OctTreeLContract
     final Integer item1 = Integer.valueOf(1);
     final Integer item2 = Integer.valueOf(2);
 
-    Assert.assertTrue(tree.insert(item0, BoundingVolumeL.of(
-      Vector3L.of(32L, 32L, 0L),
-      Vector3L.of(80L, 80L, 511L)
-    )));
+    Assert.assertTrue(tree.insert(
+      item0,
+      VolumeL.of(32L, 80L, 32L, 80L, 0L, 511L)));
 
-    Assert.assertTrue(tree.insert(item1, BoundingVolumeL.of(
-      Vector3L.of(400L, 32L, 0L),
-      Vector3L.of(400L + 32L, 80L, 511L)
-    )));
+    Assert.assertTrue(tree.insert(
+      item1,
+      VolumeL.of(
+        400L,
+        400L + 32L,
+        32L,
+        80L,
+        0L,
+        511L)));
 
-    Assert.assertTrue(tree.insert(item2, BoundingVolumeL.of(
-      Vector3L.of(400L, 400L, 0L),
-      Vector3L.of(480L, 480L, 511L)
-    )));
+    Assert.assertTrue(tree.insert(
+      item2,
+      VolumeL.of(400L, 480L, 400L, 480L, 0L, 511L)));
 
     final Ray3D ray = Ray3D.of(
       Vector3D.of(0.0, 0.0, 1.0),
@@ -2245,22 +2014,22 @@ public abstract class OctTreeLContract
 
     {
       final OctTreeRaycastResultL<Integer> rr = iter.next();
-      final BoundingVolumeL r = rr.volume();
+      final VolumeL r = rr.volume();
       Assert.assertEquals(item0, rr.item());
-      Assert.assertEquals(32L, r.lower().x());
-      Assert.assertEquals(32L, r.lower().y());
-      Assert.assertEquals(80L, r.upper().x());
-      Assert.assertEquals(80L, r.upper().y());
+      Assert.assertEquals(32L, r.minimumX());
+      Assert.assertEquals(32L, r.minimumY());
+      Assert.assertEquals(80L, r.maximumX());
+      Assert.assertEquals(80L, r.maximumY());
     }
 
     {
       final OctTreeRaycastResultL<Integer> rr = iter.next();
-      final BoundingVolumeL r = rr.volume();
+      final VolumeL r = rr.volume();
       Assert.assertEquals(item2, rr.item());
-      Assert.assertEquals(400L, r.lower().x());
-      Assert.assertEquals(400L, r.lower().y());
-      Assert.assertEquals(480L, r.upper().x());
-      Assert.assertEquals(480L, r.upper().y());
+      Assert.assertEquals(400L, r.minimumX());
+      Assert.assertEquals(400L, r.minimumY());
+      Assert.assertEquals(480L, r.maximumX());
+      Assert.assertEquals(480L, r.maximumY());
     }
 
     Assert.assertFalse(iter.hasNext());
@@ -2273,10 +2042,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertCannotSplitWidth()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(1L, 100L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 1L, 0L, 100L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -2285,9 +2052,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(1L, 1L, 1L));
+    final VolumeL item_volume = VolumeL.of(0L, 1L, 0L, 1L, 0L, 1L);
     Assert.assertTrue(tree.insert(item, item_volume));
     Assert.assertEquals(1L, (long) OctTreeLContract.countOctants(tree));
   }
@@ -2299,10 +2064,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertCannotSplitHeight()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 1L, 100L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 1L, 0L, 100L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -2311,9 +2074,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(1L, 1L, 1L));
+    final VolumeL item_volume = VolumeL.of(0L, 1L, 0L, 1L, 0L, 1L);
     Assert.assertTrue(tree.insert(item, item_volume));
     Assert.assertEquals(1L, (long) OctTreeLContract.countOctants(tree));
   }
@@ -2325,10 +2086,8 @@ public abstract class OctTreeLContract
   @Test
   public final void testInsertCannotSplitDepth()
   {
-    final BoundingVolumeL volume =
-      BoundingVolumeL.of(
-        Vector3L.of(0L, 0L, 0L),
-        Vector3L.of(100L, 100L, 1L));
+    final VolumeL volume =
+      VolumeL.of(0L, 100L, 0L, 100L, 0L, 1L);
 
     final OctTreeConfigurationL.Builder cb = OctTreeConfigurationL.builder();
     cb.setVolume(volume);
@@ -2337,9 +2096,7 @@ public abstract class OctTreeLContract
     final OctTreeLType<Object> tree = this.create(c);
 
     final Integer item = Integer.valueOf(0);
-    final BoundingVolumeL item_volume = BoundingVolumeL.of(
-      Vector3L.of(0L, 0L, 0L),
-      Vector3L.of(1L, 1L, 1L));
+    final VolumeL item_volume = VolumeL.of(0L, 1L, 0L, 1L, 0L, 1L);
     Assert.assertTrue(tree.insert(item, item_volume));
     Assert.assertEquals(1L, (long) OctTreeLContract.countOctants(tree));
   }

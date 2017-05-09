@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
 
 import java.util.function.BiFunction;
 
@@ -47,7 +47,7 @@ public interface OctTreeLType<A> extends OctTreeReadableLType<A>
 
   boolean insert(
     final A item,
-    final BoundingVolumeL bounds);
+    final VolumeL bounds);
 
   /**
    * <p>Remove the object {@code item} from the octtree.</p>
@@ -86,5 +86,5 @@ public interface OctTreeLType<A> extends OctTreeReadableLType<A>
    */
 
   @Override
-  <B> OctTreeLType<B> map(BiFunction<A, BoundingVolumeL, B> f);
+  <B> OctTreeLType<B> map(BiFunction<A, VolumeL, B> f);
 }

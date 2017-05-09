@@ -17,12 +17,14 @@
 package com.io7m.jspatial.tests.implementation;
 
 import com.io7m.jfunctional.Unit;
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumesL;
+import com.io7m.jregions.generators.VolumeLGenerator;
 import com.io7m.jspatial.implementation.OctantsL;
-import com.io7m.jspatial.tests.api.BoundingVolumeLGenerator;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.QuickCheck;
 import net.java.quickcheck.characteristic.AbstractCharacteristic;
+import net.java.quickcheck.generator.support.LongGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -35,21 +37,22 @@ public final class OctantsLTest
   @Test
   public void testExhaustive()
   {
-    final BoundingVolumeLGenerator generator = new BoundingVolumeLGenerator();
+    final VolumeLGenerator generator =
+      new VolumeLGenerator(new LongGenerator(-10000L, 10000L));
 
     QuickCheck.forAllVerbose(
-      generator, new AbstractCharacteristic<BoundingVolumeL>()
+      generator, new AbstractCharacteristic<VolumeL>()
       {
         @Override
-        protected void doSpecify(final BoundingVolumeL volume)
+        protected void doSpecify(final VolumeL volume)
           throws Throwable
         {
-          final Optional<OctantsL> o_opt = OctantsL.subdivide(volume);
+          final Optional<VolumeXYZSplitL<VolumeL>> o_opt =
+            OctantsL.subdivide(volume);
           Assert.assertTrue(o_opt.isPresent());
 
           o_opt.map(octs -> {
-
-            final List<BoundingVolumeL> all = new ArrayList<>(8);
+            final List<VolumeL> all = new ArrayList<>(8);
             all.add(octs.x0y0z0());
             all.add(octs.x1y0z0());
             all.add(octs.x0y1z0());
@@ -60,18 +63,20 @@ public final class OctantsLTest
             all.add(octs.x1y1z1());
 
             for (int i = 0; i < all.size(); ++i) {
-              volume.contains(all.get(i));
-              all.get(i).overlaps(volume);
+              final VolumeL v0 = all.get(i);
+              System.out.printf("contains: %s %s\n", volume, v0);
+              Assert.assertTrue(VolumesL.contains(volume, v0));
+              Assert.assertTrue(VolumesL.overlaps(v0, volume));
 
               for (int j = 0; j < all.size(); ++j) {
                 if (i == j) {
                   continue;
                 }
 
-                final BoundingVolumeL a = all.get(i);
-                final BoundingVolumeL b = all.get(j);
-                Assert.assertFalse(a.overlaps(b));
-                Assert.assertFalse(b.overlaps(a));
+                final VolumeL a = v0;
+                final VolumeL b = all.get(j);
+                Assert.assertFalse(VolumesL.overlaps(a, b));
+                Assert.assertFalse(VolumesL.overlaps(b, a));
               }
             }
 
@@ -87,9 +92,7 @@ public final class OctantsLTest
     Assert.assertEquals(
       Optional.empty(),
       OctantsL.subdivide(
-        BoundingVolumeL.of(
-          Vector3L.of(0L, 0L, 0L),
-          Vector3L.of(2L, 1L, 2L))));
+        VolumeL.of(0L, 2L, 0L, 1L, 0L, 2L)));
   }
 
   @Test
@@ -98,9 +101,7 @@ public final class OctantsLTest
     Assert.assertEquals(
       Optional.empty(),
       OctantsL.subdivide(
-        BoundingVolumeL.of(
-          Vector3L.of(0L, 0L, 0L),
-          Vector3L.of(1L, 2L, 2L))));
+        VolumeL.of(0L, 1L, 0L, 2L, 0L, 2L)));
   }
 
   @Test
@@ -109,8 +110,6 @@ public final class OctantsLTest
     Assert.assertEquals(
       Optional.empty(),
       OctantsL.subdivide(
-        BoundingVolumeL.of(
-          Vector3L.of(0L, 0L, 0L),
-          Vector3L.of(2L, 2L, 1L))));
+        VolumeL.of(0L, 2L, 0L, 2L, 0L, 1L)));
   }
 }

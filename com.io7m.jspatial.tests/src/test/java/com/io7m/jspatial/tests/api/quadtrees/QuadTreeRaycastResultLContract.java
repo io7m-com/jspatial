@@ -16,9 +16,8 @@
 
 package com.io7m.jspatial.tests.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultLType;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector2L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -41,18 +40,14 @@ public abstract class QuadTreeRaycastResultLContract
 
   protected abstract <T> QuadTreeRaycastResultLType<T> create(
     final double distance,
-    final BoundingAreaL area,
+    final AreaL area,
     final T object);
 
   @Test
   public final void testIdentities()
   {
-    final BoundingAreaL area0 = BoundingAreaL.of(
-      Vector2L.of(0L, 0L),
-      Vector2L.of(100L, 100L));
-    final BoundingAreaL area1 = BoundingAreaL.of(
-      Vector2L.of(1L, 1L),
-      Vector2L.of(99L, 99L));
+    final AreaL area0 = AreaL.of(0L, 100L, 0L, 100L);
+    final AreaL area1 = AreaL.of(1L, 99L, 1L, 99L);
 
     final QuadTreeRaycastResultLType<Integer> k0 =
       this.create(23.0, area0, Integer.valueOf(23));

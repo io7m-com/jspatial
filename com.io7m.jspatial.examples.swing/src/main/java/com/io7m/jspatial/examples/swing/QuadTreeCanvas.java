@@ -18,9 +18,8 @@ package com.io7m.jspatial.examples.swing;
 
 import com.io7m.jfunctional.Unit;
 import com.io7m.jnull.NullCheck;
-import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jspatial.api.BoundingAreaL;
-import com.io7m.jspatial.api.BoundingAreaLType;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.TreeVisitResult;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
@@ -70,8 +69,8 @@ final class QuadTreeCanvas extends JPanel
   private QuadTreeLType<Integer> tree_l;
   private QuadTreeDType<Integer> tree_d;
   private QuadTreeKind kind;
-  private BoundingAreaL query_area_l;
-  private BoundingAreaD query_area_d;
+  private AreaL query_area_l;
+  private AreaD query_area_d;
   private Ray2D ray;
 
   QuadTreeCanvas(
@@ -141,8 +140,8 @@ final class QuadTreeCanvas extends JPanel
   }
 
   private Unit onCommandAreaQuery(
-    final BoundingAreaL area_l,
-    final BoundingAreaD area_d,
+    final AreaL area_l,
+    final AreaD area_d,
     final boolean overlaps)
   {
     this.query_area_results.clear();
@@ -293,7 +292,7 @@ final class QuadTreeCanvas extends JPanel
   }
 
   private Unit onCommandAddObject(
-    final BoundingAreaL area,
+    final AreaL area,
     final Integer item)
   {
     switch (this.kind) {
@@ -308,11 +307,11 @@ final class QuadTreeCanvas extends JPanel
       case DOUBLE: {
         final QuadTreeDType<Integer> t = this.tree_d;
         if (t != null) {
-          final BoundingAreaD area_d = BoundingAreaD.of(
-            Vector2D.of(
-              (double) area.lower().x(), (double) area.lower().y()),
-            Vector2D.of(
-              (double) area.upper().x(), (double) area.upper().y()));
+          final AreaD area_d = AreaD.of(
+            (double) area.minimumX(),
+            (double) area.maximumX(),
+            (double) area.minimumY(),
+            (double) area.maximumY());
           final boolean inserted = t.insert(item, area_d);
           this.sendInsertedMessage(area, item, inserted);
         }
@@ -325,7 +324,7 @@ final class QuadTreeCanvas extends JPanel
   }
 
   private void sendInsertedMessage(
-    final BoundingAreaLType area,
+    final AreaL area,
     final Integer item,
     final boolean inserted)
   {
@@ -334,19 +333,19 @@ final class QuadTreeCanvas extends JPanel
         Severity.INFO,
         String.format(
           "Inserted item %d (%d+%d %dx%d)", item,
-          Long.valueOf(area.lower().x()),
-          Long.valueOf(area.lower().y()),
-          Long.valueOf(area.width()),
-          Long.valueOf(area.height()))));
+          Long.valueOf(area.minimumX()),
+          Long.valueOf(area.minimumY()),
+          Long.valueOf(area.sizeX()),
+          Long.valueOf(area.sizeY()))));
     } else {
       this.log_messages.onNext(LogMessage.of(
         Severity.ERROR,
         String.format(
           "Failed to insert item %d (%d+%d %dx%d)", item,
-          Long.valueOf(area.lower().x()),
-          Long.valueOf(area.lower().y()),
-          Long.valueOf(area.width()),
-          Long.valueOf(area.height()))));
+          Long.valueOf(area.minimumX()),
+          Long.valueOf(area.minimumY()),
+          Long.valueOf(area.sizeX()),
+          Long.valueOf(area.sizeY()))));
     }
   }
 
@@ -376,32 +375,34 @@ final class QuadTreeCanvas extends JPanel
     if (t != null) {
 
       t.iterateQuadrants(g, (gg, quadrant, depth) -> {
-        final Vector2D lower = quadrant.area().lower();
+        final Vector2D lower =
+          Vector2D.of(quadrant.area().minimumX(), quadrant.area().minimumY());
 
         gg.setColor(Color.GRAY);
         gg.drawRect(
           (int) lower.x(),
           (int) lower.y(),
-          (int) quadrant.area().width(),
-          (int) quadrant.area().height());
+          (int) quadrant.area().sizeX(),
+          (int) quadrant.area().sizeY());
         return TreeVisitResult.RESULT_CONTINUE;
       });
 
-      final BoundingAreaD qa = this.query_area_d;
+      final AreaD qa = this.query_area_d;
       if (qa != null) {
         g.setColor(Color.CYAN);
         g.drawRect(
-          (int) qa.lower().x(),
-          (int) qa.lower().y(),
-          (int) qa.width(),
-          (int) qa.height());
+          (int) qa.minimumX(),
+          (int) qa.minimumY(),
+          (int) qa.sizeX(),
+          (int) qa.sizeY());
       }
 
       g.setFont(Font.decode(INSTANCE_FONT));
 
       for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
         final Item item = entry.getValue();
-        final Vector2L lower = item.area.lower();
+        final Vector2L lower =
+          Vector2L.of(item.area.minimumX(), item.area.minimumY());
 
         if (t.contains(item.item)) {
           if (this.query_area_results.contains(item.item)) {
@@ -416,8 +417,8 @@ final class QuadTreeCanvas extends JPanel
         g.drawRect(
           (int) lower.x(),
           (int) lower.y(),
-          (int) item.area.width(),
-          (int) item.area.height());
+          (int) item.area.sizeX(),
+          (int) item.area.sizeY());
         g.drawString(
           item.item.toString(),
           (int) lower.x() + 2,
@@ -432,32 +433,34 @@ final class QuadTreeCanvas extends JPanel
     if (t != null) {
 
       t.iterateQuadrants(g, (gg, quadrant, depth) -> {
-        final Vector2L lower = quadrant.area().lower();
+        final Vector2L lower =
+          Vector2L.of(quadrant.area().minimumX(), quadrant.area().minimumY());
 
         gg.setColor(Color.GRAY);
         gg.drawRect(
           (int) lower.x(),
           (int) lower.y(),
-          (int) quadrant.area().width(),
-          (int) quadrant.area().height());
+          (int) quadrant.area().sizeX(),
+          (int) quadrant.area().sizeY());
         return TreeVisitResult.RESULT_CONTINUE;
       });
 
-      final BoundingAreaL qa = this.query_area_l;
+      final AreaL qa = this.query_area_l;
       if (qa != null) {
         g.setColor(Color.CYAN);
         g.drawRect(
-          (int) qa.lower().x(),
-          (int) qa.lower().y(),
-          (int) qa.width(),
-          (int) qa.height());
+          (int) qa.minimumX(),
+          (int) qa.minimumY(),
+          (int) qa.sizeY(),
+          (int) qa.sizeY());
       }
 
       g.setFont(Font.decode(INSTANCE_FONT));
 
       for (final Map.Entry<Integer, Item> entry : this.items.entrySet()) {
         final Item item = entry.getValue();
-        final Vector2L lower = item.area.lower();
+        final Vector2L lower =
+          Vector2L.of(item.area.minimumX(), item.area.minimumY());
 
         if (t.contains(item.item)) {
           if (this.query_area_results.contains(item.item)) {
@@ -472,8 +475,8 @@ final class QuadTreeCanvas extends JPanel
         g.drawRect(
           (int) lower.x(),
           (int) lower.y(),
-          (int) item.area.width(),
-          (int) item.area.height());
+          (int) item.area.sizeX(),
+          (int) item.area.sizeY());
         g.drawString(
           item.item.toString(),
           (int) lower.x() + 2,
@@ -492,13 +495,14 @@ final class QuadTreeCanvas extends JPanel
         for (final QuadTreeRaycastResultL<Integer> r : this.ray_area_results_l) {
           if (this.items.containsKey(r.item())) {
             final Item item = this.items.get(r.item());
-            final Vector2L lower = item.area.lower();
+            final Vector2L lower =
+              Vector2L.of(item.area.minimumX(), item.area.minimumY());
 
             g.drawRect(
               (int) lower.x(),
               (int) lower.y(),
-              (int) item.area.width(),
-              (int) item.area.height());
+              (int) item.area.sizeX(),
+              (int) item.area.sizeY());
             g.drawString(
               Double.toString(r.distance()),
               (int) lower.x() + 2,
@@ -512,11 +516,11 @@ final class QuadTreeCanvas extends JPanel
   private static final class Item
   {
     private final Integer item;
-    private final BoundingAreaL area;
+    private final AreaL area;
 
     Item(
       final Integer in_item,
-      final BoundingAreaL in_area)
+      final AreaL in_area)
     {
       this.item = NullCheck.notNull(in_item, "Item");
       this.area = NullCheck.notNull(in_area, "Area");

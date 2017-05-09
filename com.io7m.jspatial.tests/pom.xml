@@ -56,6 +56,10 @@
       <groupId>com.io7m.jaffirm</groupId>
       <artifactId>com.io7m.jaffirm.core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.io7m.jregions</groupId>
+      <artifactId>com.io7m.jregions.generators</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>${project.groupId}</groupId>

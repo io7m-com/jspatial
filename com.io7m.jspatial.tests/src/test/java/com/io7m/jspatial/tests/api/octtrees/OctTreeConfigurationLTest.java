@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationL;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationLType;
 import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
@@ -39,7 +39,7 @@ public final class OctTreeConfigurationLTest extends
   }
 
   @Override
-  protected OctTreeConfigurationLType create(final BoundingVolumeL volume)
+  protected OctTreeConfigurationLType create(final VolumeL volume)
   {
     final OctTreeConfigurationL.Builder b = OctTreeConfigurationL.builder();
     b.setVolume(volume);
@@ -53,9 +53,7 @@ public final class OctTreeConfigurationLTest extends
   @Test
   public void testBuilder()
   {
-    final Vector3L lower0 = Vector3L.of(0L, 0L, 0L);
-    final Vector3L upper0 = Vector3L.of(100L, 100L, 100L);
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(lower0, upper0);
+    final VolumeL volume0 = VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
     final OctTreeConfigurationL.Builder b0 = OctTreeConfigurationL.builder();
     b0.setVolume(volume0);
 
@@ -82,9 +80,7 @@ public final class OctTreeConfigurationLTest extends
     Assert.assertNotEquals(qc2, qc0);
     Assert.assertNotEquals(qc2, qc1);
 
-    final Vector3L lower1 = Vector3L.of(1L, 1L, 1L);
-    final Vector3L upper1 = Vector3L.of(99L, 99L, 99L);
-    final BoundingVolumeL volume1 = BoundingVolumeL.of(lower1, upper1);
+    final VolumeL volume1 = VolumeL.of(1L, 99L, 1L, 99L, 1L, 99L);
 
     b0.setVolume(volume1);
     final OctTreeConfigurationL qc3 = b0.build();
@@ -124,18 +120,14 @@ public final class OctTreeConfigurationLTest extends
   @Test
   public void testWith()
   {
-    final Vector3L lower0 = Vector3L.of(0L, 0L, 0L);
-    final Vector3L upper0 = Vector3L.of(100L, 100L, 100L);
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(lower0, upper0);
+    final VolumeL volume0 = VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
     final OctTreeConfigurationL.Builder b = OctTreeConfigurationL.builder();
     b.setVolume(volume0);
 
     final OctTreeConfigurationL qc0 = b.build();
     final OctTreeConfigurationL qc0_eq = b.build();
 
-    final Vector3L lower1 = Vector3L.of(1L, 1L, 1L);
-    final Vector3L upper1 = Vector3L.of(99L, 99L, 99L);
-    final BoundingVolumeL volume1 = BoundingVolumeL.of(lower1, upper1);
+    final VolumeL volume1 = VolumeL.of(1L, 99L, 1L, 99L, 1L, 99L);
 
     final OctTreeConfigurationL qc1 = qc0.withVolume(volume1);
     final OctTreeConfigurationL qc2 = qc0.withMinimumOctantWidth(4L);
@@ -199,17 +191,13 @@ public final class OctTreeConfigurationLTest extends
   @Test
   public void testOf()
   {
-    final Vector3L lower0 = Vector3L.of(0L, 0L, 0L);
-    final Vector3L upper0 = Vector3L.of(100L, 100L, 100L);
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(lower0, upper0);
+    final VolumeL volume0 = VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
     final OctTreeConfigurationL.Builder b = OctTreeConfigurationL.builder();
     b.setVolume(volume0);
 
     final OctTreeConfigurationL qc0 = b.build();
 
-    final Vector3L lower1 = Vector3L.of(1L, 1L, 1L);
-    final Vector3L upper1 = Vector3L.of(99L, 99L, 99L);
-    final BoundingVolumeL volume1 = BoundingVolumeL.of(lower1, upper1);
+    final VolumeL volume1 = VolumeL.of(1L, 99L, 1L, 99L, 1L, 99L);
 
     final OctTreeConfigurationL qc1 =
       OctTreeConfigurationL.of(volume1, 2L, 2L, 2L, false);
@@ -277,7 +265,7 @@ public final class OctTreeConfigurationLTest extends
   {
     final Vector3L lower0 = Vector3L.of(0L, 0L, 0L);
     final Vector3L upper0 = Vector3L.of(100L, 100L, 100L);
-    final BoundingVolumeL volume0 = BoundingVolumeL.of(lower0, upper0);
+    final VolumeL volume0 = VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
     final OctTreeConfigurationL.Builder b = OctTreeConfigurationL.builder();
     b.setVolume(volume0);
 
@@ -288,7 +276,7 @@ public final class OctTreeConfigurationLTest extends
       new OctTreeConfigurationLType()
       {
         @Override
-        public BoundingVolumeL volume()
+        public VolumeL volume()
         {
           return qc0.volume();
         }

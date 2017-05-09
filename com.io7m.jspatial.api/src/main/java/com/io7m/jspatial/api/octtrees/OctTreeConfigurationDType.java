@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
 import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
@@ -35,7 +35,7 @@ public interface OctTreeConfigurationDType
    */
 
   @Value.Parameter
-  BoundingVolumeD volume();
+  VolumeD volume();
 
   /**
    * @return The minimum width of octants (must be {@code >= 0.0001})

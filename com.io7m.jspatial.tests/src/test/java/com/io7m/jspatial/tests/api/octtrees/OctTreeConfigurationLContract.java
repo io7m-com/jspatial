@@ -16,9 +16,8 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
 import com.io7m.jspatial.api.octtrees.OctTreeConfigurationLType;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector3L;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -40,7 +39,7 @@ public abstract class OctTreeConfigurationLContract
   protected abstract <A extends OctTreeConfigurationLType> Generator<A> generator();
 
   protected abstract OctTreeConfigurationLType create(
-    final BoundingVolumeL area);
+    final VolumeL area);
 
   /**
    * Identities.
@@ -49,9 +48,7 @@ public abstract class OctTreeConfigurationLContract
   @Test
   public final void testIdentities()
   {
-    final Vector3L lower = Vector3L.of(0L, 0L, 0L);
-    final Vector3L upper = Vector3L.of(100L, 100L, 100L);
-    final BoundingVolumeL area = BoundingVolumeL.of(lower, upper);
+    final VolumeL area = VolumeL.of(0L, 100L, 0L, 100L, 0L, 100L);
     final OctTreeConfigurationLType c = this.create(area);
 
     Assert.assertEquals(area, c.volume());

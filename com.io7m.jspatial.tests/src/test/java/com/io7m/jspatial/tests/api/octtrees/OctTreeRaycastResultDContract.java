@@ -16,9 +16,8 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
 import com.io7m.jspatial.api.octtrees.OctTreeRaycastResultDType;
-import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import net.java.quickcheck.Generator;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -41,18 +40,16 @@ public abstract class OctTreeRaycastResultDContract
 
   protected abstract <T> OctTreeRaycastResultDType<T> create(
     final double distance,
-    final BoundingVolumeD volume,
+    final VolumeD volume,
     final T object);
 
   @Test
   public final void testIdentities()
   {
-    final BoundingVolumeD volume0 = BoundingVolumeD.of(
-      Vector3D.of(0.0, 0.0, 0.0),
-      Vector3D.of(100.0, 100.0, 100.0));
-    final BoundingVolumeD volume1 = BoundingVolumeD.of(
-      Vector3D.of(1.0, 1.0, 1.0),
-      Vector3D.of(99.0, 99.0, 99.0));
+    final VolumeD volume0 = VolumeD.of(
+      0.0, 100.0, 0.0, 100.0, 0.0, 100.0);
+    final VolumeD volume1 = VolumeD.of(
+      1.0, 99.0, 1.0, 99.0, 1.0, 99.0);
 
     final OctTreeRaycastResultDType<Integer> k0 =
       this.create(23.0, volume0, Integer.valueOf(23));
