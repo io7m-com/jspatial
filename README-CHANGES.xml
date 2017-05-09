@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <c:changelog xmlns:c="http://schemas.io7m.com/changelog/2.0.0">
-  <c:project>io7m-jspatial</c:project>
+  <c:project>com.io7m.jspatial</c:project>
 
   <c:release c:ticket-system="com.github.io7m.jspatial">
-    <c:date>2016-08-26</c:date>
+    <c:date>2017-05-09</c:date>
     <c:version>3.0.0</c:version>
     <c:item>
       <c:date>2014-11-28</c:date>
@@ -78,6 +78,7 @@
     <c:item>
       <c:date>2017-05-09</c:date>
       <c:type-code-change/>
+      <c:ticket>5</c:ticket>
       <c:summary>Replace all quadrant and octant handling with jregions.</c:summary>
     </c:item>
   </c:release>
