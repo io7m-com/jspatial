@@ -47,8 +47,8 @@
       <artifactId>com.io7m.jtensors.core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.io7m.jcip</groupId>
-      <artifactId>jcip-annotations</artifactId>
+      <groupId>com.io7m.jregions</groupId>
+      <artifactId>com.io7m.jregions.core</artifactId>
     </dependency>
 
     <dependency>
