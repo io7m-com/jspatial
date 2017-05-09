@@ -21,10 +21,12 @@ import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitD;
 import com.io7m.jregions.core.unparameterized.volumes.VolumesD;
 import com.io7m.jregions.generators.VolumeDGenerator;
 import com.io7m.jspatial.implementation.OctantsD;
-import net.java.quickcheck.QuickCheck;
-import net.java.quickcheck.characteristic.AbstractCharacteristic;
+import com.io7m.jspatial.tests.TestUtilities;
+import com.io7m.jspatial.tests.rules.PercentagePassRule;
+import com.io7m.jspatial.tests.rules.PercentagePassing;
 import net.java.quickcheck.generator.support.DoubleGenerator;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -32,47 +34,43 @@ import java.util.List;
 
 public final class OctantsDTest
 {
+  @Rule public PercentagePassRule percent =
+    new PercentagePassRule(TestUtilities.TEST_ITERATIONS);
+
   @Test
+  @PercentagePassing
   public void testExhaustive()
   {
     final VolumeDGenerator generator =
       new VolumeDGenerator(new DoubleGenerator());
 
-    QuickCheck.forAllVerbose(
-      generator, new AbstractCharacteristic<VolumeD>()
-      {
-        @Override
-        protected void doSpecify(final VolumeD volume)
-          throws Throwable
-        {
-          final VolumeXYZSplitD<VolumeD> octs = OctantsD.subdivide(volume);
+    final VolumeD volume = generator.next();
+    final VolumeXYZSplitD<VolumeD> octs = OctantsD.subdivide(volume);
 
-          final List<VolumeD> all = new ArrayList<>(8);
-          all.add(octs.x0y0z0());
-          all.add(octs.x1y0z0());
-          all.add(octs.x0y1z0());
-          all.add(octs.x1y1z0());
-          all.add(octs.x0y0z1());
-          all.add(octs.x1y0z1());
-          all.add(octs.x0y1z1());
-          all.add(octs.x1y1z1());
+    final List<VolumeD> all = new ArrayList<>(8);
+    all.add(octs.x0y0z0());
+    all.add(octs.x1y0z0());
+    all.add(octs.x0y1z0());
+    all.add(octs.x1y1z0());
+    all.add(octs.x0y0z1());
+    all.add(octs.x1y0z1());
+    all.add(octs.x0y1z1());
+    all.add(octs.x1y1z1());
 
-          for (int i = 0; i < all.size(); ++i) {
-            Assert.assertTrue(VolumesD.contains(volume, all.get(i)));
-            Assert.assertTrue(VolumesD.overlaps(all.get(i), volume));
+    for (int i = 0; i < all.size(); ++i) {
+      Assert.assertTrue(VolumesD.contains(volume, all.get(i)));
+      Assert.assertTrue(VolumesD.overlaps(all.get(i), volume));
 
-            for (int j = 0; j < all.size(); ++j) {
-              if (i == j) {
-                continue;
-              }
-
-              final VolumeD a = all.get(i);
-              final VolumeD b = all.get(j);
-              Assert.assertFalse(VolumesD.overlaps(a, b));
-              Assert.assertFalse(VolumesD.overlaps(b, a));
-            }
-          }
+      for (int j = 0; j < all.size(); ++j) {
+        if (i == j) {
+          continue;
         }
-      });
+
+        final VolumeD a = all.get(i);
+        final VolumeD b = all.get(j);
+        Assert.assertFalse(VolumesD.overlaps(a, b));
+        Assert.assertFalse(VolumesD.overlaps(b, a));
+      }
+    }
   }
 }

@@ -36,7 +36,7 @@
     <io7m.checkstyle.path>/com/io7m/jspatial/checkstyle/checkstyle.xml</io7m.checkstyle.path>
     <io7m.api.previousVersion>3.0.0-SNAPSHOT</io7m.api.previousVersion>
 
-    <com.io7m.jspatial.jregions.version>[1.1.0-SNAPSHOT, 2.0.0)</com.io7m.jspatial.jregions.version>
+    <com.io7m.jspatial.jregions.version>[1.1.0, 2.0.0)</com.io7m.jspatial.jregions.version>
   </properties>
 
   <licenses>
