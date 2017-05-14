@@ -15,13 +15,14 @@ h5 { font-size: 95%; font-weight: bold; margin-bottom: 1em; }
 }
 
 #leftColumn {
-  width:        20em;
+  width:        22em;
   float:        left;
   border-right: 1px #eee solid;
+  overflow:     hidden;
 }
 
 #bodyColumn {
-  margin-left:   20em;
+  margin-left:   22em;
   margin-bottom: 1em;
   padding-left:  1em;
   border-left:   1px #eee solid;
