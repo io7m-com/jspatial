@@ -1,28 +1,25 @@
 package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 
 /**
- * Immutable implementation of {@link OctTreeRaycastResultDType}.
- * <p>
- * Use the builder to create immutable instances:
- * {@code OctTreeRaycastResultD.<T>builder()}.
- * Use the static factory method to create immutable instances:
- * {@code OctTreeRaycastResultD.<T>of()}.
+ * The type of octtree raycast results.
+ * @param <T> The precise type of objects
+ * @since 3.0.0
  */
-@SuppressWarnings("all")
+@SuppressWarnings({"all"})
 @Generated({"Immutables.generator", "OctTreeRaycastResultDType<T>"})
 public final class OctTreeRaycastResultD<T>
     implements OctTreeRaycastResultDType<T> {
   private final double distance;
-  private final BoundingVolumeD volume;
+  private final VolumeD volume;
   private final T item;
 
-  private OctTreeRaycastResultD(double distance, BoundingVolumeD volume, T item) {
+  private OctTreeRaycastResultD(double distance, VolumeD volume, T item) {
     this.distance = distance;
     this.volume = Objects.requireNonNull(volume, "volume");
     this.item = Objects.requireNonNull(item, "item");
@@ -31,7 +28,7 @@ public final class OctTreeRaycastResultD<T>
   private OctTreeRaycastResultD(
       OctTreeRaycastResultD original,
       double distance,
-      BoundingVolumeD volume,
+      VolumeD volume,
       T item) {
     this.distance = distance;
     this.volume = volume;
@@ -50,7 +47,7 @@ public final class OctTreeRaycastResultD<T>
    * @return The object volume
    */
   @Override
-  public BoundingVolumeD volume() {
+  public VolumeD volume() {
     return volume;
   }
 
@@ -65,35 +62,35 @@ public final class OctTreeRaycastResultD<T>
   /**
    * Copy the current immutable object by setting a value for the {@link OctTreeRaycastResultDType#distance() distance} attribute.
    * A value strict bits equality used to prevent copying of the same value by returning {@code this}.
-   * @param distance A new value for distance
+   * @param value A new value for distance
    * @return A modified copy of the {@code this} object
    */
-  public final OctTreeRaycastResultD<T> withDistance(double distance) {
-    if (Double.doubleToLongBits(this.distance) == Double.doubleToLongBits(distance)) return this;
-    return new OctTreeRaycastResultD<T>(this, distance, this.volume, this.item);
+  public final OctTreeRaycastResultD<T> withDistance(double value) {
+    if (Double.doubleToLongBits(this.distance) == Double.doubleToLongBits(value)) return this;
+    return new OctTreeRaycastResultD<T>(this, value, this.volume, this.item);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link OctTreeRaycastResultDType#volume() volume} attribute.
    * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param volume A new value for volume
+   * @param value A new value for volume
    * @return A modified copy of the {@code this} object
    */
-  public final OctTreeRaycastResultD<T> withVolume(BoundingVolumeD volume) {
-    if (this.volume == volume) return this;
-    BoundingVolumeD newValue = Objects.requireNonNull(volume, "volume");
+  public final OctTreeRaycastResultD<T> withVolume(VolumeD value) {
+    if (this.volume == value) return this;
+    VolumeD newValue = Objects.requireNonNull(value, "volume");
     return new OctTreeRaycastResultD<T>(this, this.distance, newValue, this.item);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link OctTreeRaycastResultDType#item() item} attribute.
    * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param item A new value for item
+   * @param value A new value for item
    * @return A modified copy of the {@code this} object
    */
-  public final OctTreeRaycastResultD<T> withItem(T item) {
-    if (this.item == item) return this;
-    T newValue = Objects.requireNonNull(item, "item");
+  public final OctTreeRaycastResultD<T> withItem(T value) {
+    if (this.item == value) return this;
+    T newValue = Objects.requireNonNull(value, "item");
     return new OctTreeRaycastResultD<T>(this, this.distance, this.volume, newValue);
   }
 
@@ -101,14 +98,15 @@ public final class OctTreeRaycastResultD<T>
    * This instance is equal to all instances of {@code OctTreeRaycastResultD} that have equal attribute values.
    * @return {@code true} if {@code this} is equal to {@code another} instance
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean equals(Object another) {
     if (this == another) return true;
     return another instanceof OctTreeRaycastResultD<?>
-        && equalTo((OctTreeRaycastResultD<?>) another);
+        && equalTo((OctTreeRaycastResultD<T>) another);
   }
 
-  private boolean equalTo(OctTreeRaycastResultD<?> another) {
+  private boolean equalTo(OctTreeRaycastResultD<T> another) {
     return Double.doubleToLongBits(distance) == Double.doubleToLongBits(another.distance)
         && volume.equals(another.volume)
         && item.equals(another.item);
@@ -120,10 +118,10 @@ public final class OctTreeRaycastResultD<T>
    */
   @Override
   public int hashCode() {
-    int h = 31;
-    h = h * 17 + Double.hashCode(distance);
-    h = h * 17 + volume.hashCode();
-    h = h * 17 + item.hashCode();
+    int h = 5381;
+    h += (h << 5) + Double.hashCode(distance);
+    h += (h << 5) + volume.hashCode();
+    h += (h << 5) + item.hashCode();
     return h;
   }
 
@@ -147,7 +145,7 @@ public final class OctTreeRaycastResultD<T>
    * @param item The value for the {@code item} attribute
    * @return An immutable OctTreeRaycastResultD instance
    */
-  public static <T> OctTreeRaycastResultD<T> of(double distance, BoundingVolumeD volume, T item) {
+  public static <T> OctTreeRaycastResultD<T> of(double distance, VolumeD volume, T item) {
     return new OctTreeRaycastResultD<T>(distance, volume, item);
   }
 
@@ -191,7 +189,7 @@ public final class OctTreeRaycastResultD<T>
     private long initBits = 0x7L;
 
     private double distance;
-    private BoundingVolumeD volume;
+    private VolumeD volume;
     private T item;
 
     private Builder() {
@@ -228,7 +226,7 @@ public final class OctTreeRaycastResultD<T>
      * @param volume The value for volume 
      * @return {@code this} builder for use in a chained invocation
      */
-    public final Builder<T> setVolume(BoundingVolumeD volume) {
+    public final Builder<T> setVolume(VolumeD volume) {
       this.volume = Objects.requireNonNull(volume, "volume");
       initBits &= ~INIT_BIT_VOLUME;
       return this;

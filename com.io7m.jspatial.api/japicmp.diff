@@ -1,0 +1,3 @@
+Comparing source compatibility of /home/someone/git/com.github/io7m/jspatial/com.io7m.jspatial.api/target/com.io7m.jspatial.api-3.0.0-beta0001.jar against /home/someone/git/com.github/io7m/jspatial/com.io7m.jspatial.api/target/com.io7m.jspatial.api-3.0.0-beta0001.jar
+WARNING: You are using the option '--ignore-missing-classes', i.e. superclasses and interfaces that could not be found on the classpath are ignored. Hence changes caused by these superclasses and interfaces are not reflected in the output.
+No changes.

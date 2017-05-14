@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 <code@io7m.com> http://io7m.com
+ * Copyright © 2017 <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,8 +16,8 @@
 
 package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
-import com.io7m.jspatial.api.ImmutableStyleType;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
+import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
 /**
@@ -29,7 +29,7 @@ import org.immutables.value.Value;
  */
 
 @Value.Immutable
-@ImmutableStyleType
+@JSpatialImmutableStyleType
 public interface QuadTreeRaycastResultDType<T>
   extends Comparable<QuadTreeRaycastResultDType<T>>
 {
@@ -51,7 +51,7 @@ public interface QuadTreeRaycastResultDType<T>
    */
 
   @Value.Parameter(order = 1)
-  BoundingAreaD area();
+  AreaD area();
 
   /**
    * @return The object

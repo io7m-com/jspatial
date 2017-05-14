@@ -1,34 +1,35 @@
 package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 
 /**
- * Immutable implementation of {@link QuadTreeRaycastResultLType}.
- * <p>
- * Use the builder to create immutable instances:
- * {@code QuadTreeRaycastResultL.<T>builder()}.
- * Use the static factory method to create immutable instances:
- * {@code QuadTreeRaycastResultL.<T>of()}.
+ * The type of quadtree raycast results.
+ * @param <T> The precise type of objects
+ * @since 3.0.0
  */
-@SuppressWarnings("all")
+@SuppressWarnings({"all"})
 @Generated({"Immutables.generator", "QuadTreeRaycastResultLType<T>"})
 public final class QuadTreeRaycastResultL<T>
     implements QuadTreeRaycastResultLType<T> {
   private final double distance;
-  private final BoundingAreaL area;
+  private final AreaL area;
   private final T item;
 
-  private QuadTreeRaycastResultL(double distance, BoundingAreaL area, T item) {
+  private QuadTreeRaycastResultL(double distance, AreaL area, T item) {
     this.distance = distance;
     this.area = Objects.requireNonNull(area, "area");
     this.item = Objects.requireNonNull(item, "item");
   }
 
-  private QuadTreeRaycastResultL(QuadTreeRaycastResultL original, double distance, BoundingAreaL area, T item) {
+  private QuadTreeRaycastResultL(
+      QuadTreeRaycastResultL original,
+      double distance,
+      AreaL area,
+      T item) {
     this.distance = distance;
     this.area = area;
     this.item = item;
@@ -46,7 +47,7 @@ public final class QuadTreeRaycastResultL<T>
    * @return The object area
    */
   @Override
-  public BoundingAreaL area() {
+  public AreaL area() {
     return area;
   }
 
@@ -61,35 +62,35 @@ public final class QuadTreeRaycastResultL<T>
   /**
    * Copy the current immutable object by setting a value for the {@link QuadTreeRaycastResultLType#distance() distance} attribute.
    * A value strict bits equality used to prevent copying of the same value by returning {@code this}.
-   * @param distance A new value for distance
+   * @param value A new value for distance
    * @return A modified copy of the {@code this} object
    */
-  public final QuadTreeRaycastResultL<T> withDistance(double distance) {
-    if (Double.doubleToLongBits(this.distance) == Double.doubleToLongBits(distance)) return this;
-    return new QuadTreeRaycastResultL<T>(this, distance, this.area, this.item);
+  public final QuadTreeRaycastResultL<T> withDistance(double value) {
+    if (Double.doubleToLongBits(this.distance) == Double.doubleToLongBits(value)) return this;
+    return new QuadTreeRaycastResultL<T>(this, value, this.area, this.item);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link QuadTreeRaycastResultLType#area() area} attribute.
    * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param area A new value for area
+   * @param value A new value for area
    * @return A modified copy of the {@code this} object
    */
-  public final QuadTreeRaycastResultL<T> withArea(BoundingAreaL area) {
-    if (this.area == area) return this;
-    BoundingAreaL newValue = Objects.requireNonNull(area, "area");
+  public final QuadTreeRaycastResultL<T> withArea(AreaL value) {
+    if (this.area == value) return this;
+    AreaL newValue = Objects.requireNonNull(value, "area");
     return new QuadTreeRaycastResultL<T>(this, this.distance, newValue, this.item);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link QuadTreeRaycastResultLType#item() item} attribute.
    * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param item A new value for item
+   * @param value A new value for item
    * @return A modified copy of the {@code this} object
    */
-  public final QuadTreeRaycastResultL<T> withItem(T item) {
-    if (this.item == item) return this;
-    T newValue = Objects.requireNonNull(item, "item");
+  public final QuadTreeRaycastResultL<T> withItem(T value) {
+    if (this.item == value) return this;
+    T newValue = Objects.requireNonNull(value, "item");
     return new QuadTreeRaycastResultL<T>(this, this.distance, this.area, newValue);
   }
 
@@ -97,14 +98,15 @@ public final class QuadTreeRaycastResultL<T>
    * This instance is equal to all instances of {@code QuadTreeRaycastResultL} that have equal attribute values.
    * @return {@code true} if {@code this} is equal to {@code another} instance
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean equals(Object another) {
     if (this == another) return true;
     return another instanceof QuadTreeRaycastResultL<?>
-        && equalTo((QuadTreeRaycastResultL<?>) another);
+        && equalTo((QuadTreeRaycastResultL<T>) another);
   }
 
-  private boolean equalTo(QuadTreeRaycastResultL<?> another) {
+  private boolean equalTo(QuadTreeRaycastResultL<T> another) {
     return Double.doubleToLongBits(distance) == Double.doubleToLongBits(another.distance)
         && area.equals(another.area)
         && item.equals(another.item);
@@ -116,10 +118,10 @@ public final class QuadTreeRaycastResultL<T>
    */
   @Override
   public int hashCode() {
-    int h = 31;
-    h = h * 17 + Double.hashCode(distance);
-    h = h * 17 + area.hashCode();
-    h = h * 17 + item.hashCode();
+    int h = 5381;
+    h += (h << 5) + Double.hashCode(distance);
+    h += (h << 5) + area.hashCode();
+    h += (h << 5) + item.hashCode();
     return h;
   }
 
@@ -143,7 +145,7 @@ public final class QuadTreeRaycastResultL<T>
    * @param item The value for the {@code item} attribute
    * @return An immutable QuadTreeRaycastResultL instance
    */
-  public static <T> QuadTreeRaycastResultL<T> of(double distance, BoundingAreaL area, T item) {
+  public static <T> QuadTreeRaycastResultL<T> of(double distance, AreaL area, T item) {
     return new QuadTreeRaycastResultL<T>(distance, area, item);
   }
 
@@ -187,7 +189,7 @@ public final class QuadTreeRaycastResultL<T>
     private long initBits = 0x7L;
 
     private double distance;
-    private BoundingAreaL area;
+    private AreaL area;
     private T item;
 
     private Builder() {
@@ -224,7 +226,7 @@ public final class QuadTreeRaycastResultL<T>
      * @param area The value for area 
      * @return {@code this} builder for use in a chained invocation
      */
-    public final Builder<T> setArea(BoundingAreaL area) {
+    public final Builder<T> setArea(AreaL area) {
       this.area = Objects.requireNonNull(area, "area");
       initBits &= ~INIT_BIT_AREA;
       return this;

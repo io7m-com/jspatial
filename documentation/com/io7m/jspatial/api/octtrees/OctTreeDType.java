@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 <code@io7m.com> http://io7m.com
+ * Copyright © 2017 <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
 
 import java.util.function.BiFunction;
 
@@ -44,7 +44,7 @@ public interface OctTreeDType<A> extends OctTreeReadableDType<A>
 
   boolean insert(
     final A item,
-    final BoundingVolumeD bounds);
+    final VolumeD bounds);
 
   /**
    * <p>Remove the object {@code item} from the octtree.</p>
@@ -83,5 +83,5 @@ public interface OctTreeDType<A> extends OctTreeReadableDType<A>
    */
 
   @Override
-  <B> OctTreeDType<B> map(BiFunction<A, BoundingVolumeD, B> f);
+  <B> OctTreeDType<B> map(BiFunction<A, VolumeD, B> f);
 }

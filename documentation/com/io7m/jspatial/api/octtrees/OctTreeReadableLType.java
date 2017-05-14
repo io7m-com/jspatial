@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 <code@io7m.com> http://io7m.com
+ * Copyright © 2017 <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,8 +16,8 @@
 
 package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
-import com.io7m.jspatial.api.RayI3D;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
+import com.io7m.jspatial.api.Ray3D;
 
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -38,7 +38,7 @@ public interface OctTreeReadableLType<A> extends OctTreeReadableType
    * @return The tree bounds
    */
 
-  BoundingVolumeL bounds();
+  VolumeL bounds();
 
   /**
    * Determine whether or not the object has already been inserted into the
@@ -60,7 +60,7 @@ public interface OctTreeReadableLType<A> extends OctTreeReadableType
    * @return A new tree
    */
 
-  <B> OctTreeReadableLType<B> map(BiFunction<A, BoundingVolumeL, B> f);
+  <B> OctTreeReadableLType<B> map(BiFunction<A, VolumeL, B> f);
 
   /**
    * Iterate over all octants within the tree.
@@ -82,7 +82,7 @@ public interface OctTreeReadableLType<A> extends OctTreeReadableType
    * @throws NoSuchElementException Iff the item is not present in the tree
    */
 
-  BoundingVolumeL volumeFor(A item)
+  VolumeL volumeFor(A item)
     throws NoSuchElementException;
 
   /**
@@ -94,7 +94,7 @@ public interface OctTreeReadableLType<A> extends OctTreeReadableType
    */
 
   void containedBy(
-    BoundingVolumeL volume,
+    VolumeL volume,
     Set<A> items);
 
   /**
@@ -106,7 +106,7 @@ public interface OctTreeReadableLType<A> extends OctTreeReadableType
    */
 
   void overlappedBy(
-    BoundingVolumeL volume,
+    VolumeL volume,
     Set<A> items);
 
   /**
@@ -119,6 +119,6 @@ public interface OctTreeReadableLType<A> extends OctTreeReadableType
    */
 
   void raycast(
-    RayI3D ray,
+    Ray3D ray,
     SortedSet<OctTreeRaycastResultL<A>> items);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 <code@io7m.com> http://io7m.com
+ * Copyright © 2017 <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaD;
+import com.io7m.jregions.core.unparameterized.areas.AreaD;
 
 import java.util.Map;
 
@@ -35,11 +35,11 @@ public interface QuadTreeQuadrantDType<T>
    * quadrant
    */
 
-  Map<T, BoundingAreaD> objects();
+  Map<T, AreaD> objects();
 
   /**
    * @return The area of the quadrant
    */
 
-  BoundingAreaD area();
+  AreaD area();
 }

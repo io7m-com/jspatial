@@ -19,7 +19,7 @@
 <s:document
   xmlns:s="http://schemas.io7m.com/structural/2.1.0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
-  <s:document-title>io7m-jspatial 3.0.0-SNAPSHOT Documentation</s:document-title>
+  <s:document-title>com.io7m.jspatial 3.0.0-beta0001 Documentation</s:document-title>
   <s:document-style>documentation.css</s:document-style>
   <s:document-contents/>
 
@@ -31,7 +31,7 @@
       <s:subsection>
         <s:subsection-title>Overview</s:subsection-title>
         <s:paragraph>
-          The <s:term s:type="package">io7m-jspatial</s:term> package
+          The <s:term s:type="package">com.io7m.jspatial</s:term> package
           implements several spatial data structures, such as octtrees and
           quadtrees.
         </s:paragraph>
@@ -40,7 +40,7 @@
       <s:subsection>
         <s:subsection-title>Simplicity</s:subsection-title>
         <s:paragraph>
-          The <s:term s:type="package">io7m-jspatial</s:term> package
+          The <s:term s:type="package">com.io7m.jspatial</s:term> package
           strives for simplicity in interface and implementation. Most
           implementations of the data structures included are less than
           <s:term s:type="constant">700</s:term>
@@ -94,7 +94,7 @@
         <s:paragraph>
           Regular releases are made to the
           <s:link-external s:target="http://search.maven.org/#search%7Cga%7C1%7Cio7m-jspatial">Central Repository</s:link-external>,
-          so it's possible to use the <s:term s:type="package">io7m-jspatial</s:term>
+          so it's possible to use the <s:term s:type="package">com.io7m.jspatial</s:term>
           package in your projects with the following Maven dependency:
         </s:paragraph>
         <s:paragraph>

@@ -1,30 +1,26 @@
 package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jspatial.api.BoundingAreaL;
+import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 
 /**
- * Immutable implementation of {@link QuadTreeConfigurationLType}.
- * <p>
- * Use the builder to create immutable instances:
- * {@code QuadTreeConfigurationL.builder()}.
- * Use the static factory method to create immutable instances:
- * {@code QuadTreeConfigurationL.of()}.
+ * The type of long integer quadtree configurations.
+ * @since 3.0.0
  */
-@SuppressWarnings("all")
+@SuppressWarnings({"all"})
 @Generated({"Immutables.generator", "QuadTreeConfigurationLType"})
 public final class QuadTreeConfigurationL
     implements QuadTreeConfigurationLType {
-  private final BoundingAreaL area;
+  private final AreaL area;
   private final long minimumQuadrantWidth;
   private final long minimumQuadrantHeight;
   private final boolean trimOnRemove;
 
   private QuadTreeConfigurationL(
-      BoundingAreaL area,
+      AreaL area,
       long minimumQuadrantWidth,
       long minimumQuadrantHeight,
       boolean trimOnRemove) {
@@ -57,7 +53,7 @@ public final class QuadTreeConfigurationL
 
   private QuadTreeConfigurationL(
       QuadTreeConfigurationL original,
-      BoundingAreaL area,
+      AreaL area,
       long minimumQuadrantWidth,
       long minimumQuadrantHeight,
       boolean trimOnRemove) {
@@ -75,62 +71,62 @@ public final class QuadTreeConfigurationL
 
   private final class InitShim {
     private long minimumQuadrantWidth;
-    private int minimumQuadrantWidthStage;
+    private int minimumQuadrantWidthBuildStage;
 
     long minimumQuadrantWidth() {
-      if (minimumQuadrantWidthStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
-      if (minimumQuadrantWidthStage == STAGE_UNINITIALIZED) {
-        minimumQuadrantWidthStage = STAGE_INITIALIZING;
+      if (minimumQuadrantWidthBuildStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
+      if (minimumQuadrantWidthBuildStage == STAGE_UNINITIALIZED) {
+        minimumQuadrantWidthBuildStage = STAGE_INITIALIZING;
         this.minimumQuadrantWidth = minimumQuadrantWidthInitialize();
-        minimumQuadrantWidthStage = STAGE_INITIALIZED;
+        minimumQuadrantWidthBuildStage = STAGE_INITIALIZED;
       }
       return this.minimumQuadrantWidth;
     }
 
     void setMinimumQuadrantWidth(long minimumQuadrantWidth) {
       this.minimumQuadrantWidth = minimumQuadrantWidth;
-      minimumQuadrantWidthStage = STAGE_INITIALIZED;
+      minimumQuadrantWidthBuildStage = STAGE_INITIALIZED;
     }
     private long minimumQuadrantHeight;
-    private int minimumQuadrantHeightStage;
+    private int minimumQuadrantHeightBuildStage;
 
     long minimumQuadrantHeight() {
-      if (minimumQuadrantHeightStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
-      if (minimumQuadrantHeightStage == STAGE_UNINITIALIZED) {
-        minimumQuadrantHeightStage = STAGE_INITIALIZING;
+      if (minimumQuadrantHeightBuildStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
+      if (minimumQuadrantHeightBuildStage == STAGE_UNINITIALIZED) {
+        minimumQuadrantHeightBuildStage = STAGE_INITIALIZING;
         this.minimumQuadrantHeight = minimumQuadrantHeightInitialize();
-        minimumQuadrantHeightStage = STAGE_INITIALIZED;
+        minimumQuadrantHeightBuildStage = STAGE_INITIALIZED;
       }
       return this.minimumQuadrantHeight;
     }
 
     void setMinimumQuadrantHeight(long minimumQuadrantHeight) {
       this.minimumQuadrantHeight = minimumQuadrantHeight;
-      minimumQuadrantHeightStage = STAGE_INITIALIZED;
+      minimumQuadrantHeightBuildStage = STAGE_INITIALIZED;
     }
     private boolean trimOnRemove;
-    private int trimOnRemoveStage;
+    private int trimOnRemoveBuildStage;
 
     boolean trimOnRemove() {
-      if (trimOnRemoveStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
-      if (trimOnRemoveStage == STAGE_UNINITIALIZED) {
-        trimOnRemoveStage = STAGE_INITIALIZING;
+      if (trimOnRemoveBuildStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
+      if (trimOnRemoveBuildStage == STAGE_UNINITIALIZED) {
+        trimOnRemoveBuildStage = STAGE_INITIALIZING;
         this.trimOnRemove = trimOnRemoveInitialize();
-        trimOnRemoveStage = STAGE_INITIALIZED;
+        trimOnRemoveBuildStage = STAGE_INITIALIZED;
       }
       return this.trimOnRemove;
     }
 
     void setTrimOnRemove(boolean trimOnRemove) {
       this.trimOnRemove = trimOnRemove;
-      trimOnRemoveStage = STAGE_INITIALIZED;
+      trimOnRemoveBuildStage = STAGE_INITIALIZED;
     }
 
     private String formatInitCycleMessage() {
       ArrayList<String> attributes = new ArrayList<String>();
-      if (minimumQuadrantWidthStage == STAGE_INITIALIZING) attributes.add("minimumQuadrantWidth");
-      if (minimumQuadrantHeightStage == STAGE_INITIALIZING) attributes.add("minimumQuadrantHeight");
-      if (trimOnRemoveStage == STAGE_INITIALIZING) attributes.add("trimOnRemove");
+      if (minimumQuadrantWidthBuildStage == STAGE_INITIALIZING) attributes.add("minimumQuadrantWidth");
+      if (minimumQuadrantHeightBuildStage == STAGE_INITIALIZING) attributes.add("minimumQuadrantHeight");
+      if (trimOnRemoveBuildStage == STAGE_INITIALIZING) attributes.add("trimOnRemove");
       return "Cannot build QuadTreeConfigurationL, attribute initializers form cycle" + attributes;
     }
   }
@@ -151,7 +147,7 @@ public final class QuadTreeConfigurationL
    * @return The maximum bounding area of the tree
    */
   @Override
-  public BoundingAreaL area() {
+  public AreaL area() {
     return area;
   }
 
@@ -192,46 +188,46 @@ public final class QuadTreeConfigurationL
   /**
    * Copy the current immutable object by setting a value for the {@link QuadTreeConfigurationLType#area() area} attribute.
    * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param area A new value for area
+   * @param value A new value for area
    * @return A modified copy of the {@code this} object
    */
-  public final QuadTreeConfigurationL withArea(BoundingAreaL area) {
-    if (this.area == area) return this;
-    BoundingAreaL newValue = Objects.requireNonNull(area, "area");
+  public final QuadTreeConfigurationL withArea(AreaL value) {
+    if (this.area == value) return this;
+    AreaL newValue = Objects.requireNonNull(value, "area");
     return new QuadTreeConfigurationL(this, newValue, this.minimumQuadrantWidth, this.minimumQuadrantHeight, this.trimOnRemove);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link QuadTreeConfigurationLType#minimumQuadrantWidth() minimumQuadrantWidth} attribute.
    * A value equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param minimumQuadrantWidth A new value for minimumQuadrantWidth
+   * @param value A new value for minimumQuadrantWidth
    * @return A modified copy of the {@code this} object
    */
-  public final QuadTreeConfigurationL withMinimumQuadrantWidth(long minimumQuadrantWidth) {
-    if (this.minimumQuadrantWidth == minimumQuadrantWidth) return this;
-    return new QuadTreeConfigurationL(this, this.area, minimumQuadrantWidth, this.minimumQuadrantHeight, this.trimOnRemove);
+  public final QuadTreeConfigurationL withMinimumQuadrantWidth(long value) {
+    if (this.minimumQuadrantWidth == value) return this;
+    return new QuadTreeConfigurationL(this, this.area, value, this.minimumQuadrantHeight, this.trimOnRemove);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link QuadTreeConfigurationLType#minimumQuadrantHeight() minimumQuadrantHeight} attribute.
    * A value equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param minimumQuadrantHeight A new value for minimumQuadrantHeight
+   * @param value A new value for minimumQuadrantHeight
    * @return A modified copy of the {@code this} object
    */
-  public final QuadTreeConfigurationL withMinimumQuadrantHeight(long minimumQuadrantHeight) {
-    if (this.minimumQuadrantHeight == minimumQuadrantHeight) return this;
-    return new QuadTreeConfigurationL(this, this.area, this.minimumQuadrantWidth, minimumQuadrantHeight, this.trimOnRemove);
+  public final QuadTreeConfigurationL withMinimumQuadrantHeight(long value) {
+    if (this.minimumQuadrantHeight == value) return this;
+    return new QuadTreeConfigurationL(this, this.area, this.minimumQuadrantWidth, value, this.trimOnRemove);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link QuadTreeConfigurationLType#trimOnRemove() trimOnRemove} attribute.
    * A value equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param trimOnRemove A new value for trimOnRemove
+   * @param value A new value for trimOnRemove
    * @return A modified copy of the {@code this} object
    */
-  public final QuadTreeConfigurationL withTrimOnRemove(boolean trimOnRemove) {
-    if (this.trimOnRemove == trimOnRemove) return this;
-    return new QuadTreeConfigurationL(this, this.area, this.minimumQuadrantWidth, this.minimumQuadrantHeight, trimOnRemove);
+  public final QuadTreeConfigurationL withTrimOnRemove(boolean value) {
+    if (this.trimOnRemove == value) return this;
+    return new QuadTreeConfigurationL(this, this.area, this.minimumQuadrantWidth, this.minimumQuadrantHeight, value);
   }
 
   /**
@@ -258,11 +254,11 @@ public final class QuadTreeConfigurationL
    */
   @Override
   public int hashCode() {
-    int h = 31;
-    h = h * 17 + area.hashCode();
-    h = h * 17 + Long.hashCode(minimumQuadrantWidth);
-    h = h * 17 + Long.hashCode(minimumQuadrantHeight);
-    h = h * 17 + Boolean.hashCode(trimOnRemove);
+    int h = 5381;
+    h += (h << 5) + area.hashCode();
+    h += (h << 5) + Long.hashCode(minimumQuadrantWidth);
+    h += (h << 5) + Long.hashCode(minimumQuadrantHeight);
+    h += (h << 5) + Boolean.hashCode(trimOnRemove);
     return h;
   }
 
@@ -288,7 +284,7 @@ public final class QuadTreeConfigurationL
    * @param trimOnRemove The value for the {@code trimOnRemove} attribute
    * @return An immutable QuadTreeConfigurationL instance
    */
-  public static QuadTreeConfigurationL of(BoundingAreaL area, long minimumQuadrantWidth, long minimumQuadrantHeight, boolean trimOnRemove) {
+  public static QuadTreeConfigurationL of(AreaL area, long minimumQuadrantWidth, long minimumQuadrantHeight, boolean trimOnRemove) {
     return new QuadTreeConfigurationL(area, minimumQuadrantWidth, minimumQuadrantHeight, trimOnRemove);
   }
 
@@ -331,7 +327,7 @@ public final class QuadTreeConfigurationL
     private long initBits = 0x1L;
     private long optBits;
 
-    private BoundingAreaL area;
+    private AreaL area;
     private long minimumQuadrantWidth;
     private long minimumQuadrantHeight;
     private boolean trimOnRemove;
@@ -360,7 +356,7 @@ public final class QuadTreeConfigurationL
      * @param area The value for area 
      * @return {@code this} builder for use in a chained invocation
      */
-    public final Builder setArea(BoundingAreaL area) {
+    public final Builder setArea(AreaL area) {
       this.area = Objects.requireNonNull(area, "area");
       initBits &= ~INIT_BIT_AREA;
       return this;

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 <code@io7m.com> http://io7m.com
+ * Copyright © 2017 <code@io7m.com> http://io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
 
 import java.util.Map;
 
@@ -35,11 +35,11 @@ public interface OctTreeOctantLType<T>
    * octant
    */
 
-  Map<T, BoundingVolumeL> objects();
+  Map<T, VolumeL> objects();
 
   /**
    * @return The volume of the octant
    */
 
-  BoundingVolumeL volume();
+  VolumeL volume();
 }

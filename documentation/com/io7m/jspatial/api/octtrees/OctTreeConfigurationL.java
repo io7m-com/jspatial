@@ -1,30 +1,26 @@
 package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jspatial.api.BoundingVolumeL;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 
 /**
- * Immutable implementation of {@link OctTreeConfigurationLType}.
- * <p>
- * Use the builder to create immutable instances:
- * {@code OctTreeConfigurationL.builder()}.
- * Use the static factory method to create immutable instances:
- * {@code OctTreeConfigurationL.of()}.
+ * The type of long integer octtree configurations.
+ * @since 3.0.0
  */
-@SuppressWarnings("all")
+@SuppressWarnings({"all"})
 @Generated({"Immutables.generator", "OctTreeConfigurationLType"})
 public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
-  private final BoundingVolumeL volume;
+  private final VolumeL volume;
   private final long minimumOctantWidth;
   private final long minimumOctantHeight;
   private final long minimumOctantDepth;
   private final boolean trimOnRemove;
 
   private OctTreeConfigurationL(
-      BoundingVolumeL volume,
+      VolumeL volume,
       long minimumOctantWidth,
       long minimumOctantHeight,
       long minimumOctantDepth,
@@ -64,7 +60,7 @@ public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
 
   private OctTreeConfigurationL(
       OctTreeConfigurationL original,
-      BoundingVolumeL volume,
+      VolumeL volume,
       long minimumOctantWidth,
       long minimumOctantHeight,
       long minimumOctantDepth,
@@ -84,80 +80,80 @@ public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
 
   private final class InitShim {
     private long minimumOctantWidth;
-    private int minimumOctantWidthStage;
+    private int minimumOctantWidthBuildStage;
 
     long minimumOctantWidth() {
-      if (minimumOctantWidthStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
-      if (minimumOctantWidthStage == STAGE_UNINITIALIZED) {
-        minimumOctantWidthStage = STAGE_INITIALIZING;
+      if (minimumOctantWidthBuildStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
+      if (minimumOctantWidthBuildStage == STAGE_UNINITIALIZED) {
+        minimumOctantWidthBuildStage = STAGE_INITIALIZING;
         this.minimumOctantWidth = minimumOctantWidthInitialize();
-        minimumOctantWidthStage = STAGE_INITIALIZED;
+        minimumOctantWidthBuildStage = STAGE_INITIALIZED;
       }
       return this.minimumOctantWidth;
     }
 
     void setMinimumOctantWidth(long minimumOctantWidth) {
       this.minimumOctantWidth = minimumOctantWidth;
-      minimumOctantWidthStage = STAGE_INITIALIZED;
+      minimumOctantWidthBuildStage = STAGE_INITIALIZED;
     }
     private long minimumOctantHeight;
-    private int minimumOctantHeightStage;
+    private int minimumOctantHeightBuildStage;
 
     long minimumOctantHeight() {
-      if (minimumOctantHeightStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
-      if (minimumOctantHeightStage == STAGE_UNINITIALIZED) {
-        minimumOctantHeightStage = STAGE_INITIALIZING;
+      if (minimumOctantHeightBuildStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
+      if (minimumOctantHeightBuildStage == STAGE_UNINITIALIZED) {
+        minimumOctantHeightBuildStage = STAGE_INITIALIZING;
         this.minimumOctantHeight = minimumOctantHeightInitialize();
-        minimumOctantHeightStage = STAGE_INITIALIZED;
+        minimumOctantHeightBuildStage = STAGE_INITIALIZED;
       }
       return this.minimumOctantHeight;
     }
 
     void setMinimumOctantHeight(long minimumOctantHeight) {
       this.minimumOctantHeight = minimumOctantHeight;
-      minimumOctantHeightStage = STAGE_INITIALIZED;
+      minimumOctantHeightBuildStage = STAGE_INITIALIZED;
     }
     private long minimumOctantDepth;
-    private int minimumOctantDepthStage;
+    private int minimumOctantDepthBuildStage;
 
     long minimumOctantDepth() {
-      if (minimumOctantDepthStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
-      if (minimumOctantDepthStage == STAGE_UNINITIALIZED) {
-        minimumOctantDepthStage = STAGE_INITIALIZING;
+      if (minimumOctantDepthBuildStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
+      if (minimumOctantDepthBuildStage == STAGE_UNINITIALIZED) {
+        minimumOctantDepthBuildStage = STAGE_INITIALIZING;
         this.minimumOctantDepth = minimumOctantDepthInitialize();
-        minimumOctantDepthStage = STAGE_INITIALIZED;
+        minimumOctantDepthBuildStage = STAGE_INITIALIZED;
       }
       return this.minimumOctantDepth;
     }
 
     void setMinimumOctantDepth(long minimumOctantDepth) {
       this.minimumOctantDepth = minimumOctantDepth;
-      minimumOctantDepthStage = STAGE_INITIALIZED;
+      minimumOctantDepthBuildStage = STAGE_INITIALIZED;
     }
     private boolean trimOnRemove;
-    private int trimOnRemoveStage;
+    private int trimOnRemoveBuildStage;
 
     boolean trimOnRemove() {
-      if (trimOnRemoveStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
-      if (trimOnRemoveStage == STAGE_UNINITIALIZED) {
-        trimOnRemoveStage = STAGE_INITIALIZING;
+      if (trimOnRemoveBuildStage == STAGE_INITIALIZING) throw new IllegalStateException(formatInitCycleMessage());
+      if (trimOnRemoveBuildStage == STAGE_UNINITIALIZED) {
+        trimOnRemoveBuildStage = STAGE_INITIALIZING;
         this.trimOnRemove = trimOnRemoveInitialize();
-        trimOnRemoveStage = STAGE_INITIALIZED;
+        trimOnRemoveBuildStage = STAGE_INITIALIZED;
       }
       return this.trimOnRemove;
     }
 
     void setTrimOnRemove(boolean trimOnRemove) {
       this.trimOnRemove = trimOnRemove;
-      trimOnRemoveStage = STAGE_INITIALIZED;
+      trimOnRemoveBuildStage = STAGE_INITIALIZED;
     }
 
     private String formatInitCycleMessage() {
       ArrayList<String> attributes = new ArrayList<String>();
-      if (minimumOctantWidthStage == STAGE_INITIALIZING) attributes.add("minimumOctantWidth");
-      if (minimumOctantHeightStage == STAGE_INITIALIZING) attributes.add("minimumOctantHeight");
-      if (minimumOctantDepthStage == STAGE_INITIALIZING) attributes.add("minimumOctantDepth");
-      if (trimOnRemoveStage == STAGE_INITIALIZING) attributes.add("trimOnRemove");
+      if (minimumOctantWidthBuildStage == STAGE_INITIALIZING) attributes.add("minimumOctantWidth");
+      if (minimumOctantHeightBuildStage == STAGE_INITIALIZING) attributes.add("minimumOctantHeight");
+      if (minimumOctantDepthBuildStage == STAGE_INITIALIZING) attributes.add("minimumOctantDepth");
+      if (trimOnRemoveBuildStage == STAGE_INITIALIZING) attributes.add("trimOnRemove");
       return "Cannot build OctTreeConfigurationL, attribute initializers form cycle" + attributes;
     }
   }
@@ -182,7 +178,7 @@ public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
    * @return The maximum bounding volume of the tree
    */
   @Override
-  public BoundingVolumeL volume() {
+  public VolumeL volume() {
     return volume;
   }
 
@@ -234,12 +230,12 @@ public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
   /**
    * Copy the current immutable object by setting a value for the {@link OctTreeConfigurationLType#volume() volume} attribute.
    * A shallow reference equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param volume A new value for volume
+   * @param value A new value for volume
    * @return A modified copy of the {@code this} object
    */
-  public final OctTreeConfigurationL withVolume(BoundingVolumeL volume) {
-    if (this.volume == volume) return this;
-    BoundingVolumeL newValue = Objects.requireNonNull(volume, "volume");
+  public final OctTreeConfigurationL withVolume(VolumeL value) {
+    if (this.volume == value) return this;
+    VolumeL newValue = Objects.requireNonNull(value, "volume");
     return new OctTreeConfigurationL(
         this,
         newValue,
@@ -252,69 +248,51 @@ public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
   /**
    * Copy the current immutable object by setting a value for the {@link OctTreeConfigurationLType#minimumOctantWidth() minimumOctantWidth} attribute.
    * A value equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param minimumOctantWidth A new value for minimumOctantWidth
+   * @param value A new value for minimumOctantWidth
    * @return A modified copy of the {@code this} object
    */
-  public final OctTreeConfigurationL withMinimumOctantWidth(long minimumOctantWidth) {
-    if (this.minimumOctantWidth == minimumOctantWidth) return this;
-    return new OctTreeConfigurationL(
-        this,
-        this.volume,
-        minimumOctantWidth,
-        this.minimumOctantHeight,
-        this.minimumOctantDepth,
-        this.trimOnRemove);
+  public final OctTreeConfigurationL withMinimumOctantWidth(long value) {
+    if (this.minimumOctantWidth == value) return this;
+    return new OctTreeConfigurationL(this, this.volume, value, this.minimumOctantHeight, this.minimumOctantDepth, this.trimOnRemove);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link OctTreeConfigurationLType#minimumOctantHeight() minimumOctantHeight} attribute.
    * A value equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param minimumOctantHeight A new value for minimumOctantHeight
+   * @param value A new value for minimumOctantHeight
    * @return A modified copy of the {@code this} object
    */
-  public final OctTreeConfigurationL withMinimumOctantHeight(long minimumOctantHeight) {
-    if (this.minimumOctantHeight == minimumOctantHeight) return this;
-    return new OctTreeConfigurationL(
-        this,
-        this.volume,
-        this.minimumOctantWidth,
-        minimumOctantHeight,
-        this.minimumOctantDepth,
-        this.trimOnRemove);
+  public final OctTreeConfigurationL withMinimumOctantHeight(long value) {
+    if (this.minimumOctantHeight == value) return this;
+    return new OctTreeConfigurationL(this, this.volume, this.minimumOctantWidth, value, this.minimumOctantDepth, this.trimOnRemove);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link OctTreeConfigurationLType#minimumOctantDepth() minimumOctantDepth} attribute.
    * A value equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param minimumOctantDepth A new value for minimumOctantDepth
+   * @param value A new value for minimumOctantDepth
    * @return A modified copy of the {@code this} object
    */
-  public final OctTreeConfigurationL withMinimumOctantDepth(long minimumOctantDepth) {
-    if (this.minimumOctantDepth == minimumOctantDepth) return this;
-    return new OctTreeConfigurationL(
-        this,
-        this.volume,
-        this.minimumOctantWidth,
-        this.minimumOctantHeight,
-        minimumOctantDepth,
-        this.trimOnRemove);
+  public final OctTreeConfigurationL withMinimumOctantDepth(long value) {
+    if (this.minimumOctantDepth == value) return this;
+    return new OctTreeConfigurationL(this, this.volume, this.minimumOctantWidth, this.minimumOctantHeight, value, this.trimOnRemove);
   }
 
   /**
    * Copy the current immutable object by setting a value for the {@link OctTreeConfigurationLType#trimOnRemove() trimOnRemove} attribute.
    * A value equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param trimOnRemove A new value for trimOnRemove
+   * @param value A new value for trimOnRemove
    * @return A modified copy of the {@code this} object
    */
-  public final OctTreeConfigurationL withTrimOnRemove(boolean trimOnRemove) {
-    if (this.trimOnRemove == trimOnRemove) return this;
+  public final OctTreeConfigurationL withTrimOnRemove(boolean value) {
+    if (this.trimOnRemove == value) return this;
     return new OctTreeConfigurationL(
         this,
         this.volume,
         this.minimumOctantWidth,
         this.minimumOctantHeight,
         this.minimumOctantDepth,
-        trimOnRemove);
+        value);
   }
 
   /**
@@ -342,12 +320,12 @@ public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
    */
   @Override
   public int hashCode() {
-    int h = 31;
-    h = h * 17 + volume.hashCode();
-    h = h * 17 + Long.hashCode(minimumOctantWidth);
-    h = h * 17 + Long.hashCode(minimumOctantHeight);
-    h = h * 17 + Long.hashCode(minimumOctantDepth);
-    h = h * 17 + Boolean.hashCode(trimOnRemove);
+    int h = 5381;
+    h += (h << 5) + volume.hashCode();
+    h += (h << 5) + Long.hashCode(minimumOctantWidth);
+    h += (h << 5) + Long.hashCode(minimumOctantHeight);
+    h += (h << 5) + Long.hashCode(minimumOctantDepth);
+    h += (h << 5) + Boolean.hashCode(trimOnRemove);
     return h;
   }
 
@@ -375,7 +353,7 @@ public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
    * @param trimOnRemove The value for the {@code trimOnRemove} attribute
    * @return An immutable OctTreeConfigurationL instance
    */
-  public static OctTreeConfigurationL of(BoundingVolumeL volume, long minimumOctantWidth, long minimumOctantHeight, long minimumOctantDepth, boolean trimOnRemove) {
+  public static OctTreeConfigurationL of(VolumeL volume, long minimumOctantWidth, long minimumOctantHeight, long minimumOctantDepth, boolean trimOnRemove) {
     return new OctTreeConfigurationL(volume, minimumOctantWidth, minimumOctantHeight, minimumOctantDepth, trimOnRemove);
   }
 
@@ -419,7 +397,7 @@ public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
     private long initBits = 0x1L;
     private long optBits;
 
-    private BoundingVolumeL volume;
+    private VolumeL volume;
     private long minimumOctantWidth;
     private long minimumOctantHeight;
     private long minimumOctantDepth;
@@ -450,7 +428,7 @@ public final class OctTreeConfigurationL implements OctTreeConfigurationLType {
      * @param volume The value for volume 
      * @return {@code this} builder for use in a chained invocation
      */
-    public final Builder setVolume(BoundingVolumeL volume) {
+    public final Builder setVolume(VolumeL volume) {
       this.volume = Objects.requireNonNull(volume, "volume");
       initBits &= ~INIT_BIT_VOLUME;
       return this;
