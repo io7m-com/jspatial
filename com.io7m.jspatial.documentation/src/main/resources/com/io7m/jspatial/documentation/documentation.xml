@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright © 2016 http://io7m.com
+
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted, provided that the above
+  copyright notice and this permission notice appear in all copies.
+
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  -->
+
+<s:document
+  xmlns:s="http://schemas.io7m.com/structural/2.1.0"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+  <s:document-title>${project.parent.name} ${project.version} Documentation</s:document-title>
+  <s:document-style>documentation.css</s:document-style>
+  <s:document-contents/>
+
+  <s:part>
+    <s:part-title>Package Information</s:part-title>
+    <s:part-contents />
+    <s:section>
+      <s:section-title>Orientation</s:section-title>
+      <s:subsection>
+        <s:subsection-title>Overview</s:subsection-title>
+        <s:paragraph>
+          The <s:term s:type="package">${project.parent.name}</s:term> package
+          implements several spatial data structures, such as octtrees and
+          quadtrees.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Simplicity</s:subsection-title>
+        <s:paragraph>
+          The <s:term s:type="package">${project.parent.name}</s:term> package
+          strives for simplicity in interface and implementation. Most
+          implementations of the data structures included are less than
+          <s:term s:type="constant">700</s:term>
+          lines of code (including comments and annotations).
+        </s:paragraph>
+        <s:paragraph>
+          The intention is to allow for ease of understanding of the structures
+          and algorithms involved, to increase confidence in their correctness
+          and to ease auditing.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Efficiency</s:subsection-title>
+        <s:paragraph>
+          The package provides specialized implementations of the specified
+          APIs, with versions for long integer and double precision floating
+          point coordinates.
+        </s:paragraph>
+      </s:subsection>
+
+      <s:subsection>
+        <s:subsection-title>Correctness</s:subsection-title>
+        <s:paragraph>
+          The package includes a large battery of automated tests that attempt
+          to verify the correctness of the included implementations. As of the
+          time of writing, the tests manage over 96% coverage for all code
+          <s:footnote>
+            Some of the code is specifically and deliberately unreachable but the
+            compiler is unable to verify this without flow analysis.
+          </s:footnote>.
+        </s:paragraph>
+      </s:subsection>
+    </s:section>
+
+    <s:section>
+      <s:section-title>Installation</s:section-title>
+      <s:subsection>
+        <s:subsection-title>Source compilation</s:subsection-title>
+        <s:paragraph>
+          The project can be compiled and installed with
+          <s:link-external s:target="http://maven.apache.org">Maven</s:link-external>:
+        </s:paragraph>
+        <s:paragraph>
+          <s:verbatim s:type="example"><![CDATA[$ mvn -C clean install]]></s:verbatim>
+        </s:paragraph>
+      </s:subsection>
+      
+      <s:subsection>
+        <s:subsection-title>Maven</s:subsection-title>
+        <s:paragraph>
+          Regular releases are made to the
+          <s:link-external s:target="http://search.maven.org/#search%7Cga%7C1%7Cio7m-jspatial">Central Repository</s:link-external>,
+          so it's possible to use the <s:term s:type="package">${project.parent.name}</s:term>
+          package in your projects with the following Maven dependency:
+        </s:paragraph>
+        <s:paragraph>
+          <s:verbatim s:type="example"><![CDATA[<dependency>
+  <groupId>com.io7m.jspatial</groupId>
+  <artifactId>io7m-jspatial-api</artifactId>
+  <version>[3.0.0, 4.0.0)</version>
+</dependency>
+<dependency>
+  <groupId>com.io7m.jspatial</groupId>
+  <artifactId>io7m-jspatial-implementation</artifactId>
+  <version>[3.0.0, 4.0.0)</version>
+</dependency>]]></s:verbatim>
+        </s:paragraph>
+        <s:paragraph>
+          All <s:link-external s:target="http://io7m.com">io7m.com</s:link-external>
+          packages use Semantic Versioning
+          <s:footnote>
+            <s:link-external s:target="http://semver.org">http://semver.org</s:link-external>
+          </s:footnote>, which implies that it is always safe to use version ranges
+          with an exclusive upper bound equal to the next major version - the API of
+          the package will not change in a backwards-incompatible manner before the
+          next major version.
+        </s:paragraph>
+      </s:subsection>
+    </s:section>
+
+    <s:section>
+      <s:section-title>Platform Specific Issues</s:section-title>
+      <s:paragraph>
+        There are currently no known platform-specific issues.
+      </s:paragraph>
+    </s:section>
+
+    <s:section>
+      <s:section-title>License</s:section-title>
+      <s:paragraph>
+        All files distributed with the <s:term s:type="package"></s:term>
+        package are placed under the following license:
+        <s:verbatim s:type="license"><![CDATA[Copyright © 2016 http://io7m.com
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
+        </s:verbatim>
+      </s:paragraph>
+    </s:section>
+  </s:part>
+
+  <s:part>
+    <s:part-title>API Reference</s:part-title>
+    <s:part-contents/>
+    <s:section>
+      <s:section-title>Javadoc</s:section-title>
+      <s:paragraph>
+        API documentation for the package is provided via the
+        included <s:link-external s:target="javadoc">Javadoc</s:link-external>.
+      </s:paragraph>
+    </s:section>
+  </s:part>
+
+</s:document>

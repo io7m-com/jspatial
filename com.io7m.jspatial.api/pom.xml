@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.io7m.jspatial</groupId>
+    <artifactId>com.io7m.jspatial</artifactId>
+    <version>3.0.0-beta0001</version>
+  </parent>
+  <artifactId>com.io7m.jspatial.api</artifactId>
+
+  <packaging>bundle</packaging>
+  <name>com.io7m.jspatial.api</name>
+  <description>Spatial data structures (API)</description>
+  <url>http://io7m.github.io/jspatial/</url>
+
+  <scm>
+    <url>${project.parent.scm.url}</url>
+    <connection>${project.parent.scm.connection}</connection>
+    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
+  </scm>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.io7m.jnull</groupId>
+      <artifactId>com.io7m.jnull.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jtensors</groupId>
+      <artifactId>com.io7m.jtensors.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jregions</groupId>
+      <artifactId>com.io7m.jregions.core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.immutables</groupId>
+      <artifactId>value</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.annotation</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Check style -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+
+      <!-- Produce OSGi bundle -->
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Export-Package>
+              com.io7m.jspatial.api,
+              com.io7m.jspatial.api.quadtrees,
+              com.io7m.jspatial.api.octtrees
+            </Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

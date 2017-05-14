@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.io7m.primogenitor</groupId>
+    <artifactId>com.io7m.primogenitor</artifactId>
+    <version>1.0.2</version>
+  </parent>
+
+  <groupId>com.io7m.jspatial</groupId>
+  <artifactId>com.io7m.jspatial</artifactId>
+  <version>3.0.0-beta0001</version>
+
+  <packaging>pom</packaging>
+  <name>com.io7m.jspatial</name>
+  <description>Spatial data structures</description>
+  <url>http://github.com/io7m/jspatial</url>
+
+  <modules>
+    <module>com.io7m.jspatial.api</module>
+    <module>com.io7m.jspatial.checkstyle</module>
+    <module>com.io7m.jspatial.documentation</module>
+    <module>com.io7m.jspatial.examples.swing</module>
+    <module>com.io7m.jspatial.implementation</module>
+    <module>com.io7m.jspatial.tests</module>
+  </modules>
+
+  <properties>
+    <siteReposDirectory>com/io7m/jspatial</siteReposDirectory>
+    <siteDocumentationDirectory>com/io7m/jspatial/com.io7m.jspatial.documentation</siteDocumentationDirectory>
+    <io7m.checkstyle.artifact>com.io7m.jspatial.checkstyle</io7m.checkstyle.artifact>
+    <io7m.checkstyle.path>/com/io7m/jspatial/checkstyle/checkstyle.xml</io7m.checkstyle.path>
+    <io7m.api.previousVersion>3.0.0-beta0001</io7m.api.previousVersion>
+
+    <com.io7m.jspatial.jregions.version>[1.1.0, 2.0.0)</com.io7m.jspatial.jregions.version>
+  </properties>
+
+  <licenses>
+    <license>
+      <name>ISC License</name>
+      <url>http://io7m.com/license/isc.txt</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <url>https://github.com/io7m/jspatial</url>
+    <connection>scm:git:https://github.com/io7m/jspatial</connection>
+    <developerConnection>scm:git:https://github.com/io7m/jspatial</developerConnection>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>io7m</id>
+      <name>io7m</name>
+      <email>code@io7m.com</email>
+      <url>http://io7m.com</url>
+    </developer>
+  </developers>
+
+  <issueManagement>
+    <url>http://github.com/io7m/jspatial/issues</url>
+    <system>GitHub Issues</system>
+  </issueManagement>
+
+  <distributionManagement>
+    <site>
+      <id>GitHub</id>
+      <name>GitHub</name>
+      <url>http://io7m.github.io/jspatial</url>
+    </site>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <ciManagement>
+    <system>Travis CI</system>
+    <url>https://travis-ci.org/io7m/jspatial</url>
+  </ciManagement>
+
+  <prerequisites>
+    <maven>3.0.4</maven>
+  </prerequisites>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.io7m.jnull</groupId>
+        <artifactId>com.io7m.jnull.core</artifactId>
+        <version>[1.0.0, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.junreachable</groupId>
+        <artifactId>com.io7m.junreachable.core</artifactId>
+        <version>[1.0.0, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jcip</groupId>
+        <artifactId>jcip-annotations</artifactId>
+        <version>1.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jtensors</groupId>
+        <artifactId>com.io7m.jtensors.core</artifactId>
+        <version>[8.1.0, 9.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jaffirm</groupId>
+        <artifactId>com.io7m.jaffirm.core</artifactId>
+        <version>[1.1.0, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jintegers</groupId>
+        <artifactId>com.io7m.jintegers.core</artifactId>
+        <version>[1.0.0, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jfunctional</groupId>
+        <artifactId>com.io7m.jfunctional.core</artifactId>
+        <version>[1.0.0, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jequality</groupId>
+        <artifactId>com.io7m.jequality.core</artifactId>
+        <version>[1.0.0, 2.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jregions</groupId>
+        <artifactId>com.io7m.jregions.core</artifactId>
+        <version>${com.io7m.jspatial.jregions.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.jregions</groupId>
+        <artifactId>com.io7m.jregions.generators</artifactId>
+        <version>${com.io7m.jspatial.jregions.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>it.unimi.dsi</groupId>
+        <artifactId>fastutil</artifactId>
+        <version>[7.0.0, 8.0.0)</version>
+      </dependency>
+      <dependency>
+        <groupId>net.java.dev.designgridlayout</groupId>
+        <artifactId>designgridlayout</artifactId>
+        <version>1.11</version>
+      </dependency>
+      <dependency>
+        <groupId>org.immutables</groupId>
+        <artifactId>value</artifactId>
+        <version>2.4.6</version>
+      </dependency>
+      <dependency>
+        <groupId>io.reactivex.rxjava2</groupId>
+        <artifactId>rxjava</artifactId>
+        <version>2.1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.derive4j</groupId>
+        <artifactId>derive4j</artifactId>
+        <version>0.11.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.derive4j</groupId>
+        <artifactId>derive4j-annotation</artifactId>
+        <version>0.11.0</version>
+      </dependency>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.2.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.annotation</artifactId>
+        <version>6.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.component.annotations</artifactId>
+        <version>1.3.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.7.23</version>
+      </dependency>
+
+      <dependency>
+        <groupId>net.java.quickcheck</groupId>
+        <artifactId>quickcheck</artifactId>
+        <version>0.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>1.3</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Require JDK >= 1.8 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+            <optimize>true</optimize>
+          </configuration>
+        </plugin>
+
+        <!-- jstructural plugin for generating documentation. -->
+        <plugin>
+          <groupId>com.io7m.jstructural</groupId>
+          <artifactId>io7m-jstructural-maven-plugin</artifactId>
+          <version>5.0.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>
