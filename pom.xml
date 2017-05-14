@@ -13,7 +13,7 @@
 
   <groupId>com.io7m.jspatial</groupId>
   <artifactId>com.io7m.jspatial</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0-beta0001</version>
 
   <packaging>pom</packaging>
   <name>com.io7m.jspatial</name>
@@ -34,7 +34,7 @@
     <siteDocumentationDirectory>com/io7m/jspatial/com.io7m.jspatial.documentation</siteDocumentationDirectory>
     <io7m.checkstyle.artifact>com.io7m.jspatial.checkstyle</io7m.checkstyle.artifact>
     <io7m.checkstyle.path>/com/io7m/jspatial/checkstyle/checkstyle.xml</io7m.checkstyle.path>
-    <io7m.api.previousVersion>3.0.0-SNAPSHOT</io7m.api.previousVersion>
+    <io7m.api.previousVersion>3.0.0-beta0001</io7m.api.previousVersion>
 
     <com.io7m.jspatial.jregions.version>[1.1.0, 2.0.0)</com.io7m.jspatial.jregions.version>
   </properties>

@@ -3,7 +3,7 @@
   <c:project>com.io7m.jspatial</c:project>
 
   <c:release c:ticket-system="com.github.io7m.jspatial">
-    <c:date>2017-05-09</c:date>
+    <c:date>2017-05-14</c:date>
     <c:version>3.0.0</c:version>
     <c:item>
       <c:date>2014-11-28</c:date>
