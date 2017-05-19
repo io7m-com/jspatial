@@ -17,7 +17,6 @@
 package com.io7m.jspatial.api.quadtrees;
 
 import com.io7m.jregions.core.unparameterized.areas.AreaI;
-import com.io7m.jregions.core.unparameterized.areas.AreaL;
 
 import java.util.Map;
 
