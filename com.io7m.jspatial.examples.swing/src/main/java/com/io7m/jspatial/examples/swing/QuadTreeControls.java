@@ -370,10 +370,13 @@ final class QuadTreeControls extends JPanel
     final double x1 = (double) this.ray_query_x1_model.getNumber().longValue();
     final double y1 = (double) this.ray_query_y1_model.getNumber().longValue();
 
+    final Vector2D p0 = Vector2D.of(x0, y0);
+    final Vector2D p1 = Vector2D.of(x1, y1);
+
     final Vector2D origin =
       Vector2D.of(x0, y0);
     final Vector2D direction =
-      Vectors2D.normalize(Vector2D.of(x0 + x1, y0 + y1));
+      Vectors2D.normalize(Vectors2D.subtract(p1, p0));
 
     final Ray2D ray = Ray2D.of(origin, direction);
     this.events.onNext(QuadTreeCommandTypes.rayQuery(ray));

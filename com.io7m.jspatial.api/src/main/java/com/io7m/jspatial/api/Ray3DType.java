@@ -103,6 +103,8 @@ public interface Ray3DType
     tmin = Math.max(tmin, Math.min(tz0, tz1));
     tmax = Math.min(tmax, Math.max(tz0, tz1));
 
-    return ((tmax >= Math.max(0.0, tmin)) && (tmin < Double.POSITIVE_INFINITY));
+    final boolean tmax_ok = tmax >= Math.max(0.0, tmin);
+    final boolean tmin_ok = tmin < Double.POSITIVE_INFINITY;
+    return tmax_ok && tmin_ok;
   }
 }

@@ -14,41 +14,24 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.implementation;
+package com.io7m.jspatial.tests.implementation;
 
-import com.io7m.jnull.NullCheck;
-import com.io7m.jregions.core.unparameterized.areas.AreaD;
-import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitD;
-import com.io7m.jregions.core.unparameterized.areas.AreasD;
-import com.io7m.junreachable.UnreachableCodeException;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationI;
+import com.io7m.jspatial.api.quadtrees.QuadTreeIType;
+import com.io7m.jspatial.implementation.QuadTreeL;
+import com.io7m.jspatial.implementation.QuadTreeSupplierI;
+import com.io7m.jspatial.tests.api.quadtrees.QuadTreeIContract;
 
 /**
- * Functions to divide areas into quadrants.
+ * Test for {@link QuadTreeL}
  */
 
-public final class QuadrantsD
+public final class QuadTreeITest extends QuadTreeIContract
 {
-  private QuadrantsD()
+  @Override
+  protected <T> QuadTreeIType<T> create(
+    final QuadTreeConfigurationI config)
   {
-    throw new UnreachableCodeException();
-  }
-
-  /**
-   * Subdivide an area into four quadrants.
-   *
-   * @param area The area
-   *
-   * @return The resulting area
-   */
-
-  public static AreaXYSplitD<AreaD> subdivide(
-    final AreaD area)
-  {
-    NullCheck.notNull(area, "Area");
-
-    return AreasD.splitAlongXY(
-      area,
-      area.sizeX() / 2.0,
-      area.sizeY() / 2.0);
+    return new QuadTreeSupplierI().create(config);
   }
 }

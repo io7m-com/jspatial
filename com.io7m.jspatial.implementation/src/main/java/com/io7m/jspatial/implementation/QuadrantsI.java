@@ -17,38 +17,45 @@
 package com.io7m.jspatial.implementation;
 
 import com.io7m.jnull.NullCheck;
-import com.io7m.jregions.core.unparameterized.areas.AreaD;
-import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitD;
-import com.io7m.jregions.core.unparameterized.areas.AreasD;
+import com.io7m.jregions.core.unparameterized.areas.AreaI;
+import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitI;
+import com.io7m.jregions.core.unparameterized.areas.AreasI;
 import com.io7m.junreachable.UnreachableCodeException;
+
+import java.util.Optional;
 
 /**
  * Functions to divide areas into quadrants.
  */
 
-public final class QuadrantsD
+public final class QuadrantsI
 {
-  private QuadrantsD()
+  private QuadrantsI()
   {
     throw new UnreachableCodeException();
   }
 
   /**
-   * Subdivide an area into four quadrants.
+   * Subdivide an area into four equal sized quadrants. The area is not
+   * split if the width and height are less than 2.
    *
    * @param area The area
    *
    * @return The resulting area
    */
 
-  public static AreaXYSplitD<AreaD> subdivide(
-    final AreaD area)
+  public static Optional<AreaXYSplitI<AreaI>> subdivide(
+    final AreaI area)
   {
     NullCheck.notNull(area, "Area");
 
-    return AreasD.splitAlongXY(
-      area,
-      area.sizeX() / 2.0,
-      area.sizeY() / 2.0);
+    if (area.sizeX() >= 2 && area.sizeY() >= 2) {
+      return Optional.of(
+        AreasI.splitAlongXY(
+          area,
+          area.sizeX() / 2,
+          area.sizeY() / 2));
+    }
+    return Optional.empty();
   }
 }
