@@ -14,41 +14,34 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.implementation;
+package com.io7m.jspatial.api.quadtrees;
 
-import com.io7m.jnull.NullCheck;
-import com.io7m.jregions.core.unparameterized.areas.AreaD;
-import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitD;
-import com.io7m.jregions.core.unparameterized.areas.AreasD;
-import com.io7m.junreachable.UnreachableCodeException;
+import com.io7m.jspatial.api.TreeVisitResult;
 
 /**
- * Functions to divide areas into quadrants.
+ * The type of functions used to iterate over the quadrants of quadtrees.
+ *
+ * @param <A> The type of tree objects
+ * @param <C> The type of contextual values
+ *
+ * @since 3.0.0
  */
 
-public final class QuadrantsD
+@FunctionalInterface
+public interface QuadTreeQuadrantIterationIType<A, C>
 {
-  private QuadrantsD()
-  {
-    throw new UnreachableCodeException();
-  }
-
   /**
-   * Subdivide an area into four quadrants.
+   * Apply the function.
    *
-   * @param area The area
+   * @param context  A context value
+   * @param quadrant The current quadrant
+   * @param depth    The current quadrant depth
    *
-   * @return The resulting area
+   * @return A value indicating how or if the traversal should continue
    */
 
-  public static AreaXYSplitD<AreaD> subdivide(
-    final AreaD area)
-  {
-    NullCheck.notNull(area, "Area");
-
-    return AreasD.splitAlongXY(
-      area,
-      area.sizeX() / 2.0,
-      area.sizeY() / 2.0);
-  }
+  TreeVisitResult apply(
+    C context,
+    QuadTreeQuadrantIType<A> quadrant,
+    long depth);
 }

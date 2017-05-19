@@ -14,41 +14,32 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.implementation;
+package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jnull.NullCheck;
-import com.io7m.jregions.core.unparameterized.areas.AreaD;
-import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitD;
-import com.io7m.jregions.core.unparameterized.areas.AreasD;
-import com.io7m.junreachable.UnreachableCodeException;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeI;
+
+import java.util.Map;
 
 /**
- * Functions to divide areas into quadrants.
+ * A octant as it appears within the context of an octtree.
+ *
+ * @param <T> The precise type of objects
+ *
+ * @since 3.0.0
  */
 
-public final class QuadrantsD
+public interface OctTreeOctantIType<T>
 {
-  private QuadrantsD()
-  {
-    throw new UnreachableCodeException();
-  }
-
   /**
-   * Subdivide an area into four quadrants.
-   *
-   * @param area The area
-   *
-   * @return The resulting area
+   * @return A read-only view of the objects directly contained within this
+   * octant
    */
 
-  public static AreaXYSplitD<AreaD> subdivide(
-    final AreaD area)
-  {
-    NullCheck.notNull(area, "Area");
+  Map<T, VolumeI> objects();
 
-    return AreasD.splitAlongXY(
-      area,
-      area.sizeX() / 2.0,
-      area.sizeY() / 2.0);
-  }
+  /**
+   * @return The volume of the octant
+   */
+
+  VolumeI volume();
 }

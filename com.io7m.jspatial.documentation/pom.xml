@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.jspatial</groupId>
     <artifactId>com.io7m.jspatial</artifactId>
-    <version>3.0.0-beta0001</version>
+    <version>3.0.0-beta0002</version>
   </parent>
   <artifactId>com.io7m.jspatial.documentation</artifactId>
 

@@ -14,41 +14,29 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.implementation;
+package com.io7m.jspatial.api.octtrees;
 
-import com.io7m.jnull.NullCheck;
-import com.io7m.jregions.core.unparameterized.areas.AreaD;
-import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitD;
-import com.io7m.jregions.core.unparameterized.areas.AreasD;
-import com.io7m.junreachable.UnreachableCodeException;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
- * Functions to divide areas into quadrants.
+ * The type of constructors for trees.
+ *
+ * @since 3.0.0
  */
 
-public final class QuadrantsD
+@ProviderType
+@FunctionalInterface
+public interface OctTreeSupplierIType
 {
-  private QuadrantsD()
-  {
-    throw new UnreachableCodeException();
-  }
-
   /**
-   * Subdivide an area into four quadrants.
+   * Create a new tree based on the given configuration.
    *
-   * @param area The area
+   * @param config The configuration
+   * @param <A>    The type of objects in the tree
    *
-   * @return The resulting area
+   * @return A new tree
    */
 
-  public static AreaXYSplitD<AreaD> subdivide(
-    final AreaD area)
-  {
-    NullCheck.notNull(area, "Area");
-
-    return AreasD.splitAlongXY(
-      area,
-      area.sizeX() / 2.0,
-      area.sizeY() / 2.0);
-  }
+  <A> OctTreeIType<A> create(
+    OctTreeConfigurationI config);
 }

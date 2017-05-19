@@ -49,12 +49,12 @@ public final class QuadrantsL
   {
     NullCheck.notNull(area, "Area");
 
-    if (area.width() >= 2L && area.height() >= 2L) {
+    if (area.sizeX() >= 2L && area.sizeY() >= 2L) {
       return Optional.of(
         AreasL.splitAlongXY(
           area,
-          area.width() / 2L,
-          area.height() / 2L));
+          area.sizeX() / 2L,
+          area.sizeY() / 2L));
     }
     return Optional.empty();
   }

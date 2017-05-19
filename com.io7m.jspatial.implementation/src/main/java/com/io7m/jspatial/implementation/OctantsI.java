@@ -17,38 +17,46 @@
 package com.io7m.jspatial.implementation;
 
 import com.io7m.jnull.NullCheck;
-import com.io7m.jregions.core.unparameterized.areas.AreaD;
-import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitD;
-import com.io7m.jregions.core.unparameterized.areas.AreasD;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeI;
+import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitI;
+import com.io7m.jregions.core.unparameterized.volumes.VolumesI;
 import com.io7m.junreachable.UnreachableCodeException;
+
+import java.util.Optional;
 
 /**
  * Functions to divide areas into quadrants.
  */
 
-public final class QuadrantsD
+public final class OctantsI
 {
-  private QuadrantsD()
+  private OctantsI()
   {
     throw new UnreachableCodeException();
   }
 
   /**
-   * Subdivide an area into four quadrants.
+   * Subdivide a volume into eight equal sized quadrants. The volume is not
+   * split if the size on any axis is less than 2.
    *
-   * @param area The area
+   * @param volume The volume
    *
    * @return The resulting area
    */
 
-  public static AreaXYSplitD<AreaD> subdivide(
-    final AreaD area)
+  public static Optional<VolumeXYZSplitI<VolumeI>> subdivide(
+    final VolumeI volume)
   {
-    NullCheck.notNull(area, "Area");
+    NullCheck.notNull(volume, "Volume");
 
-    return AreasD.splitAlongXY(
-      area,
-      area.sizeX() / 2.0,
-      area.sizeY() / 2.0);
+    if (volume.sizeX() >= 2 && volume.sizeY() >= 2 && volume.sizeZ() >= 2) {
+      final int size_x = volume.sizeX() / 2;
+      final int size_y = volume.sizeY() / 2;
+      final int size_z = volume.sizeZ() / 2;
+      final VolumeXYZSplitI<VolumeI> result =
+        VolumesI.splitAtXYZ(volume, size_x, size_y, size_z);
+      return Optional.of(result);
+    }
+    return Optional.empty();
   }
 }

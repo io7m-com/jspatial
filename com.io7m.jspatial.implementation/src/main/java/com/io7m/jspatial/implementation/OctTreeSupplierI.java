@@ -16,39 +16,30 @@
 
 package com.io7m.jspatial.implementation;
 
-import com.io7m.jnull.NullCheck;
-import com.io7m.jregions.core.unparameterized.areas.AreaD;
-import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitD;
-import com.io7m.jregions.core.unparameterized.areas.AreasD;
-import com.io7m.junreachable.UnreachableCodeException;
+import com.io7m.jspatial.api.octtrees.OctTreeConfigurationI;
+import com.io7m.jspatial.api.octtrees.OctTreeIType;
+import com.io7m.jspatial.api.octtrees.OctTreeSupplierIType;
+import org.osgi.service.component.annotations.Component;
 
 /**
- * Functions to divide areas into quadrants.
+ * The default implementation of the {@link OctTreeSupplierIType} interface.
  */
 
-public final class QuadrantsD
+@Component
+public final class OctTreeSupplierI implements OctTreeSupplierIType
 {
-  private QuadrantsD()
-  {
-    throw new UnreachableCodeException();
-  }
-
   /**
-   * Subdivide an area into four quadrants.
-   *
-   * @param area The area
-   *
-   * @return The resulting area
+   * Construct a new supplier.
    */
 
-  public static AreaXYSplitD<AreaD> subdivide(
-    final AreaD area)
+  public OctTreeSupplierI()
   {
-    NullCheck.notNull(area, "Area");
 
-    return AreasD.splitAlongXY(
-      area,
-      area.sizeX() / 2.0,
-      area.sizeY() / 2.0);
+  }
+
+  @Override
+  public <A> OctTreeIType<A> create(final OctTreeConfigurationI config)
+  {
+    return OctTreeI.create(config);
   }
 }

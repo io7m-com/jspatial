@@ -20,16 +20,16 @@ import com.io7m.jaffirm.core.Invariants;
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.jnull.NullCheck;
 import com.io7m.jnull.Nullable;
-import com.io7m.jregions.core.unparameterized.areas.AreaL;
-import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitL;
-import com.io7m.jregions.core.unparameterized.areas.AreasL;
+import com.io7m.jregions.core.unparameterized.areas.AreaI;
+import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitI;
+import com.io7m.jregions.core.unparameterized.areas.AreasI;
 import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.TreeVisitResult;
-import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
-import com.io7m.jspatial.api.quadtrees.QuadTreeLType;
-import com.io7m.jspatial.api.quadtrees.QuadTreeQuadrantIterationLType;
-import com.io7m.jspatial.api.quadtrees.QuadTreeQuadrantLType;
-import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL;
+import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationI;
+import com.io7m.jspatial.api.quadtrees.QuadTreeIType;
+import com.io7m.jspatial.api.quadtrees.QuadTreeQuadrantIType;
+import com.io7m.jspatial.api.quadtrees.QuadTreeQuadrantIterationIType;
+import com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultI;
 import com.io7m.jtensors.core.unparameterized.vectors.Vector2D;
 import com.io7m.jtensors.core.unparameterized.vectors.Vectors2D;
 import com.io7m.junreachable.UnreachableCodeException;
@@ -46,18 +46,18 @@ import java.util.SortedSet;
 import java.util.function.BiFunction;
 
 /**
- * Default implementation of the {@link QuadTreeLType} interface.
+ * Default implementation of the {@link QuadTreeIType} interface.
  *
  * @param <T> The precise type of tree objects
  */
 
-public final class QuadTreeL<T> implements QuadTreeLType<T>
+public final class QuadTreeI<T> implements QuadTreeIType<T>
 {
-  private final Reference2ReferenceOpenHashMap<T, AreaL> objects;
-  private final QuadTreeConfigurationL config;
+  private final Reference2ReferenceOpenHashMap<T, AreaI> objects;
+  private final QuadTreeConfigurationI config;
   private Quadrant root;
 
-  private QuadTreeL(final QuadTreeConfigurationL in_config)
+  private QuadTreeI(final QuadTreeConfigurationI in_config)
   {
     this.config = NullCheck.notNull(in_config, "Configuration");
     this.root = new Quadrant(null, in_config.area());
@@ -73,10 +73,10 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
    * @return A new tree
    */
 
-  public static <T> QuadTreeLType<T> create(
-    final QuadTreeConfigurationL config)
+  public static <T> QuadTreeIType<T> create(
+    final QuadTreeConfigurationI config)
   {
-    return new QuadTreeL<>(config);
+    return new QuadTreeI<>(config);
   }
 
   @Override
@@ -101,7 +101,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
       return false;
     }
 
-    final QuadTreeL<?> that = (QuadTreeL<?>) o;
+    final QuadTreeI<?> that = (QuadTreeI<?>) o;
     return this.objects.equals(that.objects);
   }
 
@@ -112,7 +112,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
   }
 
   @Override
-  public AreaL bounds()
+  public AreaI bounds()
   {
     return this.root.area;
   }
@@ -120,7 +120,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
   @Override
   public boolean insert(
     final T item,
-    final AreaL item_bounds)
+    final AreaI item_bounds)
   {
     NullCheck.notNull(item, "Item");
     NullCheck.notNull(item_bounds, "Bounds");
@@ -157,14 +157,14 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
   }
 
   @Override
-  public <U> QuadTreeLType<U> map(final BiFunction<T, AreaL, U> f)
+  public <U> QuadTreeIType<U> map(final BiFunction<T, AreaI, U> f)
   {
     NullCheck.notNull(f, "Function");
 
-    final QuadTreeLType<U> qt = new QuadTreeL<>(this.config);
-    for (final Map.Entry<T, AreaL> es : this.objects.entrySet()) {
+    final QuadTreeIType<U> qt = new QuadTreeI<>(this.config);
+    for (final Map.Entry<T, AreaI> es : this.objects.entrySet()) {
       final T item = es.getKey();
-      final AreaL item_area = es.getValue();
+      final AreaI item_area = es.getValue();
       qt.insert(f.apply(item, item_area), es.getValue());
     }
     return qt;
@@ -173,15 +173,15 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
   @Override
   public <C> void iterateQuadrants(
     final C context,
-    final QuadTreeQuadrantIterationLType<T, C> f)
+    final QuadTreeQuadrantIterationIType<T, C> f)
   {
     NullCheck.notNull(context, "Context");
     NullCheck.notNull(f, "Function");
-    this.root.iterateQuadrants(context, f, 0L);
+    this.root.iterateQuadrants(context, f, 0);
   }
 
   @Override
-  public AreaL areaFor(final T item)
+  public AreaI areaFor(final T item)
   {
     NullCheck.notNull(item, "Item");
 
@@ -192,7 +192,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
   @Override
   public void containedBy(
-    final AreaL area,
+    final AreaI area,
     final Set<T> items)
   {
     NullCheck.notNull(area, "Area");
@@ -202,7 +202,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
   @Override
   public void overlappedBy(
-    final AreaL area,
+    final AreaI area,
     final Set<T> items)
   {
     NullCheck.notNull(area, "Area");
@@ -213,19 +213,19 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
   @Override
   public void raycast(
     final Ray2D ray,
-    final SortedSet<QuadTreeRaycastResultL<T>> items)
+    final SortedSet<QuadTreeRaycastResultI<T>> items)
   {
     NullCheck.notNull(ray, "Ray");
     NullCheck.notNull(items, "Items");
     this.root.raycast(ray, items);
   }
 
-  protected final class Quadrant implements QuadTreeQuadrantLType<T>
+  protected final class Quadrant implements QuadTreeQuadrantIType<T>
   {
-    private final AreaL area;
-    private final Reference2ReferenceOpenHashMap<T, AreaL> quadrant_objects;
+    private final AreaI area;
+    private final Reference2ReferenceOpenHashMap<T, AreaI> quadrant_objects;
     private final @Nullable Quadrant parent;
-    private final Map<T, AreaL> quadrant_objects_view;
+    private final Map<T, AreaI> quadrant_objects_view;
     private @Nullable Quadrant x0y0;
     private @Nullable Quadrant x0y1;
     private @Nullable Quadrant x1y0;
@@ -233,7 +233,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
     protected Quadrant(
       final @Nullable Quadrant in_parent,
-      final AreaL in_area)
+      final AreaI in_area)
     {
       this.parent = in_parent;
       this.area = NullCheck.notNull(in_area, "Area");
@@ -244,20 +244,20 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
     private boolean insert(
       final T item,
-      final AreaL item_bounds)
+      final AreaI item_bounds)
     {
       Preconditions.checkPrecondition(
         item,
-        !QuadTreeL.this.objects.containsKey(item),
+        !QuadTreeI.this.objects.containsKey(item),
         x -> "Object must not be in tree");
 
-      return AreasL.contains(this.area, item_bounds)
+      return AreasI.contains(this.area, item_bounds)
         && this.insertStep(item, item_bounds);
     }
 
     private boolean insertStep(
       final T item,
-      final AreaL item_bounds)
+      final AreaI item_bounds)
     {
       /*
        * The object can fit in this node, but perhaps it is possible to fit it
@@ -287,16 +287,16 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
       Invariants.checkInvariant(!this.isLeaf(), "Node is not a leaf");
 
-      if (AreasL.contains(this.x0y0.area, item_bounds)) {
+      if (AreasI.contains(this.x0y0.area, item_bounds)) {
         return this.x0y0.insertStep(item, item_bounds);
       }
-      if (AreasL.contains(this.x1y0.area, item_bounds)) {
+      if (AreasI.contains(this.x1y0.area, item_bounds)) {
         return this.x1y0.insertStep(item, item_bounds);
       }
-      if (AreasL.contains(this.x0y1.area, item_bounds)) {
+      if (AreasI.contains(this.x0y1.area, item_bounds)) {
         return this.x0y1.insertStep(item, item_bounds);
       }
-      if (AreasL.contains(this.x1y1.area, item_bounds)) {
+      if (AreasI.contains(this.x1y1.area, item_bounds)) {
         return this.x1y1.insertStep(item, item_bounds);
       }
 
@@ -309,9 +309,9 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
     private boolean insertObject(
       final T item,
-      final AreaL item_bounds)
+      final AreaI item_bounds)
     {
-      QuadTreeL.this.objects.put(item, item_bounds);
+      QuadTreeI.this.objects.put(item, item_bounds);
       this.quadrant_objects.put(item, item_bounds);
       return true;
     }
@@ -320,9 +320,9 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     {
       Preconditions.checkPrecondition(this.canSplit(), "Quadrant can split");
 
-      final Optional<AreaXYSplitL<AreaL>> q_opt = QuadrantsL.subdivide(this.area);
+      final Optional<AreaXYSplitI<AreaI>> q_opt = QuadrantsI.subdivide(this.area);
       if (q_opt.isPresent()) {
-        final AreaXYSplitL<AreaL> q = q_opt.get();
+        final AreaXYSplitI<AreaI> q = q_opt.get();
         this.x0y0 = new Quadrant(this, q.x0y0());
         this.x0y1 = new Quadrant(this, q.x0y1());
         this.x1y0 = new Quadrant(this, q.x1y0());
@@ -334,16 +334,16 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
     private boolean canSplit()
     {
-      final long width = this.area.sizeX();
-      final long height = this.area.sizeY();
+      final int width = this.area.sizeX();
+      final int height = this.area.sizeY();
 
-      final long min_width =
-        Math.max(2L, QuadTreeL.this.config.minimumQuadrantWidth());
-      final long min_height =
-        Math.max(2L, QuadTreeL.this.config.minimumQuadrantHeight());
+      final int min_width =
+        Math.max(2, QuadTreeI.this.config.minimumQuadrantWidth());
+      final int min_height =
+        Math.max(2, QuadTreeI.this.config.minimumQuadrantHeight());
 
-      final long half_width = width / 2L;
-      final long half_height = height / 2L;
+      final int half_width = width / 2;
+      final int half_height = height / 2;
 
       return half_width >= min_width && half_height >= min_height;
     }
@@ -355,22 +355,22 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
     private boolean remove(final T item)
     {
-      if (!QuadTreeL.this.objects.containsKey(item)) {
+      if (!QuadTreeI.this.objects.containsKey(item)) {
         return false;
       }
 
-      final AreaL bounds = QuadTreeL.this.objects.get(item);
+      final AreaI bounds = QuadTreeI.this.objects.get(item);
       return this.removeStep(item, bounds);
     }
 
     private boolean removeStep(
       final T item,
-      final AreaL item_bounds)
+      final AreaI item_bounds)
     {
       if (this.quadrant_objects.containsKey(item)) {
         this.quadrant_objects.remove(item);
-        QuadTreeL.this.objects.remove(item);
-        if (QuadTreeL.this.config.trimOnRemove()) {
+        QuadTreeI.this.objects.remove(item);
+        if (QuadTreeI.this.config.trimOnRemove()) {
           this.unsplitAttemptRecursive();
         }
         return true;
@@ -378,16 +378,16 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
       Invariants.checkInvariant(!this.isLeaf(), "Node cannot be a leaf");
 
-      if (AreasL.contains(this.x0y0.area, item_bounds)) {
+      if (AreasI.contains(this.x0y0.area, item_bounds)) {
         return this.x0y0.removeStep(item, item_bounds);
       }
-      if (AreasL.contains(this.x1y0.area, item_bounds)) {
+      if (AreasI.contains(this.x1y0.area, item_bounds)) {
         return this.x1y0.removeStep(item, item_bounds);
       }
-      if (AreasL.contains(this.x0y1.area, item_bounds)) {
+      if (AreasI.contains(this.x0y1.area, item_bounds)) {
         return this.x0y1.removeStep(item, item_bounds);
       }
-      if (AreasL.contains(this.x1y1.area, item_bounds)) {
+      if (AreasI.contains(this.x1y1.area, item_bounds)) {
         return this.x1y1.removeStep(item, item_bounds);
       }
 
@@ -400,7 +400,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     }
 
     private void areaContaining(
-      final AreaL target_area,
+      final AreaI target_area,
       final Set<T> items)
     {
       /*
@@ -416,7 +416,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
        * everything in this quadrant and all children of this quadrant.
        */
 
-      if (AreasL.contains(target_area, this.area)) {
+      if (AreasI.contains(target_area, this.area)) {
         this.collectRecursive(items);
       }
 
@@ -425,17 +425,17 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
        * therefore some items may still be contained within {@code target_area}.
        */
 
-      final ObjectSet<Map.Entry<T, AreaL>> entries =
+      final ObjectSet<Map.Entry<T, AreaI>> entries =
         this.quadrant_objects.entrySet();
-      final ObjectIterator<Map.Entry<T, AreaL>> iter =
+      final ObjectIterator<Map.Entry<T, AreaI>> iter =
         entries.iterator();
 
       while (iter.hasNext()) {
-        final Map.Entry<T, AreaL> entry = iter.next();
+        final Map.Entry<T, AreaI> entry = iter.next();
         final T item = entry.getKey();
-        final AreaL item_area = entry.getValue();
+        final AreaI item_area = entry.getValue();
 
-        if (AreasL.contains(target_area, item_area)) {
+        if (AreasI.contains(target_area, item_area)) {
           items.add(item);
         }
       }
@@ -460,7 +460,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     }
 
     private void areaOverlapping(
-      final AreaL target_area,
+      final AreaI target_area,
       final Set<T> items)
     {
       /*
@@ -476,18 +476,18 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
        * against {@code target_area}.
        */
 
-      if (AreasL.overlaps(target_area, this.area)) {
-        final ObjectSet<Map.Entry<T, AreaL>> entries =
+      if (AreasI.overlaps(target_area, this.area)) {
+        final ObjectSet<Map.Entry<T, AreaI>> entries =
           this.quadrant_objects.entrySet();
-        final ObjectIterator<Map.Entry<T, AreaL>> iter =
+        final ObjectIterator<Map.Entry<T, AreaI>> iter =
           entries.iterator();
 
         while (iter.hasNext()) {
-          final Map.Entry<T, AreaL> entry = iter.next();
+          final Map.Entry<T, AreaI> entry = iter.next();
           final T item = entry.getKey();
-          final AreaL item_area = entry.getValue();
+          final AreaI item_area = entry.getValue();
 
-          if (AreasL.overlaps(target_area, item_area)) {
+          if (AreasI.overlaps(target_area, item_area)) {
             items.add(item);
           }
         }
@@ -503,7 +503,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
     private void raycast(
       final Ray2D ray,
-      final SortedSet<QuadTreeRaycastResultL<T>> items)
+      final SortedSet<QuadTreeRaycastResultI<T>> items)
     {
       /*
        * Avoid performing pointless ray checks.
@@ -528,15 +528,15 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
        */
 
       if (ray.intersectsArea(x0, y0, x1, y1)) {
-        final ObjectSet<Map.Entry<T, AreaL>> entries =
+        final ObjectSet<Map.Entry<T, AreaI>> entries =
           this.quadrant_objects.entrySet();
-        final ObjectIterator<Map.Entry<T, AreaL>> iter =
+        final ObjectIterator<Map.Entry<T, AreaI>> iter =
           entries.iterator();
 
         while (iter.hasNext()) {
-          final Map.Entry<T, AreaL> entry = iter.next();
+          final Map.Entry<T, AreaI> entry = iter.next();
           final T item = entry.getKey();
-          final AreaL item_area = entry.getValue();
+          final AreaI item_area = entry.getValue();
 
           final double item_x0 = (double) item_area.minimumX();
           final double item_x1 = (double) item_area.maximumX();
@@ -547,8 +547,8 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
             final double distance = Vectors2D.distance(
               Vector2D.of(item_x0, item_y0),
               ray.origin());
-            final QuadTreeRaycastResultL<T> result =
-              QuadTreeRaycastResultL.of(distance, item_area, item);
+            final QuadTreeRaycastResultI<T> result =
+              QuadTreeRaycastResultI.of(distance, item_area, item);
             items.add(result);
           }
         }
@@ -564,35 +564,35 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
     private <C> TreeVisitResult iterateQuadrants(
       final C context,
-      final QuadTreeQuadrantIterationLType<T, C> f,
-      final long depth)
+      final QuadTreeQuadrantIterationIType<T, C> f,
+      final int depth)
     {
       switch (f.apply(context, this, depth)) {
         case RESULT_CONTINUE: {
           if (!this.isLeaf()) {
             switch (this.x0y0.iterateQuadrants(
-              context, f, Math.addExact(depth, 1L))) {
+              context, f, Math.addExact(depth, 1))) {
               case RESULT_CONTINUE:
                 break;
               case RESULT_TERMINATE:
                 return TreeVisitResult.RESULT_TERMINATE;
             }
             switch (this.x1y0.iterateQuadrants(
-              context, f, Math.addExact(depth, 1L))) {
+              context, f, Math.addExact(depth, 1))) {
               case RESULT_CONTINUE:
                 break;
               case RESULT_TERMINATE:
                 return TreeVisitResult.RESULT_TERMINATE;
             }
             switch (this.x0y1.iterateQuadrants(
-              context, f, Math.addExact(depth, 1L))) {
+              context, f, Math.addExact(depth, 1))) {
               case RESULT_CONTINUE:
                 break;
               case RESULT_TERMINATE:
                 return TreeVisitResult.RESULT_TERMINATE;
             }
             switch (this.x1y1.iterateQuadrants(
-              context, f, Math.addExact(depth, 1L))) {
+              context, f, Math.addExact(depth, 1))) {
               case RESULT_CONTINUE:
                 break;
               case RESULT_TERMINATE:
@@ -609,13 +609,13 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     }
 
     @Override
-    public Map<T, AreaL> objects()
+    public Map<T, AreaI> objects()
     {
       return this.quadrant_objects_view;
     }
 
     @Override
-    public AreaL area()
+    public AreaI area()
     {
       return this.area;
     }
