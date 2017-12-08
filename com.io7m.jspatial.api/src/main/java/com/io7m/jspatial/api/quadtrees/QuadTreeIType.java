@@ -46,8 +46,8 @@ public interface QuadTreeIType<A> extends QuadTreeReadableIType<A>
    */
 
   boolean insert(
-    final A item,
-    final AreaI bounds);
+    A item,
+    AreaI bounds);
 
   /**
    * <p>Remove the object {@code item} from the quadtree.</p>

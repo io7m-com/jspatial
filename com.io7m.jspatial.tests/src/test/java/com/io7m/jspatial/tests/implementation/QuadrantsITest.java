@@ -31,8 +31,6 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-import static com.io7m.jfunctional.Unit.unit;
-
 public final class QuadrantsITest
 {
   @Rule public PercentagePassRule percent =
@@ -70,7 +68,7 @@ public final class QuadrantsITest
         quads.x0y0(),
         quads.x1y1());
       Assert.assertFalse(AreasI.overlaps(quads.x0y0(), quads.x1y1()));
-      return unit();
+      return null;
     });
   }
 

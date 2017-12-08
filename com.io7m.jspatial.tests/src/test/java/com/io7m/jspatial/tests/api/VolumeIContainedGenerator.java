@@ -17,7 +17,7 @@
 package com.io7m.jspatial.tests.api;
 
 import com.io7m.jaffirm.core.Postconditions;
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeI;
 import com.io7m.jregions.core.unparameterized.volumes.VolumesI;
 import net.java.quickcheck.Generator;
@@ -31,7 +31,7 @@ public final class VolumeIContainedGenerator implements Generator<VolumeI>
   public VolumeIContainedGenerator(
     final VolumeI in_container)
   {
-    this.container = NullCheck.notNull(in_container, "Contaienr");
+    this.container = Objects.requireNonNull(in_container, "Contaienr");
   }
 
   @Override

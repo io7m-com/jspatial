@@ -17,7 +17,7 @@
 package com.io7m.jspatial.examples.swing;
 
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jspatial.api.Ray2D;
@@ -199,7 +199,7 @@ final class QuadTreeControls extends JPanel
       this.tree_height_model.getNumber().longValue()));
 
     this.events = BehaviorSubject.createDefault(
-      QuadTreeCommandTypes.createQuadTreeL(this.config_bl.build()));
+      CreateQuadTreeL.of(this.config_bl.build()));
 
     this.object_add.addActionListener(
       e -> this.onObjectAdd());
@@ -212,7 +212,7 @@ final class QuadTreeControls extends JPanel
     this.tree_create.addActionListener(
       e -> this.onTreeCreate());
     this.tree_trim.addActionListener(
-      e -> this.events.onNext(QuadTreeCommandTypes.trimQuadTree()));
+      e -> this.events.onNext(TrimQuadTree.builder().build()));
     this.area_query_run.addActionListener(
       e -> this.onAreaQuery());
     this.ray_query_run.addActionListener(
@@ -332,7 +332,7 @@ final class QuadTreeControls extends JPanel
 
       final Integer item = Integer.valueOf(this.pool.getAndIncrement());
       this.objects_model.addElement(item);
-      this.events.onNext(QuadTreeCommandTypes.addObject(area, item));
+      this.events.onNext(AddObject.of(area, item));
     }
   }
 
@@ -341,7 +341,7 @@ final class QuadTreeControls extends JPanel
     final List<Integer> range = this.objects.getSelectedValuesList();
     for (final Integer o : range) {
       this.objects_model.removeElement(o);
-      this.events.onNext(QuadTreeCommandTypes.removeObject(o));
+      this.events.onNext(RemoveObject.of(o));
     }
   }
 
@@ -357,7 +357,7 @@ final class QuadTreeControls extends JPanel
     final AreaD area_d =
       AreaD.of((double) x0, (double) x1, (double) y0, (double) y1);
 
-    this.events.onNext(QuadTreeCommandTypes.areaQuery(
+    this.events.onNext(AreaQuery.of(
       area_l,
       area_d,
       this.area_query_overlapping.isSelected()));
@@ -379,7 +379,7 @@ final class QuadTreeControls extends JPanel
       Vectors2D.normalize(Vectors2D.subtract(p1, p0));
 
     final Ray2D ray = Ray2D.of(origin, direction);
-    this.events.onNext(QuadTreeCommandTypes.rayQuery(ray));
+    this.events.onNext(RayQuery.of(ray));
   }
 
   private void onTreeCreate()
@@ -411,11 +411,11 @@ final class QuadTreeControls extends JPanel
     QuadTreeCommandType m = null;
     switch (this.tree_kind.getSelectedItem()) {
       case LONG_INTEGER: {
-        m = QuadTreeCommandTypes.createQuadTreeL(this.config_bl.build());
+        m = CreateQuadTreeL.of(this.config_bl.build());
         break;
       }
       case DOUBLE: {
-        m = QuadTreeCommandTypes.createQuadTreeD(this.config_bd.build());
+        m = CreateQuadTreeD.of(this.config_bd.build());
         break;
       }
     }
@@ -434,7 +434,7 @@ final class QuadTreeControls extends JPanel
     final AreaL area = AreaL.of(x0, x1, y0, y1);
     final Integer item = Integer.valueOf(this.pool.getAndIncrement());
     this.objects_model.addElement(item);
-    this.events.onNext(QuadTreeCommandTypes.addObject(area, item));
+    this.events.onNext(AddObject.of(area, item));
   }
 
   Observable<QuadTreeCommandType> events()
@@ -451,8 +451,8 @@ final class QuadTreeControls extends JPanel
       final JSlider in_slider,
       final JTextField in_field)
     {
-      this.slider = NullCheck.notNull(in_slider, "Slider");
-      this.field = NullCheck.notNull(in_field, "Field");
+      this.slider = Objects.requireNonNull(in_slider, "Slider");
+      this.field = Objects.requireNonNull(in_field, "Field");
     }
 
     @Override

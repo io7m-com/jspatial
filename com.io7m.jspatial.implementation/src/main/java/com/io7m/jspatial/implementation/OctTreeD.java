@@ -18,8 +18,6 @@ package com.io7m.jspatial.implementation;
 
 import com.io7m.jaffirm.core.Invariants;
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jnull.NullCheck;
-import com.io7m.jnull.Nullable;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitD;
 import com.io7m.jregions.core.unparameterized.volumes.VolumesD;
@@ -40,6 +38,7 @@ import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.function.BiFunction;
@@ -58,7 +57,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
 
   private OctTreeD(final OctTreeConfigurationD in_config)
   {
-    this.config = NullCheck.notNull(in_config, "Configuration");
+    this.config = Objects.requireNonNull(in_config, "Configuration");
     this.root = new Octant(null, in_config.volume());
     this.objects = new Reference2ReferenceOpenHashMap<>();
   }
@@ -121,8 +120,8 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     final T item,
     final VolumeD item_bounds)
   {
-    NullCheck.notNull(item, "Item");
-    NullCheck.notNull(item_bounds, "Bounds");
+    Objects.requireNonNull(item, "Item");
+    Objects.requireNonNull(item_bounds, "Bounds");
 
     if (this.objects.containsKey(item)) {
       this.remove(item);
@@ -144,7 +143,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
   @Override
   public boolean remove(final T item)
   {
-    NullCheck.notNull(item, "Item");
+    Objects.requireNonNull(item, "Item");
     return this.root.remove(item);
   }
 
@@ -158,7 +157,7 @@ public final class OctTreeD<T> implements OctTreeDType<T>
   @Override
   public <U> OctTreeDType<U> map(final BiFunction<T, VolumeD, U> f)
   {
-    NullCheck.notNull(f, "Function");
+    Objects.requireNonNull(f, "Function");
 
     final OctTreeDType<U> qt = new OctTreeD<>(this.config);
     for (final Map.Entry<T, VolumeD> es : this.objects.entrySet()) {
@@ -174,15 +173,15 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     final C context,
     final OctTreeOctantIterationDType<T, C> f)
   {
-    NullCheck.notNull(context, "Context");
-    NullCheck.notNull(f, "Function");
+    Objects.requireNonNull(context, "Context");
+    Objects.requireNonNull(f, "Function");
     this.root.iterateOctants(context, f, 0L);
   }
 
   @Override
   public VolumeD volumeFor(final T item)
   {
-    NullCheck.notNull(item, "Item");
+    Objects.requireNonNull(item, "Item");
 
     return this.objects.computeIfAbsent(item, i -> {
       throw new NoSuchElementException(i.toString());
@@ -194,8 +193,8 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     final VolumeD volume,
     final Set<T> items)
   {
-    NullCheck.notNull(volume, "Volume");
-    NullCheck.notNull(items, "Items");
+    Objects.requireNonNull(volume, "Volume");
+    Objects.requireNonNull(items, "Items");
     this.root.volumeContaining(volume, items);
   }
 
@@ -204,8 +203,8 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     final VolumeD volume,
     final Set<T> items)
   {
-    NullCheck.notNull(volume, "Volume");
-    NullCheck.notNull(items, "Items");
+    Objects.requireNonNull(volume, "Volume");
+    Objects.requireNonNull(items, "Items");
     this.root.volumeOverlapping(volume, items);
   }
 
@@ -214,8 +213,8 @@ public final class OctTreeD<T> implements OctTreeDType<T>
     final Ray3D ray,
     final SortedSet<OctTreeRaycastResultD<T>> items)
   {
-    NullCheck.notNull(ray, "Ray");
-    NullCheck.notNull(items, "Items");
+    Objects.requireNonNull(ray, "Ray");
+    Objects.requireNonNull(items, "Items");
     this.root.raycast(ray, items);
   }
 
@@ -223,23 +222,23 @@ public final class OctTreeD<T> implements OctTreeDType<T>
   {
     private final VolumeD volume;
     private final Reference2ReferenceOpenHashMap<T, VolumeD> octant_objects;
-    private final @Nullable Octant parent;
+    private final Octant parent;
     private final Map<T, VolumeD> octant_objects_view;
-    private @Nullable Octant x0y0z0;
-    private @Nullable Octant x0y1z0;
-    private @Nullable Octant x1y0z0;
-    private @Nullable Octant x1y1z0;
-    private @Nullable Octant x0y0z1;
-    private @Nullable Octant x0y1z1;
-    private @Nullable Octant x1y0z1;
-    private @Nullable Octant x1y1z1;
+    private Octant x0y0z0;
+    private Octant x0y1z0;
+    private Octant x1y0z0;
+    private Octant x1y1z0;
+    private Octant x0y0z1;
+    private Octant x0y1z1;
+    private Octant x1y0z1;
+    private Octant x1y1z1;
 
     private Octant(
-      final @Nullable Octant in_parent,
+      final Octant in_parent,
       final VolumeD in_volume)
     {
       this.parent = in_parent;
-      this.volume = NullCheck.notNull(in_volume, "Volume");
+      this.volume = Objects.requireNonNull(in_volume, "Volume");
       this.octant_objects = new Reference2ReferenceOpenHashMap<>();
       this.octant_objects_view =
         Reference2ReferenceMaps.unmodifiable(this.octant_objects);

@@ -16,7 +16,7 @@
 
 package com.io7m.jspatial.tests.rules;
 
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import org.junit.Assert;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -75,9 +75,9 @@ public final class PercentagePassRule implements TestRule
     {
       this.iterations = in_iterations;
       this.statement =
-        NullCheck.notNull(in_statement, "Statement");
+        Objects.requireNonNull(in_statement, "Statement");
       this.description =
-        NullCheck.notNull(in_description, "Description");
+        Objects.requireNonNull(in_description, "Description");
       this.target_percent = in_percent;
     }
 

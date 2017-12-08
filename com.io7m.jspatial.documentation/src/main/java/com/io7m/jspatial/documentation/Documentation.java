@@ -16,12 +16,8 @@
 
 package com.io7m.jspatial.documentation;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-
 /**
- * Functions for retrieving the documentation.
+ * Documentation marker class.
  */
 
 public final class Documentation
@@ -31,22 +27,4 @@ public final class Documentation
     throw new AssertionError("Unreachable code!");
   }
 
-  /**
-   * @return The resource URI of the documentation.
-   */
-
-  public static URI getDocumentationXMLLocation()
-  {
-    try {
-      final URL url =
-        Documentation.class
-          .getResource("/com/io7m/jspatial/documentation/documentation.xml");
-      assert url != null;
-      final URI uri = url.toURI();
-      assert uri != null;
-      return uri;
-    } catch (final URISyntaxException e) {
-      throw new AssertionError(e);
-    }
-  }
 }

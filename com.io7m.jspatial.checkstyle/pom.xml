@@ -17,10 +17,4 @@
   <description>Spatial data structures (Checkstyle policy)</description>
   <url>http://io7m.github.io/jspatial/</url>
 
-  <scm>
-    <url>${project.parent.scm.url}</url>
-    <connection>${project.parent.scm.connection}</connection>
-    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
-  </scm>
-
 </project>

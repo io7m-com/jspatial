@@ -1,10 +1,10 @@
 /*
  * Copyright © 2017 <code@io7m.com> http://io7m.com
- * 
+ *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
@@ -15,9 +15,18 @@
  */
 
 /**
- * Unit tests against the API quadtree types.
+ * Spatial data structures (Documentation)
  */
 
+module com.io7m.jspatial.documentation
+{
+  requires static org.immutables.value;
+  requires static org.osgi.annotation;
+  requires static org.osgi.service.component.annotations;
 
-package com.io7m.jspatial.tests.api.quadtrees;
+  requires fastutil;
+  requires com.io7m.jspatial.api;
+  requires com.io7m.jspatial.implementation;
 
+  exports com.io7m.jspatial.documentation;
+}

@@ -46,8 +46,8 @@ public interface OctTreeIType<A> extends OctTreeReadableIType<A>
    */
 
   boolean insert(
-    final A item,
-    final VolumeI bounds);
+    A item,
+    VolumeI bounds);
 
   /**
    * <p>Remove the object {@code item} from the octtree.</p>

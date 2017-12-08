@@ -5,38 +5,40 @@
 
 <module name="Checker">
 
-  <!-- Allow control of Javadoc checks with CHECKSTYLE_JAVADOC:ON and CHECKSTYLE_JAVADOC:OFF -->
-  <module name="SuppressionCommentFilter">
-    <property name="onCommentFormat" value="CHECKSTYLE_JAVADOC:ON"/>
-    <property name="offCommentFormat" value="CHECKSTYLE_JAVADOC:OFF"/>
-    <property name="checkFormat" value="Javadoc.*"/>
+  <!-- Exclude module-info.java files from processing -->
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value="module\-info\.java$"/>
   </module>
 
-  <!-- Allow control of spacing checks with CHECKSTYLE_SPACE:ON and CHECKSTYLE_SPACE:OFF -->
-  <module name="SuppressionCommentFilter">
-    <property name="onCommentFormat" value="CHECKSTYLE_SPACE:ON"/>
-    <property name="offCommentFormat" value="CHECKSTYLE_SPACE:OFF"/>
-    <property name="checkFormat" value="NoWhitespaceAfter"/>
-  </module>
-
-  <!-- Allow control of all checks with CHECKSTYLE:ON and CHECKSTYLE:OFF -->
-  <module name="SuppressionCommentFilter">
-    <property name="onCommentFormat" value="CHECKSTYLE:ON"/>
-    <property name="offCommentFormat" value="CHECKSTYLE:OFF"/>
-    <property name="checkFormat" value=".*"/>
-  </module>
-  
-    <!-- Allow control of visibility checks with CHECKSTYLE_VISIBILITY:ON and CHECKSTYLE_VISIBILITY:OFF -->
-  <module name="SuppressionCommentFilter">
-    <property name="onCommentFormat" value="CHECKSTYLE_VISIBILITY:ON"/>
-    <property name="offCommentFormat" value="CHECKSTYLE_VISIBILITY:OFF"/>
-    <property name="checkFormat" value="VisibilityModifier"/>
-  </module>
-
-  <property name="severity" value="error"/>
   <module name="TreeWalker">
-    <!-- Required to use the SuppressionCommentFilter above -->
-    <module name="FileContentsHolder"/>
+
+    <!-- Allow control of Javadoc checks with CHECKSTYLE_JAVADOC:ON and CHECKSTYLE_JAVADOC:OFF -->
+    <module name="SuppressionCommentFilter">
+      <property name="onCommentFormat" value="CHECKSTYLE_JAVADOC:ON"/>
+      <property name="offCommentFormat" value="CHECKSTYLE_JAVADOC:OFF"/>
+      <property name="checkFormat" value="Javadoc.*"/>
+    </module>
+
+    <!-- Allow control of spacing checks with CHECKSTYLE_SPACE:ON and CHECKSTYLE_SPACE:OFF -->
+    <module name="SuppressionCommentFilter">
+      <property name="onCommentFormat" value="CHECKSTYLE_SPACE:ON"/>
+      <property name="offCommentFormat" value="CHECKSTYLE_SPACE:OFF"/>
+      <property name="checkFormat" value="NoWhitespaceAfter"/>
+    </module>
+
+    <!-- Allow control of all checks with CHECKSTYLE:ON and CHECKSTYLE:OFF -->
+    <module name="SuppressionCommentFilter">
+      <property name="onCommentFormat" value="CHECKSTYLE:ON"/>
+      <property name="offCommentFormat" value="CHECKSTYLE:OFF"/>
+      <property name="checkFormat" value=".*"/>
+    </module>
+
+    <!-- Allow control of visibility checks with CHECKSTYLE_VISIBILITY:ON and CHECKSTYLE_VISIBILITY:OFF -->
+    <module name="SuppressionCommentFilter">
+      <property name="onCommentFormat" value="CHECKSTYLE_VISIBILITY:ON"/>
+      <property name="offCommentFormat" value="CHECKSTYLE_VISIBILITY:OFF"/>
+      <property name="checkFormat" value="VisibilityModifier"/>
+    </module>
 
     <!--
     <module name="AbstractClassName"/>
