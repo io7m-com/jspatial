@@ -132,7 +132,7 @@
     <s:section>
       <s:section-title>License</s:section-title>
       <s:paragraph>
-        All files distributed with the <s:term s:type="package"></s:term>
+        All files distributed with the <s:term s:type="package">${project.parent.name}</s:term>
         package are placed under the following license:
         <s:verbatim s:type="license"><![CDATA[Copyright © 2016 http://io7m.com
 
@@ -156,10 +156,10 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.]]>
     <s:part-title>API Reference</s:part-title>
     <s:part-contents/>
     <s:section>
-      <s:section-title>Javadoc</s:section-title>
+      <s:section-title>JavaDoc</s:section-title>
       <s:paragraph>
         API documentation for the package is provided via the
-        included <s:link-external s:target="javadoc">Javadoc</s:link-external>.
+        included <s:link-external s:target="apidocs">JavaDoc</s:link-external>.
       </s:paragraph>
     </s:section>
   </s:part>
