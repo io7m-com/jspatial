@@ -25,7 +25,7 @@ module com.io7m.jspatial.documentation
   requires static org.osgi.annotation;
   requires static org.osgi.service.component.annotations;
 
-  requires fastutil;
+  requires it.unimi.dsi.fastutil;
   requires com.io7m.jspatial.api;
   requires com.io7m.jspatial.implementation;
 

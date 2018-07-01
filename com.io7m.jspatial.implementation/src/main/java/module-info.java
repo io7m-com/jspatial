@@ -32,7 +32,7 @@ module com.io7m.jspatial.implementation
   requires com.io7m.jspatial.api;
   requires com.io7m.junreachable.core;
   requires com.io7m.jregions.core;
-  requires fastutil;
+  requires it.unimi.dsi.fastutil;
   requires com.io7m.jaffirm.core;
   requires com.io7m.jtensors.core;
 
