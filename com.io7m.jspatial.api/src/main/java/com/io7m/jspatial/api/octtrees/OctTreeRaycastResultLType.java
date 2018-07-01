@@ -16,8 +16,8 @@
 
 package com.io7m.jspatial.api.octtrees;
 
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
-import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
 /**
@@ -29,7 +29,7 @@ import org.immutables.value.Value;
  */
 
 @Value.Immutable
-@JSpatialImmutableStyleType
+@ImmutablesStyleType
 public interface OctTreeRaycastResultLType<T>
   extends Comparable<OctTreeRaycastResultLType<T>>
 {

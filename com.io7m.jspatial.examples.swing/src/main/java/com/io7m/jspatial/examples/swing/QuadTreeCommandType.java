@@ -16,9 +16,9 @@
 
 package com.io7m.jspatial.examples.swing;
 
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jregions.core.unparameterized.areas.AreaL;
-import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
@@ -26,6 +26,8 @@ import org.immutables.value.Value;
 
 interface QuadTreeCommandType
 {
+  Kind kind();
+
   enum Kind
   {
     ADD_OBJECT,
@@ -37,9 +39,7 @@ interface QuadTreeCommandType
     RAY_QUERY
   }
 
-  Kind kind();
-
-  @JSpatialImmutableStyleType
+  @ImmutablesStyleType
   @Value.Immutable
   interface AddObjectType extends QuadTreeCommandType
   {
@@ -56,7 +56,7 @@ interface QuadTreeCommandType
     Integer item();
   }
 
-  @JSpatialImmutableStyleType
+  @ImmutablesStyleType
   @Value.Immutable
   interface RemoveObjectType extends QuadTreeCommandType
   {
@@ -70,7 +70,7 @@ interface QuadTreeCommandType
     Integer item();
   }
 
-  @JSpatialImmutableStyleType
+  @ImmutablesStyleType
   @Value.Immutable
   interface TrimQuadTreeType extends QuadTreeCommandType
   {
@@ -81,7 +81,7 @@ interface QuadTreeCommandType
     }
   }
 
-  @JSpatialImmutableStyleType
+  @ImmutablesStyleType
   @Value.Immutable
   interface CreateQuadTreeLType extends QuadTreeCommandType
   {
@@ -95,7 +95,7 @@ interface QuadTreeCommandType
     QuadTreeConfigurationL configuration();
   }
 
-  @JSpatialImmutableStyleType
+  @ImmutablesStyleType
   @Value.Immutable
   interface CreateQuadTreeDType extends QuadTreeCommandType
   {
@@ -109,7 +109,7 @@ interface QuadTreeCommandType
     QuadTreeConfigurationD configuration();
   }
 
-  @JSpatialImmutableStyleType
+  @ImmutablesStyleType
   @Value.Immutable
   interface AreaQueryType extends QuadTreeCommandType
   {
@@ -129,7 +129,7 @@ interface QuadTreeCommandType
     boolean overlaps();
   }
 
-  @JSpatialImmutableStyleType
+  @ImmutablesStyleType
   @Value.Immutable
   interface RayQueryType extends QuadTreeCommandType
   {

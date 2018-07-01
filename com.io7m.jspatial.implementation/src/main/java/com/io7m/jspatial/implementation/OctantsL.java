@@ -36,8 +36,8 @@ public final class OctantsL
   }
 
   /**
-   * Subdivide a volume into eight equal sized quadrants. The volume is not
-   * split if the size on any axis is less than 2.
+   * Subdivide a volume into eight equal sized quadrants. The volume is not split if the size on any
+   * axis is less than 2.
    *
    * @param volume The volume
    *

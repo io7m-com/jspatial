@@ -12,7 +12,7 @@
   </parent>
   <artifactId>com.io7m.jspatial.api</artifactId>
 
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <name>com.io7m.jspatial.api</name>
   <description>Spatial data structures (API)</description>
   <url>http://io7m.github.io/jspatial/</url>
@@ -33,8 +33,8 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.annotation</artifactId>
+      <groupId>com.io7m.immutables.style</groupId>
+      <artifactId>com.io7m.immutables.style</artifactId>
       <scope>provided</scope>
     </dependency>
   </dependencies>
@@ -45,6 +45,18 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+
+      <!-- Analyze semantic versioning -->
+      <plugin>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-baseline-maven-plugin</artifactId>
+      </plugin>
+
+      <!-- Spot bugs -->
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
       </plugin>
 
       <!-- Process annotations -->
@@ -62,19 +74,16 @@
         </configuration>
       </plugin>
 
-      <!-- Produce OSGi bundle -->
+      <!-- Produce OSGi manifest -->
       <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-maven-plugin</artifactId>
         <configuration>
-          <instructions>
-            <Export-Package>
-              com.io7m.jspatial.api,
-              com.io7m.jspatial.api.quadtrees,
+          <bnd><![CDATA[
+            Export-Package: com.io7m.jspatial.api, \
+              com.io7m.jspatial.api.quadtrees,     \
               com.io7m.jspatial.api.octtrees
-            </Export-Package>
-          </instructions>
+]]></bnd>
         </configuration>
       </plugin>
     </plugins>

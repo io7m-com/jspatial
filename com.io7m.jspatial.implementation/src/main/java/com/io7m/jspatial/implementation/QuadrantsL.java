@@ -36,8 +36,8 @@ public final class QuadrantsL
   }
 
   /**
-   * Subdivide an area into four equal sized quadrants. The area is not split if
-   * the width and height are less than 2.
+   * Subdivide an area into four equal sized quadrants. The area is not split if the width and
+   * height are less than 2.
    *
    * @param area The area
    *

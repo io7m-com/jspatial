@@ -12,7 +12,7 @@
   </parent>
   <artifactId>com.io7m.jspatial.implementation</artifactId>
 
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <name>com.io7m.jspatial.implementation</name>
   <description>Spatial data structures (Main implementation)</description>
   <url>http://io7m.github.io/jspatial/</url>
@@ -46,11 +46,6 @@
       <artifactId>fastutil</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.immutables</groupId>
-      <artifactId>value</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.component.annotations</artifactId>
       <scope>provided</scope>
@@ -65,17 +60,26 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
       </plugin>
 
-      <!-- Produce OSGi bundle -->
+      <!-- Analyze semantic versioning -->
       <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-baseline-maven-plugin</artifactId>
+      </plugin>
+
+      <!-- Spot bugs -->
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+      </plugin>
+
+      <!-- Produce OSGi manifest -->
+      <plugin>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-maven-plugin</artifactId>
         <configuration>
-          <instructions>
-            <Export-Package>
-              com.io7m.jspatial.implementation
-            </Export-Package>
-          </instructions>
+          <bnd><![CDATA[
+            Export-Package: com.io7m.jspatial.implementation
+]]></bnd>
         </configuration>
       </plugin>
     </plugins>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter xmlns="https://github.com/spotbugs/filter/3.0.0">
+
+  <Match>
+    <Or>
+      <Class name="com.io7m.jspatial.api.octtrees.OctTreeConfigurationD"/>
+      <Class name="com.io7m.jspatial.api.octtrees.OctTreeConfigurationI"/>
+      <Class name="com.io7m.jspatial.api.octtrees.OctTreeConfigurationL"/>
+      <Class name="com.io7m.jspatial.api.octtrees.OctTreeRaycastResultD"/>
+      <Class name="com.io7m.jspatial.api.octtrees.OctTreeRaycastResultI"/>
+      <Class name="com.io7m.jspatial.api.octtrees.OctTreeRaycastResultL"/>
+      <Class name="com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD"/>
+      <Class name="com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationI"/>
+      <Class name="com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL"/>
+      <Class name="com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultD"/>
+      <Class name="com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultI"/>
+      <Class name="com.io7m.jspatial.api.quadtrees.QuadTreeRaycastResultL"/>
+      <Class name="com.io7m.jspatial.api.Ray2D"/>
+      <Class name="com.io7m.jspatial.api.Ray3D"/>
+
+      <Class name="~com\.io7m\.jspatial\..+\$InitShim"/>
+      <Class name="~com\.io7m\.jspatial\..+\$Builder"/>
+    </Or>
+  </Match>
+
+  <!-- False positive -->
+  <Match>
+    <Class name="com.io7m.jspatial.api.Ray2DType"/>
+    <Method name="intersectsArea"/>
+    <Bug pattern="SEO_SUBOPTIMAL_EXPRESSION_ORDER"/>
+  </Match>
+
+  <Match>
+    <Or>
+      <Bug pattern="IMC_IMMATURE_CLASS_NO_TOSTRING"/>
+      <Bug pattern="OPM_OVERLY_PERMISSIVE_METHOD"/>
+      <Bug pattern="DRE_DECLARED_RUNTIME_EXCEPTION"/>
+    </Or>
+  </Match>
+
+</FindBugsFilter>

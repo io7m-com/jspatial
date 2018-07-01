@@ -327,8 +327,8 @@ public final class QuadTreeD<T> implements QuadTreeDType<T>
 
     private boolean canSplit()
     {
-      final double width = this.area.width();
-      final double height = this.area.height();
+      final double width = this.area.sizeX();
+      final double height = this.area.sizeY();
 
       final double min_width =
         Math.max(0.0001, QuadTreeD.this.config.minimumQuadrantWidth());
@@ -638,8 +638,7 @@ public final class QuadTreeD<T> implements QuadTreeDType<T>
     }
 
     /**
-     * Attempt to turn this node and as many ancestors of this node back into
-     * leaves as possible.
+     * Attempt to turn this node and as many ancestors of this node back into leaves as possible.
      */
 
     private void unsplitAttemptRecursive()

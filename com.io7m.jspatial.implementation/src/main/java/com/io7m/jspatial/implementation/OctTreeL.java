@@ -814,8 +814,7 @@ public final class OctTreeL<T> implements OctTreeLType<T>
     }
 
     /**
-     * Attempt to turn this node and as many ancestors of this node back into
-     * leaves as possible.
+     * Attempt to turn this node and as many ancestors of this node back into leaves as possible.
      */
 
     private void unsplitAttemptRecursive()

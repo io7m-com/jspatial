@@ -31,8 +31,7 @@ import java.util.Map;
 public interface OctTreeOctantIType<T>
 {
   /**
-   * @return A read-only view of the objects directly contained within this
-   * octant
+   * @return A read-only view of the objects directly contained within this octant
    */
 
   Map<T, VolumeI> objects();

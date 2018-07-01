@@ -19,6 +19,7 @@ module com.io7m.jspatial.examples.swing
   requires java.desktop;
 
   requires static org.immutables.value;
+  requires static com.io7m.immutables.style;
 
   requires com.io7m.jaffirm.core;
   requires com.io7m.jregions.core;

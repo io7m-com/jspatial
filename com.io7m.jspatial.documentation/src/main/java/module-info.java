@@ -21,6 +21,7 @@
 module com.io7m.jspatial.documentation
 {
   requires static org.immutables.value;
+  requires static com.io7m.immutables.style;
   requires static org.osgi.annotation;
   requires static org.osgi.service.component.annotations;
 

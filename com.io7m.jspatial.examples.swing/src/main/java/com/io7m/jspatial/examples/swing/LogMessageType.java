@@ -16,14 +16,14 @@
 
 package com.io7m.jspatial.examples.swing;
 
-import com.io7m.jspatial.api.JSpatialImmutableStyleType;
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
 /**
  * Log message type.
  */
 
-@JSpatialImmutableStyleType
+@ImmutablesStyleType
 @Value.Immutable
 interface LogMessageType
 {

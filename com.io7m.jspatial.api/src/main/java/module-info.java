@@ -21,7 +21,7 @@
 module com.io7m.jspatial.api
 {
   requires static org.immutables.value;
-  requires static org.osgi.annotation;
+  requires static com.io7m.immutables.style;
 
   requires com.io7m.jregions.core;
   requires com.io7m.jtensors.core;

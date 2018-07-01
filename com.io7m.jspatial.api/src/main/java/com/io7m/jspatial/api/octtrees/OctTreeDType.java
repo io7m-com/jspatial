@@ -50,8 +50,7 @@ public interface OctTreeDType<A> extends OctTreeReadableDType<A>
    * <p>Remove the object {@code item} from the octtree.</p>
    *
    * <p>The function returns {@code false} if the object could not be
-   * removed for any reason (perhaps due to not being in the tree in the first
-   * place).</p>
+   * removed for any reason (perhaps due to not being in the tree in the first place).</p>
    *
    * @param item The object to remove
    *

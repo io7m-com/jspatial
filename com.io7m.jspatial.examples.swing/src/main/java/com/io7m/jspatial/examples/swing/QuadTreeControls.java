@@ -17,7 +17,6 @@
 package com.io7m.jspatial.examples.swing;
 
 import com.io7m.jaffirm.core.Preconditions;
-import java.util.Objects;
 import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jspatial.api.Ray2D;
@@ -45,6 +44,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.Font;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -115,6 +115,8 @@ final class QuadTreeControls extends JPanel
   private final JSpinner ray_query_y1;
   private final JButton ray_query_run;
 
+  // Large constructor (too many executable statements)
+  // CHECKSTYLE:OFF
   QuadTreeControls()
   {
     this.pool = new AtomicInteger(0);
@@ -198,26 +200,18 @@ final class QuadTreeControls extends JPanel
       this.tree_y_model.getNumber().longValue(),
       this.tree_height_model.getNumber().longValue()));
 
-    this.events = BehaviorSubject.createDefault(
-      CreateQuadTreeL.of(this.config_bl.build()));
+    this.events = BehaviorSubject.createDefault(CreateQuadTreeL.of(this.config_bl.build()));
 
-    this.object_add.addActionListener(
-      e -> this.onObjectAdd());
-    this.objects.addListSelectionListener(
-      e -> this.onObjectListChanged());
-    this.objects_random_add.addActionListener(
-      e -> this.onObjectsRandomAdd());
-    this.object_remove.addActionListener(
-      e -> this.onObjectRemove());
-    this.tree_create.addActionListener(
-      e -> this.onTreeCreate());
-    this.tree_trim.addActionListener(
-      e -> this.events.onNext(TrimQuadTree.builder().build()));
-    this.area_query_run.addActionListener(
-      e -> this.onAreaQuery());
-    this.ray_query_run.addActionListener(
-      e -> this.onRayQuery());
+    this.object_add.addActionListener(e -> this.onObjectAdd());
+    this.objects.addListSelectionListener(e -> this.onObjectListChanged());
+    this.objects_random_add.addActionListener(e -> this.onObjectsRandomAdd());
+    this.object_remove.addActionListener(e -> this.onObjectRemove());
+    this.tree_create.addActionListener(e -> this.onTreeCreate());
+    this.tree_trim.addActionListener(e -> this.events.onNext(TrimQuadTree.builder().build()));
+    this.area_query_run.addActionListener(e -> this.onAreaQuery());
+    this.ray_query_run.addActionListener(e -> this.onRayQuery());
   }
+  // CHECKSTYLE:ON
 
   private static long randomLong(
     final long min,

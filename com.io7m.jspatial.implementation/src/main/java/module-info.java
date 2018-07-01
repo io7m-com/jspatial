@@ -14,6 +14,13 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+import com.io7m.jspatial.implementation.OctTreeSupplierD;
+import com.io7m.jspatial.implementation.OctTreeSupplierI;
+import com.io7m.jspatial.implementation.OctTreeSupplierL;
+import com.io7m.jspatial.implementation.QuadTreeSupplierD;
+import com.io7m.jspatial.implementation.QuadTreeSupplierI;
+import com.io7m.jspatial.implementation.QuadTreeSupplierL;
+
 /**
  * Spatial data structures (Main implementation)
  */
@@ -28,6 +35,14 @@ module com.io7m.jspatial.implementation
   requires fastutil;
   requires com.io7m.jaffirm.core;
   requires com.io7m.jtensors.core;
+
+  provides com.io7m.jspatial.api.octtrees.OctTreeSupplierDType with OctTreeSupplierD;
+  provides com.io7m.jspatial.api.octtrees.OctTreeSupplierLType with OctTreeSupplierL;
+  provides com.io7m.jspatial.api.octtrees.OctTreeSupplierIType with OctTreeSupplierI;
+
+  provides com.io7m.jspatial.api.quadtrees.QuadTreeSupplierDType with QuadTreeSupplierD;
+  provides com.io7m.jspatial.api.quadtrees.QuadTreeSupplierLType with QuadTreeSupplierL;
+  provides com.io7m.jspatial.api.quadtrees.QuadTreeSupplierIType with QuadTreeSupplierI;
 
   exports com.io7m.jspatial.implementation;
 }

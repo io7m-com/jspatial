@@ -16,7 +16,7 @@
     <mdep.analyze.skip>true</mdep.analyze.skip>
   </properties>
 
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <name>com.io7m.jspatial.tests</name>
   <description>Spatial data structures (Unit tests)</description>
   <url>http://io7m.github.io/jspatial/</url>

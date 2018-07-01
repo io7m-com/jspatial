@@ -814,8 +814,7 @@ public final class OctTreeI<T> implements OctTreeIType<T>
     }
 
     /**
-     * Attempt to turn this node and as many ancestors of this node back into
-     * leaves as possible.
+     * Attempt to turn this node and as many ancestors of this node back into leaves as possible.
      */
 
     private void unsplitAttemptRecursive()
