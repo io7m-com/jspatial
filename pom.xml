@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
     <artifactId>com.io7m.primogenitor</artifactId>
-    <version>3.0.0-beta0008</version>
+    <version>3.0.0-beta0010</version>
   </parent>
 
   <groupId>com.io7m.jspatial</groupId>
