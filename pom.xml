@@ -7,8 +7,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
-    <artifactId>com.io7m.primogenitor</artifactId>
-    <version>3.0.0-beta0022</version>
+    <artifactId>com.io7m.primogenitor.full</artifactId>
+    <version>3.1.0</version>
   </parent>
 
   <groupId>com.io7m.jspatial</groupId>
