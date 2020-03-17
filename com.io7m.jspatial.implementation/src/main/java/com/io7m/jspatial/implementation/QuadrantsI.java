@@ -16,12 +16,12 @@
 
 package com.io7m.jspatial.implementation;
 
-import com.io7m.jnull.NullCheck;
 import com.io7m.jregions.core.unparameterized.areas.AreaI;
 import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitI;
 import com.io7m.jregions.core.unparameterized.areas.AreasI;
 import com.io7m.junreachable.UnreachableCodeException;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -36,8 +36,8 @@ public final class QuadrantsI
   }
 
   /**
-   * Subdivide an area into four equal sized quadrants. The area is not
-   * split if the width and height are less than 2.
+   * Subdivide an area into four equal sized quadrants. The area is not split if the width and
+   * height are less than 2.
    *
    * @param area The area
    *
@@ -47,7 +47,7 @@ public final class QuadrantsI
   public static Optional<AreaXYSplitI<AreaI>> subdivide(
     final AreaI area)
   {
-    NullCheck.notNull(area, "Area");
+    Objects.requireNonNull(area, "Area");
 
     if (area.sizeX() >= 2 && area.sizeY() >= 2) {
       return Optional.of(

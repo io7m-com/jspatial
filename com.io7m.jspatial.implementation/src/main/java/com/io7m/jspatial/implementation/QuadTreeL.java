@@ -18,8 +18,6 @@ package com.io7m.jspatial.implementation;
 
 import com.io7m.jaffirm.core.Invariants;
 import com.io7m.jaffirm.core.Preconditions;
-import com.io7m.jnull.NullCheck;
-import com.io7m.jnull.Nullable;
 import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitL;
 import com.io7m.jregions.core.unparameterized.areas.AreasL;
@@ -40,6 +38,7 @@ import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
@@ -59,7 +58,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
 
   private QuadTreeL(final QuadTreeConfigurationL in_config)
   {
-    this.config = NullCheck.notNull(in_config, "Configuration");
+    this.config = Objects.requireNonNull(in_config, "Configuration");
     this.root = new Quadrant(null, in_config.area());
     this.objects = new Reference2ReferenceOpenHashMap<>();
   }
@@ -122,8 +121,8 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     final T item,
     final AreaL item_bounds)
   {
-    NullCheck.notNull(item, "Item");
-    NullCheck.notNull(item_bounds, "Bounds");
+    Objects.requireNonNull(item, "Item");
+    Objects.requireNonNull(item_bounds, "Bounds");
 
     if (this.objects.containsKey(item)) {
       this.remove(item);
@@ -145,7 +144,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
   @Override
   public boolean remove(final T item)
   {
-    NullCheck.notNull(item, "Item");
+    Objects.requireNonNull(item, "Item");
     return this.root.remove(item);
   }
 
@@ -159,7 +158,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
   @Override
   public <U> QuadTreeLType<U> map(final BiFunction<T, AreaL, U> f)
   {
-    NullCheck.notNull(f, "Function");
+    Objects.requireNonNull(f, "Function");
 
     final QuadTreeLType<U> qt = new QuadTreeL<>(this.config);
     for (final Map.Entry<T, AreaL> es : this.objects.entrySet()) {
@@ -175,15 +174,15 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     final C context,
     final QuadTreeQuadrantIterationLType<T, C> f)
   {
-    NullCheck.notNull(context, "Context");
-    NullCheck.notNull(f, "Function");
+    Objects.requireNonNull(context, "Context");
+    Objects.requireNonNull(f, "Function");
     this.root.iterateQuadrants(context, f, 0L);
   }
 
   @Override
   public AreaL areaFor(final T item)
   {
-    NullCheck.notNull(item, "Item");
+    Objects.requireNonNull(item, "Item");
 
     return this.objects.computeIfAbsent(item, i -> {
       throw new NoSuchElementException(i.toString());
@@ -195,8 +194,8 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     final AreaL area,
     final Set<T> items)
   {
-    NullCheck.notNull(area, "Area");
-    NullCheck.notNull(items, "Items");
+    Objects.requireNonNull(area, "Area");
+    Objects.requireNonNull(items, "Items");
     this.root.areaContaining(area, items);
   }
 
@@ -205,8 +204,8 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     final AreaL area,
     final Set<T> items)
   {
-    NullCheck.notNull(area, "Area");
-    NullCheck.notNull(items, "Items");
+    Objects.requireNonNull(area, "Area");
+    Objects.requireNonNull(items, "Items");
     this.root.areaOverlapping(area, items);
   }
 
@@ -215,8 +214,8 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     final Ray2D ray,
     final SortedSet<QuadTreeRaycastResultL<T>> items)
   {
-    NullCheck.notNull(ray, "Ray");
-    NullCheck.notNull(items, "Items");
+    Objects.requireNonNull(ray, "Ray");
+    Objects.requireNonNull(items, "Items");
     this.root.raycast(ray, items);
   }
 
@@ -224,19 +223,19 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
   {
     private final AreaL area;
     private final Reference2ReferenceOpenHashMap<T, AreaL> quadrant_objects;
-    private final @Nullable Quadrant parent;
+    private final Quadrant parent;
     private final Map<T, AreaL> quadrant_objects_view;
-    private @Nullable Quadrant x0y0;
-    private @Nullable Quadrant x0y1;
-    private @Nullable Quadrant x1y0;
-    private @Nullable Quadrant x1y1;
+    private Quadrant x0y0;
+    private Quadrant x0y1;
+    private Quadrant x1y0;
+    private Quadrant x1y1;
 
     protected Quadrant(
-      final @Nullable Quadrant in_parent,
+      final Quadrant in_parent,
       final AreaL in_area)
     {
       this.parent = in_parent;
-      this.area = NullCheck.notNull(in_area, "Area");
+      this.area = Objects.requireNonNull(in_area, "Area");
       this.quadrant_objects = new Reference2ReferenceOpenHashMap<>();
       this.quadrant_objects_view =
         Reference2ReferenceMaps.unmodifiable(this.quadrant_objects);
@@ -645,8 +644,7 @@ public final class QuadTreeL<T> implements QuadTreeLType<T>
     }
 
     /**
-     * Attempt to turn this node and as many ancestors of this node back into
-     * leaves as possible.
+     * Attempt to turn this node and as many ancestors of this node back into leaves as possible.
      */
 
     private void unsplitAttemptRecursive()

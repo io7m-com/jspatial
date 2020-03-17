@@ -16,41 +16,130 @@
 
 package com.io7m.jspatial.examples.swing;
 
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jspatial.api.Ray2D;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
-import org.derive4j.Data;
+import org.immutables.value.Value;
 
-@Data
 interface QuadTreeCommandType
 {
-  <R> R match(CasesType<R> cases);
+  Kind kind();
 
-  interface CasesType<R>
+  enum Kind
   {
-    R addObject(
-      AreaL area_l,
-      Integer item);
+    ADD_OBJECT,
+    REMOVE_OBJECT,
+    TRIM,
+    CREATE_QUAD_TREE_L,
+    CREATE_QUAD_TREE_D,
+    AREA_QUERY,
+    RAY_QUERY
+  }
 
-    R removeObject(
-      Integer item);
+  @ImmutablesStyleType
+  @Value.Immutable
+  interface AddObjectType extends QuadTreeCommandType
+  {
+    @Override
+    default Kind kind()
+    {
+      return Kind.ADD_OBJECT;
+    }
 
-    R trimQuadTree();
+    @Value.Parameter
+    AreaL area();
 
-    R createQuadTreeL(
-      QuadTreeConfigurationL lconfig);
+    @Value.Parameter
+    Integer item();
+  }
 
-    R createQuadTreeD(
-      QuadTreeConfigurationD dconfig);
+  @ImmutablesStyleType
+  @Value.Immutable
+  interface RemoveObjectType extends QuadTreeCommandType
+  {
+    @Override
+    default Kind kind()
+    {
+      return Kind.REMOVE_OBJECT;
+    }
 
-    R areaQuery(
-      AreaL area_l,
-      AreaD area_d,
-      boolean overlaps);
+    @Value.Parameter
+    Integer item();
+  }
 
-    R rayQuery(
-      Ray2D ray);
+  @ImmutablesStyleType
+  @Value.Immutable
+  interface TrimQuadTreeType extends QuadTreeCommandType
+  {
+    @Override
+    default Kind kind()
+    {
+      return Kind.TRIM;
+    }
+  }
+
+  @ImmutablesStyleType
+  @Value.Immutable
+  interface CreateQuadTreeLType extends QuadTreeCommandType
+  {
+    @Override
+    default Kind kind()
+    {
+      return Kind.CREATE_QUAD_TREE_L;
+    }
+
+    @Value.Parameter
+    QuadTreeConfigurationL configuration();
+  }
+
+  @ImmutablesStyleType
+  @Value.Immutable
+  interface CreateQuadTreeDType extends QuadTreeCommandType
+  {
+    @Override
+    default Kind kind()
+    {
+      return Kind.CREATE_QUAD_TREE_D;
+    }
+
+    @Value.Parameter
+    QuadTreeConfigurationD configuration();
+  }
+
+  @ImmutablesStyleType
+  @Value.Immutable
+  interface AreaQueryType extends QuadTreeCommandType
+  {
+    @Override
+    default Kind kind()
+    {
+      return Kind.AREA_QUERY;
+    }
+
+    @Value.Parameter
+    AreaL areaL();
+
+    @Value.Parameter
+    AreaD areaD();
+
+    @Value.Parameter
+    boolean overlaps();
+  }
+
+  @ImmutablesStyleType
+  @Value.Immutable
+  interface RayQueryType extends QuadTreeCommandType
+  {
+    @Override
+    default Kind kind()
+    {
+      return Kind.RAY_QUERY;
+    }
+
+    @Value.Parameter
+    Ray2D ray();
   }
 }

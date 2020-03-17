@@ -31,8 +31,7 @@ import java.util.Map;
 public interface QuadTreeQuadrantLType<T>
 {
   /**
-   * @return A read-only view of the objects directly contained within this
-   * quadrant
+   * @return A read-only view of the objects directly contained within this quadrant
    */
 
   Map<T, AreaL> objects();

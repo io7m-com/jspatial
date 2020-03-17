@@ -18,6 +18,6 @@
  * Unit tests against the API types.
  */
 
-@com.io7m.jnull.NonNullByDefault
+
 package com.io7m.jspatial.tests.api;
 

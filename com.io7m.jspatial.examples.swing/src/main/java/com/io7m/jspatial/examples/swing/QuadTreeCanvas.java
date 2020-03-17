@@ -16,8 +16,6 @@
 
 package com.io7m.jspatial.examples.swing;
 
-import com.io7m.jfunctional.Unit;
-import com.io7m.jnull.NullCheck;
 import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jregions.core.unparameterized.areas.AreaL;
 import com.io7m.jspatial.api.Ray2D;
@@ -43,10 +41,10 @@ import java.awt.Graphics;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.util.function.Function;
 
 /**
  * The tree canvas.
@@ -65,7 +63,6 @@ final class QuadTreeCanvas extends JPanel
   private final Set<Integer> query_area_results;
   private final SortedSet<QuadTreeRaycastResultL<Integer>> ray_area_results_l;
   private final SortedSet<QuadTreeRaycastResultD<Integer>> ray_area_results_d;
-  private final Function<QuadTreeCommandType, Unit> on_message_cases;
   private QuadTreeLType<Integer> tree_l;
   private QuadTreeDType<Integer> tree_d;
   private QuadTreeKind kind;
@@ -84,19 +81,10 @@ final class QuadTreeCanvas extends JPanel
     this.ray_area_results_d = new TreeSet<>();
     this.log_messages = in_log_messages;
 
-    this.on_message_cases = QuadTreeCommandTypes.cases()
-      .addObject(this::onCommandAddObject)
-      .removeObject(this::onCommandRemoveObject)
-      .trimQuadTree(this::onCommandTrimQuadTree)
-      .createQuadTreeL(QuadTreeCanvas.this::onCommandCreateQuadTreeL)
-      .createQuadTreeD(QuadTreeCanvas.this::onCommandCreateQuadTreeD)
-      .areaQuery(this::onCommandAreaQuery)
-      .rayQuery(this::onCommandRayQuery);
-
     in_tree_commands.subscribe(this::onCommand);
   }
 
-  private Unit onCommandRayQuery(
+  private Void onCommandRayQuery(
     final Ray2D in_ray)
   {
     this.ray_area_results_l.clear();
@@ -124,7 +112,7 @@ final class QuadTreeCanvas extends JPanel
       }
     }
 
-    return Unit.unit();
+    return null;
   }
 
   private void sendRayQueryCountMessage()
@@ -139,7 +127,7 @@ final class QuadTreeCanvas extends JPanel
         String.format("Ray query selected %d items", Integer.valueOf(count))));
   }
 
-  private Unit onCommandAreaQuery(
+  private Void onCommandAreaQuery(
     final AreaL area_l,
     final AreaD area_d,
     final boolean overlaps)
@@ -181,7 +169,7 @@ final class QuadTreeCanvas extends JPanel
       }
     }
 
-    return Unit.unit();
+    return null;
   }
 
   private void sendAreaQueryCountMessage()
@@ -196,11 +184,48 @@ final class QuadTreeCanvas extends JPanel
 
   private void onCommand(final QuadTreeCommandType m)
   {
-    this.on_message_cases.apply(m);
+    switch (m.kind()) {
+      case ADD_OBJECT: {
+        final AddObject e = (AddObject) m;
+        this.onCommandAddObject(e.area(), e.item());
+        break;
+      }
+      case REMOVE_OBJECT: {
+        final RemoveObject e = (RemoveObject) m;
+        this.onCommandRemoveObject(e.item());
+        break;
+      }
+      case TRIM: {
+        final TrimQuadTree e = (TrimQuadTree) m;
+        this.onCommandTrimQuadTree();
+        break;
+      }
+      case CREATE_QUAD_TREE_L: {
+        final CreateQuadTreeL e = (CreateQuadTreeL) m;
+        this.onCommandCreateQuadTreeL(e.configuration());
+        break;
+      }
+      case CREATE_QUAD_TREE_D: {
+        final CreateQuadTreeD e = (CreateQuadTreeD) m;
+        this.onCommandCreateQuadTreeD(e.configuration());
+        break;
+      }
+      case AREA_QUERY: {
+        final AreaQuery e = (AreaQuery) m;
+        this.onCommandAreaQuery(e.areaL(), e.areaD(), e.overlaps());
+        break;
+      }
+      case RAY_QUERY: {
+        final RayQuery e = (RayQuery) m;
+        this.onCommandRayQuery(e.ray());
+        break;
+      }
+    }
+
     this.repaint();
   }
 
-  private Unit onCommandCreateQuadTreeL(
+  private Void onCommandCreateQuadTreeL(
     final QuadTreeConfigurationL config)
   {
     this.kind = QuadTreeKind.LONG_INTEGER;
@@ -212,10 +237,10 @@ final class QuadTreeCanvas extends JPanel
     this.ray = null;
     this.ray_area_results_d.clear();
     this.ray_area_results_l.clear();
-    return Unit.unit();
+    return null;
   }
 
-  private Unit onCommandCreateQuadTreeD(
+  private Void onCommandCreateQuadTreeD(
     final QuadTreeConfigurationD config)
   {
     this.kind = QuadTreeKind.DOUBLE;
@@ -224,10 +249,10 @@ final class QuadTreeCanvas extends JPanel
     this.query_area_results.clear();
     this.query_area_d = null;
     this.query_area_l = null;
-    return Unit.unit();
+    return null;
   }
 
-  private Unit onCommandTrimQuadTree()
+  private Void onCommandTrimQuadTree()
   {
     switch (this.kind) {
       case LONG_INTEGER: {
@@ -246,10 +271,10 @@ final class QuadTreeCanvas extends JPanel
       }
     }
 
-    return Unit.unit();
+    return null;
   }
 
-  private Unit onCommandRemoveObject(
+  private Void onCommandRemoveObject(
     final Integer item)
   {
     switch (this.kind) {
@@ -273,7 +298,7 @@ final class QuadTreeCanvas extends JPanel
 
     this.query_area_results.remove(item);
     this.items.remove(item);
-    return Unit.unit();
+    return null;
   }
 
   private void sendRemovedMessage(
@@ -291,7 +316,7 @@ final class QuadTreeCanvas extends JPanel
     }
   }
 
-  private Unit onCommandAddObject(
+  private Void onCommandAddObject(
     final AreaL area,
     final Integer item)
   {
@@ -320,7 +345,7 @@ final class QuadTreeCanvas extends JPanel
     }
 
     this.items.put(item, new Item(item, area));
-    return Unit.unit();
+    return null;
   }
 
   private void sendInsertedMessage(
@@ -522,8 +547,8 @@ final class QuadTreeCanvas extends JPanel
       final Integer in_item,
       final AreaL in_area)
     {
-      this.item = NullCheck.notNull(in_item, "Item");
-      this.area = NullCheck.notNull(in_area, "Area");
+      this.item = Objects.requireNonNull(in_item, "Item");
+      this.area = Objects.requireNonNull(in_area, "Area");
     }
   }
 }

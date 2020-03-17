@@ -17,7 +17,7 @@
 package com.io7m.jspatial.tests.api;
 
 import com.io7m.jaffirm.core.Postconditions;
-import com.io7m.jnull.NullCheck;
+import java.util.Objects;
 import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jregions.core.unparameterized.areas.AreasD;
 import net.java.quickcheck.Generator;
@@ -31,7 +31,7 @@ public final class AreaDContainedGenerator implements Generator<AreaD>
   public AreaDContainedGenerator(
     final AreaD in_container)
   {
-    this.container = NullCheck.notNull(in_container, "Container");
+    this.container = Objects.requireNonNull(in_container, "Container");
   }
 
   @Override

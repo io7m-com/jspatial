@@ -46,15 +46,14 @@ public interface QuadTreeLType<A> extends QuadTreeReadableLType<A>
    */
 
   boolean insert(
-    final A item,
-    final AreaL bounds);
+    A item,
+    AreaL bounds);
 
   /**
    * <p>Remove the object {@code item} from the quadtree.</p>
    *
    * <p>The function returns {@code false} if the object could not be
-   * removed for any reason (perhaps due to not being in the tree in the first
-   * place).</p>
+   * removed for any reason (perhaps due to not being in the tree in the first place).</p>
    *
    * @param item The object to remove
    *

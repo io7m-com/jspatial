@@ -16,7 +16,6 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jfunctional.Unit;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeI;
 import com.io7m.jregions.core.unparameterized.volumes.VolumesI;
 import com.io7m.jspatial.api.Ray3D;
@@ -1599,7 +1598,7 @@ public abstract class OctTreeIContract
     }
 
     final Map<Integer, VolumeI> found = new HashMap<>(500);
-    tree.iterateOctants(Unit.unit(), (context, octant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, octant, depth) -> {
       Assert.assertTrue(VolumesI.contains(container, octant.volume()));
 
       final Map<Integer, VolumeI> objects = octant.objects();
@@ -1640,7 +1639,7 @@ public abstract class OctTreeIContract
     Assert.assertEquals(9, (long) OctTreeIContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 1) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1679,7 +1678,7 @@ public abstract class OctTreeIContract
     Assert.assertEquals(9, (long) OctTreeIContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 2) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1718,7 +1717,7 @@ public abstract class OctTreeIContract
     Assert.assertEquals(9, (long) OctTreeIContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 3) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1757,7 +1756,7 @@ public abstract class OctTreeIContract
     Assert.assertEquals(9, (long) OctTreeIContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 4) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1796,7 +1795,7 @@ public abstract class OctTreeIContract
     Assert.assertEquals(9, (long) OctTreeIContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 5) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1835,7 +1834,7 @@ public abstract class OctTreeIContract
     Assert.assertEquals(9, (long) OctTreeIContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 6) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1874,7 +1873,7 @@ public abstract class OctTreeIContract
     Assert.assertEquals(9, (long) OctTreeIContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 7) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1913,7 +1912,7 @@ public abstract class OctTreeIContract
     Assert.assertEquals(9, (long) OctTreeIContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 8) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1952,7 +1951,7 @@ public abstract class OctTreeIContract
     Assert.assertEquals(9, (long) OctTreeIContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateOctants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 9) {
         return TreeVisitResult.RESULT_TERMINATE;
       }

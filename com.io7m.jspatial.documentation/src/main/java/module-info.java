@@ -14,35 +14,20 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.io7m.jspatial.api;
-
-import org.immutables.value.Value;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 /**
- * The immutable style for the package.
- *
- * @since 3.0.0
+ * Spatial data structures (Documentation)
  */
 
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Value.Style(
-  get = {"is*", "get*"},
-  init = "set*",
-  typeAbstract = {"Abstract*", "*Type"},
-  typeImmutable = "*",
-  typeModifiable = "*Mutable",
-  builder = "builder",
-  build = "build",
-  visibility = Value.Style.ImplementationVisibility.PUBLIC,
-  defaults = @Value.Immutable(copy = true))
-public @interface JSpatialImmutableStyleType
+module com.io7m.jspatial.documentation
 {
+  requires static org.immutables.value;
+  requires static com.io7m.immutables.style;
+  requires static org.osgi.annotation;
+  requires static org.osgi.service.component.annotations;
 
+  requires it.unimi.dsi.fastutil;
+  requires com.io7m.jspatial.api;
+  requires com.io7m.jspatial.implementation;
+
+  exports com.io7m.jspatial.documentation;
 }
-

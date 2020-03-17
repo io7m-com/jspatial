@@ -16,7 +16,6 @@
 
 package com.io7m.jspatial.tests.api.quadtrees;
 
-import com.io7m.jfunctional.Unit;
 import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jregions.core.unparameterized.areas.AreasD;
 import com.io7m.jspatial.api.Ray2D;
@@ -1101,7 +1100,7 @@ public abstract class QuadTreeDContract
     }
 
     final Map<Integer, AreaD> found = new HashMap<>(500);
-    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateQuadrants(Integer.valueOf(0), (context, quadrant, depth) -> {
       Assert.assertTrue(AreasD.contains(container, quadrant.area()));
 
       final Map<Integer, AreaD> objects = quadrant.objects();
@@ -1141,7 +1140,7 @@ public abstract class QuadTreeDContract
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateQuadrants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 1) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1179,7 +1178,7 @@ public abstract class QuadTreeDContract
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateQuadrants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 2) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1217,7 +1216,7 @@ public abstract class QuadTreeDContract
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateQuadrants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 3) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1255,7 +1254,7 @@ public abstract class QuadTreeDContract
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateQuadrants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 4) {
         return TreeVisitResult.RESULT_TERMINATE;
       }
@@ -1293,7 +1292,7 @@ public abstract class QuadTreeDContract
     Assert.assertEquals(5L, (long) QuadTreeDContract.countQuadrants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateQuadrants(Unit.unit(), (context, quadrant, depth) -> {
+    tree.iterateQuadrants(Integer.valueOf(0), (context, quadrant, depth) -> {
       if (count.get() == 5) {
         return TreeVisitResult.RESULT_TERMINATE;
       }

@@ -16,11 +16,12 @@
 
 package com.io7m.jspatial.implementation;
 
-import com.io7m.jnull.NullCheck;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitD;
 import com.io7m.jregions.core.unparameterized.volumes.VolumesD;
 import com.io7m.junreachable.UnreachableCodeException;
+
+import java.util.Objects;
 
 /**
  * Functions to divide volumes into octants.
@@ -44,7 +45,7 @@ public final class OctantsD
   public static VolumeXYZSplitD<VolumeD> subdivide(
     final VolumeD area)
   {
-    NullCheck.notNull(area, "Volume");
+    Objects.requireNonNull(area, "Volume");
 
     return VolumesD.splitAtXYZ(
       area,

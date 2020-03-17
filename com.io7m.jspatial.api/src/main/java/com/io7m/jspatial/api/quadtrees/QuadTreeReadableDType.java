@@ -41,8 +41,7 @@ public interface QuadTreeReadableDType<A> extends QuadTreeReadableType
   AreaD bounds();
 
   /**
-   * Determine whether or not the object has already been inserted into the
-   * tree.
+   * Determine whether or not the object has already been inserted into the tree.
    *
    * @param item The object
    *
@@ -86,8 +85,8 @@ public interface QuadTreeReadableDType<A> extends QuadTreeReadableType
     throws NoSuchElementException;
 
   /**
-   * Returns all objects in the tree that are completely contained within
-   * {@code area}, saving the results to {@code items}.
+   * Returns all objects in the tree that are completely contained within {@code area}, saving the
+   * results to {@code items}.
    *
    * @param area  The area to examine
    * @param items The returned items
@@ -98,8 +97,8 @@ public interface QuadTreeReadableDType<A> extends QuadTreeReadableType
     Set<A> items);
 
   /**
-   * Returns all objects in the tree that are overlapped
-   * {@code area}, saving the results to {@code items}.
+   * Returns all objects in the tree that are overlapped {@code area}, saving the results to {@code
+   * items}.
    *
    * @param area  The area to examine
    * @param items The returned items
@@ -110,9 +109,9 @@ public interface QuadTreeReadableDType<A> extends QuadTreeReadableType
     Set<A> items);
 
   /**
-   * Returns all objects that are intersected by the given ray. The objects
-   * are returned in order of distance from the origin of the ray: The first
-   * object returned will be the object nearest to the origin.
+   * Returns all objects that are intersected by the given ray. The objects are returned in order of
+   * distance from the origin of the ray: The first object returned will be the object nearest to
+   * the origin.
    *
    * @param ray   The ray
    * @param items The intersected items

@@ -16,7 +16,6 @@
 
 package com.io7m.jspatial.tests.api.octtrees;
 
-import com.io7m.jfunctional.Unit;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
 import com.io7m.jregions.core.unparameterized.volumes.VolumesD;
 import com.io7m.jspatial.api.Ray3D;
@@ -1897,16 +1896,17 @@ public abstract class OctTreeDContract
     }
 
     final Map<Integer, VolumeD> found = new HashMap<>(500);
-    tree.iterateOctants(Unit.unit(), (context, octant, depth) -> {
-      Assert.assertTrue(VolumesD.contains(container, octant.volume()));
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, octant, depth) -> {
+        Assert.assertTrue(VolumesD.contains(container, octant.volume()));
 
-      final Map<Integer, VolumeD> objects = octant.objects();
-      for (final Map.Entry<Integer, VolumeD> e : objects.entrySet()) {
-        Assert.assertFalse(found.containsKey(e.getKey()));
-        found.put(e.getKey(), e.getValue());
-      }
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        final Map<Integer, VolumeD> objects = octant.objects();
+        for (final Map.Entry<Integer, VolumeD> e : objects.entrySet()) {
+          Assert.assertFalse(found.containsKey(e.getKey()));
+          found.put(e.getKey(), e.getValue());
+        }
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(inserted, found);
   }
@@ -1938,14 +1938,15 @@ public abstract class OctTreeDContract
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      if (count.get() == 1) {
-        return TreeVisitResult.RESULT_TERMINATE;
-      }
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, quadrant, depth) -> {
+        if (count.get() == 1) {
+          return TreeVisitResult.RESULT_TERMINATE;
+        }
 
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        count.incrementAndGet();
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(1L, (long) count.get());
   }
@@ -1977,14 +1978,15 @@ public abstract class OctTreeDContract
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      if (count.get() == 2) {
-        return TreeVisitResult.RESULT_TERMINATE;
-      }
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, quadrant, depth) -> {
+        if (count.get() == 2) {
+          return TreeVisitResult.RESULT_TERMINATE;
+        }
 
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        count.incrementAndGet();
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(2L, (long) count.get());
   }
@@ -2016,14 +2018,15 @@ public abstract class OctTreeDContract
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      if (count.get() == 3) {
-        return TreeVisitResult.RESULT_TERMINATE;
-      }
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, quadrant, depth) -> {
+        if (count.get() == 3) {
+          return TreeVisitResult.RESULT_TERMINATE;
+        }
 
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        count.incrementAndGet();
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(3L, (long) count.get());
   }
@@ -2055,14 +2058,15 @@ public abstract class OctTreeDContract
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      if (count.get() == 4) {
-        return TreeVisitResult.RESULT_TERMINATE;
-      }
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, quadrant, depth) -> {
+        if (count.get() == 4) {
+          return TreeVisitResult.RESULT_TERMINATE;
+        }
 
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        count.incrementAndGet();
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(4L, (long) count.get());
   }
@@ -2094,14 +2098,15 @@ public abstract class OctTreeDContract
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      if (count.get() == 5) {
-        return TreeVisitResult.RESULT_TERMINATE;
-      }
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, quadrant, depth) -> {
+        if (count.get() == 5) {
+          return TreeVisitResult.RESULT_TERMINATE;
+        }
 
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        count.incrementAndGet();
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(5L, (long) count.get());
   }
@@ -2133,14 +2138,15 @@ public abstract class OctTreeDContract
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      if (count.get() == 6) {
-        return TreeVisitResult.RESULT_TERMINATE;
-      }
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, quadrant, depth) -> {
+        if (count.get() == 6) {
+          return TreeVisitResult.RESULT_TERMINATE;
+        }
 
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        count.incrementAndGet();
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(6L, (long) count.get());
   }
@@ -2172,14 +2178,15 @@ public abstract class OctTreeDContract
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      if (count.get() == 7) {
-        return TreeVisitResult.RESULT_TERMINATE;
-      }
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, quadrant, depth) -> {
+        if (count.get() == 7) {
+          return TreeVisitResult.RESULT_TERMINATE;
+        }
 
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        count.incrementAndGet();
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(7L, (long) count.get());
   }
@@ -2211,14 +2218,15 @@ public abstract class OctTreeDContract
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      if (count.get() == 8) {
-        return TreeVisitResult.RESULT_TERMINATE;
-      }
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, quadrant, depth) -> {
+        if (count.get() == 8) {
+          return TreeVisitResult.RESULT_TERMINATE;
+        }
 
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        count.incrementAndGet();
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(8L, (long) count.get());
   }
@@ -2250,14 +2258,15 @@ public abstract class OctTreeDContract
     Assert.assertEquals(9L, (long) OctTreeDContract.countOctants(tree));
 
     final AtomicInteger count = new AtomicInteger(0);
-    tree.iterateOctants(Unit.unit(), (context, quadrant, depth) -> {
-      if (count.get() == 9) {
-        return TreeVisitResult.RESULT_TERMINATE;
-      }
+    tree.iterateOctants(
+      Integer.valueOf(0), (context, quadrant, depth) -> {
+        if (count.get() == 9) {
+          return TreeVisitResult.RESULT_TERMINATE;
+        }
 
-      count.incrementAndGet();
-      return TreeVisitResult.RESULT_CONTINUE;
-    });
+        count.incrementAndGet();
+        return TreeVisitResult.RESULT_CONTINUE;
+      });
 
     Assert.assertEquals(9L, (long) count.get());
   }

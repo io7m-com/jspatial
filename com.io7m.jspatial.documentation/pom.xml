@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.io7m.jspatial</groupId>
     <artifactId>com.io7m.jspatial</artifactId>
-    <version>3.0.0-beta0002</version>
+    <version>3.0.0-beta0003</version>
   </parent>
   <artifactId>com.io7m.jspatial.documentation</artifactId>
 
@@ -20,12 +20,6 @@
   <properties>
     <mdep.analyze.skip>true</mdep.analyze.skip>
   </properties>
-
-  <scm>
-    <url>${project.parent.scm.url}</url>
-    <connection>${project.parent.scm.connection}</connection>
-    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
-  </scm>
 
   <dependencies>
     <dependency>
@@ -40,8 +34,35 @@
     </dependency>
 
     <dependency>
-      <groupId>com.io7m.jnull</groupId>
-      <artifactId>com.io7m.jnull.core</artifactId>
+      <groupId>it.unimi.dsi</groupId>
+      <artifactId>fastutil</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.immutables</groupId>
+      <artifactId>value</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.service.component.annotations</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.annotation</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.immutables.style</groupId>
+      <artifactId>com.io7m.immutables.style</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.io7m.primogenitor</groupId>
+      <artifactId>com.io7m.primogenitor.support</artifactId>
+      <version>3.5.0</version>
     </dependency>
   </dependencies>
 
@@ -71,64 +92,33 @@
         </executions>
       </plugin>
 
-      <!-- Unpack sources into documentation directory -->
+      <!-- Unpack sources of dependencies -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
             <id>unpack-sources</id>
-            <phase>prepare-package</phase>
+            <phase>package</phase>
             <goals>
-              <goal>unpack</goal>
+              <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>com.io7m.jspatial.api</artifactId>
-                  <classifier>sources</classifier>
-                  <version>${project.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
-                  <includes>**\/*.java</includes>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Produce documentation -->
-      <plugin>
-        <groupId>com.io7m.jstructural</groupId>
-        <artifactId>io7m-jstructural-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>make-documentation-single</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>transform</goal>
-            </goals>
-            <configuration>
-              <documentFile>${project.build.directory}/documentation/documentation.xml</documentFile>
-              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
-              <brandFile>${project.build.directory}/documentation/brand.xml</brandFile>
-              <pagination>XHTML_SINGLE</pagination>
+              <excludes>module-info.java</excludes>
+              <includeGroupIds>${project.groupId}</includeGroupIds>
+              <classifier>sources</classifier>
+              <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+              <outputDirectory>${project.build.directory}/javadoc-sources</outputDirectory>
             </configuration>
           </execution>
           <execution>
-            <id>make-documentation-multi</id>
-            <phase>prepare-package</phase>
+            <id>make-classpath</id>
+            <phase>package</phase>
             <goals>
-              <goal>transform</goal>
+              <goal>build-classpath</goal>
             </goals>
             <configuration>
-              <documentFile>${project.build.directory}/documentation/documentation.xml</documentFile>
-              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
-              <brandFile>${project.build.directory}/documentation/brand.xml</brandFile>
-              <pagination>XHTML_MULTI</pagination>
+              <outputFile>${project.build.directory}/javadoc-classpath</outputFile>
             </configuration>
           </execution>
         </executions>
@@ -136,47 +126,23 @@
 
       <!-- Javadoc handling -->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
         <executions>
-          <!-- Produce javadoc jar for Central -->
           <execution>
-            <id>attach-javadocs</id>
-            <phase>package</phase>
             <goals>
-              <goal>jar</goal>
+              <goal>java</goal>
             </goals>
-            <configuration>
-              <bottom><![CDATA[Copyright &#169; {currentYear} &lt;code@io7m.com&gt; http://io7m.com]]></bottom>
-              <archive>
-                <manifestEntries>
-                  <Specification-Title>${project.name}</Specification-Title>
-                  <Specification-Version>${project.version}</Specification-Version>
-                  <Specification-Vendor>io7m.com</Specification-Vendor>
-                  <Implementation-Title>${project.name}</Implementation-Title>
-                  <Implementation-Version>${project.version}</Implementation-Version>
-                  <Implementation-Vendor>io7m.com</Implementation-Vendor>
-                  <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
-                  <Built-By>io7m</Built-By>
-                </manifestEntries>
-              </archive>
-            </configuration>
-          </execution>
-          <!-- Produce aggregate dependency javadocs -->
-          <execution>
-            <id>javadoc-aggregate</id>
             <phase>package</phase>
-            <goals>
-              <goal>javadoc-no-fork</goal>
-            </goals>
             <configuration>
-              <bottom><![CDATA[Copyright &#169; {currentYear} &lt;code@io7m.com&gt; http://io7m.com]]></bottom>
-              <outputDirectory>${project.build.directory}/apidocs</outputDirectory>
-              <includeDependencySources>true</includeDependencySources>
-              <includeTransitiveDependencySources>true</includeTransitiveDependencySources>
-              <dependencySourceIncludes>
-                <dependencySourceSet>com.io7m.jspatial*</dependencySourceSet>
-              </dependencySourceIncludes>
+              <mainClass>com.io7m.primogenitor.support.TrivialJavadoc</mainClass>
+              <arguments>
+                <argument>${project.build.directory}/javadoc-sources</argument>
+                <argument>${project.build.directory}/javadoc-classpath</argument>
+                <argument>${project.build.directory}/documentation/apidocs</argument>
+                <argument>${project.build.directory}/javadoc-log.txt</argument>
+                <argument>${project.build.directory}/javadoc-options</argument>
+              </arguments>
             </configuration>
           </execution>
         </executions>
@@ -205,7 +171,7 @@
         </executions>
       </plugin>
 
-      <!-- Unpack the documentation archive to the parent's generated site staging directory. -->
+      <!-- Unpack the documentation archive to the parent's generated site minisite directory. -->
       <!-- This is arguably abusive, but there appears to be no other way to achieve it. -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -222,7 +188,7 @@
               <verbose>true</verbose>
               <fileset>
                 <directory>${project.build.directory}/${project.name}-${project.version}.zip/${project.name}-${project.version}/</directory>
-                <outputDirectory>${project.parent.build.directory}/staging/documentation/</outputDirectory>
+                <outputDirectory>${project.parent.build.directory}/minisite/documentation/</outputDirectory>
               </fileset>
             </configuration>
           </execution>

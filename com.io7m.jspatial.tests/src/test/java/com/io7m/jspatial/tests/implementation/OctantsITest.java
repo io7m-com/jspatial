@@ -25,7 +25,6 @@ import com.io7m.jspatial.tests.TestUtilities;
 import com.io7m.jspatial.tests.rules.PercentagePassRule;
 import com.io7m.jspatial.tests.rules.PercentagePassing;
 import net.java.quickcheck.generator.support.IntegerGenerator;
-import net.java.quickcheck.generator.support.LongGenerator;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,8 +32,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.io7m.jfunctional.Unit.unit;
 
 public final class OctantsITest
 {
@@ -81,7 +78,7 @@ public final class OctantsITest
           Assert.assertFalse(VolumesI.overlaps(b, a));
         }
       }
-      return unit();
+      return null;
     });
   }
 

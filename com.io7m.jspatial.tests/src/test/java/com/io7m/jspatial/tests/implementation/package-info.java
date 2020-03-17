@@ -18,6 +18,6 @@
  * Unit tests against the default implementation.
  */
 
-@com.io7m.jnull.NonNullByDefault
+
 package com.io7m.jspatial.tests.implementation;
 

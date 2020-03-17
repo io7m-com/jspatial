@@ -16,8 +16,8 @@
 
 package com.io7m.jspatial.api.octtrees;
 
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeD;
-import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
 /**
@@ -26,7 +26,7 @@ import org.immutables.value.Value;
  * @since 3.0.0
  */
 
-@JSpatialImmutableStyleType
+@ImmutablesStyleType
 @Value.Immutable
 public interface OctTreeConfigurationDType
 {
@@ -71,8 +71,8 @@ public interface OctTreeConfigurationDType
   }
 
   /**
-   * @return {@code true} iff the implementation should attempt to trim empty
-   * leaf nodes when an item is removed
+   * @return {@code true} iff the implementation should attempt to trim empty leaf nodes when an
+   * item is removed
    */
 
   @Value.Parameter

@@ -16,12 +16,12 @@
 
 package com.io7m.jspatial.implementation;
 
-import com.io7m.jnull.NullCheck;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitL;
 import com.io7m.jregions.core.unparameterized.volumes.VolumesL;
 import com.io7m.junreachable.UnreachableCodeException;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -36,8 +36,8 @@ public final class OctantsL
   }
 
   /**
-   * Subdivide a volume into eight equal sized quadrants. The volume is not
-   * split if the size on any axis is less than 2.
+   * Subdivide a volume into eight equal sized quadrants. The volume is not split if the size on any
+   * axis is less than 2.
    *
    * @param volume The volume
    *
@@ -47,7 +47,7 @@ public final class OctantsL
   public static Optional<VolumeXYZSplitL<VolumeL>> subdivide(
     final VolumeL volume)
   {
-    NullCheck.notNull(volume, "Volume");
+    Objects.requireNonNull(volume, "Volume");
 
     if (volume.sizeX() >= 2L && volume.sizeY() >= 2L && volume.sizeZ() >= 2L) {
       final long size_x = volume.sizeX() / 2L;

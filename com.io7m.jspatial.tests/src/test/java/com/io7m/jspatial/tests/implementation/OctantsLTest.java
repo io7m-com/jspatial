@@ -16,7 +16,6 @@
 
 package com.io7m.jspatial.tests.implementation;
 
-import com.io7m.jfunctional.Unit;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeL;
 import com.io7m.jregions.core.unparameterized.volumes.VolumeXYZSplitL;
 import com.io7m.jregions.core.unparameterized.volumes.VolumesL;
@@ -33,8 +32,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.io7m.jfunctional.Unit.*;
 
 public final class OctantsLTest
 {
@@ -81,7 +78,7 @@ public final class OctantsLTest
           Assert.assertFalse(VolumesL.overlaps(b, a));
         }
       }
-      return unit();
+      return null;
     });
   }
 

@@ -16,17 +16,17 @@
 
 package com.io7m.jspatial.api;
 
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jtensors.core.unparameterized.vectors.Vector3D;
 import org.immutables.value.Value;
 
 /**
- * Immutable three-dimensional ray type, defined as an origin and a direction
- * vector.
+ * Immutable three-dimensional ray type, defined as an origin and a direction vector.
  *
  * @since 3.0.0
  */
 
-@JSpatialImmutableStyleType
+@ImmutablesStyleType
 @Value.Immutable
 public interface Ray3DType
 {
@@ -52,17 +52,19 @@ public interface Ray3DType
   @Value.Auxiliary
   default Vector3D directionInverse()
   {
+    final Vector3D dir = this.direction();
     return Vector3D.of(
-      1.0 / this.direction().x(),
-      1.0 / this.direction().y(),
-      1.0 / this.direction().z());
+      1.0 / dir.x(),
+      1.0 / dir.y(),
+      1.0 / dir.z());
   }
 
   /**
    * <p>Branchless optimization of the Kay-Kajiya slab ray/AABB intersection
    * test by Tavian Barnes.</p>
    *
-   * <p>See <a href="http://tavianator.com/2011/05/fast-branchless-raybounding-box-intersections/">tavianator.com</a>.</p>
+   * <p>See <a href="http://tavianator.com/2011/05/fast-branchless-raybounding-box-intersections/">tavianator.com</a>
+   * .</p>
    *
    * @param x0 The lower X coordinate.
    * @param x1 The upper X coordinate.
@@ -85,20 +87,26 @@ public interface Ray3DType
     final Vector3D origin = this.origin();
     final Vector3D direction_inverse = this.directionInverse();
 
-    final double tx0 = (x0 - origin.x()) * direction_inverse.x();
-    final double tx1 = (x1 - origin.x()) * direction_inverse.x();
+    final double dix = direction_inverse.x();
+    final double ox = origin.x();
+    final double tx0 = (x0 - ox) * dix;
+    final double tx1 = (x1 - ox) * dix;
 
     double tmin = Math.min(tx0, tx1);
     double tmax = Math.max(tx0, tx1);
 
-    final double ty0 = (y0 - origin.y()) * direction_inverse.y();
-    final double ty1 = (y1 - origin.y()) * direction_inverse.y();
+    final double diy = direction_inverse.y();
+    final double oy = origin.y();
+    final double ty0 = (y0 - oy) * diy;
+    final double ty1 = (y1 - oy) * diy;
 
     tmin = Math.max(tmin, Math.min(ty0, ty1));
     tmax = Math.min(tmax, Math.max(ty0, ty1));
 
-    final double tz0 = (z0 - origin.z()) * direction_inverse.z();
-    final double tz1 = (z1 - origin.z()) * direction_inverse.z();
+    final double diz = direction_inverse.z();
+    final double oz = origin.z();
+    final double tz0 = (z0 - oz) * diz;
+    final double tz1 = (z1 - oz) * diz;
 
     tmin = Math.max(tmin, Math.min(tz0, tz1));
     tmax = Math.min(tmax, Math.max(tz0, tz1));

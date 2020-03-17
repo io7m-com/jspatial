@@ -18,6 +18,6 @@
  * Swing QuadTree viewer.
  */
 
-@com.io7m.jnull.NonNullByDefault
+
 package com.io7m.jspatial.examples.swing;
 

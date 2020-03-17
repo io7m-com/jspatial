@@ -16,11 +16,12 @@
 
 package com.io7m.jspatial.implementation;
 
-import com.io7m.jnull.NullCheck;
 import com.io7m.jregions.core.unparameterized.areas.AreaD;
 import com.io7m.jregions.core.unparameterized.areas.AreaXYSplitD;
 import com.io7m.jregions.core.unparameterized.areas.AreasD;
 import com.io7m.junreachable.UnreachableCodeException;
+
+import java.util.Objects;
 
 /**
  * Functions to divide areas into quadrants.
@@ -44,7 +45,7 @@ public final class QuadrantsD
   public static AreaXYSplitD<AreaD> subdivide(
     final AreaD area)
   {
-    NullCheck.notNull(area, "Area");
+    Objects.requireNonNull(area, "Area");
 
     return AreasD.splitAlongXY(
       area,

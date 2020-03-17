@@ -16,8 +16,8 @@
 
 package com.io7m.jspatial.api.quadtrees;
 
+import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.jregions.core.unparameterized.areas.AreaI;
-import com.io7m.jspatial.api.JSpatialImmutableStyleType;
 import org.immutables.value.Value;
 
 /**
@@ -26,7 +26,7 @@ import org.immutables.value.Value;
  * @since 3.0.0
  */
 
-@JSpatialImmutableStyleType
+@ImmutablesStyleType
 @Value.Immutable
 public interface QuadTreeConfigurationIType
 {
@@ -60,8 +60,8 @@ public interface QuadTreeConfigurationIType
   }
 
   /**
-   * @return {@code true} iff the implementation should attempt to trim empty
-   * leaf nodes when an item is removed
+   * @return {@code true} iff the implementation should attempt to trim empty leaf nodes when an
+   * item is removed
    */
 
   @Value.Parameter
