@@ -10,7 +10,7 @@
     <li>ISC license.</li>
     <li><a href="https://www.osgi.org/">OSGi</a>-ready.</li>
     <li><a href="https://en.wikipedia.org/wiki/Java_Platform_Module_System">JPMS</a>-ready</li>
-    <li>Platform independent: Written in pure Java 9.</li>
+    <li>Platform independent: Written in pure Java 11.</li>
     <li>Rendering system independent (the example viewers use Swing and <a href="http://www.jogamp.org/jogl">JOGL</a>, but neither are required to use the library).</li>
   </ul>
 </div>
