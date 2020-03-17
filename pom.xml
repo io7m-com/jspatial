@@ -13,7 +13,7 @@
 
   <groupId>com.io7m.jspatial</groupId>
   <artifactId>com.io7m.jspatial</artifactId>
-  <version>3.0.0-beta0002</version>
+  <version>3.0.0-beta0003</version>
 
   <packaging>pom</packaging>
   <name>com.io7m.jspatial</name>
@@ -29,8 +29,8 @@
   </modules>
 
   <properties>
-    <io7m.api.previousVersion>3.0.0-beta0002</io7m.api.previousVersion>
-
+    <io7m.api.previousVersion>3.0.0-beta0003</io7m.api.previousVersion>
+    <com.codacy.id>e929da3002124ae1844ebb0d1dd3697c</com.codacy.id>
     <io7m.com.io7m.jspatial.jregions.version>2.0.0</io7m.com.io7m.jspatial.jregions.version>
     <io7m.org.immutables.version>2.6.1</io7m.org.immutables.version>
   </properties>

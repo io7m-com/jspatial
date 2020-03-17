@@ -7,6 +7,5 @@ jspatial
 [![Codacy grade](https://img.shields.io/codacy/grade/e929da3002124ae1844ebb0d1dd3697c.png?style=flat-square)](https://www.codacy.com/app/github_79/jspatial)
 [![Codecov](https://img.shields.io/codecov/c/github/io7m/jspatial.png?style=flat-square)](https://codecov.io/gh/io7m/jspatial)
 
-See https://io7m.github.io/jspatial/ for more information.
+![jspatial](./src/site/resources/jspatial.jpg?raw=true)
 
-![QuadTree Viewer](./src/site/resources/quadview_sm.png?raw=true)
