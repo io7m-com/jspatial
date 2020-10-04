@@ -8,10 +8,6 @@
          <img src="https://img.shields.io/maven-central/v/com.io7m.jspatial/com.io7m.jspatial.png?style=flat-square"
               alt="Maven Central"/>
       </a>
-      <a href="https://www.codacy.com/app/github_79/jspatial">
-         <img src="https://img.shields.io/codacy/grade/ef32f8e67cf14526b0ec1cb994ba562d.png?style=flat-square"
-              alt="Codacy"/>
-      </a>
       <a href="https://codecov.io/gh/io7m/jspatial">
          <img src="https://img.shields.io/codecov/c/github/io7m/jspatial.png?style=flat-square"
               alt="Codecov"/>
