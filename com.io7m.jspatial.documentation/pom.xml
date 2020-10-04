@@ -62,7 +62,7 @@
     <dependency>
       <groupId>com.io7m.primogenitor</groupId>
       <artifactId>com.io7m.primogenitor.support</artifactId>
-      <version>5.0.0</version>
+      <version>6.0.0-beta0004</version>
     </dependency>
   </dependencies>
 
