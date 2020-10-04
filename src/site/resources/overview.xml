@@ -1,9 +1,9 @@
 <div xmlns="http://www.w3.org/1999/xhtml">
   <p class="shields">
-      <a href="https://travis-ci.org/io7m/jspatial">
-         <img src="https://img.shields.io/travis/io7m/jspatial.png?style=flat-square"
-              alt="Build status"/>
-      </a>
+    <a href="https://github.com/io7m/jspatial/actions?query=workflow%3Amain-openjdk_lts-linux">
+      <img src="https://img.shields.io/github/workflow/status/io7m/jspatial/main-openjdk_lts-linux"
+           alt="Build status"/>
+    </a>
       <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.io7m.jspatial%22">
          <img src="https://img.shields.io/maven-central/v/com.io7m.jspatial/com.io7m.jspatial.png?style=flat-square"
               alt="Maven Central"/>
