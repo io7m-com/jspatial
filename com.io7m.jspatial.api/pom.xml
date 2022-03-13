@@ -15,7 +15,7 @@
   <packaging>jar</packaging>
   <name>com.io7m.jspatial.api</name>
   <description>Spatial data structures (API)</description>
-  <url>http://io7m.github.io/jspatial/</url>
+  <url>https://www.io7m.com/software/jspatial/</url>
 
   <dependencies>
     <dependency>

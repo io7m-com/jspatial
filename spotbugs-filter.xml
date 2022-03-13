@@ -23,6 +23,19 @@
     </Or>
   </Match>
 
+  <Match>
+    <Or>
+      <Class name="com.io7m.jspatial.implementation.OctTreeD$Octant"/>
+      <Class name="com.io7m.jspatial.implementation.OctTreeI$Octant"/>
+      <Class name="com.io7m.jspatial.implementation.OctTreeL$Octant"/>
+      <Class name="com.io7m.jspatial.implementation.QuadTreeD$Quadrant"/>
+      <Class name="com.io7m.jspatial.implementation.QuadTreeI$Quadrant"/>
+      <Class name="com.io7m.jspatial.implementation.QuadTreeL$Quadrant"/>
+    </Or>
+    <Method name="objects"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+
   <!-- False positive -->
   <Match>
     <Class name="com.io7m.jspatial.api.Ray2DType"/>

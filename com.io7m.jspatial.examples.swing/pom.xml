@@ -15,7 +15,7 @@
   <packaging>jar</packaging>
   <name>com.io7m.jspatial.examples.swing</name>
   <description>Spatial data structures (Swing examples)</description>
-  <url>http://io7m.github.io/jspatial/</url>
+  <url>https://www.io7m.com/software/jspatial/</url>
 
   <dependencies>
     <dependency>
