@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <div class="brand" xmlns="http://www.w3.org/1999/xhtml">
   <div class="brand_left">
-    <a href="http://io7m.com/">io7m</a>
+    <a href="https://www.io7m.com/">io7m</a>
   </div>
   <div class="brand_right">
     <a href="${project.parent.url}">${project.parent.name}</a> ${project.version}

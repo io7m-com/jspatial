@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <project
   xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,7 +19,7 @@
   <packaging>pom</packaging>
   <name>com.io7m.jspatial</name>
   <description>Spatial data structures</description>
-  <url>http://github.com/io7m/jspatial</url>
+  <url>https://www.io7m.com/software/jspatial</url>
 
   <modules>
     <module>com.io7m.jspatial.api</module>
@@ -30,7 +31,6 @@
 
   <properties>
     <io7m.api.previousVersion>3.0.0-beta0003</io7m.api.previousVersion>
-    <com.codacy.id>e929da3002124ae1844ebb0d1dd3697c</com.codacy.id>
     <io7m.com.io7m.jspatial.jregions.version>2.0.0</io7m.com.io7m.jspatial.jregions.version>
     <io7m.org.immutables.version>2.8.8</io7m.org.immutables.version>
   </properties>
@@ -38,7 +38,7 @@
   <licenses>
     <license>
       <name>ISC License</name>
-      <url>http://io7m.com/license/isc.txt</url>
+      <url>https://www.io7m.com/license/isc.txt</url>
     </license>
   </licenses>
 
@@ -53,12 +53,12 @@
       <id>io7m</id>
       <name>io7m</name>
       <email>code@io7m.com</email>
-      <url>http://io7m.com</url>
+      <url>https://www.io7m.com</url>
     </developer>
   </developers>
 
   <issueManagement>
-    <url>http://github.com/io7m/jspatial/issues</url>
+    <url>https://github.com/io7m/jspatial/issues</url>
     <system>GitHub Issues</system>
   </issueManagement>
 

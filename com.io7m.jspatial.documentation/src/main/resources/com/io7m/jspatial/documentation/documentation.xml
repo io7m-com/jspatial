@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright © 2016 http://io7m.com
+  Copyright © 2016 https://www.io7m.com
 
   Permission to use, copy, modify, and/or distribute this software for any
   purpose with or without fee is hereby granted, provided that the above
@@ -110,7 +110,7 @@
 </dependency>]]></s:verbatim>
         </s:paragraph>
         <s:paragraph>
-          All <s:link-external s:target="http://io7m.com">io7m.com</s:link-external>
+          All <s:link-external s:target="https://www.io7m.com">io7m.com</s:link-external>
           packages use Semantic Versioning
           <s:footnote>
             <s:link-external s:target="http://semver.org">http://semver.org</s:link-external>
@@ -134,7 +134,7 @@
       <s:paragraph>
         All files distributed with the <s:term s:type="package">${project.parent.name}</s:term>
         package are placed under the following license:
-        <s:verbatim s:type="license"><![CDATA[Copyright © 2016 http://io7m.com
+        <s:verbatim s:type="license"><![CDATA[Copyright © 2016 https://www.io7m.com
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
