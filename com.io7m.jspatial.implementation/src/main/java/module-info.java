@@ -27,6 +27,8 @@ import com.io7m.jspatial.implementation.QuadTreeSupplierL;
 
 module com.io7m.jspatial.implementation
 {
+  requires static org.osgi.annotation.bundle;
+  requires static org.osgi.annotation.versioning;
   requires static org.osgi.service.component.annotations;
 
   requires com.io7m.jspatial.api;
