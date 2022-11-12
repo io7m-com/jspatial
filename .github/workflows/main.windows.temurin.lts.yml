@@ -1,4 +1,4 @@
-name: main-openjdk_current-linux
+name: main.windows.temurin.lts
 
 on:
   push:
@@ -12,8 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
           java-version: 17
+          distribution: 'temurin'
       - name: Build
         run: mvn --errors clean verify site

@@ -1,0 +1,20 @@
+name: main.windows.temurin.current
+
+on:
+  push:
+    branches: [ develop, feature/*, release/* ]
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: 19
+          distribution: 'temurin'
+      - name: Build
+        run: mvn --errors clean verify site
