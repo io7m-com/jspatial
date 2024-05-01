@@ -25,6 +25,7 @@ jobs:
           name: test-logs
           path: ./com.io7m.jspatial.tests/target/surefire-reports
       - name: Coverage
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v4.3.0
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: com.io7m.jspatial.tests/target/site/jacoco-aggregate/jacoco.xml

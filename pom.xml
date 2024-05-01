@@ -44,9 +44,9 @@
   </licenses>
 
   <scm>
-    <url>https://github.com/io7m/jspatial</url>
-    <connection>scm:git:https://github.com/io7m/jspatial</connection>
-    <developerConnection>scm:git:https://github.com/io7m/jspatial</developerConnection>
+    <url>https://www.github.com/io7m-com/jspatial</url>
+    <connection>scm:git:https://www.github.com/io7m-com/jspatial</connection>
+    <developerConnection>scm:git:https://www.github.com/io7m-com/jspatial</developerConnection>
   </scm>
 
   <developers>
@@ -59,7 +59,7 @@
   </developers>
 
   <issueManagement>
-    <url>https://github.com/io7m/jspatial/issues</url>
+    <url>https://www.github.com/io7m-com/jspatial/issues</url>
     <system>GitHub Issues</system>
   </issueManagement>
 
