@@ -14,7 +14,7 @@
 
   <groupId>com.io7m.jspatial</groupId>
   <artifactId>com.io7m.jspatial</artifactId>
-  <version>3.0.0-beta0003</version>
+  <version>3.0.0-SNAPSHOT</version>
 
   <packaging>pom</packaging>
   <name>com.io7m.jspatial</name>
@@ -30,7 +30,7 @@
   </modules>
 
   <properties>
-    <io7m.api.previousVersion>3.0.0-beta0003</io7m.api.previousVersion>
+    <io7m.api.previousVersion>3.0.0-SNAPSHOT</io7m.api.previousVersion>
     <io7m.com.io7m.jspatial.jregions.version>4.0.0</io7m.com.io7m.jspatial.jregions.version>
     <io7m.java.targetJavaVersion>21</io7m.java.targetJavaVersion>
     <io7m.org.immutables.version>2.10.1</io7m.org.immutables.version>

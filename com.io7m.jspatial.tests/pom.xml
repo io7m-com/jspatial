@@ -8,18 +8,20 @@
   <parent>
     <groupId>com.io7m.jspatial</groupId>
     <artifactId>com.io7m.jspatial</artifactId>
-    <version>3.0.0-beta0003</version>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>com.io7m.jspatial.tests</artifactId>
-
-  <properties>
-    <mdep.analyze.skip>true</mdep.analyze.skip>
-  </properties>
 
   <packaging>jar</packaging>
   <name>com.io7m.jspatial.tests</name>
   <description>Spatial data structures (Unit tests)</description>
   <url>https://www.io7m.com/software/jspatial/</url>
+
+  <properties>
+    <spotbugs.skip>true</spotbugs.skip>
+    <mdep.analyze.skip>true</mdep.analyze.skip>
+    <checkstyle.skip>true</checkstyle.skip>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -69,28 +71,19 @@
     <dependency>
       <groupId>net.java.quickcheck</groupId>
       <artifactId>quickcheck</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
       <artifactId>hamcrest-core</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Check style -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-      </plugin>
-
       <!-- Determine test coverage -->
       <plugin>
         <groupId>org.jacoco</groupId>
