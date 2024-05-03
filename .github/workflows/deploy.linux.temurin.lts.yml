@@ -1,0 +1,28 @@
+name: deploy.linux.temurin.lts
+
+on:
+  push:
+    tags: [ com.io7m.jspatial-* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      - name: Import signing key
+        env:
+          PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
+        run: echo "${PGP_SIGNING_KEY}" | gpg --import
+
+      - name: Deploy release
+        env:
+          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+        run: .github/workflows/deploy-release.sh
