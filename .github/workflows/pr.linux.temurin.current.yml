@@ -1,13 +1,13 @@
 
-name: main.windows.temurin.lts
+name: pr.linux.temurin.current
 
 on:
-  push:
+  pull_request:
     branches: [ develop, feature/*, release/* ]
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -16,7 +16,7 @@ jobs:
       - name: JDK
         uses: actions/setup-java@v4
         with:
-          java-version: 21
+          java-version: 22
           distribution: 'temurin'
 
       - name: Collect project version

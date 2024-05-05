@@ -1,8 +1,8 @@
 
-name: main.windows.temurin.lts
+name: pr.windows.temurin.lts
 
 on:
-  push:
+  pull_request:
     branches: [ develop, feature/*, release/* ]
 
 jobs:
