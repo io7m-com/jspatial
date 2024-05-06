@@ -1,3 +1,4 @@
+
 name: deploy.linux.temurin.lts
 
 on:
@@ -16,12 +17,19 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 21
-          distribution: 'temurin'
+          distribution: temurin
 
       - name: Import signing key
         env:
           PGP_SIGNING_KEY: ${{ secrets.PGP_SIGNING_KEY }}
-        run: echo "${PGP_SIGNING_KEY}" | gpg --import
+        run: echo ${PGP_SIGNING_KEY} | gpg --import
+
+      - name: Log in to Quay.io.
+        uses: redhat-actions/podman-login@v1.7
+        with:
+          username: ${{ secrets.QUAY_IO_USERNAME }}
+          password: ${{ secrets.QUAY_IO_PASSWORD }}
+          registry: 'quay.io'
 
       - name: Deploy release
         env:

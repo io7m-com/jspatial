@@ -43,6 +43,13 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: com.io7m.jspatial.tests/target/site/jacoco-aggregate/jacoco.xml
 
+      - name: Log in to Quay.io.
+        uses: redhat-actions/podman-login@v1.7
+        with:
+          username: ${{ secrets.QUAY_IO_USERNAME }}
+          password: ${{ secrets.QUAY_IO_PASSWORD }}
+          registry: 'quay.io'
+
       - name: Deploy snapshot
         if: ${{ steps.project_is_snapshot.outputs.IO7M_PROJECT_VERSION_IS_SNAPSHOT == 'true' }}
         env:
