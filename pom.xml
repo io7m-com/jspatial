@@ -113,7 +113,7 @@
       <dependency>
         <groupId>com.io7m.jequality</groupId>
         <artifactId>com.io7m.jequality.core</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.1</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jregions</groupId>
