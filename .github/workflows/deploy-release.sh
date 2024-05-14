@@ -1,4 +1,9 @@
 #!/bin/sh
+#
+#  Automatically generated: DO NOT EDIT.
+#
+#  Generation code: https://www.github.com/io7m-com/.github/
+#
 
 fatal()
 {
@@ -54,5 +59,6 @@ exec mvn \
 -Dio7m.deployment=true \
 --batch-mode \
 --strict-checksums \
+-Denforcer.skip=true \
 -DskipTests=true \
 -DskipITs=true deploy
