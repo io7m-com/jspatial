@@ -98,7 +98,7 @@
       <dependency>
         <groupId>com.io7m.jtensors</groupId>
         <artifactId>com.io7m.jtensors.core</artifactId>
-        <version>10.0.0</version>
+        <version>11.0.0</version>
       </dependency>
       <dependency>
         <groupId>com.io7m.jaffirm</groupId>
