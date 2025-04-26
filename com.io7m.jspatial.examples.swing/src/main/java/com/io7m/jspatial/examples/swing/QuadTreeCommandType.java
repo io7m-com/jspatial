@@ -24,6 +24,8 @@ import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationD;
 import com.io7m.jspatial.api.quadtrees.QuadTreeConfigurationL;
 import org.immutables.value.Value;
 
+// CHECKSTYLE:OFF
+
 interface QuadTreeCommandType
 {
   Kind kind();

@@ -16,8 +16,21 @@
 
 package com.io7m.jspatial.examples.swing;
 
+/**
+ * The kind of quad tree.
+ */
+
 enum QuadTreeKind
 {
+  /**
+   * Long integer coordinates.
+   */
+
   LONG_INTEGER,
+
+  /**
+   * Double coordinates.
+   */
+
   DOUBLE
 }
