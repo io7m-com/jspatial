@@ -33,7 +33,7 @@
     <io7m.api.previousVersion>3.0.0-SNAPSHOT</io7m.api.previousVersion>
     <io7m.com.io7m.jspatial.jregions.version>4.0.0</io7m.com.io7m.jspatial.jregions.version>
     <io7m.java.targetJavaVersion>21</io7m.java.targetJavaVersion>
-    <io7m.org.immutables.version>2.11.1</io7m.org.immutables.version>
+    <io7m.org.immutables.version>2.11.3</io7m.org.immutables.version>
   </properties>
 
   <licenses>
